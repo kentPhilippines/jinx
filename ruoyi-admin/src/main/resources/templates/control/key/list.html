@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('商户密钥')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="role-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								商户ID：<input type="text" name="merchantId"/>
+							</li>
+							<li>
+								商户名称：<input type="text" name="merchantName"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+	        <div class="col-sm-12 select-table table-striped">
+			    <table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+		var editFlag = [[${@permission.hasPermi('merchant:auth:edit')}]];
+		var removeFlag = [[${@permission.hasPermi('merchant:auth:remove')}]];
+		var prefix = ctx + "merchant/info";
+		
+		$(function() {
+		    var options = {
+		        url: prefix + "/list",
+		        createUrl: prefix + "/add",
+		        updateUrl: prefix + "/edit/{id}",
+		        removeUrl: prefix + "/remove",
+		        exportUrl: prefix + "/export",
+		        sortName: "merchantId",
+		        modalName: "商户密钥",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'id',
+		            title: 'ID编号'
+		        },
+		        {
+		            field: 'merchantId',
+		            title: '商户ID'
+		        },
+		        {
+		            field: 'merchantName',
+		            title: '商户名称'
+		        },
+		        {
+		            field: 'auditTime',
+		            title: '创建时间',
+		            sortable: true
+		        },
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showBalance(\'' + row.merchantId + '\')"><i class="fa fa-user"></i>登陆密码重置</a> ');
+		                actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showBalance(\'' + row.merchantId + '\')"><i class="fa fa-user"></i>支付密码重置</a> ');
+		                actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showBalance(\'' + row.merchantId + '\')"><i class="fa fa-user"></i>谷歌验证解绑</a> ');
+		                actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showBalance(\'' + row.merchantId + '\')"><i class="fa fa-user"></i>商户密钥重置</a> ');
+		                actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="showBalance(\'' + row.merchantId + '\')"><i class="fa fa-user"></i>一键重置所有</a> ');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		});
+		
+		/* 商户管理-账户余额 */
+		function showBalance(mercahntId) {
+		    var url = prefix + '/authUser/' + mercahntId;
+		    $.modal.openTab("商户账户余额", url);
+		}
+		
+		/* 商戶状态显示 */
+		function statusTools(row) {
+		    if (row.status == 1) {
+    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.merchantId + '\')"></i> ';
+    		} else {
+    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.merchantId + '\')"></i> ';
+    		}
+		}
+		
+		/* 商户管理-关闭 */
+		function disable(merchantId) {
+			$.modal.confirm("确认要关闭此商户吗？", function() {
+				$.operate.post(prefix + "/changeStatus", { "merchantId": merchantId, "status": 1 });
+		    })
+		}
+
+		/* 商户管理-开通 */
+		function enable(merchantId) {
+			$.modal.confirm("确认要开通此商戶吗？", function() {
+				$.operate.post(prefix + "/changeStatus", { "merchantId": merchantId, "status": 0 });
+		    })
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资金变动查询')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="role-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            关联订单号：<input type="text" name="merchantId"/>
+                        </li>
+                        <li>
+                            商户ID：<input type="text" name="merchantName"/>
+                        </li>
+                        <li>
+                            交易类型：<select name="productName" th:with="type=${@dict.getType('sys_normal_disable')}">
+                            <option value="">所有</option>
+                            <option th:value="0">充值</option>
+                            <option th:value="1">充值手续费</option>
+                            <option th:value="2">充值退回</option>
+                            <option th:value="3">补单</option>
+                        </select>
+                        </li>
+                        <li class="select-time">
+                            <label>创建时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="merchant:auth:export">
+                <i class="fa fa-download"></i> 导出 </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('merchant:auth:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('merchant:auth:remove')}]];
+    var prefix = ctx + "merchant/info";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            sortName: "merchantId",
+            modalName: "资金流水",
+            columns: [{
+                checkbox: false
+            },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    field: 'merchantId',
+                    title: '商户ID'
+                },
+                {
+                    field: 'merchantName',
+                    title: '商户名称'
+                },
+                {
+                    field: 'tradeType',
+                    title: '交易类型',
+                },
+                {
+                    field: 'orderBalance',
+                    title: '订单金额(元)',
+                    sortable: true
+                },
+                {
+                    field: 'associateOrderNo ',
+                    title: '关联订单号'
+                },
+                {
+                    field: 'description',
+                    title: '流水描述'
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* 商户管理-账户余额 */
+    function showBalance(mercahntId) {
+        var url = prefix + '/authUser/' + mercahntId;
+        $.modal.openTab("商户账户余额", url);
+    }
+
+    /* 商戶状态显示 */
+    function statusTools(row) {
+        if (row.status == 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.merchantId + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.merchantId + '\')"></i> ';
+        }
+    }
+
+    /* 商户管理-关闭 */
+    function disable(merchantId) {
+        $.modal.confirm("确认要关闭此商户吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"merchantId": merchantId, "status": 1});
+        })
+    }
+
+    /* 商户管理-开通 */
+    function enable(merchantId) {
+        $.modal.confirm("确认要开通此商戶吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"merchantId": merchantId, "status": 0});
+        })
+    }
+</script>
+</body>
+</html>
