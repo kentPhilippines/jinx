@@ -72,13 +72,12 @@ public class DataScopeAspect {
         }
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
-        if (currentUser != null) {
+        if (currentUser != null) 
             // 如果是超级管理员，则不过滤数据
-            if (!currentUser.isAdmin()) {
+            if (!currentUser.isAdmin()) 
                 dataScopeFilter(joinPoint, currentUser, controllerDataScope.deptAlias(),
                         controllerDataScope.userAlias());
-            }
-        }
+        
     }
 
     /**
@@ -129,10 +128,8 @@ public class DataScopeAspect {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
-
-        if (method != null) {
+        if (method != null) 
             return method.getAnnotation(DataScope.class);
-        }
         return null;
     }
 }

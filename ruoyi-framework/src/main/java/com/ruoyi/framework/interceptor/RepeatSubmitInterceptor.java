@@ -17,39 +17,33 @@ import com.ruoyi.common.utils.ServletUtils;
  * @author ruoyi
  */
 @Component
-public abstract class RepeatSubmitInterceptor extends HandlerInterceptorAdapter
-{
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
-    {
-        if (handler instanceof HandlerMethod)
-        {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
-            RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
-            if (annotation != null)
-            {
-                if (this.isRepeatSubmit(request))
-                {
-                    AjaxResult ajaxResult = AjaxResult.error("不允许重复提交，请稍后再试");
-                    ServletUtils.renderString(response, JSON.marshal(ajaxResult));
-                    return false;
-                }
-            }
-            return true;
-        }
-        else
-        {
-            return super.preHandle(request, response, handler);
-        }
-    }
+public abstract class RepeatSubmitInterceptor extends HandlerInterceptorAdapter {
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+		if (handler instanceof HandlerMethod) {
+			HandlerMethod handlerMethod = (HandlerMethod) handler;
+			Method method = handlerMethod.getMethod();
+			RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
+			if (annotation != null) {
+				if (this.isRepeatSubmit(request)) {
+					AjaxResult ajaxResult = AjaxResult.error("不允许重复提交，请稍后再试");
+					ServletUtils.renderString(response, JSON.marshal(ajaxResult));
+					return false;
+				}
+			}
+			return true;
+		} else {
+			return super.preHandle(request, response, handler);
+		}
+	}
 
-    /**
-     * 验证是否重复提交由子类实现具体的防重复提交的规则
-     * 
-     * @param httpServletRequest
-     * @return
-     * @throws Exception
-     */
-    public abstract boolean isRepeatSubmit(HttpServletRequest request) throws Exception;
+	/**
+	 * 验证是否重复提交由子类实现具体的防重复提交的规则
+	 * 
+	 * @param httpServletRequest
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract boolean isRepeatSubmit(HttpServletRequest request) throws Exception;
 }
