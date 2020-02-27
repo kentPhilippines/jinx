@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayUserFundMapper">
+
+    <resultMap type="AlipayUserFund" id="AlipayUserFundResult">
+        <result property="id"    column="id"    />
+        <result property="userid"    column="userId"    />
+        <result property="username"    column="userName"    />
+        <result property="cashbalance"    column="cashBalance"    />
+        <result property="rechargenumber"    column="rechargeNumber"    />
+        <result property="freezebalance"    column="freezeBalance"    />
+        <result property="accountbalance"    column="accountBalance"    />
+        <result property="sumdealamount"    column="sumDealAmount"    />
+        <result property="sumrechargeamount"    column="sumRechargeAmount"    />
+        <result property="sumprofit"    column="sumProfit"    />
+        <result property="sumagentprofit"    column="sumAgentProfit"    />
+        <result property="sumordercount"    column="sumOrderCount"    />
+        <result property="todaydealamount"    column="todayDealAmount"    />
+        <result property="todayprofit"    column="todayProfit"    />
+        <result property="todayordercount"    column="todayOrderCount"    />
+        <result property="todayagentprofit"    column="todayAgentProfit"    />
+        <result property="usertype"    column="userType"    />
+        <result property="agent"    column="agent"    />
+        <result property="isagent"    column="isAgent"    />
+        <result property="createtime"    column="createTime"    />
+        <result property="submittime"    column="submitTime"    />
+        <result property="status"    column="status"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectAlipayUserFundVo">
+        select id, userId, userName, cashBalance, rechargeNumber, freezeBalance, accountBalance, sumDealAmount, sumRechargeAmount, sumProfit, sumAgentProfit, sumOrderCount, todayDealAmount, todayProfit, todayOrderCount, todayAgentProfit, userType, agent, isAgent, createTime, submitTime, status, version from alipay_user_fund
+    </sql>
+
+    <select id="selectAlipayUserFundList" parameterType="AlipayUserFund" resultMap="AlipayUserFundResult">
+        <include refid="selectAlipayUserFundVo"/>
+        <where>
+            <if test="userid != null  and userid != ''"> and userId = #{userid}</if>
+            <if test="username != null  and username != ''"> and userName like concat('%', #{username}, '%')</if>
+            <if test="cashbalance != null "> and cashBalance = #{cashbalance}</if>
+            <if test="rechargenumber != null "> and rechargeNumber = #{rechargenumber}</if>
+            <if test="freezebalance != null "> and freezeBalance = #{freezebalance}</if>
+            <if test="accountbalance != null "> and accountBalance = #{accountbalance}</if>
+            <if test="sumdealamount != null "> and sumDealAmount = #{sumdealamount}</if>
+            <if test="sumrechargeamount != null "> and sumRechargeAmount = #{sumrechargeamount}</if>
+            <if test="sumprofit != null "> and sumProfit = #{sumprofit}</if>
+            <if test="sumagentprofit != null "> and sumAgentProfit = #{sumagentprofit}</if>
+            <if test="sumordercount != null "> and sumOrderCount = #{sumordercount}</if>
+            <if test="todaydealamount != null "> and todayDealAmount = #{todaydealamount}</if>
+            <if test="todayprofit != null "> and todayProfit = #{todayprofit}</if>
+            <if test="todayordercount != null "> and todayOrderCount = #{todayordercount}</if>
+            <if test="todayagentprofit != null "> and todayAgentProfit = #{todayagentprofit}</if>
+            <if test="usertype != null  and usertype != ''"> and userType = #{usertype}</if>
+            <if test="agent != null  and agent != ''"> and agent = #{agent}</if>
+            <if test="isagent != null  and isagent != ''"> and isAgent = #{isagent}</if>
+            <if test="createtime != null "> and createTime = #{createtime}</if>
+            <if test="submittime != null "> and submitTime = #{submittime}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+
+    <select id="selectAlipayUserFundById" parameterType="Long" resultMap="AlipayUserFundResult">
+        <include refid="selectAlipayUserFundVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAlipayUserFund" parameterType="AlipayUserFund" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_user_fund
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null  and userid != ''">userId,</if>
+            <if test="username != null  and username != ''">userName,</if>
+            <if test="cashbalance != null ">cashBalance,</if>
+            <if test="rechargenumber != null ">rechargeNumber,</if>
+            <if test="freezebalance != null ">freezeBalance,</if>
+            <if test="accountbalance != null ">accountBalance,</if>
+            <if test="sumdealamount != null ">sumDealAmount,</if>
+            <if test="sumrechargeamount != null ">sumRechargeAmount,</if>
+            <if test="sumprofit != null ">sumProfit,</if>
+            <if test="sumagentprofit != null ">sumAgentProfit,</if>
+            <if test="sumordercount != null ">sumOrderCount,</if>
+            <if test="todaydealamount != null ">todayDealAmount,</if>
+            <if test="todayprofit != null ">todayProfit,</if>
+            <if test="todayordercount != null ">todayOrderCount,</if>
+            <if test="todayagentprofit != null ">todayAgentProfit,</if>
+            <if test="usertype != null  and usertype != ''">userType,</if>
+            <if test="agent != null  and agent != ''">agent,</if>
+            <if test="isagent != null  and isagent != ''">isAgent,</if>
+            <if test="createtime != null ">createTime,</if>
+            <if test="submittime != null ">submitTime,</if>
+            <if test="status != null ">status,</if>
+            <if test="version != null ">version,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userid != null  and userid != ''">#{userid},</if>
+            <if test="username != null  and username != ''">#{username},</if>
+            <if test="cashbalance != null ">#{cashbalance},</if>
+            <if test="rechargenumber != null ">#{rechargenumber},</if>
+            <if test="freezebalance != null ">#{freezebalance},</if>
+            <if test="accountbalance != null ">#{accountbalance},</if>
+            <if test="sumdealamount != null ">#{sumdealamount},</if>
+            <if test="sumrechargeamount != null ">#{sumrechargeamount},</if>
+            <if test="sumprofit != null ">#{sumprofit},</if>
+            <if test="sumagentprofit != null ">#{sumagentprofit},</if>
+            <if test="sumordercount != null ">#{sumordercount},</if>
+            <if test="todaydealamount != null ">#{todaydealamount},</if>
+            <if test="todayprofit != null ">#{todayprofit},</if>
+            <if test="todayordercount != null ">#{todayordercount},</if>
+            <if test="todayagentprofit != null ">#{todayagentprofit},</if>
+            <if test="usertype != null  and usertype != ''">#{usertype},</if>
+            <if test="agent != null  and agent != ''">#{agent},</if>
+            <if test="isagent != null  and isagent != ''">#{isagent},</if>
+            <if test="createtime != null ">#{createtime},</if>
+            <if test="submittime != null ">#{submittime},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="version != null ">#{version},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAlipayUserFund" parameterType="AlipayUserFund">
+        update alipay_user_fund
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userid != null  and userid != ''">userId = #{userid},</if>
+            <if test="username != null  and username != ''">userName = #{username},</if>
+            <if test="cashbalance != null ">cashBalance = #{cashbalance},</if>
+            <if test="rechargenumber != null ">rechargeNumber = #{rechargenumber},</if>
+            <if test="freezebalance != null ">freezeBalance = #{freezebalance},</if>
+            <if test="accountbalance != null ">accountBalance = #{accountbalance},</if>
+            <if test="sumdealamount != null ">sumDealAmount = #{sumdealamount},</if>
+            <if test="sumrechargeamount != null ">sumRechargeAmount = #{sumrechargeamount},</if>
+            <if test="sumprofit != null ">sumProfit = #{sumprofit},</if>
+            <if test="sumagentprofit != null ">sumAgentProfit = #{sumagentprofit},</if>
+            <if test="sumordercount != null ">sumOrderCount = #{sumordercount},</if>
+            <if test="todaydealamount != null ">todayDealAmount = #{todaydealamount},</if>
+            <if test="todayprofit != null ">todayProfit = #{todayprofit},</if>
+            <if test="todayordercount != null ">todayOrderCount = #{todayordercount},</if>
+            <if test="todayagentprofit != null ">todayAgentProfit = #{todayagentprofit},</if>
+            <if test="usertype != null  and usertype != ''">userType = #{usertype},</if>
+            <if test="agent != null  and agent != ''">agent = #{agent},</if>
+            <if test="isagent != null  and isagent != ''">isAgent = #{isagent},</if>
+            <if test="createtime != null ">createTime = #{createtime},</if>
+            <if test="submittime != null ">submitTime = #{submittime},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="version != null ">version = #{version},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayUserFundById" parameterType="Long">
+        delete from alipay_user_fund where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayUserFundByIds" parameterType="String">
+        delete from alipay_user_fund where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

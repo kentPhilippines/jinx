@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayDealOrderAppMapper">
+    
+    <resultMap type="AlipayDealOrderApp" id="AlipayDealOrderAppResult">
+        <result property="id"    column="id"    />
+        <result property="orderid"    column="orderId"    />
+        <result property="ordertype"    column="orderType"    />
+        <result property="orderaccount"    column="orderAccount"    />
+        <result property="orderstatus"    column="orderStatus"    />
+        <result property="dealdescribe"    column="dealDescribe"    />
+        <result property="orderamount"    column="orderAmount"    />
+        <result property="orderip"    column="orderIp"    />
+        <result property="apporderid"    column="appOrderId"    />
+        <result property="createtime"    column="createTime"    />
+        <result property="feeid"    column="feeId"    />
+        <result property="notify"    column="notify"    />
+        <result property="back"    column="back"    />
+        <result property="submittime"    column="submitTime"    />
+        <result property="submitsystem"    column="submitSystem"    />
+        <result property="status"    column="status"    />
+        <result property="retain1"    column="retain1"    />
+        <result property="retain2"    column="retain2"    />
+        <result property="retain3"    column="retain3"    />
+    </resultMap>
+
+    <sql id="selectAlipayDealOrderAppVo">
+        select id, orderId, orderType, orderAccount, orderStatus, dealDescribe, orderAmount, orderIp, appOrderId, createTime, feeId, notify, back, submitTime, submitSystem, status, retain1, retain2, retain3 from alipay_deal_order_app
+    </sql>
+
+    <select id="selectAlipayDealOrderAppList" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">
+        <include refid="selectAlipayDealOrderAppVo"/>
+        <where>  
+            <if test="ordertype != null "> and orderType = #{ordertype}</if>
+            <if test="orderaccount != null  and orderaccount != ''"> and orderAccount = #{orderaccount}</if>
+            <if test="orderstatus != null "> and orderStatus = #{orderstatus}</if>
+            <if test="dealdescribe != null  and dealdescribe != ''"> and dealDescribe = #{dealdescribe}</if>
+            <if test="orderamount != null "> and orderAmount = #{orderamount}</if>
+            <if test="orderip != null  and orderip != ''"> and orderIp = #{orderip}</if>
+            <if test="apporderid != null  and apporderid != ''"> and appOrderId = #{apporderid}</if>
+            <if test="createtime != null "> and createTime = #{createtime}</if>
+            <if test="feeid != null "> and feeId = #{feeid}</if>
+            <if test="notify != null  and notify != ''"> and notify = #{notify}</if>
+            <if test="back != null  and back != ''"> and back = #{back}</if>
+            <if test="submittime != null "> and submitTime = #{submittime}</if>
+            <if test="submitsystem != null  and submitsystem != ''"> and submitSystem = #{submitsystem}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
+            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
+            <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayDealOrderAppById" parameterType="Long" resultMap="AlipayDealOrderAppResult">
+        <include refid="selectAlipayDealOrderAppVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayDealOrderApp" parameterType="AlipayDealOrderApp" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_deal_order_app
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderid != null  and orderid != ''">orderId,</if>
+            <if test="ordertype != null ">orderType,</if>
+            <if test="orderaccount != null  and orderaccount != ''">orderAccount,</if>
+            <if test="orderstatus != null ">orderStatus,</if>
+            <if test="dealdescribe != null  and dealdescribe != ''">dealDescribe,</if>
+            <if test="orderamount != null ">orderAmount,</if>
+            <if test="orderip != null  and orderip != ''">orderIp,</if>
+            <if test="apporderid != null  and apporderid != ''">appOrderId,</if>
+            <if test="createtime != null ">createTime,</if>
+            <if test="feeid != null ">feeId,</if>
+            <if test="notify != null  and notify != ''">notify,</if>
+            <if test="back != null  and back != ''">back,</if>
+            <if test="submittime != null ">submitTime,</if>
+            <if test="submitsystem != null  and submitsystem != ''">submitSystem,</if>
+            <if test="status != null ">status,</if>
+            <if test="retain1 != null  and retain1 != ''">retain1,</if>
+            <if test="retain2 != null  and retain2 != ''">retain2,</if>
+            <if test="retain3 != null  and retain3 != ''">retain3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderid != null  and orderid != ''">#{orderid},</if>
+            <if test="ordertype != null ">#{ordertype},</if>
+            <if test="orderaccount != null  and orderaccount != ''">#{orderaccount},</if>
+            <if test="orderstatus != null ">#{orderstatus},</if>
+            <if test="dealdescribe != null  and dealdescribe != ''">#{dealdescribe},</if>
+            <if test="orderamount != null ">#{orderamount},</if>
+            <if test="orderip != null  and orderip != ''">#{orderip},</if>
+            <if test="apporderid != null  and apporderid != ''">#{apporderid},</if>
+            <if test="createtime != null ">#{createtime},</if>
+            <if test="feeid != null ">#{feeid},</if>
+            <if test="notify != null  and notify != ''">#{notify},</if>
+            <if test="back != null  and back != ''">#{back},</if>
+            <if test="submittime != null ">#{submittime},</if>
+            <if test="submitsystem != null  and submitsystem != ''">#{submitsystem},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="retain1 != null  and retain1 != ''">#{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">#{retain2},</if>
+            <if test="retain3 != null  and retain3 != ''">#{retain3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayDealOrderApp" parameterType="AlipayDealOrderApp">
+        update alipay_deal_order_app
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderid != null  and orderid != ''">orderId = #{orderid},</if>
+            <if test="ordertype != null ">orderType = #{ordertype},</if>
+            <if test="orderaccount != null  and orderaccount != ''">orderAccount = #{orderaccount},</if>
+            <if test="orderstatus != null ">orderStatus = #{orderstatus},</if>
+            <if test="dealdescribe != null  and dealdescribe != ''">dealDescribe = #{dealdescribe},</if>
+            <if test="orderamount != null ">orderAmount = #{orderamount},</if>
+            <if test="orderip != null  and orderip != ''">orderIp = #{orderip},</if>
+            <if test="apporderid != null  and apporderid != ''">appOrderId = #{apporderid},</if>
+            <if test="createtime != null ">createTime = #{createtime},</if>
+            <if test="feeid != null ">feeId = #{feeid},</if>
+            <if test="notify != null  and notify != ''">notify = #{notify},</if>
+            <if test="back != null  and back != ''">back = #{back},</if>
+            <if test="submittime != null ">submitTime = #{submittime},</if>
+            <if test="submitsystem != null  and submitsystem != ''">submitSystem = #{submitsystem},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="retain1 != null  and retain1 != ''">retain1 = #{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">retain2 = #{retain2},</if>
+            <if test="retain3 != null  and retain3 != ''">retain3 = #{retain3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayDealOrderAppById" parameterType="Long">
+        delete from alipay_deal_order_app where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayDealOrderAppByIds" parameterType="String">
+        delete from alipay_deal_order_app where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

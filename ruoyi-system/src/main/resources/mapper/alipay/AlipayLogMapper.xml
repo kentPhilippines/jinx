@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayLogMapper">
+    
+    <resultMap type="AlipayLog" id="AlipayLogResult">
+        <result property="id"    column="id"    />
+        <result property="ipaddr"    column="ipAddr"    />
+        <result property="loginlocation"    column="loginLocation"    />
+        <result property="logintime"    column="loginTime"    />
+        <result property="msg"    column="msg"    />
+        <result property="usename"    column="useName"    />
+        <result property="createtime"    column="createTime"    />
+        <result property="submittime"    column="submitTime"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectAlipayLogVo">
+        select id, ipAddr, loginLocation, loginTime, msg, useName, createTime, submitTime, status from alipay_log
+    </sql>
+
+    <select id="selectAlipayLogList" parameterType="AlipayLog" resultMap="AlipayLogResult">
+        <include refid="selectAlipayLogVo"/>
+        <where>  
+            <if test="ipaddr != null  and ipaddr != ''"> and ipAddr = #{ipaddr}</if>
+            <if test="loginlocation != null  and loginlocation != ''"> and loginLocation = #{loginlocation}</if>
+            <if test="logintime != null "> and loginTime = #{logintime}</if>
+            <if test="msg != null  and msg != ''"> and msg = #{msg}</if>
+            <if test="usename != null  and usename != ''"> and useName like concat('%', #{usename}, '%')</if>
+            <if test="createtime != null "> and createTime = #{createtime}</if>
+            <if test="submittime != null "> and submitTime = #{submittime}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayLogById" parameterType="Long" resultMap="AlipayLogResult">
+        <include refid="selectAlipayLogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayLog" parameterType="AlipayLog" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ipaddr != null  and ipaddr != ''">ipAddr,</if>
+            <if test="loginlocation != null  and loginlocation != ''">loginLocation,</if>
+            <if test="logintime != null ">loginTime,</if>
+            <if test="msg != null  and msg != ''">msg,</if>
+            <if test="usename != null  and usename != ''">useName,</if>
+            <if test="createtime != null ">createTime,</if>
+            <if test="submittime != null ">submitTime,</if>
+            <if test="status != null ">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ipaddr != null  and ipaddr != ''">#{ipaddr},</if>
+            <if test="loginlocation != null  and loginlocation != ''">#{loginlocation},</if>
+            <if test="logintime != null ">#{logintime},</if>
+            <if test="msg != null  and msg != ''">#{msg},</if>
+            <if test="usename != null  and usename != ''">#{usename},</if>
+            <if test="createtime != null ">#{createtime},</if>
+            <if test="submittime != null ">#{submittime},</if>
+            <if test="status != null ">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayLog" parameterType="AlipayLog">
+        update alipay_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ipaddr != null  and ipaddr != ''">ipAddr = #{ipaddr},</if>
+            <if test="loginlocation != null  and loginlocation != ''">loginLocation = #{loginlocation},</if>
+            <if test="logintime != null ">loginTime = #{logintime},</if>
+            <if test="msg != null  and msg != ''">msg = #{msg},</if>
+            <if test="usename != null  and usename != ''">useName = #{usename},</if>
+            <if test="createtime != null ">createTime = #{createtime},</if>
+            <if test="submittime != null ">submitTime = #{submittime},</if>
+            <if test="status != null ">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayLogById" parameterType="Long">
+        delete from alipay_log where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayLogByIds" parameterType="String">
+        delete from alipay_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
