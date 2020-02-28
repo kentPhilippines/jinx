@@ -6,25 +6,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="AlipayUserInfo" id="AlipayUserInfoResult">
         <result property="id"    column="id"    />
-        <result property="userid"    column="userId"    />
-        <result property="username"    column="userName"    />
+        <result property="userId"    column="userId"    />
+        <result property="userName"    column="userName"    />
         <result property="password"    column="password"    />
-        <result property="paypasword"    column="payPasword"    />
+        <result property="payPasword"    column="payPasword"    />
         <result property="salt"    column="salt"    />
-        <result property="usertype"    column="userType"    />
+        <result property="userType"    column="userType"    />
         <result property="switchs"    column="switchs"    />
-        <result property="usernode"    column="userNode"    />
+        <result property="userNode"    column="userNode"    />
         <result property="email"    column="email"    />
         <result property="agent"    column="agent"    />
-        <result property="isagent"    column="isAgent"    />
+        <result property="isAgent"    column="isAgent"    />
         <result property="credit"    column="credit"    />
-        <result property="receiveorderstate"    column="receiveOrderState"    />
-        <result property="remitorderstate"    column="remitOrderState"    />
+        <result property="receiveOrderState"    column="receiveOrderState"    />
+        <result property="remitOrderState"    column="remitOrderState"    />
         <result property="qq"    column="QQ"    />
         <result property="telegram"    column="telegram"    />
         <result property="skype"    column="skype"    />
-        <result property="createtime"    column="createTime"    />
-        <result property="submittime"    column="submitTime"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="submitTime"    column="submitTime"    />
         <result property="status"    column="status"    />
         <result property="retain1"    column="retain1"    />
         <result property="retain2"    column="retain2"    />
@@ -36,34 +36,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status, retain1, retain2, retain3, retain4 from alipay_user_info
     </sql>
 
-    <select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">
-        <include refid="selectAlipayUserInfoVo"/>
-        <where>  
-            <if test="username != null  and username != ''"> and userName like concat('%', #{username}, '%')</if>
-            <if test="password != null  and password != ''"> and password = #{password}</if>
-            <if test="paypasword != null  and paypasword != ''"> and payPasword = #{paypasword}</if>
-            <if test="salt != null  and salt != ''"> and salt = #{salt}</if>
-            <if test="usertype != null "> and userType = #{usertype}</if>
-            <if test="switchs != null "> and switchs = #{switchs}</if>
-            <if test="usernode != null  and usernode != ''"> and userNode = #{usernode}</if>
-            <if test="email != null  and email != ''"> and email = #{email}</if>
-            <if test="agent != null  and agent != ''"> and agent = #{agent}</if>
-            <if test="isagent != null  and isagent != ''"> and isAgent = #{isagent}</if>
-            <if test="credit != null "> and credit = #{credit}</if>
-            <if test="receiveorderstate != null "> and receiveOrderState = #{receiveorderstate}</if>
-            <if test="remitorderstate != null "> and remitOrderState = #{remitorderstate}</if>
-            <if test="qq != null  and qq != ''"> and QQ = #{qq}</if>
-            <if test="telegram != null  and telegram != ''"> and telegram = #{telegram}</if>
-            <if test="skype != null  and skype != ''"> and skype = #{skype}</if>
-            <if test="createtime != null "> and createTime = #{createtime}</if>
-            <if test="submittime != null "> and submitTime = #{submittime}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
-            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
-            <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
-            <if test="retain4 != null  and retain4 != ''"> and retain4 = #{retain4}</if>
-        </where>
-    </select>
+    <!--<select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">-->
+        <!--<include refid="selectAlipayUserInfoVo"/>-->
+        <!--<where>  -->
+            <!--<if test="username != null  and username != ''"> and userName like concat('%', #{userName}, '%')</if>-->
+            <!--<if test="password != null  and password != ''"> and password = #{password}</if>-->
+            <!--<if test="paypasword != null  and paypasword != ''"> and payPasword = #{paypasword}</if>-->
+            <!--<if test="salt != null  and salt != ''"> and salt = #{salt}</if>-->
+            <!--<if test="usertype != null "> and userType = #{usertype}</if>-->
+            <!--<if test="switchs != null "> and switchs = #{switchs}</if>-->
+            <!--<if test="usernode != null  and usernode != ''"> and userNode = #{usernode}</if>-->
+            <!--<if test="email != null  and email != ''"> and email = #{email}</if>-->
+            <!--<if test="agent != null  and agent != ''"> and agent = #{agent}</if>-->
+            <!--<if test="isagent != null  and isagent != ''"> and isAgent = #{isagent}</if>-->
+            <!--<if test="credit != null "> and credit = #{credit}</if>-->
+            <!--<if test="receiveorderstate != null "> and receiveOrderState = #{receiveorderstate}</if>-->
+            <!--<if test="remitorderstate != null "> and remitOrderState = #{remitorderstate}</if>-->
+            <!--<if test="qq != null  and qq != ''"> and QQ = #{qq}</if>-->
+            <!--<if test="telegram != null  and telegram != ''"> and telegram = #{telegram}</if>-->
+            <!--<if test="skype != null  and skype != ''"> and skype = #{skype}</if>-->
+            <!--<if test="createtime != null "> and createTime = #{createtime}</if>-->
+            <!--<if test="submittime != null "> and submitTime = #{submittime}</if>-->
+            <!--<if test="status != null "> and status = #{status}</if>-->
+            <!--<if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>-->
+            <!--<if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>-->
+            <!--<if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>-->
+            <!--<if test="retain4 != null  and retain4 != ''"> and retain4 = #{retain4}</if>-->
+        <!--</where>-->
+    <!--</select>-->
     
     <select id="selectAlipayUserInfoById" parameterType="Long" resultMap="AlipayUserInfoResult">
         <include refid="selectAlipayUserInfoVo"/>

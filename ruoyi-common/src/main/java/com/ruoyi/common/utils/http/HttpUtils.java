@@ -129,6 +129,7 @@ public class HttpUtils
         catch (ConnectException e)
         {
             log.error("调用HttpUtils.sendPost ConnectException, url=" + url + ",param=" + param, e);
+            return "ConnectException";
         }
         catch (SocketTimeoutException e)
         {

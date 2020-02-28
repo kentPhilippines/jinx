@@ -20,336 +20,289 @@ public class AlipayUserInfo extends BaseEntity
     private Long id;
 
     /** 用户id【登录账号】 */
-    private String userid;
+    private String userId;
 
     /** 用户昵称 */
-    @Excel(name = "用户昵称")
-    private String username;
+    private String userName;
 
     /** shiro加密秘钥【登录】 */
-    @Excel(name = "shiro加密秘钥【登录】")
     private String password;
 
     /** shiro加密秘钥【资金】 */
-    @Excel(name = "shiro加密秘钥【资金】")
-    private String paypasword;
+    private String payPasword;
 
     /** 秘钥加密盐值【加密算法】 */
-    @Excel(name = "秘钥加密盐值【加密算法】")
     private String salt;
 
     /** 用户类型,商户1 码商2 */
-    @Excel(name = "用户类型,商户1 码商2")
-    private Integer usertype;
+    private Integer userType;
 
     /** 当前用户总开关 1开启0关闭【码商商户后台控制,该咋宏泰只能在后台显示】 */
-    @Excel(name = "当前用户总开关 1开启0关闭【码商商户后台控制,该咋宏泰只能在后台显示】")
     private Integer switchs;
 
     /** 组群备注 */
-    @Excel(name = "组群备注")
-    private String usernode;
+    private String userNode;
 
     /** 邮箱【修改账号秘钥邮件发送地址】 */
-    @Excel(name = "邮箱【修改账号秘钥邮件发送地址】")
     private String email;
 
     /** 代理商id【如果存在代理商则存在数据,如果不存在代理商则为null】 */
-    @Excel(name = "代理商id【如果存在代理商则存在数据,如果不存在代理商则为null】")
     private String agent;
 
     /** 是否为代理商:1代理商2普通码商【分润结算类型看用户类型userType】 */
-    @Excel(name = "是否为代理商:1代理商2普通码商【分润结算类型看用户类型userType】")
-    private String isagent;
+    private String isAgent;
 
     /** 信用等级为默认为100,掉单一次,或者出现故障一次减分0.001分,可人为加分 */
-    @Excel(name = "信用等级为默认为100,掉单一次,或者出现故障一次减分0.001分,可人为加分")
     private Double credit;
 
     /** 是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以交易】 */
-    @Excel(name = "是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以交易】")
-    private Integer receiveorderstate;
+    private Integer receiveOrderState;
 
     /** 是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以代付】 */
-    @Excel(name = "是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以代付】")
-    private Integer remitorderstate;
+    private Integer remitOrderState;
 
     /** QQ联系方式 */
-    @Excel(name = "QQ联系方式")
-    private String qq;
+    private String QQ;
 
     /** 小飞机 */
-    @Excel(name = "小飞机")
     private String telegram;
 
     /** skype */
-    @Excel(name = "skype")
     private String skype;
 
     /** 最后一次数据修改时间 */
-    @Excel(name = "最后一次数据修改时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date submittime;
+    private Date submitTime;
 
     /** 数据是否可用:1数据可用2数据无用 */
-    @Excel(name = "数据是否可用:1数据可用2数据无用")
     private Integer status;
 
     /** 预留，添加业务使用 */
-    @Excel(name = "预留，添加业务使用")
     private String retain1;
 
     /** 预留，添加业务使用 */
-    @Excel(name = "预留，添加业务使用")
     private String retain2;
 
     /** 预留，添加业务使用 */
-    @Excel(name = "预留，添加业务使用")
     private String retain3;
 
     /** 预留，添加业务使用 */
-    @Excel(name = "预留，添加业务使用")
     private String retain4;
 
-    public void setId(Long id) 
-    {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() 
-    {
-        return id;
-    }
-    public void setUserid(String userid) 
-    {
-        this.userid = userid;
+    public String getUserId() {
+        return userId;
     }
 
-    public String getUserid() 
-    {
-        return userid;
-    }
-    public void setUsername(String username) 
-    {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getUsername() 
-    {
-        return username;
+    public String getUserName() {
+        return userName;
     }
-    public void setPassword(String password) 
-    {
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getPassword() 
-    {
-        return password;
-    }
-    public void setPaypasword(String paypasword) 
-    {
-        this.paypasword = paypasword;
+    public String getPayPasword() {
+        return payPasword;
     }
 
-    public String getPaypasword() 
-    {
-        return paypasword;
+    public void setPayPasword(String payPasword) {
+        this.payPasword = payPasword;
     }
-    public void setSalt(String salt) 
-    {
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
         this.salt = salt;
     }
 
-    public String getSalt() 
-    {
-        return salt;
-    }
-    public void setUsertype(Integer usertype) 
-    {
-        this.usertype = usertype;
+    public Integer getUserType() {
+        return userType;
     }
 
-    public Integer getUsertype() 
-    {
-        return usertype;
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
-    public void setSwitchs(Integer switchs) 
-    {
+
+    public Integer getSwitchs() {
+        return switchs;
+    }
+
+    public void setSwitchs(Integer switchs) {
         this.switchs = switchs;
     }
 
-    public Integer getSwitchs() 
-    {
-        return switchs;
-    }
-    public void setUsernode(String usernode) 
-    {
-        this.usernode = usernode;
+    public String getUserNode() {
+        return userNode;
     }
 
-    public String getUsernode() 
-    {
-        return usernode;
+    public void setUserNode(String userNode) {
+        this.userNode = userNode;
     }
-    public void setEmail(String email) 
-    {
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getEmail() 
-    {
-        return email;
+    public String getAgent() {
+        return agent;
     }
-    public void setAgent(String agent) 
-    {
+
+    public void setAgent(String agent) {
         this.agent = agent;
     }
 
-    public String getAgent() 
-    {
-        return agent;
-    }
-    public void setIsagent(String isagent) 
-    {
-        this.isagent = isagent;
+    public String getIsAgent() {
+        return isAgent;
     }
 
-    public String getIsagent() 
-    {
-        return isagent;
+    public void setIsAgent(String isAgent) {
+        this.isAgent = isAgent;
     }
-    public void setCredit(Double credit) 
-    {
+
+    public Double getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Double credit) {
         this.credit = credit;
     }
 
-    public Double getCredit() 
-    {
-        return credit;
-    }
-    public void setReceiveorderstate(Integer receiveorderstate) 
-    {
-        this.receiveorderstate = receiveorderstate;
+    public Integer getReceiveOrderState() {
+        return receiveOrderState;
     }
 
-    public Integer getReceiveorderstate() 
-    {
-        return receiveorderstate;
-    }
-    public void setRemitorderstate(Integer remitorderstate) 
-    {
-        this.remitorderstate = remitorderstate;
+    public void setReceiveOrderState(Integer receiveOrderState) {
+        this.receiveOrderState = receiveOrderState;
     }
 
-    public Integer getRemitorderstate() 
-    {
-        return remitorderstate;
-    }
-    public void setQq(String qq) 
-    {
-        this.qq = qq;
+    public Integer getRemitOrderState() {
+        return remitOrderState;
     }
 
-    public String getQq() 
-    {
-        return qq;
+    public void setRemitOrderState(Integer remitOrderState) {
+        this.remitOrderState = remitOrderState;
     }
-    public void setTelegram(String telegram) 
-    {
+
+    public String getQQ() {
+        return QQ;
+    }
+
+    public void setQQ(String QQ) {
+        this.QQ = QQ;
+    }
+
+    public String getTelegram() {
+        return telegram;
+    }
+
+    public void setTelegram(String telegram) {
         this.telegram = telegram;
     }
 
-    public String getTelegram() 
-    {
-        return telegram;
+    public String getSkype() {
+        return skype;
     }
-    public void setSkype(String skype) 
-    {
+
+    public void setSkype(String skype) {
         this.skype = skype;
     }
 
-    public String getSkype() 
-    {
-        return skype;
-    }
-    public void setSubmittime(Date submittime) 
-    {
-        this.submittime = submittime;
+    public Date getSubmitTime() {
+        return submitTime;
     }
 
-    public Date getSubmittime() 
-    {
-        return submittime;
+    public void setSubmitTime(Date submitTime) {
+        this.submitTime = submitTime;
     }
-    public void setStatus(Integer status) 
-    {
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Integer getStatus() 
-    {
-        return status;
+    public String getRetain1() {
+        return retain1;
     }
-    public void setRetain1(String retain1) 
-    {
+
+    public void setRetain1(String retain1) {
         this.retain1 = retain1;
     }
 
-    public String getRetain1() 
-    {
-        return retain1;
+    public String getRetain2() {
+        return retain2;
     }
-    public void setRetain2(String retain2) 
-    {
+
+    public void setRetain2(String retain2) {
         this.retain2 = retain2;
     }
 
-    public String getRetain2() 
-    {
-        return retain2;
+    public String getRetain3() {
+        return retain3;
     }
-    public void setRetain3(String retain3) 
-    {
+
+    public void setRetain3(String retain3) {
         this.retain3 = retain3;
     }
 
-    public String getRetain3() 
-    {
-        return retain3;
-    }
-    public void setRetain4(String retain4) 
-    {
-        this.retain4 = retain4;
+    public String getRetain4() {
+        return retain4;
     }
 
-    public String getRetain4() 
-    {
-        return retain4;
+    public void setRetain4(String retain4) {
+        this.retain4 = retain4;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
-            .append("userid", getUserid())
-            .append("username", getUsername())
+            .append("userId", getUserId())
+            .append("userName", getUserName())
             .append("password", getPassword())
-            .append("paypasword", getPaypasword())
+            .append("payPassword", getPayPasword())
             .append("salt", getSalt())
-            .append("usertype", getUsertype())
+            .append("userType", getUserType())
             .append("switchs", getSwitchs())
-            .append("usernode", getUsernode())
+            .append("userNode", getUserNode())
             .append("email", getEmail())
             .append("agent", getAgent())
-            .append("isagent", getIsagent())
+            .append("isAgent", getIsAgent())
             .append("credit", getCredit())
-            .append("receiveorderstate", getReceiveorderstate())
-            .append("remitorderstate", getRemitorderstate())
-            .append("qq", getQq())
+            .append("receiveOrderState", getReceiveOrderState())
+            .append("remitOrderState", getRemitOrderState())
+            .append("QQ", getQQ())
             .append("telegram", getTelegram())
             .append("skype", getSkype())
-            .append("createtime", getCreateTime())
-            .append("submittime", getSubmittime())
+            .append("createTime", getCreateTime())
+            .append("submitTime", getSubmitTime())
             .append("status", getStatus())
             .append("retain1", getRetain1())
             .append("retain2", getRetain2())

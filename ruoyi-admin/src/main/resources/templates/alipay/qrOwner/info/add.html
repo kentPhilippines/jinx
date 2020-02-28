@@ -1,73 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('新增码商')"/>
+    <th:block th:include="include :: header('新增码商代理')"/>
     <th:block th:include="include :: select2-css"/>
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-role-add">
         <div class="form-group">
-            <label class="col-sm-3 control-label is-required">代理商ID：</label>
+            <label class="col-sm-3 control-label is-required">登陆账号：</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" name="AgentId" id="AgentId" disabled="disabled">
-                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>系统自动生成</span>
+                <input class="form-control" type="text" name="userId" id="userId" required>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label is-required">代理商名称：</label>
+            <label class="col-sm-3 control-label ">用户昵称：</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" name="agentName" id="agentName" required>
+                <input class="form-control" type="text" name="userName" id="userName" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">登陆密码：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="password" name="password" id="password" required>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">安全邮箱：</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" name="mail" id="mail" required>
+                <input class="form-control" type="text" name="email" id="email" required>
             </div>
         </div>
+
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">联系方式：</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" name="QQ" id="QQ" placeholder="QQ号码">
                 <input class="form-control" type="text" name="telegram" id="telegram" placeholder="小飞机">
-                <input class="form-control" type="text" name="Skype" id="Skype" placeholder="skype">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">产品名称：</label>
-            <div class="col-sm-8">
-                <select name="productName" id="productName" class="form-control m-b" th:with="type=${@dict.getType('sys_user_sex')}">
-                    <!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
-                    <option value="">请选择产品名称</option>
-                    <option th:value="0">支付宝H5</option>
-                    <option th:value="1">微信扫码</option>
-                    <option th:value="2">云闪付</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">费率：</label>
-            <div class="col-sm-8">
-                <input class="form-control" type="number" name="rate" id="rate" min="0" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">所属群：</label>
-            <div class="col-sm-8">
-                <input class="form-control" type="text" name="belong" id="belong" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">码商服务群：</label>
-            <div class="col-sm-8">
-                <select name="group" id="group" class="form-control m-b" th:with="type=${@dict.getType('sys_user_sex')}">
-                    <!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
-                    <option value="">请选择码商服务群</option>
-                    <option th:value="0">支付宝H5</option>
-                    <option th:value="1">微信扫码</option>
-                    <option th:value="2">云闪付</option>
-                </select>
+                <input class="form-control" type="text" name="skype" id="skype" placeholder="skype">
             </div>
         </div>
         <div class="form-group">

@@ -15,12 +15,10 @@ public enum DataSourceType
     /**
      * 从库
      */
-    SLAVE,
+    ALIPAY_SLAVE,
 
+    PAY_SLAVE,
 
-    alipay,
-
-    pay
-
+    DEALPAY_SLAVE
 
 }

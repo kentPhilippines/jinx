@@ -1,35 +1,39 @@
 package com.ruoyi.web.controller.alipay;
 
-import java.util.List;
-
+import com.google.common.collect.Maps;
+import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.service.IAlipayUserInfoService;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.MapDataUtil;
+import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.DictionaryUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.alipay.domain.AlipayUserInfo;
-import com.ruoyi.alipay.service.IAlipayUserInfoService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户详情Controller
  *
- * @author ruoyi
+ * @author otc
  * @date 2020-02-27
  */
 @Controller
 @RequestMapping("/alipay/userInfo")
 public class AlipayUserInfoController extends BaseController {
-    private String prefix = "alipay/userInfo";
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
+    private String prefix = "alipay/qrOwner/info";
 
     @Autowired
     private IAlipayUserInfoService alipayUserInfoService;
@@ -81,7 +85,22 @@ public class AlipayUserInfoController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(AlipayUserInfo alipayUserInfo) {
-        return toAjax(alipayUserInfoService.insertAlipayUserInfo(alipayUserInfo));
+        String url = dictionaryUtils.getApiUrlPath("alipay_api_address", "add_user_entity");
+        Map<String, Object> mapParam = Maps.newHashMap();
+        mapParam.put("userId",alipayUserInfo.getUserId());
+        mapParam.put("userName",alipayUserInfo.getUserName());
+        mapParam.put("password",alipayUserInfo.getPayPasword());
+        mapParam.put("email",alipayUserInfo.getEmail());
+        mapParam.put("QQ",alipayUserInfo.getQQ());
+        mapParam.put("telegram",alipayUserInfo.getTelegram());
+        mapParam.put("skype",alipayUserInfo.getSkype());
+        String flag = HttpUtils.sendPost(url, MapDataUtil.createParam(mapParam));
+        switch (flag) {
+            case "ConnectException":
+                throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + url);
+        }
+        int i = flag == "true" ? 0 : 1;
+        return toAjax(0);
     }
 
     /**
@@ -115,4 +134,32 @@ public class AlipayUserInfoController extends BaseController {
     public AjaxResult remove(String ids) {
         return toAjax(alipayUserInfoService.deleteAlipayUserInfoByIds(ids));
     }
+
+
+    /**
+     * 新增方法
+     */
+
+    /**
+     * 码商状态修改
+     */
+    @Log(title = "码商查询", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("alipay:userInfo:edit")
+    @PostMapping("/changeStatus")
+    @ResponseBody
+    public AjaxResult changeStatus(AlipayUserInfo user) {
+        String url = dictionaryUtils.getApiUrlPath("alipay_api_address", "update_user_status");
+        Map<String, Object> mapParam = Maps.newHashMap();
+        mapParam.put("switchs", user.getSwitchs());
+        mapParam.put("userId", user.getUserId());
+        String flag = HttpUtils.sendPost(url, MapDataUtil.createParam(mapParam));
+        switch (flag) {
+            case "ConnectException":
+                throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + url);
+        }
+        int i = flag == "true" ? 0 : 1;
+        return toAjax(0);
+    }
+
+
 }

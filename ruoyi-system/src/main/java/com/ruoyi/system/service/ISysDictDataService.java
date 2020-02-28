@@ -2,6 +2,7 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 import com.ruoyi.system.domain.SysDictData;
+import org.springframework.stereotype.Service;
 
 /**
  * 字典 业务层
@@ -74,4 +75,5 @@ public interface ISysDictDataService
      * @return 结果
      */
     public int updateDictData(SysDictData dictData);
+
 }

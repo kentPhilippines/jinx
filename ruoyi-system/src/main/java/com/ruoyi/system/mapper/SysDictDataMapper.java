@@ -3,6 +3,7 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.ruoyi.system.domain.SysDictData;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 字典表 数据层
@@ -92,4 +93,13 @@ public interface SysDictDataMapper
      * @return 结果
      */
     public int updateDictDataType(@Param("oldDictType") String oldDictType, @Param("newDictType") String newDictType);
+
+    /**
+     * 查询字典value
+     * @param dictType
+     * @param dictLabel
+     * @return
+     */
+    @Select("select dict_value from sys_dict_data where dict_type = #{dictType} and dict_label = #{dictLabel} ")
+    List<String> findDictValueByKye(@Param("dictType") String dictType, @Param("dictLabel") String dictLabel);
 }
