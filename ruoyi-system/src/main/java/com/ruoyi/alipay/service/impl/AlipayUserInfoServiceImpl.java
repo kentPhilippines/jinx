@@ -30,6 +30,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
      * @return 用户详情
      */
     @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayUserInfo selectAlipayUserInfoById(Long id) {
         return alipayUserInfoMapper.selectAlipayUserInfoById(id);
     }

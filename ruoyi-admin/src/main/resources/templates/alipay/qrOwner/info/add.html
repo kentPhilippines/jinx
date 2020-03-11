@@ -6,7 +6,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-role-add">
+    <form class="form-horizontal m" id="form-alipay-add">
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">登陆账号：</label>
             <div class="col-sm-8">
@@ -51,28 +51,17 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: select2-js"/>
 <script type="text/javascript">
-    $(function () {
-        var url = ctx + "system/menu/roleMenuTreeData";
-        var options = {
-            id: "menuTrees",
-            url: url,
-            check: {enable: true},
-            expandLevel: 0
-        };
-        $.tree.init(options);
-    });
-
-    $("#form-role-add").validate({
+    $("#form-alipay-add").validate({
         rules: {
             onkeyup: false,
-            roleName: {
+            userId: {
                 remote: {
-                    url: ctx + "system/role/checkRoleNameUnique",
+                    url: ctx + "//checkAlipayUserIdUnique",
                     type: "post",
                     dataType: "json",
                     data: {
-                        "roleName": function () {
-                            return $.common.trim($("#roleName").val());
+                        "userId": function () {
+                            return $.common.trim($("#userId").val());
                         }
                     },
                     dataFilter: function (data, type) {
@@ -100,8 +89,8 @@
             },
         },
         messages: {
-            "roleName": {
-                remote: "角色名称已经存在"
+            "userId": {
+                remote: "登陆账号已经存在"
             },
             "roleKey": {
                 remote: "角色权限已经存在"
@@ -117,23 +106,28 @@
     }
 
     function add() {
-        var roleName = $("input[name='roleName']").val();
-        var roleKey = $("input[name='roleKey']").val();
-        var roleSort = $("input[name='roleSort']").val();
-        var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+        var userId = $("input[name='userId']").val();
+        var userName = $("input[name='userName']").val();
+        var password = $("input[name='password']").val();
+        var email = $("input[name='email']").val();
+        var QQ = $("input[name='QQ']").val();
+        var telegram = $("input[name='telegram']").val();
+        var skype = $("input[name='skype']").val();
         var remark = $("input[name='remark']").val();
-        var menuIds = $.tree.getCheckedNodes();
         $.ajax({
             cache: true,
             type: "POST",
-            url: ctx + "system/role/add",
+            url: ctx + "/alipay/userInfo/add",
+            dataType: "json",
             data: {
-                "roleName": roleName,
-                "roleKey": roleKey,
-                "roleSort": roleSort,
-                "status": status,
-                "remark": remark,
-                "menuIds": menuIds
+                "userId": userId,
+                "userName": userName,
+                "password": password,
+                "email": email,
+                "QQ": QQ,
+                "telegram": telegram,
+                "skype": skype,
+                "remark": remark
             },
             async: false,
             error: function (request) {

@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -52,6 +53,7 @@ public class AlipayUserInfoController extends BaseController {
     @ResponseBody
     public TableDataInfo list(AlipayUserInfo alipayUserInfo) {
         startPage();
+        //通过数据库源获取数据列表
         List<AlipayUserInfo> list = alipayUserInfoService.selectAlipayUserInfoList(alipayUserInfo);
         return getDataTable(list);
     }
@@ -85,16 +87,20 @@ public class AlipayUserInfoController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(AlipayUserInfo alipayUserInfo) {
-        String url = dictionaryUtils.getApiUrlPath("alipay_api_address", "add_user_entity");
+        //获取alipay处理接口URL
+        StringBuffer url = new StringBuffer();
+        String ip = StaticConstants.ALIPAY_IP_PORT;
+        //获取数据库内请求路径
+        String path = dictionaryUtils.getApiUrlPath("alipay_api_address", "add_user_entity");
         Map<String, Object> mapParam = Maps.newHashMap();
-        mapParam.put("userId",alipayUserInfo.getUserId());
-        mapParam.put("userName",alipayUserInfo.getUserName());
-        mapParam.put("password",alipayUserInfo.getPayPasword());
-        mapParam.put("email",alipayUserInfo.getEmail());
-        mapParam.put("QQ",alipayUserInfo.getQQ());
-        mapParam.put("telegram",alipayUserInfo.getTelegram());
-        mapParam.put("skype",alipayUserInfo.getSkype());
-        String flag = HttpUtils.sendPost(url, MapDataUtil.createParam(mapParam));
+        mapParam.put("userId", alipayUserInfo.getUserId());
+        mapParam.put("userName", alipayUserInfo.getUserName());
+        mapParam.put("password", alipayUserInfo.getPayPasword());
+        mapParam.put("email", alipayUserInfo.getEmail());
+        mapParam.put("QQ", alipayUserInfo.getQQ());
+        mapParam.put("telegram", alipayUserInfo.getTelegram());
+        mapParam.put("skype", alipayUserInfo.getSkype());
+        String flag = HttpUtils.sendPost(url.append(ip).append(path).toString(), MapDataUtil.createParam(mapParam));
         switch (flag) {
             case "ConnectException":
                 throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + url);
@@ -121,18 +127,36 @@ public class AlipayUserInfoController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(AlipayUserInfo alipayUserInfo) {
+
         return toAjax(alipayUserInfoService.updateAlipayUserInfo(alipayUserInfo));
     }
 
     /**
-     * 删除用户详情
+     * 删除用户详情(调用api)
      */
     @RequiresPermissions("alipay:userInfo:remove")
     @Log(title = "用户详情", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(alipayUserInfoService.deleteAlipayUserInfoByIds(ids));
+        //获取alipay处理接口URL
+        StringBuffer url = new StringBuffer();
+        String ip = StaticConstants.ALIPAY_IP_PORT;
+        //获取数据库内请求路径
+        String path = dictionaryUtils.getApiUrlPath("alipay_api_address", "update_user_status");
+        Map<String, Object> mapParam = Maps.newHashMap();
+        mapParam.put("ids", ids);
+        String flag = HttpUtils.sendPost(url.append(ip).append(path).toString(), MapDataUtil.createParam(mapParam));
+        switch (flag) {
+            case "ConnectException":
+                throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + url);
+        }
+        int i = flag == "true" ? 0 : 1;
+        return  toAjax(i);
+
+
+
+
     }
 
 
@@ -141,18 +165,22 @@ public class AlipayUserInfoController extends BaseController {
      */
 
     /**
-     * 码商状态修改
+     * 码商状态修改（调用api）
      */
     @Log(title = "码商查询", businessType = BusinessType.UPDATE)
     @RequiresPermissions("alipay:userInfo:edit")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(AlipayUserInfo user) {
-        String url = dictionaryUtils.getApiUrlPath("alipay_api_address", "update_user_status");
+        //获取alipay处理接口URL
+        StringBuffer url = new StringBuffer();
+        String ip = StaticConstants.ALIPAY_IP_PORT;
+        //获取数据库内请求路径
+        String path = dictionaryUtils.getApiUrlPath("alipay_api_address", "update_user_status");
         Map<String, Object> mapParam = Maps.newHashMap();
         mapParam.put("switchs", user.getSwitchs());
         mapParam.put("userId", user.getUserId());
-        String flag = HttpUtils.sendPost(url, MapDataUtil.createParam(mapParam));
+        String flag = HttpUtils.sendPost(url.append(ip).append(path).toString(), MapDataUtil.createParam(mapParam));
         switch (flag) {
             case "ConnectException":
                 throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + url);
@@ -161,5 +189,15 @@ public class AlipayUserInfoController extends BaseController {
         return toAjax(0);
     }
 
+    /**
+     * 检验登陆用户ID是否唯一
+     */
+    @ResponseBody
+    public TableDataInfo check(AlipayUserInfo alipayUserInfo) {
+        startPage();
+        //通过数据库源获取数据列表
+        List<AlipayUserInfo> list = alipayUserInfoService.selectAlipayUserInfoList(alipayUserInfo);
+        return getDataTable(list);
+    }
 
 }

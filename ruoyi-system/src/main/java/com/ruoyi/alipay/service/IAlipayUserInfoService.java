@@ -17,7 +17,7 @@ public interface IAlipayUserInfoService
      * @param id 用户详情ID
      * @return 用户详情
      */
-    public AlipayUserInfo selectAlipayUserInfoById(Long id);
+    AlipayUserInfo selectAlipayUserInfoById(Long id);
 
     /**
      * 查询用户详情列表
