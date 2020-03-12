@@ -869,9 +869,32 @@ var table = {
         	    };
         	    $.ajax(config)
             },
+        	ajaxSubmit: function(url, type, dataType, data) {
+            	var config = {
+        	        url: url,
+        	        type: type,
+        	        dataType: dataType,
+        	        data: data,
+        	        beforeSend: function () {
+        	        	$.modal.loading("正在处理中，请稍后...");
+        	        },
+        	        success: function(result) {
+						layer.alert(result.msg, {
+							icon: 1,
+							skin: 'layer-ext-moon'
+						});
+						$.modal.closeLoading();
+        	        }
+        	    };
+        	    $.ajax(config)
+            },
             // post请求传输
             post: function(url, data, callback) {
             	$.operate.submit(url, "post", "json", data, callback);
+            },
+            // fixPost请求传输
+			fixPost: function(url, data) {
+            	$.operate.ajaxSubmit(url, "post", "json", data);
             },
             // get请求传输
             get: function(url, callback) {

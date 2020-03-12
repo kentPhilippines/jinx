@@ -68,13 +68,13 @@ public abstract class AbstractQuartzJob implements Job
      * @param context 工作执行上下文对象
      * @param sysScheduleJob 系统计划任务
      */
-    protected void after(JobExecutionContext context, SysJob sysJob, Exception e)
-    {
-        Date startTime = threadLocal.get();
-        threadLocal.remove();
+        protected void after(JobExecutionContext context, SysJob sysJob, Exception e)
+        {
+            Date startTime = threadLocal.get();
+            threadLocal.remove();
 
-        final SysJobLog sysJobLog = new SysJobLog();
-        sysJobLog.setJobName(sysJob.getJobName());
+            final SysJobLog sysJobLog = new SysJobLog();
+            sysJobLog.setJobName(sysJob.getJobName());
         sysJobLog.setJobGroup(sysJob.getJobGroup());
         sysJobLog.setInvokeTarget(sysJob.getInvokeTarget());
         sysJobLog.setStartTime(startTime);

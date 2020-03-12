@@ -1,99 +1,100 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('用户详情列表')" />
+    <th:block th:include="include :: header('用户详情列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <p>登陆账号：</p>
-                                <input type="text" name="userId" id="userId"/>
-                            </li>
-                            <li>
-                                <p>代理商ID：</p>
-                                <input type="text" name="agent" id="agent"/>
-                            </li>
-                            <li>
-                                用户状态：<select name="status" th:with="type=${@dict.getType('qr_user_switchs')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
-                            </li>
-                            <li class="select-time">
-                                <p>创建时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreatetime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreatetime]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>登陆账号：</p>
+                            <input type="text" name="userId" id="userId"/>
+                        </li>
+                        <li>
+                            <p>代理商ID：</p>
+                            <input type="text" name="agent" id="agent"/>
+                        </li>
+                        <li>
+                            用户状态：<select name="status" th:with="type=${@dict.getType('qr_user_switchs')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <li class="select-time">
+                            <p>创建时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:userInfo:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:userInfo:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:userInfo:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:userInfo:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:userInfo:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="alipay:userInfo:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-     <th:block th:include="include :: layout-latest-js" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('alipay:userInfo:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('alipay:userInfo:remove')}]];
-        var prefix = ctx + "alipay/userInfo";
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<script th:inline="javascript">
+    var resetLoginFlag = [[${@permission.hasPermi('alipay:userInfo:reset:login')}]];
+    var resetWithdrawalFlag = [[${@permission.hasPermi('alipay:userInfo:reset:withdrawal')}]];
+    var editFlag = [[${@permission.hasPermi('alipay:userInfo:edit')}]];
+    var prefix = ctx + "alipay/userInfo";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "码商详情",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "码商详情",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'id', 
-                    title : '数据id',
+                    field: 'id',
+                    title: '数据id',
                     visible: false
                 },
                 {
-                    field : 'userId',
-                    title : '登录账号'
+                    field: 'userId',
+                    title: '登录账号'
                 },
                 {
-                    field : 'userName',
-                    title : '用户昵称'
+                    field: 'userName',
+                    title: '用户昵称'
                 },
                 {
-                    field : 'userType',
-                    title : '用户类型',
-                    formatter: function(value, item, index) {
+                    field: 'userType',
+                    title: '用户类型',
+                    formatter: function (value, item, index) {
                         if (item.userType == '1') {
                             return '<span>商户</span>';
                         } else if (item.userType == '2') {
@@ -102,15 +103,15 @@
                     }
                 },
                 {
-                    field : 'agent',
-                    title : '代理商ID',
-                    align : 'center'
+                    field: 'agent',
+                    title: '代理商ID',
+                    align: 'center'
                 },
                 {
-                    field : 'isAgent',
-                    title : '代理商(是/否)',
+                    field: 'isAgent',
+                    title: '代理商(是/否)',
                     align: 'center',
-                    formatter: function(value, item, index) {
+                    formatter: function (value, item, index) {
                         if (item.isAgent == '1') {
                             return '<span>是</span>';
                         } else if (item.isAgent == '2') {
@@ -119,25 +120,25 @@
                     }
                 },
                 {
-                    field : 'credit', 
-                    title : '信用分'
+                    field: 'credit',
+                    title: '信用分'
                 },
                 {
-                    field : 'email',
-                    title : '邮箱',
+                    field: 'email',
+                    title: '邮箱',
                     align: 'center'
                 },
                 {
-                    field : 'QQ',
-                    title : 'QQ号码'
+                    field: 'qq',
+                    title: 'QQ号码'
                 },
                 {
-                    field : 'telegram', 
-                    title : 'telegram'
+                    field: 'telegram',
+                    title: 'telegram'
                 },
                 {
-                    field : 'skype', 
-                    title : 'skype'
+                    field: 'skype',
+                    title: 'skype'
                 },
                 {
                     visible: editFlag == 'hidden' ? false : true,
@@ -148,45 +149,61 @@
                     }
                 },
                 {
-                    field : 'createTime',
-                    title : '创建时间',
+                    field: 'createTime',
+                    title: '创建时间',
                     align: 'center'
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-danger btn-xs ' + resetLoginFlag + '" href="javascript:void(0)" onclick="resetPwdLogin(\'' + row.id+ '\')"><i class="fa fa-key"></i>登陆</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + resetWithdrawalFlag + '" href="javascript:void(0)" onclick="resetWithdrawalPwd(\'' + row.id + '\')"><i class="fa fa-key"></i>提现</a> ');
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        /* 用户状态显示 */
-        function statusTools(row) {
-            if (row.switchs == 0) {
-                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.userId + '\')"></i> ';
-            } else {
-                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
-            }
+    /* 用户状态显示 */
+    function statusTools(row) {
+        if (row.switchs == 0) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.userId + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
         }
-        /* 用户管理-停用 */
-        function disable(userId) {
-            $.modal.confirm("确认要停用用户吗？", function() {
-                $.operate.post(prefix + "/changeStatus", { "userId": userId, "switchs": 0 });
-            })
-        }
+    }
 
-        /* 用户管理启用 */
-        function enable(userId) {
-            $.modal.confirm("确认要启用用户吗？", function() {
-                $.operate.post(prefix + "/changeStatus", { "userId": userId, "switchs": 1 });
-            })
-        }
-    </script>
+    /* 重置用户的登陆密码 */
+    function resetPwdLogin(id) {
+        $.modal.confirm("确认要重置此用户的【登陆】密码？", function() {
+            $.operate.fixPost(prefix + "/resetLoginPwd", { "id": id });
+        })
+    }
+
+    /* 重置用户的提现密码 */
+    function resetWithdrawalPwd(id) {
+        $.modal.confirm("确认要重置此用户的【提现】密码？", function() {
+            $.operate.fixPost(prefix + "/resetWithdrawalPwd", { "id": id });
+        })
+    }
+
+    /* 用户管理-停用 */
+    function disable(userId) {
+        $.modal.confirm("确认要停用用户吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"userId": userId, "switchs": 0});
+        })
+    }
+
+    /* 用户管理启用 */
+    function enable(userId) {
+        $.modal.confirm("确认要启用用户吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"userId": userId, "switchs": 1});
+        })
+    }
+</script>
 </body>
 </html>

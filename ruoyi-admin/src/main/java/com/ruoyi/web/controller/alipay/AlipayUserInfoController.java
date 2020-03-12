@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayUserInfoService;
@@ -88,25 +89,35 @@ public class AlipayUserInfoController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(AlipayUserInfo alipayUserInfo) {
         //获取alipay处理接口URL
-        StringBuffer url = new StringBuffer();
-        String ip = StaticConstants.ALIPAY_IP_PORT;
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_ERVICE_API_KEY, StaticConstants.ALIPAY_ERVICE_API_VALUE);
         //获取数据库内请求路径
-        String path = dictionaryUtils.getApiUrlPath("alipay_api_address", "add_user_entity");
+//        String url1 = "http://10.14.180.64:5055/api-alipay/account-api/add-account";
         Map<String, Object> mapParam = Maps.newHashMap();
         mapParam.put("userId", alipayUserInfo.getUserId());
         mapParam.put("userName", alipayUserInfo.getUserName());
-        mapParam.put("password", alipayUserInfo.getPayPasword());
+        mapParam.put("password", alipayUserInfo.getPassword());
+        mapParam.put("payPasword", alipayUserInfo.getPayPasword());
+        mapParam.put("userType", 2);//码商代码
+        mapParam.put("isAgent", 1);//是否为代理
         mapParam.put("email", alipayUserInfo.getEmail());
         mapParam.put("QQ", alipayUserInfo.getQQ());
         mapParam.put("telegram", alipayUserInfo.getTelegram());
         mapParam.put("skype", alipayUserInfo.getSkype());
-        String flag = HttpUtils.sendPost(url.append(ip).append(path).toString(), MapDataUtil.createParam(mapParam));
-        switch (flag) {
-            case "ConnectException":
-                throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + url);
+        String flag = HttpUtils.sendPost(ipPort + urlPath, MapDataUtil.createParam(mapParam));
+        if ("ConnectException".equals(flag)) {
+            throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
         }
-        int i = flag == "true" ? 0 : 1;
-        return toAjax(0);
+        JSONObject json = JSONObject.parseObject(flag);
+        String result = json.getString("success");
+        switch (result) {
+            case "true":
+                return toAjax(1);
+            case "false":
+                String message = json.getString("message");
+                return error(message);
+        }
+        return null;
     }
 
     /**
@@ -127,7 +138,6 @@ public class AlipayUserInfoController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(AlipayUserInfo alipayUserInfo) {
-
         return toAjax(alipayUserInfoService.updateAlipayUserInfo(alipayUserInfo));
     }
 
@@ -141,7 +151,8 @@ public class AlipayUserInfoController extends BaseController {
     public AjaxResult remove(String ids) {
         //获取alipay处理接口URL
         StringBuffer url = new StringBuffer();
-        String ip = StaticConstants.ALIPAY_IP_PORT;
+        String ip = null;
+//        StaticConstants.ALIPAY_IP_PORT;
         //获取数据库内请求路径
         String path = dictionaryUtils.getApiUrlPath("alipay_api_address", "update_user_status");
         Map<String, Object> mapParam = Maps.newHashMap();
@@ -152,9 +163,7 @@ public class AlipayUserInfoController extends BaseController {
                 throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + url);
         }
         int i = flag == "true" ? 0 : 1;
-        return  toAjax(i);
-
-
+        return toAjax(i);
 
 
     }
@@ -174,7 +183,7 @@ public class AlipayUserInfoController extends BaseController {
     public AjaxResult changeStatus(AlipayUserInfo user) {
         //获取alipay处理接口URL
         StringBuffer url = new StringBuffer();
-        String ip = StaticConstants.ALIPAY_IP_PORT;
+        String ip = null;
         //获取数据库内请求路径
         String path = dictionaryUtils.getApiUrlPath("alipay_api_address", "update_user_status");
         Map<String, Object> mapParam = Maps.newHashMap();
@@ -192,12 +201,42 @@ public class AlipayUserInfoController extends BaseController {
     /**
      * 检验登陆用户ID是否唯一
      */
+    @PostMapping("checkAlipayUserIdUnique")
     @ResponseBody
-    public TableDataInfo check(AlipayUserInfo alipayUserInfo) {
-        startPage();
-        //通过数据库源获取数据列表
-        List<AlipayUserInfo> list = alipayUserInfoService.selectAlipayUserInfoList(alipayUserInfo);
-        return getDataTable(list);
+    public String checkAlipayUserIdUnique(AlipayUserInfo alipayUserInfo) {
+        logger.info("進入登陸賬號驗證方法");
+        return alipayUserInfoService.checkAlipayUserIdUnique(alipayUserInfo);
     }
+
+    /**
+     * 重置用戶的登陸密碼
+     */
+    @RequiresPermissions("alipay:userInfo:reset:login")
+    @PostMapping("resetLoginPwd")
+    @ResponseBody
+    public AjaxResult resetLoginPwd(Long id) {
+        String resetPwd = alipayUserInfoService.resetLoginPwd(id);
+        if ("false".equals(resetPwd)) {
+            return error("操作失败");
+        }
+        return success("重置成功，新的登陆密码：" + resetPwd);
+
+    }
+
+    /**
+     * 重置用戶的提現密碼
+     */
+    @RequiresPermissions("alipay:userInfo:reset:withdrawal")
+    @Log(title = "码商查询", businessType = BusinessType.UPDATE)
+    @PostMapping("resetWithdrawalPwd")
+    @ResponseBody
+    public AjaxResult resetWithdrawalPwd(Long id) {
+        String resetPwd = alipayUserInfoService.resetWithdrawalPwd(id);
+        if ("false".equals(resetPwd)) {
+            return error("操作失败");
+        }
+        return success("重置成功，新的提现密码：" + resetPwd);
+    }
+
 
 }

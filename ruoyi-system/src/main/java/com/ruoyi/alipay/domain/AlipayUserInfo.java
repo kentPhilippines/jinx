@@ -298,7 +298,7 @@ public class AlipayUserInfo extends BaseEntity
             .append("credit", getCredit())
             .append("receiveOrderState", getReceiveOrderState())
             .append("remitOrderState", getRemitOrderState())
-            .append("QQ", getQQ())
+            .append("qq", getQQ())
             .append("telegram", getTelegram())
             .append("skype", getSkype())
             .append("createTime", getCreateTime())

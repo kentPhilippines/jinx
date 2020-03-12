@@ -59,6 +59,10 @@ public class UserConstants
     public final static String ROLE_NAME_UNIQUE = "0";
     public final static String ROLE_NAME_NOT_UNIQUE = "1";
 
+    /** 码商用户名是否唯一的返回结果码 */
+    public final static String QRUSER_NAME_UNIQUE = "0";
+    public final static String QRUSER_NAME_NOT_UNIQUE = "1";
+
     /** 岗位名称是否唯一的返回结果码 */
     public final static String POST_NAME_UNIQUE = "0";
     public final static String POST_NAME_NOT_UNIQUE = "1";
