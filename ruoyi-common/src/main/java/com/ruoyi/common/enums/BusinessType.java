@@ -56,4 +56,8 @@ public enum BusinessType
      * 清空
      */
     CLEAN,
+    /**
+     * 重置
+     */
+    RESET,
 }

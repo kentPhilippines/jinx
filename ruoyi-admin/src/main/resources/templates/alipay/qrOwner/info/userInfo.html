@@ -19,10 +19,9 @@
                             <input type="text" name="agent" id="agent"/>
                         </li>
                         <li>
-                            用户状态：<select name="status" th:with="type=${@dict.getType('qr_user_switchs')}">
+                            <p>用户状态：</p><select id="switchs" name="switchs" th:with="type=${@dict.getType('qr_user_switchs')}">
                             <option value="">所有</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                    th:value="${dict.dictValue}"></option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                         </select>
                         </li>
                         <li class="select-time">
@@ -37,7 +36,7 @@
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;
+                                    class="fa fa-refresh"></i>&nbsp;重置
                             </a>
                         </li>
                     </ul>

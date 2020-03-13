@@ -121,37 +121,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateAlipayUserInfo" parameterType="AlipayUserInfo">
-        update alipay_user_info
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="userid != null  and userid != ''">userId = #{userid},</if>
-            <if test="username != null  and username != ''">userName = #{username},</if>
-            <if test="password != null  and password != ''">password = #{password},</if>
-            <if test="paypasword != null  and paypasword != ''">payPasword = #{paypasword},</if>
-            <if test="salt != null  and salt != ''">salt = #{salt},</if>
-            <if test="usertype != null ">userType = #{usertype},</if>
-            <if test="switchs != null ">switchs = #{switchs},</if>
-            <if test="usernode != null  and usernode != ''">userNode = #{usernode},</if>
-            <if test="email != null  and email != ''">email = #{email},</if>
-            <if test="agent != null  and agent != ''">agent = #{agent},</if>
-            <if test="isagent != null  and isagent != ''">isAgent = #{isagent},</if>
-            <if test="credit != null ">credit = #{credit},</if>
-            <if test="receiveorderstate != null ">receiveOrderState = #{receiveorderstate},</if>
-            <if test="remitorderstate != null ">remitOrderState = #{remitorderstate},</if>
-            <if test="qq != null  and qq != ''">QQ = #{qq},</if>
-            <if test="telegram != null  and telegram != ''">telegram = #{telegram},</if>
-            <if test="skype != null  and skype != ''">skype = #{skype},</if>
-            <if test="createtime != null ">createTime = #{createtime},</if>
-            <if test="submittime != null ">submitTime = #{submittime},</if>
-            <if test="status != null ">status = #{status},</if>
-            <if test="retain1 != null  and retain1 != ''">retain1 = #{retain1},</if>
-            <if test="retain2 != null  and retain2 != ''">retain2 = #{retain2},</if>
-            <if test="retain3 != null  and retain3 != ''">retain3 = #{retain3},</if>
-            <if test="retain4 != null  and retain4 != ''">retain4 = #{retain4},</if>
-        </trim>
-        where id = #{id}
-    </update>
-
     <delete id="deleteAlipayUserInfoById" parameterType="Long">
         delete from alipay_user_info where id = #{id}
     </delete>

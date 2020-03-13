@@ -5,18 +5,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.system.mapper.SysRoleMapper">
 
 	<resultMap type="SysRole" id="SysRoleResult">
-		<id     property="roleId"       column="role_id"        />
-		<result property="roleName"     column="role_name"      />
-		<result property="roleKey"      column="role_key"       />
-		<result property="roleSort"     column="role_sort"      />
-		<result property="dataScope"    column="data_scope"     />
-		<result property="status"       column="status"         />
-		<result property="delFlag"      column="del_flag"       />
-		<result property="createBy"     column="create_by"      />
-		<result property="createTime"   column="create_time"    />
-		<result property="updateBy"     column="update_by"      />
-		<result property="updateTime"   column="update_time"    />
-		<result property="remark"       column="remark"         />
+		<id     property="roleId"       column="role_id"/>
+		<result property="roleName"     column="role_name"/>
+		<result property="roleKey"      column="role_key"/>
+		<result property="roleSort"     column="role_sort"/>
+		<result property="dataScope"    column="data_scope"/>
+		<result property="status"       column="status"/>
+		<result property="delFlag"      column="del_flag"/>
+		<result property="createBy"     column="create_by"/>
+		<result property="createTime"   column="create_time"/>
+		<result property="updateBy"     column="update_by"/>
+		<result property="updateTime"   column="update_time"/>
+		<result property="remark"       column="remark"/>
 	</resultMap>
 	
 	<sql id="selectRoleContactVo">
@@ -83,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	</delete>
  	
  	<delete id="deleteRoleByIds" parameterType="Long">
- 	    update sys_role set del_flag = '2' where role_id in
+ 	    delete sys_role set del_flag = '2' where role_id in
  		<foreach collection="array" item="roleId" open="(" separator="," close=")">
  			#{roleId}
         </foreach> 

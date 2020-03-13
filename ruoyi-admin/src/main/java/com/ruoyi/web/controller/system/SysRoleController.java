@@ -148,6 +148,11 @@ public class SysRoleController extends BaseController {
         return error();
     }
 
+    /**
+     * 删除角色（物理删除 ）
+     * @param ids
+     * @return
+     */
     @RequiresPermissions("system:role:remove")
     @Log(title = "角色管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")

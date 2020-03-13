@@ -881,6 +881,7 @@ var table = {
         	        success: function(result) {
 						layer.alert(result.msg, {
 							icon: 1,
+							title: '系统提示',
 							skin: 'layer-ext-moon'
 						});
 						$.modal.closeLoading();

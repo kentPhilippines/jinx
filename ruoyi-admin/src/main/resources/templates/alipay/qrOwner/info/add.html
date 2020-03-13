@@ -40,7 +40,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label is-required">联系方式：</label>
+            <label class="col-sm-3 control-label ">联系方式：</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" name="QQ" id="QQ" placeholder="QQ号码">
                 <input class="form-control" type="text" name="telegram" id="telegram" placeholder="小飞机">
@@ -122,6 +122,9 @@
                 "remark": remark
             },
             async: true,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+            },
             error: function (request) {
                 $.modal.alertError("系统错误");
             },

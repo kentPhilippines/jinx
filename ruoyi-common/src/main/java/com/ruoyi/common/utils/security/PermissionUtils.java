@@ -51,13 +51,18 @@ public class PermissionUtils {
     public static final String PERMISSION = "no.permission";
 
     /**
+     * 其他数据的权限
+     */
+    public static final String SWITCH_PERMISSION = "no.switch.permission";
+
+    /**
      * 权限错误消息提醒
      *
      * @param permissionsStr 错误信息
      * @return 提示信息
      */
     public static String getMsg(String permissionsStr) {
-        String permission = StringUtils.substringBetween(permissionsStr, "[", "]");
+            String permission = StringUtils.substringBetween(permissionsStr, "[", "]");
         String msg = MessageUtils.message(PERMISSION, permission);
         if (StringUtils.endsWithIgnoreCase(permission, PermissionConstants.ADD_PERMISSION)) {
             msg = MessageUtils.message(CREATE_PERMISSION, permission);
@@ -70,6 +75,8 @@ public class PermissionUtils {
         } else if (StringUtils.endsWithAny(permission,
                 new String[]{PermissionConstants.VIEW_PERMISSION, PermissionConstants.LIST_PERMISSION})) {
             msg = MessageUtils.message(VIEW_PERMISSION, permission);
+        }else if(StringUtils.endsWithIgnoreCase(permission, PermissionConstants.SWITCH_PERMISSION)){
+            msg = MessageUtils.message(SWITCH_PERMISSION, permission);
         }
         return msg;
     }

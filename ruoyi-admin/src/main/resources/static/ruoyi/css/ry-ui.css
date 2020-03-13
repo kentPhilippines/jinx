@@ -657,7 +657,7 @@ label {
 	background: transparent;
 	outline: none;
 	height: 30px;
-	width: 200px;
+	width: 150px;
 	padding-left: 5px;
 }
 
@@ -676,7 +676,7 @@ label {
 	background: transparent;
 	outline: none;
 	height: 30px;
-    width: 200px;
+    width: 150px;
 }
 
 .bootstrap-select.form-control .btn-default {

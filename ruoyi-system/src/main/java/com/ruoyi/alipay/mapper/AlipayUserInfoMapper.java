@@ -70,7 +70,7 @@ public interface AlipayUserInfoMapper {
      * @param alipayUserInfo 用户详情
      * @return 结果
      */
-    public int updateAlipayUserInfo(AlipayUserInfo alipayUserInfo);
+    int updateAlipayUserInfo(AlipayUserInfo alipayUserInfo);
 
     /**
      * 删除用户详情

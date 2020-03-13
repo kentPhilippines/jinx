@@ -24,4 +24,7 @@ public class PermissionConstants
 
     /** 查询权限 */
     public static final String LIST_PERMISSION = "list";
+
+    /** 开关权限 */
+    public static final String SWITCH_PERMISSION = "switch";
 }
