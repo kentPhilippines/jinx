@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.MerchantInfoMapper">
+    
+    <resultMap type="MerchantInfoEntity" id="MerchantInfoEntityResult">
+        <result property="id"    column="id"    />
+        <result property="merchantId"    column="merchant_id"    />
+        <result property="merchantName"    column="merchant_name"    />
+        <result property="privateKey"    column="private_key"    />
+        <result property="publicKey"    column="public_key"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="switches"    column="switches"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectMerchantInfoEntityVo">
+        select id, merchant_id, merchant_name, private_key, public_key, create_by, create_time, update_by, update_time, switches, del_flag, remark from t_merchant_info
+    </sql>
+
+    <select id="selectMerchantInfoEntityList" parameterType="MerchantInfoEntity" resultMap="MerchantInfoEntityResult">
+        <include refid="selectMerchantInfoEntityVo"/>
+        <where>  
+            <if test="merchantId != null  and merchantId != ''"> and merchant_id = #{merchantId}</if>
+            <if test="merchantName != null  and merchantName != ''"> and merchant_name like concat('%', #{merchantName}, '%')</if>
+            <if test="privateKey != null  and privateKey != ''"> and private_key = #{privateKey}</if>
+            <if test="publicKey != null  and publicKey != ''"> and public_key = #{publicKey}</if>
+            <if test="switches != null "> and switches = #{switches}</if>
+        </where>
+    </select>
+    
+    <select id="selectMerchantInfoEntityById" parameterType="Long" resultMap="MerchantInfoEntityResult">
+        <include refid="selectMerchantInfoEntityVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMerchantInfoEntity" parameterType="MerchantInfoEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into t_merchant_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantId != null  and merchantId != ''">merchant_id,</if>
+            <if test="merchantName != null  and merchantName != ''">merchant_name,</if>
+            <if test="privateKey != null  and privateKey != ''">private_key,</if>
+            <if test="publicKey != null  and publicKey != ''">public_key,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="switches != null ">switches,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantId != null  and merchantId != ''">#{merchantId},</if>
+            <if test="merchantName != null  and merchantName != ''">#{merchantName},</if>
+            <if test="privateKey != null  and privateKey != ''">#{privateKey},</if>
+            <if test="publicKey != null  and publicKey != ''">#{publicKey},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="switches != null ">#{switches},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMerchantInfoEntity" parameterType="MerchantInfoEntity">
+        update t_merchant_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="merchantId != null  and merchantId != ''">merchant_id = #{merchantId},</if>
+            <if test="merchantName != null  and merchantName != ''">merchant_name = #{merchantName},</if>
+            <if test="privateKey != null  and privateKey != ''">private_key = #{privateKey},</if>
+            <if test="publicKey != null  and publicKey != ''">public_key = #{publicKey},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="switches != null ">switches = #{switches},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMerchantInfoEntityById" parameterType="Long">
+        delete from t_merchant_info where id = #{id}
+    </delete>
+
+    <delete id="deleteMerchantInfoEntityByIds" parameterType="String">
+        delete from t_merchant_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

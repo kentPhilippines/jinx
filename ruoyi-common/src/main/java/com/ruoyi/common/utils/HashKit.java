@@ -4,19 +4,16 @@ import cn.hutool.core.util.RandomUtil;
 import com.ruoyi.common.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.ImmutableList;
 
 import java.io.UnsupportedEncodingException;
-import java.security.*;
-import java.util.Base64;
-import java.util.List;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 public class HashKit {
     private static final String UTF_8 = "utf-8";
     private static final String ENCODE_TYPE = "md5";
     private static final Logger log = LoggerFactory.getLogger(HashKit.class);
-
 
     /* 生成随机盐*/
     public static String randomSalt() {
@@ -102,27 +99,4 @@ public class HashKit {
         }
         return sb.toString();
     }
-
-    /**
-     * 生成RSA密钥对
-     *
-     * @return
-     */
-    public static List<String> generateKeyPair() {
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(1024);
-            KeyPair keyPair = keyPairGenerator.genKeyPair();
-            PublicKey publicKey = keyPair.getPublic();
-            PrivateKey privateKey = keyPair.getPrivate();
-            byte[] publicKeyBytes = publicKey.getEncoded();
-            byte[] privateKeyBytes = privateKey.getEncoded();
-            String publicKeyString = Base64.getEncoder().encodeToString(publicKeyBytes);
-            String privateKeyString = Base64.getEncoder().encodeToString(privateKeyBytes);
-            return ImmutableList.of(publicKeyString, privateKeyString);
-        } catch (NoSuchAlgorithmException var15) {
-            return null;
-        }
-    }
-
 }
