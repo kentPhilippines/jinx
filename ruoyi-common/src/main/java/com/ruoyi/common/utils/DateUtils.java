@@ -3,7 +3,10 @@ package com.ruoyi.common.utils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -131,5 +134,25 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         // 计算差多少秒//输出结果
         // long sec = diff % nd % nh % nm / ns;
         return day + "天" + hour + "小时" + min + "分钟";
+    }
+
+    /**
+     * 获取指定时间的区间list
+     *
+     * @param days
+     * @return
+     */
+    public static List getDateList(Integer days, Date startTime) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startTime);
+        cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - days);
+        List list = new ArrayList();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        list.add(sdf.format(cal.getTime()));
+        for (int k = 1; k <= days; k++) {
+            cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + 1);
+            list.add(sdf.format(cal.getTime()));
+        }
+        return list;
     }
 }
