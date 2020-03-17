@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.service.impl;
 
 import java.util.List;
+import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.alipay.mapper.AlipayDealOrderAppMapper;
@@ -11,8 +12,8 @@ import com.ruoyi.common.core.text.Convert;
 /**
  * 商户订单登记Service业务层处理
  * 
- * @author otc
- * @date 2020-02-27
+ * @author kiwi
+ * @date 2020-03-17
  */
 @Service
 public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService 
@@ -53,6 +54,7 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
     @Override
     public int insertAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp)
     {
+        alipayDealOrderApp.setCreateTime(DateUtils.getNowDate());
         return alipayDealOrderAppMapper.insertAlipayDealOrderApp(alipayDealOrderApp);
     }
 

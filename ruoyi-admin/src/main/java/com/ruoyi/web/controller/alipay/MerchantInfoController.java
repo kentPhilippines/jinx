@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import com.ruoyi.common.utils.NoUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,4 +116,16 @@ public class MerchantInfoController extends BaseController {
     public AjaxResult remove(String ids) {
         return toAjax(merchantInfoService.deleteMerchantInfoEntityByIds(ids));
     }
+
+    /**
+     * 自动生成商户编码
+     * @return
+     */
+    @PostMapping("/getMerchantNo")
+    @ResponseBody
+    public AjaxResult getMerchantNo (){
+        return AjaxResult.success(NoUtils.shortUUID());
+    }
+
+
 }

@@ -9,8 +9,8 @@ import java.util.Date;
 /**
  * 商户订单登记对象 alipay_deal_order_app
  * 
- * @author otc
- * @date 2020-02-27
+ * @author kiwi
+ * @date 2020-03-17
  */
 public class AlipayDealOrderApp extends BaseEntity
 {
@@ -20,39 +20,39 @@ public class AlipayDealOrderApp extends BaseEntity
     private Long id;
 
     /** 订单号 */
-    private String orderid;
+    private String orderId;
 
     /** 订单类型:1交易,5代付 */
     @Excel(name = "订单类型:1交易,5代付")
-    private Integer ordertype;
+    private Integer orderType;
 
     /** 订单关联商户账号 */
     @Excel(name = "订单关联商户账号")
-    private String orderaccount;
+    private String orderAccount;
 
     /** 订单状态:1处理中2成功3未收到回调4失败5超时6订单申述7人工处理 */
     @Excel(name = "订单状态:1处理中2成功3未收到回调4失败5超时6订单申述7人工处理")
-    private Integer orderstatus;
+    private String orderStatus;
 
     /** 交易备注 */
     @Excel(name = "交易备注")
-    private String dealdescribe;
+    private String dealDescribe;
 
     /** 订单金额(原始金额) */
     @Excel(name = "订单金额(原始金额)")
-    private Double orderamount;
+    private Double orderAmount;
 
     /** 订单生成IP(源头ip) */
     @Excel(name = "订单生成IP(源头ip)")
-    private String orderip;
+    private String orderIp;
 
     /** 交易外部订单号 */
     @Excel(name = "交易外部订单号")
-    private String apporderid;
+    private String appOrderId;
 
     /** 使用费率id */
     @Excel(name = "使用费率id")
-    private Integer feeid;
+    private Integer feeId;
 
     /** 订单异步回调地址 */
     @Excel(name = "订单异步回调地址")
@@ -64,11 +64,7 @@ public class AlipayDealOrderApp extends BaseEntity
 
     /** 数据修改时间 */
     @Excel(name = "数据修改时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date submittime;
-
-    /** 数据提交系统 */
-    @Excel(name = "数据提交系统")
-    private String submitsystem;
+    private Date submitTime;
 
     /** 状态:1可使用；0不可使用 */
     @Excel(name = "状态:1可使用；0不可使用")
@@ -95,86 +91,86 @@ public class AlipayDealOrderApp extends BaseEntity
     {
         return id;
     }
-    public void setOrderid(String orderid) 
+    public void setOrderId(String orderId) 
     {
-        this.orderid = orderid;
+        this.orderId = orderId;
     }
 
-    public String getOrderid() 
+    public String getOrderId() 
     {
-        return orderid;
+        return orderId;
     }
-    public void setOrdertype(Integer ordertype) 
+    public void setOrderType(Integer orderType) 
     {
-        this.ordertype = ordertype;
-    }
-
-    public Integer getOrdertype() 
-    {
-        return ordertype;
-    }
-    public void setOrderaccount(String orderaccount) 
-    {
-        this.orderaccount = orderaccount;
+        this.orderType = orderType;
     }
 
-    public String getOrderaccount() 
+    public Integer getOrderType() 
     {
-        return orderaccount;
+        return orderType;
     }
-    public void setOrderstatus(Integer orderstatus) 
+    public void setOrderAccount(String orderAccount) 
     {
-        this.orderstatus = orderstatus;
-    }
-
-    public Integer getOrderstatus() 
-    {
-        return orderstatus;
-    }
-    public void setDealdescribe(String dealdescribe) 
-    {
-        this.dealdescribe = dealdescribe;
+        this.orderAccount = orderAccount;
     }
 
-    public String getDealdescribe() 
+    public String getOrderAccount() 
     {
-        return dealdescribe;
+        return orderAccount;
     }
-    public void setOrderamount(Double orderamount) 
+    public void setOrderStatus(String orderStatus) 
     {
-        this.orderamount = orderamount;
-    }
-
-    public Double getOrderamount() 
-    {
-        return orderamount;
-    }
-    public void setOrderip(String orderip) 
-    {
-        this.orderip = orderip;
+        this.orderStatus = orderStatus;
     }
 
-    public String getOrderip() 
+    public String getOrderStatus() 
     {
-        return orderip;
+        return orderStatus;
     }
-    public void setApporderid(String apporderid) 
+    public void setDealDescribe(String dealDescribe) 
     {
-        this.apporderid = apporderid;
-    }
-
-    public String getApporderid() 
-    {
-        return apporderid;
-    }
-    public void setFeeid(Integer feeid) 
-    {
-        this.feeid = feeid;
+        this.dealDescribe = dealDescribe;
     }
 
-    public Integer getFeeid() 
+    public String getDealDescribe() 
     {
-        return feeid;
+        return dealDescribe;
+    }
+    public void setOrderAmount(Double orderAmount) 
+    {
+        this.orderAmount = orderAmount;
+    }
+
+    public Double getOrderAmount() 
+    {
+        return orderAmount;
+    }
+    public void setOrderIp(String orderIp) 
+    {
+        this.orderIp = orderIp;
+    }
+
+    public String getOrderIp() 
+    {
+        return orderIp;
+    }
+    public void setAppOrderId(String appOrderId) 
+    {
+        this.appOrderId = appOrderId;
+    }
+
+    public String getAppOrderId() 
+    {
+        return appOrderId;
+    }
+    public void setFeeId(Integer feeId) 
+    {
+        this.feeId = feeId;
+    }
+
+    public Integer getFeeId() 
+    {
+        return feeId;
     }
     public void setNotify(String notify) 
     {
@@ -194,23 +190,14 @@ public class AlipayDealOrderApp extends BaseEntity
     {
         return back;
     }
-    public void setSubmittime(Date submittime) 
+    public void setSubmitTime(Date submitTime) 
     {
-        this.submittime = submittime;
+        this.submitTime = submitTime;
     }
 
-    public Date getSubmittime() 
+    public Date getSubmitTime() 
     {
-        return submittime;
-    }
-    public void setSubmitsystem(String submitsystem) 
-    {
-        this.submitsystem = submitsystem;
-    }
-
-    public String getSubmitsystem() 
-    {
-        return submitsystem;
+        return submitTime;
     }
     public void setStatus(Integer status) 
     {
@@ -253,20 +240,19 @@ public class AlipayDealOrderApp extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
-            .append("orderid", getOrderid())
-            .append("ordertype", getOrdertype())
-            .append("orderaccount", getOrderaccount())
-            .append("orderstatus", getOrderstatus())
-            .append("dealdescribe", getDealdescribe())
-            .append("orderamount", getOrderamount())
-            .append("orderip", getOrderip())
-            .append("apporderid", getApporderid())
-            .append("createtime", getCreateTime())
-            .append("feeid", getFeeid())
+            .append("orderId", getOrderId())
+            .append("orderType", getOrderType())
+            .append("orderAccount", getOrderAccount())
+            .append("orderStatus", getOrderStatus())
+            .append("dealDescribe", getDealDescribe())
+            .append("orderAmount", getOrderAmount())
+            .append("orderIp", getOrderIp())
+            .append("appOrderId", getAppOrderId())
+            .append("feeId", getFeeId())
             .append("notify", getNotify())
             .append("back", getBack())
-            .append("submittime", getSubmittime())
-            .append("submitsystem", getSubmitsystem())
+            .append("submitTime", getSubmitTime())
+            .append("createTime", getCreateTime())
             .append("status", getStatus())
             .append("retain1", getRetain1())
             .append("retain2", getRetain2())

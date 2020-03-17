@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('订单记录表列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>订单号：</p>
+                                <input type="text" name="orderId"/>
+                            </li>
+                            <li>
+                                <p>用户id：</p>
+                                <input type="text" name="userId"/>
+                            </li>
+                            <li>
+                                <p>媒介数据id：</p>
+                                <input type="text" name="mediumId"/>
+                            </li>
+                            <li>
+                                <p>二维码数据id：</p>
+                                <input type="text" name="qrId"/>
+                            </li>
+                            <li>
+                                <p>流动金额：</p>
+                                <input type="text" name="amount"/>
+                            </li>
+                            <li>
+                                <p>订单状态  与交易订单 一样：</p>
+                                <select name="orderStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>状态:1可使用；0不可使用：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>数据创建时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
+                            </li>
+                            <li class="select-time">
+                                <p>数据最后一次修改时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:record:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:record:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:record:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:record:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('alipay:record:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('alipay:record:remove')}]];
+        var prefix = ctx + "alipay/record";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "订单记录表",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '数据id',
+                    visible: false
+                },
+                {
+                    field : 'orderId', 
+                    title : '订单号'
+                },
+                {
+                    field : 'userId', 
+                    title : '用户id'
+                },
+                {
+                    field : 'mediumId', 
+                    title : '媒介数据id'
+                },
+                {
+                    field : 'qrId', 
+                    title : '二维码数据id'
+                },
+                {
+                    field : 'amount', 
+                    title : '流动金额'
+                },
+                {
+                    field : 'orderStatus', 
+                    title : '订单状态  与交易订单 一样'
+                },
+                {
+                    field : 'status', 
+                    title : '状态:1可使用；0不可使用'
+                },
+                {
+                    field : 'createTime', 
+                    title : '数据创建时间'
+                },
+                {
+                    field : 'submitTime', 
+                    title : '数据最后一次修改时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
