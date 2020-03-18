@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayCorrelationDataMapper">
+    
+    <resultMap type="AlipayCorrelationData" id="AlipayCorrelationDataResult">
+        <result property="id"    column="id"    />
+        <result property="orderId"    column="orderId"    />
+        <result property="userId"    column="userId"    />
+        <result property="mediumId"    column="mediumId"    />
+        <result property="qrId"    column="qrId"    />
+        <result property="amount"    column="amount"    />
+        <result property="orderStatus"    column="orderStatus"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="submitTime"    column="submitTime"    />
+    </resultMap>
+
+    <sql id="selectAlipayCorrelationDataVo">
+        select id, orderId, userId, mediumId, qrId, amount, orderStatus, status, createTime, submitTime from alipay_correlation_data
+    </sql>
+
+    <select id="selectAlipayCorrelationDataList" parameterType="AlipayCorrelationData" resultMap="AlipayCorrelationDataResult">
+        <include refid="selectAlipayCorrelationDataVo"/>
+        <where>  
+            <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
+            <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
+            <if test="mediumId != null "> and mediumId = #{mediumId}</if>
+            <if test="qrId != null  and qrId != ''"> and qrId = #{qrId}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="orderStatus != null "> and orderStatus = #{orderStatus}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayCorrelationDataById" parameterType="Long" resultMap="AlipayCorrelationDataResult">
+        <include refid="selectAlipayCorrelationDataVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayCorrelationData" parameterType="AlipayCorrelationData" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_correlation_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">orderId,</if>
+            <if test="userId != null  and userId != ''">userId,</if>
+            <if test="mediumId != null ">mediumId,</if>
+            <if test="qrId != null  and qrId != ''">qrId,</if>
+            <if test="amount != null ">amount,</if>
+            <if test="orderStatus != null ">orderStatus,</if>
+            <if test="status != null ">status,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">#{orderId},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="mediumId != null ">#{mediumId},</if>
+            <if test="qrId != null  and qrId != ''">#{qrId},</if>
+            <if test="amount != null ">#{amount},</if>
+            <if test="orderStatus != null ">#{orderStatus},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayCorrelationData" parameterType="AlipayCorrelationData">
+        update alipay_correlation_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">orderId = #{orderId},</if>
+            <if test="userId != null  and userId != ''">userId = #{userId},</if>
+            <if test="mediumId != null ">mediumId = #{mediumId},</if>
+            <if test="qrId != null  and qrId != ''">qrId = #{qrId},</if>
+            <if test="amount != null ">amount = #{amount},</if>
+            <if test="orderStatus != null ">orderStatus = #{orderStatus},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayCorrelationDataById" parameterType="Long">
+        delete from alipay_correlation_data where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayCorrelationDataByIds" parameterType="String">
+        delete from alipay_correlation_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

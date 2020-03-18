@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayCorrelationMapper">
+    
+    <resultMap type="AlipayCorrelation" id="AlipayCorrelationResult">
+        <result property="id"    column="id"    />
+        <result property="parentId"    column="parentId"    />
+        <result property="parentName"    column="parentName"    />
+        <result property="childrenId"    column="childrenId"    />
+        <result property="childrenName"    column="childrenName"    />
+        <result property="distance"    column="distance"    />
+        <result property="medium"    column="medium"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="submitTime"    column="submitTime"    />
+        <result property="parentType"    column="parentType"    />
+        <result property="childrenType"    column="childrenType"    />
+    </resultMap>
+
+    <sql id="selectAlipayCorrelationVo">
+        select id, parentId, parentName, childrenId, childrenName, distance, medium, status, createTime, submitTime, parentType, childrenType from alipay_correlation
+    </sql>
+
+    <select id="selectAlipayCorrelationList" parameterType="AlipayCorrelation" resultMap="AlipayCorrelationResult">
+        <include refid="selectAlipayCorrelationVo"/>
+        <where>  
+            <if test="parentId != null "> and parentId = #{parentId}</if>
+            <if test="parentName != null  and parentName != ''"> and parentName like concat('%', #{parentName}, '%')</if>
+            <if test="childrenId != null "> and childrenId = #{childrenId}</if>
+            <if test="childrenName != null  and childrenName != ''"> and childrenName like concat('%', #{childrenName}, '%')</if>
+            <if test="distance != null "> and distance = #{distance}</if>
+            <if test="medium != null  and medium != ''"> and medium = #{medium}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+            <if test="parentType != null "> and parentType = #{parentType}</if>
+            <if test="childrenType != null "> and childrenType = #{childrenType}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayCorrelationById" parameterType="Long" resultMap="AlipayCorrelationResult">
+        <include refid="selectAlipayCorrelationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayCorrelation" parameterType="AlipayCorrelation" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_correlation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentId != null ">parentId,</if>
+            <if test="parentName != null  and parentName != ''">parentName,</if>
+            <if test="childrenId != null ">childrenId,</if>
+            <if test="childrenName != null  and childrenName != ''">childrenName,</if>
+            <if test="distance != null ">distance,</if>
+            <if test="medium != null  and medium != ''">medium,</if>
+            <if test="status != null ">status,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+            <if test="parentType != null ">parentType,</if>
+            <if test="childrenType != null ">childrenType,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="parentName != null  and parentName != ''">#{parentName},</if>
+            <if test="childrenId != null ">#{childrenId},</if>
+            <if test="childrenName != null  and childrenName != ''">#{childrenName},</if>
+            <if test="distance != null ">#{distance},</if>
+            <if test="medium != null  and medium != ''">#{medium},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+            <if test="parentType != null ">#{parentType},</if>
+            <if test="childrenType != null ">#{childrenType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayCorrelation" parameterType="AlipayCorrelation">
+        update alipay_correlation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentId != null ">parentId = #{parentId},</if>
+            <if test="parentName != null  and parentName != ''">parentName = #{parentName},</if>
+            <if test="childrenId != null ">childrenId = #{childrenId},</if>
+            <if test="childrenName != null  and childrenName != ''">childrenName = #{childrenName},</if>
+            <if test="distance != null ">distance = #{distance},</if>
+            <if test="medium != null  and medium != ''">medium = #{medium},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+            <if test="parentType != null ">parentType = #{parentType},</if>
+            <if test="childrenType != null ">childrenType = #{childrenType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayCorrelationById" parameterType="Long">
+        delete from alipay_correlation where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayCorrelationByIds" parameterType="String">
+        delete from alipay_correlation where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

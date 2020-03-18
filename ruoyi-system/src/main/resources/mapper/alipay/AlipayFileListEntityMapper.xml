@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayFileListEntityMapper">
+    
+    <resultMap type="AlipayFileListEntity" id="AlipayFileListEntityResult">
+        <result property="id"    column="id"    />
+        <result property="fileId"    column="fileId"    />
+        <result property="fileholder"    column="fileholder"    />
+        <result property="fileNote"    column="fileNote"    />
+        <result property="isFixation"    column="isFixation"    />
+        <result property="fixationAmount"    column="fixationAmount"    />
+        <result property="code"    column="code"    />
+        <result property="concealId"    column="concealId"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="submitTime"    column="submitTime"    />
+        <result property="status"    column="status"    />
+        <result property="isDeal"    column="isDeal"    />
+        <result property="isCut"    column="isCut"    />
+        <result property="retain1"    column="retain1"    />
+        <result property="retain2"    column="retain2"    />
+    </resultMap>
+
+    <sql id="selectAlipayFileListEntityVo">
+        select id, fileId, fileholder, fileNote, isFixation, fixationAmount, code, concealId, createTime, submitTime, status, isDeal, isCut, retain1, retain2 from alipay_file_list
+    </sql>
+
+    <select id="selectAlipayFileListEntityList" parameterType="AlipayFileListEntity" resultMap="AlipayFileListEntityResult">
+        <include refid="selectAlipayFileListEntityVo"/>
+        <where>  
+            <if test="fileId != null  and fileId != ''"> and fileId = #{fileId}</if>
+            <if test="fileholder != null  and fileholder != ''"> and fileholder = #{fileholder}</if>
+            <if test="fileNote != null  and fileNote != ''"> and fileNote = #{fileNote}</if>
+            <if test="isFixation != null  and isFixation != ''"> and isFixation = #{isFixation}</if>
+            <if test="fixationAmount != null "> and fixationAmount = #{fixationAmount}</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="concealId != null  and concealId != ''"> and concealId = #{concealId}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="isDeal != null  and isDeal != ''"> and isDeal = #{isDeal}</if>
+            <if test="isCut != null  and isCut != ''"> and isCut = #{isCut}</if>
+            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
+            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayFileListEntityById" parameterType="Long" resultMap="AlipayFileListEntityResult">
+        <include refid="selectAlipayFileListEntityVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayFileListEntity" parameterType="AlipayFileListEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_file_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileId != null  and fileId != ''">fileId,</if>
+            <if test="fileholder != null  and fileholder != ''">fileholder,</if>
+            <if test="fileNote != null  and fileNote != ''">fileNote,</if>
+            <if test="isFixation != null  and isFixation != ''">isFixation,</if>
+            <if test="fixationAmount != null ">fixationAmount,</if>
+            <if test="code != null  and code != ''">code,</if>
+            <if test="concealId != null  and concealId != ''">concealId,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+            <if test="status != null ">status,</if>
+            <if test="isDeal != null  and isDeal != ''">isDeal,</if>
+            <if test="isCut != null  and isCut != ''">isCut,</if>
+            <if test="retain1 != null  and retain1 != ''">retain1,</if>
+            <if test="retain2 != null  and retain2 != ''">retain2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileId != null  and fileId != ''">#{fileId},</if>
+            <if test="fileholder != null  and fileholder != ''">#{fileholder},</if>
+            <if test="fileNote != null  and fileNote != ''">#{fileNote},</if>
+            <if test="isFixation != null  and isFixation != ''">#{isFixation},</if>
+            <if test="fixationAmount != null ">#{fixationAmount},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="concealId != null  and concealId != ''">#{concealId},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="isDeal != null  and isDeal != ''">#{isDeal},</if>
+            <if test="isCut != null  and isCut != ''">#{isCut},</if>
+            <if test="retain1 != null  and retain1 != ''">#{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">#{retain2},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayFileListEntity" parameterType="AlipayFileListEntity">
+        update alipay_file_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileId != null  and fileId != ''">fileId = #{fileId},</if>
+            <if test="fileholder != null  and fileholder != ''">fileholder = #{fileholder},</if>
+            <if test="fileNote != null  and fileNote != ''">fileNote = #{fileNote},</if>
+            <if test="isFixation != null  and isFixation != ''">isFixation = #{isFixation},</if>
+            <if test="fixationAmount != null ">fixationAmount = #{fixationAmount},</if>
+            <if test="code != null  and code != ''">code = #{code},</if>
+            <if test="concealId != null  and concealId != ''">concealId = #{concealId},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="isDeal != null  and isDeal != ''">isDeal = #{isDeal},</if>
+            <if test="isCut != null  and isCut != ''">isCut = #{isCut},</if>
+            <if test="retain1 != null  and retain1 != ''">retain1 = #{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">retain2 = #{retain2},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayFileListEntityById" parameterType="Long">
+        delete from alipay_file_list where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayFileListEntityByIds" parameterType="String">
+        delete from alipay_file_list where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

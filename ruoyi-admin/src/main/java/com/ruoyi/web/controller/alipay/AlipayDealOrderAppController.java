@@ -1,7 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,31 +21,34 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 商户订单登记Controller
- *
- * @author otc
- * @date 2020-02-27
+ * 
+ * @author kiwi
+ * @date 2020-03-17
  */
 @Controller
-@RequestMapping("/alipay/merchantOrder")
-public class AlipayDealOrderAppController extends BaseController {
-    private String prefix = "alipay/merchantOrder";
+@RequestMapping("/alipay/orderApp")
+public class AlipayDealOrderAppController extends BaseController
+{
+    private String prefix = "alipay/orderApp";
 
     @Autowired
     private IAlipayDealOrderAppService alipayDealOrderAppService;
 
-    @RequiresPermissions("alipay:merchantOrder:view")
+    @RequiresPermissions("alipay:orderApp:view")
     @GetMapping()
-    public String merchantOrder() {
-        return prefix + "/merchantOrder";
+    public String orderApp()
+    {
+        return prefix + "/orderApp";
     }
 
     /**
      * 查询商户订单登记列表
      */
-    @RequiresPermissions("alipay:merchantOrder:list")
+    @RequiresPermissions("alipay:orderApp:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(AlipayDealOrderApp alipayDealOrderApp) {
+    public TableDataInfo list(AlipayDealOrderApp alipayDealOrderApp)
+    {
         startPage();
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
         return getDataTable(list);
@@ -55,32 +57,35 @@ public class AlipayDealOrderAppController extends BaseController {
     /**
      * 导出商户订单登记列表
      */
-    @RequiresPermissions("alipay:merchantOrder:export")
+    @RequiresPermissions("alipay:orderApp:export")
     @Log(title = "商户订单登记", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(AlipayDealOrderApp alipayDealOrderApp) {
+    public AjaxResult export(AlipayDealOrderApp alipayDealOrderApp)
+    {
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
         ExcelUtil<AlipayDealOrderApp> util = new ExcelUtil<AlipayDealOrderApp>(AlipayDealOrderApp.class);
-        return util.exportExcel(list, "merchantOrder");
+        return util.exportExcel(list, "orderApp");
     }
 
     /**
      * 新增商户订单登记
      */
     @GetMapping("/add")
-    public String add() {
+    public String add()
+    {
         return prefix + "/add";
     }
 
     /**
      * 新增保存商户订单登记
      */
-    @RequiresPermissions("alipay:merchantOrder:add")
+    @RequiresPermissions("alipay:orderApp:add")
     @Log(title = "商户订单登记", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(AlipayDealOrderApp alipayDealOrderApp) {
+    public AjaxResult addSave(AlipayDealOrderApp alipayDealOrderApp)
+    {
         return toAjax(alipayDealOrderAppService.insertAlipayDealOrderApp(alipayDealOrderApp));
     }
 
@@ -88,7 +93,8 @@ public class AlipayDealOrderAppController extends BaseController {
      * 修改商户订单登记
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap)
+    {
         AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderAppById(id);
         mmap.put("alipayDealOrderApp", alipayDealOrderApp);
         return prefix + "/edit";
@@ -97,22 +103,24 @@ public class AlipayDealOrderAppController extends BaseController {
     /**
      * 修改保存商户订单登记
      */
-    @RequiresPermissions("alipay:merchantOrder:edit")
+    @RequiresPermissions("alipay:orderApp:edit")
     @Log(title = "商户订单登记", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(AlipayDealOrderApp alipayDealOrderApp) {
+    public AjaxResult editSave(AlipayDealOrderApp alipayDealOrderApp)
+    {
         return toAjax(alipayDealOrderAppService.updateAlipayDealOrderApp(alipayDealOrderApp));
     }
 
     /**
      * 删除商户订单登记
      */
-    @RequiresPermissions("alipay:merchantOrder:remove")
+    @RequiresPermissions("alipay:orderApp:remove")
     @Log(title = "商户订单登记", businessType = BusinessType.DELETE)
-    @PostMapping("/remove")
+    @PostMapping( "/remove")
     @ResponseBody
-    public AjaxResult remove(String ids) {
+    public AjaxResult remove(String ids)
+    {
         return toAjax(alipayDealOrderAppService.deleteAlipayDealOrderAppByIds(ids));
     }
 }

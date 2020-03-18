@@ -5,7 +5,7 @@ ruoyi:
   # 版本
   version: 4.1.0
   # 版权年份
-  copyrightYear: 2019
+  copyrightYear: 2020
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
@@ -97,7 +97,7 @@ shiro:
     indexUrl: /index
     # 验证码开关
     captchaEnabled: true
-    # 验证码类型 math 数组计算 char 字符
+    # 验证码类型 math 数组计算 char 字符 google 谷歌动态口令
     captchaType: math
   cookie:
     # 设置Cookie的域名 默认空，即当前访问的域名

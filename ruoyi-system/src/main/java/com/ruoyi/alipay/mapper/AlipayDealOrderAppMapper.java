@@ -6,8 +6,8 @@ import java.util.List;
 /**
  * 商户订单登记Mapper接口
  * 
- * @author otc
- * @date 2020-02-27
+ * @author kiwi
+ * @date 2020-03-17
  */
 public interface AlipayDealOrderAppMapper 
 {
