@@ -1,13 +1,13 @@
 package com.ruoyi.alipay.mapper;
 
-import com.ruoyi.alipay.domain.AlipayUserRateEntity;
+import com.ruoyi.system.domain.AlipayUserRateEntity;
 import java.util.List;
 
 /**
  * 用户产品费率Mapper接口
  * 
  * @author kiwi
- * @date 2020-03-17
+ * @date 2020-03-18
  */
 public interface AlipayUserRateEntityMapper 
 {

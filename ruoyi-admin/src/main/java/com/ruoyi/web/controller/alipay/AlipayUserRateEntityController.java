@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.alipay.domain.AlipayUserRateEntity;
-import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
+import com.ruoyi.system.domain.AlipayUserRateEntity;
+import com.ruoyi.system.service.IAlipayUserRateEntityService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -23,7 +23,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 用户产品费率Controller
  * 
  * @author kiwi
- * @date 2020-03-17
+ * @date 2020-03-18
  */
 @Controller
 @RequestMapping("/alipay/rate")

@@ -13,7 +13,7 @@ import com.ruoyi.common.core.text.Convert;
  * 用户产品费率Service业务层处理
  * 
  * @author kiwi
- * @date 2020-03-17
+ * @date 2020-03-18
  */
 @Service
 public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntityService 

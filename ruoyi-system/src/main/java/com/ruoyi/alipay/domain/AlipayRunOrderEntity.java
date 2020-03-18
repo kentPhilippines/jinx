@@ -10,7 +10,7 @@ import java.util.Date;
  * 流水订单记录对象 alipay_run_order
  * 
  * @author kiwi
- * @date 2020-03-17
+ * @date 2020-03-18
  */
 public class AlipayRunOrderEntity extends BaseEntity
 {
@@ -29,7 +29,7 @@ public class AlipayRunOrderEntity extends BaseEntity
 
     /** 关联账户 */
     @Excel(name = "关联账户")
-    private String associatedId;
+    private String orderAccount;
 
     /** 流水类型(1充值交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费,7冻结,8解冻,9代付手手续费冻结,10代付冻结,11增加交易点数,12点数扣除,13代理商分润，14码商分润，17人工加点数，18人工减点数，19 卡商交易加钱) */
     @Excel(name = "流水类型(1充值交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费,7冻结,8解冻,9代付手手续费冻结,10代付冻结,11增加交易点数,12点数扣除,13代理商分润，14码商分润，17人工加点数，18人工减点数，19 卡商交易加钱)")
@@ -110,14 +110,14 @@ public class AlipayRunOrderEntity extends BaseEntity
     {
         return associatedId;
     }
-    public void setAssociatedId(String associatedId) 
+    public void setOrderAccount(String orderAccount) 
     {
-        this.associatedId = associatedId;
+        this.orderAccount = orderAccount;
     }
 
-    public String getAssociatedId() 
+    public String getOrderAccount() 
     {
-        return associatedId;
+        return orderAccount;
     }
     public void setRunOrderType(Integer runOrderType) 
     {
@@ -243,7 +243,7 @@ public class AlipayRunOrderEntity extends BaseEntity
             .append("id", getId())
             .append("orderId", getOrderId())
             .append("associatedId", getAssociatedId())
-            .append("associatedId", getAssociatedId())
+            .append("orderAccount", getOrderAccount())
             .append("runOrderType", getRunOrderType())
             .append("amount", getAmount())
             .append("generationIp", getGenerationIp())
