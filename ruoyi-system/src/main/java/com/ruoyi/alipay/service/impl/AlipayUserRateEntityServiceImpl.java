@@ -4,9 +4,9 @@ import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.AlipayUserRateEntityMapper;
-import com.ruoyi.system.domain.AlipayUserRateEntity;
-import com.ruoyi.system.service.IAlipayUserRateEntityService;
+import com.ruoyi.alipay.mapper.AlipayUserRateEntityMapper;
+import com.ruoyi.alipay.domain.AlipayUserRateEntity;
+import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
 import com.ruoyi.common.core.text.Convert;
 
 /**

@@ -1,6 +1,6 @@
 package com.ruoyi.alipay.service;
 
-import com.ruoyi.system.domain.AlipayUserRateEntity;
+import com.ruoyi.alipay.domain.AlipayUserRateEntity;
 import java.util.List;
 
 /**
