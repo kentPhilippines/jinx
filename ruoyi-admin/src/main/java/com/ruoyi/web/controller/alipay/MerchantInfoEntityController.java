@@ -32,16 +32,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/alipay/merchant")
 public class MerchantInfoEntityController extends BaseController {
     private String prefix = "alipay/merchant/info";
-
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
-
     @RequiresPermissions("alipay:merchant:view")
     @GetMapping()
     public String merchant() {
         return prefix + "/merchant";
     }
-
     /**
      * 查询商户信息列表
      */
@@ -53,8 +50,6 @@ public class MerchantInfoEntityController extends BaseController {
         List<AlipayUserInfo> list = merchantInfoEntityService.selectMerchantInfoEntityList(merchantInfoEntity);
         return getDataTable(list);
     }
-
-
     /**
      * 新增商户信息
      */

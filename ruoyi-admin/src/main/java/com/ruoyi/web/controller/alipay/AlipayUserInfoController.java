@@ -45,7 +45,6 @@ public class AlipayUserInfoController extends BaseController {
     public String userInfo() {
         return prefix + "/userInfo";
     }
-
     /**
      * 查询用户详情列表
      */

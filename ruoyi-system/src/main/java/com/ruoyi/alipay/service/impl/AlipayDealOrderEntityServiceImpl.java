@@ -24,7 +24,6 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
 
 	/**
 	 * 查询交易订单
-	 * 
 	 * @param id 交易订单ID
 	 * @return 交易订单
 	 */
@@ -48,7 +47,6 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
 
 	/**
 	 * 新增交易订单
-	 * 
 	 * @param alipayDealOrderEntity 交易订单
 	 * @return 结果
 	 */
@@ -60,7 +58,6 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
 
 	/**
 	 * 修改交易订单
-	 * 
 	 * @param alipayDealOrderEntity 交易订单
 	 * @return 结果
 	 */
@@ -71,7 +68,6 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
 
 	/**
 	 * 删除交易订单对象
-	 * 
 	 * @param ids 需要删除的数据ID
 	 * @return 结果
 	 */
@@ -82,7 +78,6 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
 
 	/**
 	 * 删除交易订单信息
-	 * 
 	 * @param id 交易订单ID
 	 * @return 结果
 	 */

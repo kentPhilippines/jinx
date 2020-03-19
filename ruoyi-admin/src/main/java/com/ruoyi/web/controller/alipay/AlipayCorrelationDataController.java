@@ -27,100 +27,92 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @Controller
 @RequestMapping("/alipay/record")
-public class AlipayCorrelationDataController extends BaseController
-{
-    private String prefix = "alipay/record";
+public class AlipayCorrelationDataController extends BaseController {
+	private String prefix = "alipay/record";
+	@Autowired
+	private IAlipayCorrelationDataService alipayCorrelationDataService;
 
-    @Autowired
-    private IAlipayCorrelationDataService alipayCorrelationDataService;
+	@RequiresPermissions("alipay:record:view")
+	@GetMapping()
+	public String record() {
+		return prefix + "/record";
+	}
 
-    @RequiresPermissions("alipay:record:view")
-    @GetMapping()
-    public String record()
-    {
-        return prefix + "/record";
-    }
+	/**
+	 * 查询订单记录表列表
+	 */
+	@RequiresPermissions("alipay:record:list")
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(AlipayCorrelationData alipayCorrelationData) {
+		startPage();
+		List<AlipayCorrelationData> list = alipayCorrelationDataService
+				.selectAlipayCorrelationDataList(alipayCorrelationData);
+		return getDataTable(list);
+	}
 
-    /**
-     * 查询订单记录表列表
-     */
-    @RequiresPermissions("alipay:record:list")
-    @PostMapping("/list")
-    @ResponseBody
-    public TableDataInfo list(AlipayCorrelationData alipayCorrelationData)
-    {
-        startPage();
-        List<AlipayCorrelationData> list = alipayCorrelationDataService.selectAlipayCorrelationDataList(alipayCorrelationData);
-        return getDataTable(list);
-    }
+	/**
+	 * 导出订单记录表列表
+	 */
+	@RequiresPermissions("alipay:record:export")
+	@Log(title = "订单记录表", businessType = BusinessType.EXPORT)
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult export(AlipayCorrelationData alipayCorrelationData) {
+		List<AlipayCorrelationData> list = alipayCorrelationDataService
+				.selectAlipayCorrelationDataList(alipayCorrelationData);
+		ExcelUtil<AlipayCorrelationData> util = new ExcelUtil<AlipayCorrelationData>(AlipayCorrelationData.class);
+		return util.exportExcel(list, "record");
+	}
 
-    /**
-     * 导出订单记录表列表
-     */
-    @RequiresPermissions("alipay:record:export")
-    @Log(title = "订单记录表", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(AlipayCorrelationData alipayCorrelationData)
-    {
-        List<AlipayCorrelationData> list = alipayCorrelationDataService.selectAlipayCorrelationDataList(alipayCorrelationData);
-        ExcelUtil<AlipayCorrelationData> util = new ExcelUtil<AlipayCorrelationData>(AlipayCorrelationData.class);
-        return util.exportExcel(list, "record");
-    }
+	/**
+	 * 新增订单记录表
+	 */
+	@GetMapping("/add")
+	public String add() {
+		return prefix + "/add";
+	}
 
-    /**
-     * 新增订单记录表
-     */
-    @GetMapping("/add")
-    public String add()
-    {
-        return prefix + "/add";
-    }
+	/**
+	 * 新增保存订单记录表
+	 */
+	@RequiresPermissions("alipay:record:add")
+	@Log(title = "订单记录表", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public AjaxResult addSave(AlipayCorrelationData alipayCorrelationData) {
+		return toAjax(alipayCorrelationDataService.insertAlipayCorrelationData(alipayCorrelationData));
+	}
 
-    /**
-     * 新增保存订单记录表
-     */
-    @RequiresPermissions("alipay:record:add")
-    @Log(title = "订单记录表", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayCorrelationData alipayCorrelationData)
-    {
-        return toAjax(alipayCorrelationDataService.insertAlipayCorrelationData(alipayCorrelationData));
-    }
+	/**
+	 * 修改订单记录表
+	 */
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+		AlipayCorrelationData alipayCorrelationData = alipayCorrelationDataService.selectAlipayCorrelationDataById(id);
+		mmap.put("alipayCorrelationData", alipayCorrelationData);
+		return prefix + "/edit";
+	}
 
-    /**
-     * 修改订单记录表
-     */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
-        AlipayCorrelationData alipayCorrelationData = alipayCorrelationDataService.selectAlipayCorrelationDataById(id);
-        mmap.put("alipayCorrelationData", alipayCorrelationData);
-        return prefix + "/edit";
-    }
+	/**
+	 * 修改保存订单记录表
+	 */
+	@RequiresPermissions("alipay:record:edit")
+	@Log(title = "订单记录表", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public AjaxResult editSave(AlipayCorrelationData alipayCorrelationData) {
+		return toAjax(alipayCorrelationDataService.updateAlipayCorrelationData(alipayCorrelationData));
+	}
 
-    /**
-     * 修改保存订单记录表
-     */
-    @RequiresPermissions("alipay:record:edit")
-    @Log(title = "订单记录表", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayCorrelationData alipayCorrelationData)
-    {
-        return toAjax(alipayCorrelationDataService.updateAlipayCorrelationData(alipayCorrelationData));
-    }
-
-    /**
-     * 删除订单记录表
-     */
-    @RequiresPermissions("alipay:record:remove")
-    @Log(title = "订单记录表", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids)
-    {
-        return toAjax(alipayCorrelationDataService.deleteAlipayCorrelationDataByIds(ids));
-    }
+	/**
+	 * 删除订单记录表
+	 */
+	@RequiresPermissions("alipay:record:remove")
+	@Log(title = "订单记录表", businessType = BusinessType.DELETE)
+	@PostMapping("/remove")
+	@ResponseBody
+	public AjaxResult remove(String ids) {
+		return toAjax(alipayCorrelationDataService.deleteAlipayCorrelationDataByIds(ids));
+	}
 }

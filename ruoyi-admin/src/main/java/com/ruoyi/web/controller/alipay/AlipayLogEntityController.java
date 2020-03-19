@@ -27,100 +27,90 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @Controller
 @RequestMapping("/alipay/loginLog")
-public class AlipayLogEntityController extends BaseController
-{
-    private String prefix = "alipay/loginLog";
+public class AlipayLogEntityController extends BaseController {
+	private String prefix = "alipay/loginLog";
 
-    @Autowired
-    private IAlipayLogEntityService alipayLogEntityService;
+	@Autowired
+	private IAlipayLogEntityService alipayLogEntityService;
 
-    @RequiresPermissions("alipay:loginLog:view")
-    @GetMapping()
-    public String loginLog()
-    {
-        return prefix + "/loginLog";
-    }
+	@RequiresPermissions("alipay:loginLog:view")
+	@GetMapping()
+	public String loginLog() {
+		return prefix + "/loginLog";
+	}
+	/**
+	 * 查询日志表列表
+	 */
+	@RequiresPermissions("alipay:loginLog:list")
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(AlipayLogEntity alipayLogEntity) {
+		startPage();
+		List<AlipayLogEntity> list = alipayLogEntityService.selectAlipayLogEntityList(alipayLogEntity);
+		return getDataTable(list);
+	}
 
-    /**
-     * 查询日志表列表
-     */
-    @RequiresPermissions("alipay:loginLog:list")
-    @PostMapping("/list")
-    @ResponseBody
-    public TableDataInfo list(AlipayLogEntity alipayLogEntity)
-    {
-        startPage();
-        List<AlipayLogEntity> list = alipayLogEntityService.selectAlipayLogEntityList(alipayLogEntity);
-        return getDataTable(list);
-    }
+	/**
+	 * 导出日志表列表
+	 */
+	@RequiresPermissions("alipay:loginLog:export")
+	@Log(title = "日志表", businessType = BusinessType.EXPORT)
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult export(AlipayLogEntity alipayLogEntity) {
+		List<AlipayLogEntity> list = alipayLogEntityService.selectAlipayLogEntityList(alipayLogEntity);
+		ExcelUtil<AlipayLogEntity> util = new ExcelUtil<AlipayLogEntity>(AlipayLogEntity.class);
+		return util.exportExcel(list, "loginLog");
+	}
 
-    /**
-     * 导出日志表列表
-     */
-    @RequiresPermissions("alipay:loginLog:export")
-    @Log(title = "日志表", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(AlipayLogEntity alipayLogEntity)
-    {
-        List<AlipayLogEntity> list = alipayLogEntityService.selectAlipayLogEntityList(alipayLogEntity);
-        ExcelUtil<AlipayLogEntity> util = new ExcelUtil<AlipayLogEntity>(AlipayLogEntity.class);
-        return util.exportExcel(list, "loginLog");
-    }
+	/**
+	 * 新增日志表
+	 */
+	@GetMapping("/add")
+	public String add() {
+		return prefix + "/add";
+	}
 
-    /**
-     * 新增日志表
-     */
-    @GetMapping("/add")
-    public String add()
-    {
-        return prefix + "/add";
-    }
+	/**
+	 * 新增保存日志表
+	 */
+	@RequiresPermissions("alipay:loginLog:add")
+	@Log(title = "日志表", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public AjaxResult addSave(AlipayLogEntity alipayLogEntity) {
+		return toAjax(alipayLogEntityService.insertAlipayLogEntity(alipayLogEntity));
+	}
 
-    /**
-     * 新增保存日志表
-     */
-    @RequiresPermissions("alipay:loginLog:add")
-    @Log(title = "日志表", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayLogEntity alipayLogEntity)
-    {
-        return toAjax(alipayLogEntityService.insertAlipayLogEntity(alipayLogEntity));
-    }
+	/**
+	 * 修改日志表
+	 */
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+		AlipayLogEntity alipayLogEntity = alipayLogEntityService.selectAlipayLogEntityById(id);
+		mmap.put("alipayLogEntity", alipayLogEntity);
+		return prefix + "/edit";
+	}
 
-    /**
-     * 修改日志表
-     */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
-        AlipayLogEntity alipayLogEntity = alipayLogEntityService.selectAlipayLogEntityById(id);
-        mmap.put("alipayLogEntity", alipayLogEntity);
-        return prefix + "/edit";
-    }
+	/**
+	 * 修改保存日志表
+	 */
+	@RequiresPermissions("alipay:loginLog:edit")
+	@Log(title = "日志表", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public AjaxResult editSave(AlipayLogEntity alipayLogEntity) {
+		return toAjax(alipayLogEntityService.updateAlipayLogEntity(alipayLogEntity));
+	}
 
-    /**
-     * 修改保存日志表
-     */
-    @RequiresPermissions("alipay:loginLog:edit")
-    @Log(title = "日志表", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayLogEntity alipayLogEntity)
-    {
-        return toAjax(alipayLogEntityService.updateAlipayLogEntity(alipayLogEntity));
-    }
-
-    /**
-     * 删除日志表
-     */
-    @RequiresPermissions("alipay:loginLog:remove")
-    @Log(title = "日志表", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids)
-    {
-        return toAjax(alipayLogEntityService.deleteAlipayLogEntityByIds(ids));
-    }
+	/**
+	 * 删除日志表
+	 */
+	@RequiresPermissions("alipay:loginLog:remove")
+	@Log(title = "日志表", businessType = BusinessType.DELETE)
+	@PostMapping("/remove")
+	@ResponseBody
+	public AjaxResult remove(String ids) {
+		return toAjax(alipayLogEntityService.deleteAlipayLogEntityByIds(ids));
+	}
 }

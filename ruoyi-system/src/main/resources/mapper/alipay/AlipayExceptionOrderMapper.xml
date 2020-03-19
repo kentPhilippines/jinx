@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayExceptionOrderMapper">
+    
+    <resultMap type="AlipayExceptionOrder" id="AlipayExceptionOrderResult">
+        <result property="id"    column="id"    />
+        <result property="orderexceptId"    column="orderExceptId"    />
+        <result property="orderId"    column="orderId"    />
+        <result property="exceptStatus"    column="exceptStatus"    />
+        <result property="exceptType"    column="exceptType"    />
+        <result property="orderAccount"    column="orderAccount"    />
+        <result property="exceptOrderAmount"    column="exceptOrderAmount"    />
+        <result property="orderGenerationip"    column="orderGenerationIp"    />
+        <result property="explains"    column="explains"    />
+        <result property="operation"    column="operation"    />
+        <result property="createtime"    column="createTime"    />
+        <result property="submittime"    column="submitTime"    />
+        <result property="submitsystem"    column="submitSystem"    />
+        <result property="status"    column="status"    />
+        <result property="retain1"    column="retain1"    />
+        <result property="retain2"    column="retain2"    />
+        <result property="retain3"    column="retain3"    />
+    </resultMap>
+
+    <sql id="selectAlipayExceptionOrderVo">
+        select id, orderExceptId, orderId, exceptStatus, exceptType, orderAccount, exceptOrderAmount, orderGenerationIp, explains, operation, createTime, submitTime, submitSystem, status, retain1, retain2, retain3 from alipay_exception_order
+    </sql>
+
+    <select id="selectAlipayExceptionOrderList" parameterType="AlipayExceptionOrder" resultMap="AlipayExceptionOrderResult">
+        <include refid="selectAlipayExceptionOrderVo"/>
+        <where>  
+            <if test="orderexceptId != null  and orderexceptId != ''"> and orderExceptId = #{orderexceptId}</if>
+            <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
+            <if test="exceptStatus != null "> and exceptStatus = #{exceptStatus}</if>
+            <if test="exceptType != null "> and exceptType = #{exceptType}</if>
+            <if test="orderAccount != null  and orderAccount != ''"> and orderAccount = #{orderAccount}</if>
+            <if test="exceptOrderAmount != null  and exceptOrderAmount != ''"> and exceptOrderAmount = #{exceptOrderAmount}</if>
+            <if test="orderGenerationip != null  and orderGenerationip != ''"> and orderGenerationIp = #{orderGenerationip}</if>
+            <if test="explains != null  and explains != ''"> and explains = #{explains}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            <if test="createtime != null "> and createTime = #{createtime}</if>
+            <if test="submittime != null "> and submitTime = #{submittime}</if>
+            <if test="submitsystem != null  and submitsystem != ''"> and submitSystem = #{submitsystem}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
+            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
+            <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayExceptionOrderById" parameterType="Long" resultMap="AlipayExceptionOrderResult">
+        <include refid="selectAlipayExceptionOrderVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayExceptionOrder" parameterType="AlipayExceptionOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_exception_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderexceptId != null  and orderexceptId != ''">orderExceptId,</if>
+            <if test="orderId != null  and orderId != ''">orderId,</if>
+            <if test="exceptStatus != null ">exceptStatus,</if>
+            <if test="exceptType != null ">exceptType,</if>
+            <if test="orderAccount != null  and orderAccount != ''">orderAccount,</if>
+            <if test="exceptOrderAmount != null  and exceptOrderAmount != ''">exceptOrderAmount,</if>
+            <if test="orderGenerationip != null  and orderGenerationip != ''">orderGenerationIp,</if>
+            <if test="explains != null  and explains != ''">explains,</if>
+            <if test="operation != null  and operation != ''">operation,</if>
+            <if test="createtime != null ">createTime,</if>
+            <if test="submittime != null ">submitTime,</if>
+            <if test="submitsystem != null  and submitsystem != ''">submitSystem,</if>
+            <if test="status != null ">status,</if>
+            <if test="retain1 != null  and retain1 != ''">retain1,</if>
+            <if test="retain2 != null  and retain2 != ''">retain2,</if>
+            <if test="retain3 != null  and retain3 != ''">retain3,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderexceptId != null  and orderexceptId != ''">#{orderexceptId},</if>
+            <if test="orderId != null  and orderId != ''">#{orderId},</if>
+            <if test="exceptStatus != null ">#{exceptStatus},</if>
+            <if test="exceptType != null ">#{exceptType},</if>
+            <if test="orderAccount != null  and orderAccount != ''">#{orderAccount},</if>
+            <if test="exceptOrderAmount != null  and exceptOrderAmount != ''">#{exceptOrderAmount},</if>
+            <if test="orderGenerationip != null  and orderGenerationip != ''">#{orderGenerationip},</if>
+            <if test="explains != null  and explains != ''">#{explains},</if>
+            <if test="operation != null  and operation != ''">#{operation},</if>
+            <if test="createtime != null ">#{createtime},</if>
+            <if test="submittime != null ">#{submittime},</if>
+            <if test="submitsystem != null  and submitsystem != ''">#{submitsystem},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="retain1 != null  and retain1 != ''">#{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">#{retain2},</if>
+            <if test="retain3 != null  and retain3 != ''">#{retain3},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayExceptionOrder" parameterType="AlipayExceptionOrder">
+        update alipay_exception_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderexceptId != null  and orderexceptId != ''">orderExceptId = #{orderexceptId},</if>
+            <if test="orderId != null  and orderId != ''">orderId = #{orderId},</if>
+            <if test="exceptStatus != null ">exceptStatus = #{exceptStatus},</if>
+            <if test="exceptType != null ">exceptType = #{exceptType},</if>
+            <if test="orderAccount != null  and orderAccount != ''">orderAccount = #{orderAccount},</if>
+            <if test="exceptOrderAmount != null  and exceptOrderAmount != ''">exceptOrderAmount = #{exceptOrderAmount},</if>
+            <if test="orderGenerationip != null  and orderGenerationip != ''">orderGenerationIp = #{orderGenerationip},</if>
+            <if test="explains != null  and explains != ''">explains = #{explains},</if>
+            <if test="operation != null  and operation != ''">operation = #{operation},</if>
+            <if test="createtime != null ">createTime = #{createtime},</if>
+            <if test="submittime != null ">submitTime = #{submittime},</if>
+            <if test="submitsystem != null  and submitsystem != ''">submitSystem = #{submitsystem},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="retain1 != null  and retain1 != ''">retain1 = #{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">retain2 = #{retain2},</if>
+            <if test="retain3 != null  and retain3 != ''">retain3 = #{retain3},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayExceptionOrderById" parameterType="Long">
+        delete from alipay_exception_order where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayExceptionOrderByIds" parameterType="String">
+        delete from alipay_exception_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
