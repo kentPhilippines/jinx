@@ -3,16 +3,21 @@ package com.ruoyi.alipay.service.impl;
 import java.util.List;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.HashKit;
+import com.ruoyi.common.utils.RSAUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.alipay.mapper.MerchantInfoEntityMapper;
 import com.ruoyi.alipay.domain.MerchantInfoEntity;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.core.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.ValueExp;
 
@@ -26,6 +31,9 @@ import javax.management.ValueExp;
 public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService {
     @Autowired
     private MerchantInfoEntityMapper merchantInfoEntityMapper;
+
+    @Autowired
+    private AlipayUserFundEntityMapper alipayUserFundEntityMapper;
 
     /**
      * 查询商户信息
@@ -45,7 +53,7 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
      * @return 商户信息
      */
     @Override
-    @DataSource(value= DataSourceType.ALIPAY_SLAVE)
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserInfo> selectMerchantInfoEntityList(AlipayUserInfo merchantInfoEntity) {
         return merchantInfoEntityMapper.selectMerchantInfoEntityList(merchantInfoEntity);
     }
@@ -57,9 +65,29 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
      * @return 结果
      */
     @Override
-    public int insertMerchantInfoEntity(MerchantInfoEntity merchantInfoEntity) {
-        merchantInfoEntity.setCreateTime(DateUtils.getNowDate());
-        return merchantInfoEntityMapper.insertMerchantInfoEntity(merchantInfoEntity);
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    @Transactional(rollbackFor = Exception.class)
+    public int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity) {
+        List<String> keys = RSAUtils.genKeyPair();
+        if (keys == null) {
+            throw new BusinessException("获取密钥对错误，操作失败");
+        }
+        String salt = HashKit.randomSalt();
+        String md5 = HashKit.encodePassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPassword(), salt);//登陆密码
+        String cash = HashKit.encodePassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPayPasword(), salt);//提现密码
+        merchantInfoEntity.setPassword(md5);
+        merchantInfoEntity.setSalt(salt);
+        merchantInfoEntity.setPayPasword(cash);
+        merchantInfoEntity.setUserType(1);
+        merchantInfoEntity.setIsAgent(String.valueOf(1));
+        merchantInfoEntity.setPublicKey(keys.get(0));
+        merchantInfoEntity.setPrivateKey(keys.get(1));
+        //新增商户用户
+        int i = merchantInfoEntityMapper.insertMerchantInfoEntity(merchantInfoEntity);
+        if (i > 0) {//成功后增加资金信息
+            int j = alipayUserFundEntityMapper.insertAlipayUserFundInfo(merchantInfoEntity);
+        }
+        return i > 0 ? 1 : 0;
     }
 
     /**

@@ -70,7 +70,7 @@ public class MerchantInfoEntityController extends BaseController {
     @Log(title = "商户信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(MerchantInfoEntity merchantInfoEntity) {
+    public AjaxResult addSave(AlipayUserInfo merchantInfoEntity) {
         return toAjax(merchantInfoEntityService.insertMerchantInfoEntity(merchantInfoEntity));
     }
 

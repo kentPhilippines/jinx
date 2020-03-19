@@ -129,22 +129,18 @@ public class CommonController {
     }
 
     /**
-     * 商户参数公钥加密请求
+     * 商户参数私钥解密请求
      * @param request
      * @return
      */
     @PostMapping("/common/private/decrypt")
     public AjaxResult getDecryptPrivateKey(HttpServletRequest request){
-        String privateKey = request.getParameter("privateKey");
+        String cipherText = request.getParameter("cipherText");//密文
         String userId = request.getParameter("userId");
         AlipayUserInfo alipayUserInfo = alipayUserInfoService.findMerchantInfoByUserId(userId);
         if(alipayUserInfo == null){
             return AjaxResult.warn("商户不存在");
-        }else if(!privateKey.equals(alipayUserInfo.getPublicKey())){
-            return AjaxResult.warn("与商户公钥不符");
         }
-        Map<String, Object> map = MapDataUtil.convertDataMap(request);
-        String param = MapDataUtil.createParam(map);
-        return AjaxResult.success(RSAUtils.privateDecrypt(param,privateKey));
+        return AjaxResult.success(RSAUtils.privateDecrypt(cipherText,alipayUserInfo.getPrivateKey()));
     }
 }

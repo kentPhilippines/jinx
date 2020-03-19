@@ -30,22 +30,26 @@ public class RSAUtils {
     /**
      * 随机生成密钥对
      */
-    public static List<String> genKeyPair() throws NoSuchAlgorithmException {
-        // KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
-        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
-        // 初始化密钥对生成器
-        keyPairGen.initialize(KEY_SIZE);
-        // 生成一个密钥对，保存在keyPair中
-        KeyPair keyPair = keyPairGen.generateKeyPair();
-        // 得到私钥
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        // 得到公钥
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        String publicKeyString = java.util.Base64.getEncoder().encodeToString(publicKey.getEncoded());
-        // 得到私钥字符串
-        String privateKeyString = java.util.Base64.getEncoder().encodeToString(privateKey.getEncoded());
-        // 将公钥和私钥保存到List
-        return ImmutableList.of(publicKeyString, privateKeyString);
+    public static List<String> genKeyPair() {
+        try {
+            // KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
+            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
+            // 初始化密钥对生成器
+            keyPairGen.initialize(KEY_SIZE);
+            // 生成一个密钥对，保存在keyPair中
+            KeyPair keyPair = keyPairGen.generateKeyPair();
+            // 得到私钥
+            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+            // 得到公钥
+            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+            String publicKeyString = java.util.Base64.getEncoder().encodeToString(publicKey.getEncoded());
+            // 得到私钥字符串
+            String privateKeyString = java.util.Base64.getEncoder().encodeToString(privateKey.getEncoded());
+            // 将公钥和私钥保存到List
+            return ImmutableList.of(publicKeyString, privateKeyString);
+        } catch (NoSuchAlgorithmException var15){
+            return null;
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.domain.MerchantInfoEntity;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -61,7 +62,10 @@ public interface MerchantInfoEntityMapper
      * @param merchantInfoEntity 商户信息
      * @return 结果
      */
-    public int insertMerchantInfoEntity(MerchantInfoEntity merchantInfoEntity);
+
+    @Insert("insert into alipay_user_info (userId,userName,password,salt,payPasword,userType,email," +
+            "QQ,telegram,skype,privateKey,publicKey) values (#{userId},#{userName},#{password},#{salt},#{payPasword},#{userType},#{email},#{QQ},#{telegram},#{skype},#{privateKey},#{publicKey})")
+    public int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
 
     /**
      * 修改商户信息
