@@ -27,100 +27,93 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @Controller
 @RequestMapping("/alipay/deposit")
-public class AlipayRechargeEntityController extends BaseController
-{
-    private String prefix = "alipay/deposit";
+public class AlipayRechargeEntityController extends BaseController {
+	private String prefix = "alipay/deposit";
 
-    @Autowired
-    private IAlipayRechargeEntityService alipayRechargeEntityService;
+	@Autowired
+	private IAlipayRechargeEntityService alipayRechargeEntityService;
 
-    @RequiresPermissions("alipay:deposit:view")
-    @GetMapping()
-    public String deposit()
-    {
-        return prefix + "/deposit";
-    }
+	@RequiresPermissions("alipay:deposit:view")
+	@GetMapping()
+	public String deposit() {
+		return prefix + "/deposit";
+	}
 
-    /**
-     * 查询充值记录列表
-     */
-    @RequiresPermissions("alipay:deposit:list")
-    @PostMapping("/list")
-    @ResponseBody
-    public TableDataInfo list(AlipayRechargeEntity alipayRechargeEntity)
-    {
-        startPage();
-        List<AlipayRechargeEntity> list = alipayRechargeEntityService.selectAlipayRechargeEntityList(alipayRechargeEntity);
-        return getDataTable(list);
-    }
+	/**
+	 * 查询充值记录列表
+	 */
+	@RequiresPermissions("alipay:deposit:list")
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(AlipayRechargeEntity alipayRechargeEntity) {
+		startPage();
+		List<AlipayRechargeEntity> list = alipayRechargeEntityService
+				.selectAlipayRechargeEntityList(alipayRechargeEntity);
+		return getDataTable(list);
+	}
 
-    /**
-     * 导出充值记录列表
-     */
-    @RequiresPermissions("alipay:deposit:export")
-    @Log(title = "充值记录", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(AlipayRechargeEntity alipayRechargeEntity)
-    {
-        List<AlipayRechargeEntity> list = alipayRechargeEntityService.selectAlipayRechargeEntityList(alipayRechargeEntity);
-        ExcelUtil<AlipayRechargeEntity> util = new ExcelUtil<AlipayRechargeEntity>(AlipayRechargeEntity.class);
-        return util.exportExcel(list, "deposit");
-    }
+	/**
+	 * 导出充值记录列表
+	 */
+	@RequiresPermissions("alipay:deposit:export")
+	@Log(title = "充值记录", businessType = BusinessType.EXPORT)
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult export(AlipayRechargeEntity alipayRechargeEntity) {
+		List<AlipayRechargeEntity> list = alipayRechargeEntityService
+				.selectAlipayRechargeEntityList(alipayRechargeEntity);
+		ExcelUtil<AlipayRechargeEntity> util = new ExcelUtil<AlipayRechargeEntity>(AlipayRechargeEntity.class);
+		return util.exportExcel(list, "deposit");
+	}
 
-    /**
-     * 新增充值记录
-     */
-    @GetMapping("/add")
-    public String add()
-    {
-        return prefix + "/add";
-    }
+	/**
+	 * 新增充值记录
+	 */
+	@GetMapping("/add")
+	public String add() {
+		return prefix + "/add";
+	}
 
-    /**
-     * 新增保存充值记录
-     */
-    @RequiresPermissions("alipay:deposit:add")
-    @Log(title = "充值记录", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayRechargeEntity alipayRechargeEntity)
-    {
-        return toAjax(alipayRechargeEntityService.insertAlipayRechargeEntity(alipayRechargeEntity));
-    }
+	/**
+	 * 新增保存充值记录
+	 */
+	@RequiresPermissions("alipay:deposit:add")
+	@Log(title = "充值记录", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public AjaxResult addSave(AlipayRechargeEntity alipayRechargeEntity) {
+		return toAjax(alipayRechargeEntityService.insertAlipayRechargeEntity(alipayRechargeEntity));
+	}
 
-    /**
-     * 修改充值记录
-     */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
-        AlipayRechargeEntity alipayRechargeEntity = alipayRechargeEntityService.selectAlipayRechargeEntityById(id);
-        mmap.put("alipayRechargeEntity", alipayRechargeEntity);
-        return prefix + "/edit";
-    }
+	/**
+	 * 修改充值记录
+	 */
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+		AlipayRechargeEntity alipayRechargeEntity = alipayRechargeEntityService.selectAlipayRechargeEntityById(id);
+		mmap.put("alipayRechargeEntity", alipayRechargeEntity);
+		return prefix + "/edit";
+	}
 
-    /**
-     * 修改保存充值记录
-     */
-    @RequiresPermissions("alipay:deposit:edit")
-    @Log(title = "充值记录", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayRechargeEntity alipayRechargeEntity)
-    {
-        return toAjax(alipayRechargeEntityService.updateAlipayRechargeEntity(alipayRechargeEntity));
-    }
+	/**
+	 * 修改保存充值记录
+	 */
+	@RequiresPermissions("alipay:deposit:edit")
+	@Log(title = "充值记录", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public AjaxResult editSave(AlipayRechargeEntity alipayRechargeEntity) {
+		return toAjax(alipayRechargeEntityService.updateAlipayRechargeEntity(alipayRechargeEntity));
+	}
 
-    /**
-     * 删除充值记录
-     */
-    @RequiresPermissions("alipay:deposit:remove")
-    @Log(title = "充值记录", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids)
-    {
-        return toAjax(alipayRechargeEntityService.deleteAlipayRechargeEntityByIds(ids));
-    }
+	/**
+	 * 删除充值记录
+	 */
+	@RequiresPermissions("alipay:deposit:remove")
+	@Log(title = "充值记录", businessType = BusinessType.DELETE)
+	@PostMapping("/remove")
+	@ResponseBody
+	public AjaxResult remove(String ids) {
+		return toAjax(alipayRechargeEntityService.deleteAlipayRechargeEntityByIds(ids));
+	}
 }

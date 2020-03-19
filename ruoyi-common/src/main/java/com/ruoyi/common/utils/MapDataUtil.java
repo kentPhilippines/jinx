@@ -27,8 +27,7 @@ public class MapDataUtil
             entry = (Entry<?, ?>) entries.next();
             name = (String) entry.getKey();
             Object valueObj = entry.getValue();
-            if (null == valueObj)
-            {
+            if (null == valueObj) {
                 value = "";
             }
             else if (valueObj instanceof String[])

@@ -27,100 +27,91 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @Controller
 @RequestMapping("/alipay/rate")
-public class AlipayUserRateEntityController extends BaseController
-{
-    private String prefix = "alipay/rate";
+public class AlipayUserRateEntityController extends BaseController {
+	private String prefix = "alipay/rate";
 
-    @Autowired
-    private IAlipayUserRateEntityService alipayUserRateEntityService;
+	@Autowired
+	private IAlipayUserRateEntityService alipayUserRateEntityService;
+	@RequiresPermissions("alipay:rate:view")
+	@GetMapping()
+	public String rate() {
+		return prefix + "/rate";
+	}
 
-    @RequiresPermissions("alipay:rate:view")
-    @GetMapping()
-    public String rate()
-    {
-        return prefix + "/rate";
-    }
+	/**
+	 * 查询用户产品费率列表
+	 */
+	@RequiresPermissions("alipay:rate:list")
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(AlipayUserRateEntity alipayUserRateEntity) {
+		startPage();
+		List<AlipayUserRateEntity> list = alipayUserRateEntityService.selectAlipayUserRateEntityList(alipayUserRateEntity);
+		return getDataTable(list);
+	}
 
-    /**
-     * 查询用户产品费率列表
-     */
-    @RequiresPermissions("alipay:rate:list")
-    @PostMapping("/list")
-    @ResponseBody
-    public TableDataInfo list(AlipayUserRateEntity alipayUserRateEntity)
-    {
-        startPage();
-        List<AlipayUserRateEntity> list = alipayUserRateEntityService.selectAlipayUserRateEntityList(alipayUserRateEntity);
-        return getDataTable(list);
-    }
+	/**
+	 * 导出用户产品费率列表
+	 */
+	@RequiresPermissions("alipay:rate:export")
+	@Log(title = "用户产品费率", businessType = BusinessType.EXPORT)
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult export(AlipayUserRateEntity alipayUserRateEntity) {
+		List<AlipayUserRateEntity> list = alipayUserRateEntityService
+				.selectAlipayUserRateEntityList(alipayUserRateEntity);
+		ExcelUtil<AlipayUserRateEntity> util = new ExcelUtil<AlipayUserRateEntity>(AlipayUserRateEntity.class);
+		return util.exportExcel(list, "rate");
+	}
 
-    /**
-     * 导出用户产品费率列表
-     */
-    @RequiresPermissions("alipay:rate:export")
-    @Log(title = "用户产品费率", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(AlipayUserRateEntity alipayUserRateEntity)
-    {
-        List<AlipayUserRateEntity> list = alipayUserRateEntityService.selectAlipayUserRateEntityList(alipayUserRateEntity);
-        ExcelUtil<AlipayUserRateEntity> util = new ExcelUtil<AlipayUserRateEntity>(AlipayUserRateEntity.class);
-        return util.exportExcel(list, "rate");
-    }
+	/**
+	 * 新增用户产品费率
+	 */
+	@GetMapping("/add")
+	public String add() {
+		return prefix + "/add";
+	}
 
-    /**
-     * 新增用户产品费率
-     */
-    @GetMapping("/add")
-    public String add()
-    {
-        return prefix + "/add";
-    }
+	/**
+	 * 新增保存用户产品费率
+	 */
+	@RequiresPermissions("alipay:rate:add")
+	@Log(title = "用户产品费率", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public AjaxResult addSave(AlipayUserRateEntity alipayUserRateEntity) {
+		return toAjax(alipayUserRateEntityService.insertAlipayUserRateEntity(alipayUserRateEntity));
+	}
 
-    /**
-     * 新增保存用户产品费率
-     */
-    @RequiresPermissions("alipay:rate:add")
-    @Log(title = "用户产品费率", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayUserRateEntity alipayUserRateEntity)
-    {
-        return toAjax(alipayUserRateEntityService.insertAlipayUserRateEntity(alipayUserRateEntity));
-    }
+	/**
+	 * 修改用户产品费率
+	 */
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+		AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityService.selectAlipayUserRateEntityById(id);
+		mmap.put("alipayUserRateEntity", alipayUserRateEntity);
+		return prefix + "/edit";
+	}
 
-    /**
-     * 修改用户产品费率
-     */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
-        AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityService.selectAlipayUserRateEntityById(id);
-        mmap.put("alipayUserRateEntity", alipayUserRateEntity);
-        return prefix + "/edit";
-    }
+	/**
+	 * 修改保存用户产品费率
+	 */
+	@RequiresPermissions("alipay:rate:edit")
+	@Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public AjaxResult editSave(AlipayUserRateEntity alipayUserRateEntity) {
+		return toAjax(alipayUserRateEntityService.updateAlipayUserRateEntity(alipayUserRateEntity));
+	}
 
-    /**
-     * 修改保存用户产品费率
-     */
-    @RequiresPermissions("alipay:rate:edit")
-    @Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayUserRateEntity alipayUserRateEntity)
-    {
-        return toAjax(alipayUserRateEntityService.updateAlipayUserRateEntity(alipayUserRateEntity));
-    }
-
-    /**
-     * 删除用户产品费率
-     */
-    @RequiresPermissions("alipay:rate:remove")
-    @Log(title = "用户产品费率", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids)
-    {
-        return toAjax(alipayUserRateEntityService.deleteAlipayUserRateEntityByIds(ids));
-    }
+	/**
+	 * 删除用户产品费率
+	 */
+	@RequiresPermissions("alipay:rate:remove")
+	@Log(title = "用户产品费率", businessType = BusinessType.DELETE)
+	@PostMapping("/remove")
+	@ResponseBody
+	public AjaxResult remove(String ids) {
+		return toAjax(alipayUserRateEntityService.deleteAlipayUserRateEntityByIds(ids));
+	}
 }
