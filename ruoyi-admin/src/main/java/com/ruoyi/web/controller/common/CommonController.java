@@ -3,6 +3,10 @@ package com.ruoyi.web.controller.common;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.service.IAlipayUserInfoService;
+import com.ruoyi.common.utils.MapDataUtil;
+import com.ruoyi.common.utils.RSAUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,8 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 
+import java.util.Map;
+
 /**
  * 通用请求处理
  *
@@ -30,6 +36,8 @@ public class CommonController {
 
     @Autowired
     private ServerConfig serverConfig;
+    @Autowired
+    private IAlipayUserInfoService alipayUserInfoService;
 
     /**
      * 通用下载请求
@@ -97,5 +105,46 @@ public class CommonController {
         response.setHeader("Content-Disposition",
                 "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, downloadName));
         FileUtils.writeBytes(downloadPath, response.getOutputStream());
+    }
+
+    /**
+     * 商户参数公钥加密请求
+     * @param request
+     * @return
+     */
+    @PostMapping("/common/public/encrypt")
+    @ResponseBody
+    public AjaxResult getEncryptPublicKey(HttpServletRequest request){
+        String publicKey = request.getParameter("publicKey");
+        String userId = request.getParameter("userId");
+        AlipayUserInfo alipayUserInfo = alipayUserInfoService.findMerchantInfoByUserId(userId);
+        if(alipayUserInfo == null){
+            return AjaxResult.warn("商户不存在");
+        }else if(!publicKey.equals(alipayUserInfo.getPublicKey())){
+            return AjaxResult.warn("与商户公钥不符");
+        }
+        Map<String, Object> map = MapDataUtil.convertDataMap(request);
+        String param = MapDataUtil.createParam(map);
+        return AjaxResult.success(RSAUtils.publicEncrypt(param,publicKey));
+    }
+
+    /**
+     * 商户参数公钥加密请求
+     * @param request
+     * @return
+     */
+    @PostMapping("/common/private/decrypt")
+    public AjaxResult getDecryptPrivateKey(HttpServletRequest request){
+        String privateKey = request.getParameter("privateKey");
+        String userId = request.getParameter("userId");
+        AlipayUserInfo alipayUserInfo = alipayUserInfoService.findMerchantInfoByUserId(userId);
+        if(alipayUserInfo == null){
+            return AjaxResult.warn("商户不存在");
+        }else if(!privateKey.equals(alipayUserInfo.getPublicKey())){
+            return AjaxResult.warn("与商户公钥不符");
+        }
+        Map<String, Object> map = MapDataUtil.convertDataMap(request);
+        String param = MapDataUtil.createParam(map);
+        return AjaxResult.success(RSAUtils.privateDecrypt(param,privateKey));
     }
 }

@@ -77,10 +77,10 @@ public class AlipayUserInfo extends BaseEntity
     private Integer status;
 
     /** 预留，添加业务使用 */
-    private String retain1;
+    private String privateKey;
 
     /** 预留，添加业务使用 */
-    private String retain2;
+    private String publicKey;
 
     /** 预留，添加业务使用 */
     private String retain3;
@@ -248,22 +248,6 @@ public class AlipayUserInfo extends BaseEntity
         this.status = status;
     }
 
-    public String getRetain1() {
-        return retain1;
-    }
-
-    public void setRetain1(String retain1) {
-        this.retain1 = retain1;
-    }
-
-    public String getRetain2() {
-        return retain2;
-    }
-
-    public void setRetain2(String retain2) {
-        this.retain2 = retain2;
-    }
-
     public String getRetain3() {
         return retain3;
     }
@@ -278,6 +262,22 @@ public class AlipayUserInfo extends BaseEntity
 
     public void setRetain4(String retain4) {
         this.retain4 = retain4;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 
     @Override
@@ -304,8 +304,8 @@ public class AlipayUserInfo extends BaseEntity
             .append("createTime", getCreateTime())
             .append("submitTime", getSubmitTime())
             .append("status", getStatus())
-            .append("retain1", getRetain1())
-            .append("retain2", getRetain2())
+            .append("privateKey", getPrivateKey())
+            .append("publicKey", getPublicKey())
             .append("retain3", getRetain3())
             .append("retain4", getRetain4())
             .toString();

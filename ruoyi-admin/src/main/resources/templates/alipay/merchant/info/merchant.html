@@ -12,11 +12,11 @@
                         <ul>
                             <li>
                                 <p>商户ID：</p>
-                                <input type="text" id="merchantId" name="merchantId"/>
+                                <input type="text" id="userId" name="userId"/>
                             </li>
                             <li>
                                 <p>商户名称：</p>
-                                <input type="text" id="merchantName" name="merchantName"/>
+                                <input type="text" id="userName" name="userName"/>
                             </li>
                             <li>
                                 <p>状态：</p>
@@ -36,13 +36,13 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="merchant:info:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:merchant:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="merchant:info:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:merchant:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="merchant:info:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:merchant:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
             </div>
@@ -54,9 +54,9 @@
     <th:block th:include="include :: footer" />
      <script type="text/javascript" th:src="@{/js/download.js}"></script>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('merchant:info:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('merchant:info:remove')}]];
-        var prefix = ctx + "merchant/info";
+        var editFlag = [[${@permission.hasPermi('alipay:merchant:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('alipay:merchant:remove')}]];
+        var prefix = ctx + "alipay/merchant";
 
         $(function() {
             var options = {
@@ -74,11 +74,11 @@
                     visible: false
                 },
                 {
-                    field : 'merchantId', 
+                    field : 'userId',
                     title : '商户ID'
                 },
                 {
-                    field : 'merchantName', 
+                    field : 'userName',
                     title : '商户名称'
                 },
                 {
@@ -131,33 +131,33 @@
         /* 商户状态显示 */
         function statusTools(row) {
             if (row.switchs == 0) {
-                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.merchantId + '\')"></i> ';
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.userId + '\')"></i> ';
             } else {
-                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.merchantId + '\')"></i> ';
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
             }
         }
 
         /* 商户管理-停用 */
         function disable(userId) {
             $.modal.confirm("确认要停用此商户吗？", function () {
-                $.operate.post(prefix + "/changeStatus", {"merchantId": merchantId, "switches": 0});
+                $.operate.post(prefix + "/changeStatus", {"userId": userId, "switchs": 0});
             })
         }
 
         /* 商户管理-启用 */
         function enable(userId) {
             $.modal.confirm("确认要启用此商户吗？", function () {
-                $.operate.post(prefix + "/changeStatus", {"merchantId": merchantId, "switches": 1});
+                $.operate.post(prefix + "/changeStatus", {"userId": userId, "switchs": 1});
             })
         }
 
         /*下载公钥*/
         function download_public(row) {
-            return '<i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载公钥" aria-hidden="true"  onclick="javascript:txtDownload(\'' + row.publicKey + '\',\'' + row.merchantName + '公钥\')"></i> ';
+            return '<i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载公钥" aria-hidden="true"  onclick="javascript:txtDownload(\'' + row.publicKey + '\',\'' + row.userName + '公钥\')"></i> ';
         }
         /*下载私钥*/
         function download_private(row) {
-            return '<i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载私钥" aria-hidden="true"  onclick="javascript:txtDownload(\'' + row.privateKey + '\',\'' + row.merchantName + '私钥\')"></i> ';
+            return '<i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载私钥" aria-hidden="true"  onclick="javascript:txtDownload(\'' + row.privateKey + '\',\'' + row.userName + '私钥\')"></i> ';
         }
 
         /*下载txt*/

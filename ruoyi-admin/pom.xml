@@ -102,7 +102,7 @@
                 </configuration>   
 		   </plugin>   
         </plugins>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>otc-admin</finalName>
     </build>
 	
 </project>

@@ -82,4 +82,11 @@ public interface IAlipayUserInfoService {
      * @return 影响行数
      */
     String resetWithdrawalPwd(Long id);
+
+    /**
+     * 根据商户号查询商户
+     * @param userId
+     * @return
+     */
+    AlipayUserInfo findMerchantInfoByUserId(String userId);
 }

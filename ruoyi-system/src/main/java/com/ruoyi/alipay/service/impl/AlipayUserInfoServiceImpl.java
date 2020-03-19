@@ -151,4 +151,10 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
         int j = alipayUserInfoMapper.updateWithdrawalPwd(alipayUserInfo);
         return j == 1 ? resetPwd : "false";
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserInfo findMerchantInfoByUserId(String userId) {
+        return alipayUserInfoMapper.selectMerhantInfoByUserId(userId);
+    }
 }
