@@ -14,9 +14,11 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
 import java.util.Map;
 import javax.crypto.Cipher;
+import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.ruoyi.common.exception.BusinessException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
@@ -229,6 +231,40 @@ public class RSAUtils {
         } catch (Exception e) {
             throw new RuntimeException("验签字符串[" + content + "]时遇到异常", e);
         }
+    }
+
+    /**
+     * 将参数用公钥进行加密，平台内部调用
+     * @param map           map参数
+     * @param privateKey    私钥
+     * @return              返回map
+     */
+    public static String getEncryptPublicKey(Map<String, Object> map, String privateKey){
+        //拼接参数
+        String urlParam = MapDataUtil.createParam(map);
+        //私钥解密密文得到字符串参数
+        String cipherText = publicEncrypt(urlParam,privateKey);
+        //调用方法转成map
+        if (StringUtils.isEmpty(cipherText)) {
+            throw new BusinessException("加密字符串为空");
+        }
+        return cipherText;
+    }
+
+    /**
+     * 将解密的密文转成map返回 所有的验证都在调用前完成
+     * @param data          密文
+     * @param privateKey    私钥
+     * @return              返回map
+     */
+    public Map<String, Object> retMapDecode(String data, String privateKey){
+        //私钥解密密文得到字符串参数
+        String urlParam = privateDecrypt(data,privateKey);
+        //调用方法转成map
+        if (StringUtils.isEmpty(urlParam)) {
+            throw new BusinessException("解密字符串为空");
+        }
+       return MapDataUtil.paramToMap(urlParam);
     }
 
 }
