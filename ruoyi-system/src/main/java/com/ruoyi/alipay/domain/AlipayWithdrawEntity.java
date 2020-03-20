@@ -76,7 +76,7 @@ public class AlipayWithdrawEntity extends BaseEntity
     private Integer status;
 
     /** 备用字段添加业务使用 */
-    @Excel(name = "备用字段添加业务使用")
+    @Excel(name = "代付来源")
     private String retain1;
 
     /** 备用字段添加业务使用 */

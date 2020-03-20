@@ -45,7 +45,6 @@ public class AlipayUserInfoController extends BaseController {
     public String userInfo() {
         return prefix + "/userInfo";
     }
-
     /**
      * 查询用户详情列表
      */
@@ -247,6 +246,9 @@ public class AlipayUserInfoController extends BaseController {
         }
         return success("重置成功，新的提现密码：" + resetPwd);
     }
+
+
+
 
 
 }

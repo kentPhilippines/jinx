@@ -6,10 +6,10 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 商户详情对象 t_merchant_info
+ * 商户信息对象 t_merchant_info
  * 
- * @author kiwi
- * @date 2020-03-14
+ * @author ruoyi
+ * @date 2020-03-18
  */
 public class MerchantInfoEntity extends BaseEntity
 {
@@ -18,7 +18,7 @@ public class MerchantInfoEntity extends BaseEntity
     /** 数据ID */
     private Long id;
 
-    /** 商户ID(登陆账号) */
+    /** 商户ID */
     @Excel(name = "商户ID")
     private String merchantId;
 
@@ -27,18 +27,30 @@ public class MerchantInfoEntity extends BaseEntity
     private String merchantName;
 
     /** 商家私钥 */
-    @Excel(name = "商户私钥")
+    @Excel(name = "商家私钥")
     private String privateKey;
 
     /** 商家公钥 */
-    @Excel(name = "商户公钥")
+    @Excel(name = "商家公钥")
     private String publicKey;
 
-    /** 状态 */
-    @Excel(name = "状态")
+    /** 交易密钥 */
+    @Excel(name = "交易密钥")
+    private String dealKey;
+
+    /** 提现密码 */
+    @Excel(name = "提现密码")
+    private String withdrawalPwd;
+
+    /** 提现盐值 */
+    @Excel(name = "提现盐值")
+    private String withdrawalSalt;
+
+    /** 商户状态 */
+    @Excel(name = "商户状态")
     private Integer switches;
 
-    /** 删除标记 */
+    /** 删除标志 */
     private Integer delFlag;
 
     public void setId(Long id) 
@@ -86,6 +98,33 @@ public class MerchantInfoEntity extends BaseEntity
     {
         return publicKey;
     }
+    public void setDealKey(String dealKey) 
+    {
+        this.dealKey = dealKey;
+    }
+
+    public String getDealKey() 
+    {
+        return dealKey;
+    }
+    public void setWithdrawalPwd(String withdrawalPwd) 
+    {
+        this.withdrawalPwd = withdrawalPwd;
+    }
+
+    public String getWithdrawalPwd() 
+    {
+        return withdrawalPwd;
+    }
+    public void setWithdrawalSalt(String withdrawalSalt) 
+    {
+        this.withdrawalSalt = withdrawalSalt;
+    }
+
+    public String getWithdrawalSalt() 
+    {
+        return withdrawalSalt;
+    }
     public void setSwitches(Integer switches) 
     {
         this.switches = switches;
@@ -113,6 +152,9 @@ public class MerchantInfoEntity extends BaseEntity
             .append("merchantName", getMerchantName())
             .append("privateKey", getPrivateKey())
             .append("publicKey", getPublicKey())
+            .append("dealKey", getDealKey())
+            .append("withdrawalPwd", getWithdrawalPwd())
+            .append("withdrawalSalt", getWithdrawalSalt())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

@@ -27,100 +27,93 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @Controller
 @RequestMapping("/alipay/file")
-public class AlipayFileListEntityController extends BaseController
-{
-    private String prefix = "alipay/file";
+public class AlipayFileListEntityController extends BaseController {
+	private String prefix = "alipay/file";
 
-    @Autowired
-    private IAlipayFileListEntityService alipayFileListEntityService;
+	@Autowired
+	private IAlipayFileListEntityService alipayFileListEntityService;
 
-    @RequiresPermissions("alipay:file:view")
-    @GetMapping()
-    public String file()
-    {
-        return prefix + "/file";
-    }
+	@RequiresPermissions("alipay:file:view")
+	@GetMapping()
+	public String file() {
+		return prefix + "/file";
+	}
 
-    /**
-     * 查询文件列列表
-     */
-    @RequiresPermissions("alipay:file:list")
-    @PostMapping("/list")
-    @ResponseBody
-    public TableDataInfo list(AlipayFileListEntity alipayFileListEntity)
-    {
-        startPage();
-        List<AlipayFileListEntity> list = alipayFileListEntityService.selectAlipayFileListEntityList(alipayFileListEntity);
-        return getDataTable(list);
-    }
+	/**
+	 * 查询文件列列表
+	 */
+	@RequiresPermissions("alipay:file:list")
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(AlipayFileListEntity alipayFileListEntity) {
+		startPage();
+		List<AlipayFileListEntity> list = alipayFileListEntityService
+				.selectAlipayFileListEntityList(alipayFileListEntity);
+		return getDataTable(list);
+	}
 
-    /**
-     * 导出文件列列表
-     */
-    @RequiresPermissions("alipay:file:export")
-    @Log(title = "文件列", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(AlipayFileListEntity alipayFileListEntity)
-    {
-        List<AlipayFileListEntity> list = alipayFileListEntityService.selectAlipayFileListEntityList(alipayFileListEntity);
-        ExcelUtil<AlipayFileListEntity> util = new ExcelUtil<AlipayFileListEntity>(AlipayFileListEntity.class);
-        return util.exportExcel(list, "file");
-    }
+	/**
+	 * 导出文件列列表
+	 */
+	@RequiresPermissions("alipay:file:export")
+	@Log(title = "文件列", businessType = BusinessType.EXPORT)
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult export(AlipayFileListEntity alipayFileListEntity) {
+		List<AlipayFileListEntity> list = alipayFileListEntityService
+				.selectAlipayFileListEntityList(alipayFileListEntity);
+		ExcelUtil<AlipayFileListEntity> util = new ExcelUtil<AlipayFileListEntity>(AlipayFileListEntity.class);
+		return util.exportExcel(list, "file");
+	}
 
-    /**
-     * 新增文件列
-     */
-    @GetMapping("/add")
-    public String add()
-    {
-        return prefix + "/add";
-    }
+	/**
+	 * 新增文件列
+	 */
+	@GetMapping("/add")
+	public String add() {
+		return prefix + "/add";
+	}
 
-    /**
-     * 新增保存文件列
-     */
-    @RequiresPermissions("alipay:file:add")
-    @Log(title = "文件列", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayFileListEntity alipayFileListEntity)
-    {
-        return toAjax(alipayFileListEntityService.insertAlipayFileListEntity(alipayFileListEntity));
-    }
+	/**
+	 * 新增保存文件列
+	 */
+	@RequiresPermissions("alipay:file:add")
+	@Log(title = "文件列", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public AjaxResult addSave(AlipayFileListEntity alipayFileListEntity) {
+		return toAjax(alipayFileListEntityService.insertAlipayFileListEntity(alipayFileListEntity));
+	}
 
-    /**
-     * 修改文件列
-     */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
-        AlipayFileListEntity alipayFileListEntity = alipayFileListEntityService.selectAlipayFileListEntityById(id);
-        mmap.put("alipayFileListEntity", alipayFileListEntity);
-        return prefix + "/edit";
-    }
+	/**
+	 * 修改文件列
+	 */
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+		AlipayFileListEntity alipayFileListEntity = alipayFileListEntityService.selectAlipayFileListEntityById(id);
+		mmap.put("alipayFileListEntity", alipayFileListEntity);
+		return prefix + "/edit";
+	}
 
-    /**
-     * 修改保存文件列
-     */
-    @RequiresPermissions("alipay:file:edit")
-    @Log(title = "文件列", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayFileListEntity alipayFileListEntity)
-    {
-        return toAjax(alipayFileListEntityService.updateAlipayFileListEntity(alipayFileListEntity));
-    }
+	/**
+	 * 修改保存文件列
+	 */
+	@RequiresPermissions("alipay:file:edit")
+	@Log(title = "文件列", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public AjaxResult editSave(AlipayFileListEntity alipayFileListEntity) {
+		return toAjax(alipayFileListEntityService.updateAlipayFileListEntity(alipayFileListEntity));
+	}
 
-    /**
-     * 删除文件列
-     */
-    @RequiresPermissions("alipay:file:remove")
-    @Log(title = "文件列", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids)
-    {
-        return toAjax(alipayFileListEntityService.deleteAlipayFileListEntityByIds(ids));
-    }
+	/**
+	 * 删除文件列
+	 */
+	@RequiresPermissions("alipay:file:remove")
+	@Log(title = "文件列", businessType = BusinessType.DELETE)
+	@PostMapping("/remove")
+	@ResponseBody
+	public AjaxResult remove(String ids) {
+		return toAjax(alipayFileListEntityService.deleteAlipayFileListEntityByIds(ids));
+	}
 }

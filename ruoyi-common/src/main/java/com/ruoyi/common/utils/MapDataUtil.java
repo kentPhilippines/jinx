@@ -1,5 +1,7 @@
 package com.ruoyi.common.utils;
 
+import com.google.common.collect.Maps;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,39 +11,30 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Map通用处理方法
- * 
+ *
  * @author ruoyi
  */
-public class MapDataUtil
-{
-    public static Map<String, Object> convertDataMap(HttpServletRequest request)
-    {
+public class MapDataUtil {
+    public static Map<String, Object> convertDataMap(HttpServletRequest request) {
         Map<String, String[]> properties = request.getParameterMap();
         Map<String, Object> returnMap = new HashMap<String, Object>();
         Iterator<?> entries = properties.entrySet().iterator();
         Map.Entry<?, ?> entry;
         String name = "";
         String value = "";
-        while (entries.hasNext())
-        {
+        while (entries.hasNext()) {
             entry = (Entry<?, ?>) entries.next();
             name = (String) entry.getKey();
             Object valueObj = entry.getValue();
-            if (null == valueObj)
-            {
+            if (null == valueObj) {
                 value = "";
-            }
-            else if (valueObj instanceof String[])
-            {
+            } else if (valueObj instanceof String[]) {
                 String[] values = (String[]) valueObj;
-                for (int i = 0; i < values.length; i++)
-                {
+                for (int i = 0; i < values.length; i++) {
                     value = values[i] + ",";
                 }
                 value = value.substring(0, value.length() - 1);
-            }
-            else
-            {
+            } else {
                 value = valueObj.toString();
             }
             returnMap.put(name, value);
@@ -49,6 +42,11 @@ public class MapDataUtil
         return returnMap;
     }
 
+    /**
+     * 对参数map进行升序排序用&拼接
+     * @param map
+     * @return
+     */
     public static String createParam(Map<String, Object> map) {
         try {
             if (map == null || map.isEmpty())
@@ -60,10 +58,33 @@ public class MapDataUtil
                 res.append(key[i] + "=" + map.get(key[i]) + "&");
             }
             String rStr = res.substring(0, res.length() - 1);
-                return rStr;
+            return rStr;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 将字符串参数转成Map集合
+     * @param paramStr
+     * @return
+     */
+    public static Map<String,Object> paramToMap(String paramStr){
+        //将字符串参数转成数据组
+        String[] params = paramStr.split("&");
+        Map<String, Object> resMap = Maps.newHashMap();
+        for (int i = 0; i < params.length; i++) {
+            String[] param = params[i].split("=");
+            if (param.length >= 2) {
+                String key = param[0];
+                String value = param[1];
+                for (int j = 2; j < param.length; j++) {
+                    value += "=" + param[j];
+                }
+                resMap.put(key, value);
+            }
+        }
+        return resMap;
     }
 }

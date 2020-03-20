@@ -33,7 +33,7 @@ public interface AlipayUserInfoMapper {
             "SELECT " +
             " id,userId, userName, `password`, payPasword, salt, userType, switchs," +
             " userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState," +
-            " QQ, telegram, skype, createTime, submitTime, `status`, retain1, retain2, retain3, retain4 " +
+            " QQ, telegram, skype, createTime, submitTime, `status`, privateKey, publicKey, retain3, retain4 " +
             " FROM " +
             " alipay_user_info" +
             " where userType = 2 " +
@@ -94,7 +94,7 @@ public interface AlipayUserInfoMapper {
      * @param userId
      * @return 结果
      */
-    @Select("select * from alipay_user_info where userId = #{userId}")
+    @Select("select id, userId, userName, password, userType, switchs, userNode,isAgent, credit, remitOrderState from alipay_user_info where userId = #{userId}")
     AlipayUserInfo checkAlipayUserIdUnique(@Param("userId") String userId);
 
     /**
@@ -112,4 +112,7 @@ public interface AlipayUserInfoMapper {
      */
     @Update("update alipay_user_info set payPasword = #{payPasword} where id = #{id}")
     int updateWithdrawalPwd(AlipayUserInfo alipayUserInfo);
+
+    @Select("select id, userId, userName, password, userType, switchs, userNode,isAgent, credit, remitOrderState, privateKey, publicKey from alipay_user_info where userId = #{userId} ")
+    AlipayUserInfo selectMerhantInfoByUserId(@Param("userId") String userId);
 }
