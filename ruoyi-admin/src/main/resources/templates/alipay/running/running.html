@@ -11,11 +11,11 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <p>流水订单id(全局唯一索引)：</p>
+                                <p>流水订单id：</p>
                                 <input type="text" name="orderId"/>
                             </li>
                             <li>
-                                <p>关联订单号(普通索引)：</p>
+                                <p>关联订单号：</p>
                                 <input type="text" name="associatedId"/>
                             </li>
                             <li>
@@ -23,75 +23,28 @@
                                 <input type="text" name="orderAccount"/>
                             </li>
                             <li>
-                                <p>流水类型(1充值交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费,7冻结,8解冻,9代付手手续费冻结,10代付冻结,11增加交易点数,12点数扣除,13代理商分润，14码商分润，17人工加点数，18人工减点数，19 卡商交易加钱)：</p>
-                                <select name="runOrderType" th:with="type=${@dict.getType('')}">
+                                <p>流水类型：</p>
+                                <select name="runOrderType" th:with="type=${@dict.getType('runOrderType')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
-                            </li>
-                            <li>
-                                <p>流水金额：</p>
-                                <input type="text" name="amount"/>
                             </li>
                             <li>
                                 <p>流水关联ip：</p>
                                 <input type="text" name="generationIp"/>
                             </li>
-                            <li>
-                                <p>流水描述：</p>
-                                <input type="text" name="dealDescribe"/>
-                            </li>
-                            <li>
-                                <p>入款记录账户：</p>
-                                <input type="text" name="acountR"/>
-                            </li>
-                            <li>
-                                <p>出款记录账户：</p>
-                                <input type="text" name="accountW"/>
-                            </li>
                             <li class="select-time">
-                                <p>数据创建时间：</p>
+                                <p>流水创建时间：</p>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
                             </li>
-                            <li class="select-time">
-                                <p>数据最近一次修改时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
-                            </li>
                             <li>
-                                <p>状态:1可使用；0不可使用：</p>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>流水状态  1.自然状态 2.人工操作：</p>
-                                <select name="runType" th:with="type=${@dict.getType('')}">
+                                <p>流水状态：</p>
+                                <select name="runType" th:with="type=${@dict.getType('runType')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
-                            </li>
-                            <li>
-                                <p>1支出0收入：</p>
-                                <select name="amountType" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>当前账户余额：</p>
-                                <input type="text" name="amountNow"/>
-                            </li>
-                            <li>
-                                <p>备用字段添加业务使用：</p>
-                                <input type="text" name="retain4"/>
-                            </li>
-                            <li>
-                                <p>备用字段添加业务使用：</p>
-                                <input type="text" name="retain5"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -103,15 +56,6 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:running:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:running:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:running:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:running:export">
                     <i class="fa fa-download"></i> 导出
                  </a>
@@ -145,11 +89,11 @@
                 },
                 {
                     field : 'orderId', 
-                    title : '流水订单id(全局唯一索引)'
+                    title : '流水订单id '
                 },
                 {
                     field : 'associatedId', 
-                    title : '关联订单号(普通索引)'
+                    title : '关联订单号 '
                 },
                 {
                     field : 'orderAccount', 
@@ -157,7 +101,26 @@
                 },
                 {
                     field : 'runOrderType', 
-                    title : '流水类型(1充值交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费,7冻结,8解冻,9代付手手续费冻结,10代付冻结,11增加交易点数,12点数扣除,13代理商分润，14码商分润，17人工加点数，18人工减点数，19 卡商交易加钱)'
+                    title : '流水类型',
+                    formatter: function (value, item, index) {
+                        if (item.runOrderType == '11') {
+                            return '<span>账户充值</span>';
+                        } else if (item.runOrderType == '9') {
+                            return '<span>代付手续费</span>';
+                        }else if (item.runOrderType == '10') {
+                            return '<span>代付</span>';
+                        }else if (item.runOrderType == '14') {
+                            return '<span>交易分润</span>';
+                        }else if (item.runOrderType == '13') {
+                            return '<span>代理商分润</span>';
+                        }else if (item.runOrderType == '12') {
+                            return '<span>交易点数扣除</span>';
+                        }else if (item.runOrderType == '18') {
+                            return '<span>人工扣款</span>';
+                        }else if (item.runOrderType == '17') {
+                            return '<span>人工加款\t</span>';
+                        }
+                    }
                 },
                 {
                     field : 'amount', 
@@ -184,40 +147,36 @@
                     title : '数据创建时间'
                 },
                 {
-                    field : 'submitTime', 
-                    title : '数据最近一次修改时间'
-                },
-                {
-                    field : 'status', 
-                    title : '状态:1可使用；0不可使用'
-                },
-                {
                     field : 'runType', 
-                    title : '流水状态  1.自然状态 2.人工操作'
+                    title : '流水状态',
+                    formatter: function (value, item, index) {
+                        if (item.runType == '1') {
+                            return '<span>自然状态</span>';
+                        }else if (item.runType == '2') {
+                            return '<span>人工操作</span>';
+                        }
+                    }
                 },
                 {
                     field : 'amountType', 
-                    title : '1支出0收入'
+                    title : '经济状态',
+                    formatter: function (value, item, index) {
+                        if (item.amountType == '1') {
+                            return '<span>支出</span>';
+                        }else if (item.amountType == '2') {
+                            return '<span>收入</span>';
+                        }
+                    }
                 },
                 {
                     field : 'amountNow', 
                     title : '当前账户余额'
                 },
                 {
-                    field : 'retain4', 
-                    title : '备用字段添加业务使用'
-                },
-                {
-                    field : 'retain5', 
-                    title : '备用字段添加业务使用'
-                },
-                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]

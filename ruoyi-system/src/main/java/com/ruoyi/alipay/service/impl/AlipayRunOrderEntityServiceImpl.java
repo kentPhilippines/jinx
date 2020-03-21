@@ -29,6 +29,7 @@ public class AlipayRunOrderEntityServiceImpl implements IAlipayRunOrderEntitySer
 	 * @return 流水订单记录
 	 */
 	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
 	public AlipayRunOrderEntity selectAlipayRunOrderEntityById(Long id) {
 		return alipayRunOrderEntityMapper.selectAlipayRunOrderEntityById(id);
 	}
