@@ -71,6 +71,7 @@ public class MerchantInfoEntityController extends BaseController {
 
     /**
      * 修改商户信息
+     * 
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
