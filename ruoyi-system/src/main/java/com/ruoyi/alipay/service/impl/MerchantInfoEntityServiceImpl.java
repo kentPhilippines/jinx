@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
+import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
@@ -34,6 +35,9 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
 
     @Autowired
     private AlipayUserFundEntityMapper alipayUserFundEntityMapper;
+
+    @Autowired
+    private AlipayUserInfoMapper alipayUserInfoMapper;
 
     /**
      * 查询商户信息
@@ -123,5 +127,19 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
     @Override
     public int deleteMerchantInfoEntityById(Long id) {
         return merchantInfoEntityMapper.deleteMerchantInfoEntityById(id);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public String resetPayPassword(Long id) {
+        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAliasUserInfoById(id);
+        if (alipayUserInfo == null) {
+            throw new BusinessException("ID不能为空或此用户不存在");
+        }
+        String resetPwd = HashKit.resetPassword();
+        String md5 = HashKit.encodePassword(alipayUserInfo.getUserId(), resetPwd, alipayUserInfo.getSalt());
+        alipayUserInfo.setPayPasword(md5);
+        int j = alipayUserInfoMapper.updateWithdrawalPwd(alipayUserInfo);
+        return j == 1 ? resetPwd : "false";
     }
 }

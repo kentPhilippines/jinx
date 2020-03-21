@@ -115,4 +115,5 @@ public interface AlipayUserInfoMapper {
 
     @Select("select id, userId, userName, password, userType, switchs, userNode,isAgent, credit, remitOrderState, privateKey, publicKey from alipay_user_info where userId = #{userId} ")
     AlipayUserInfo selectMerhantInfoByUserId(@Param("userId") String userId);
+
 }

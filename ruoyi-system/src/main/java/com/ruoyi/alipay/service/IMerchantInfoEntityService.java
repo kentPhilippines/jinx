@@ -59,4 +59,11 @@ public interface IMerchantInfoEntityService
      * @return 结果
      */
      int deleteMerchantInfoEntityById(Long id);
+
+    /**
+     * 重置商户的提现密码
+     * @param id
+     * @return
+     */
+    String resetPayPassword(Long id);
 }
