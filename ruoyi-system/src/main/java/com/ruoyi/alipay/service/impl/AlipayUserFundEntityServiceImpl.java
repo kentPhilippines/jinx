@@ -28,6 +28,7 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 	 * @return 用户资金账户
 	 */
 	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
 	public AlipayUserFundEntity selectAlipayUserFundEntityById(Long id) {
 		return alipayUserFundEntityMapper.selectAlipayUserFundEntityById(id);
 	}

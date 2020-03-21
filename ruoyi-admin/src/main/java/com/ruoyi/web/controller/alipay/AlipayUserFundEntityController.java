@@ -116,4 +116,19 @@ public class AlipayUserFundEntityController extends BaseController {
 	public AjaxResult remove(String ids) {
 		return toAjax(alipayUserFundEntityService.deleteAlipayUserFundEntityByIds(ids));
 	}
+
+
+
+	@GetMapping("/fundInfo/{id}")
+	public String fundInfo(@PathVariable("id") Long id, ModelMap mmap) {
+		AlipayUserFundEntity alipayUserFundEntity = alipayUserFundEntityService.selectAlipayUserFundEntityById(id);
+		mmap.put("alipayUserFundEntity", alipayUserFundEntity);
+		return prefix + "/fundInfo";
+	}
+
+
+
+
+
+
 }
