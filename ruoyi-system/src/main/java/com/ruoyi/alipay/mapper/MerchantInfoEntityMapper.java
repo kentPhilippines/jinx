@@ -3,6 +3,7 @@ package com.ruoyi.alipay.mapper;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.domain.MerchantInfoEntity;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -13,15 +14,15 @@ import java.util.List;
  * @author ruoyi
  * @date 2020-03-18
  */
-public interface MerchantInfoEntityMapper 
-{
+public interface MerchantInfoEntityMapper  {
     /**
      * 查询商户信息
      * 
      * @param id 商户信息ID
      * @return 商户信息
      */
-    public MerchantInfoEntity selectMerchantInfoEntityById(Long id);
+    @Select("select * from alipay_user_info where id = #{id}")
+    public AlipayUserInfo selectMerchantInfoEntityById( @Param("id") Long id);
 
     /**
      * 查询商户信息列表
@@ -33,7 +34,7 @@ public interface MerchantInfoEntityMapper
             "SELECT " +
             " id,userId, userName, `password`, payPasword, salt, userType, switchs," +
             " userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState," +
-            " QQ, telegram, skype, createTime, submitTime, `status`, privateKey, publicKey, retain3, retain4 " +
+            " QQ, telegram, skype, createTime, submitTime, `status`, privateKey, publicKey " +
             " FROM " +
             " alipay_user_info" +
             " where userType = 1 " +

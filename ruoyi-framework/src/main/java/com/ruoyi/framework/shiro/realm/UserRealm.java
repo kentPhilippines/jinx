@@ -34,7 +34,6 @@ import com.ruoyi.system.service.ISysRoleService;
 
 /**
  * 自定义Realm 处理登录 权限
- *
  * @author ruoyi
  */
 public class UserRealm extends AuthorizingRealm {
@@ -83,10 +82,8 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         String username = upToken.getUsername();
         String password = "";
-        if (upToken.getPassword() != null) {
+        if (upToken.getPassword() != null)
             password = new String(upToken.getPassword());
-        }
-
         SysUser user = null;
         try {
             user = loginService.login(username, password);

@@ -18,7 +18,7 @@ public interface IMerchantInfoEntityService
      * @param id 商户信息ID
      * @return 商户信息
      */
-     MerchantInfoEntity selectMerchantInfoEntityById(Long id);
+    AlipayUserInfo selectMerchantInfoEntityById(Long id);
 
     /**
      * 查询商户信息列表

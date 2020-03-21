@@ -21,7 +21,7 @@ public interface AlipayUserInfoMapper {
      * @return 用户详情
      */
     @Select("select * from alipay_user_info where id = #{id}")
-    AlipayUserInfo selectAlipayUserInfoById(@Param("id") Long id);
+    AlipayUserInfo selectAliasUserInfoById(@Param("id") Long id);
 
     /**
      * 查询用户详情列表
@@ -33,7 +33,7 @@ public interface AlipayUserInfoMapper {
             "SELECT " +
             " id,userId, userName, `password`, payPasword, salt, userType, switchs," +
             " userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState," +
-            " QQ, telegram, skype, createTime, submitTime, `status`, privateKey, publicKey, retain3, retain4 " +
+            " QQ, telegram, skype, createTime, submitTime, `status`, privateKey, publicKey  " +
             " FROM " +
             " alipay_user_info" +
             " where userType = 2 " +
@@ -54,7 +54,7 @@ public interface AlipayUserInfoMapper {
             "</if>" +
             " order by switchs desc, createTime desc " +
             "</script>")
-    List<AlipayUserInfo> selectAlipayUserInfoList(AlipayUserInfo alipayUserInfo);
+    List<AlipayUserInfo> selectAliaUserInfoList(AlipayUserInfo alipayUserInfo);
 
     /**
      * 新增用户详情
@@ -62,7 +62,7 @@ public interface AlipayUserInfoMapper {
      * @param alipayUserInfo 用户详情
      * @return 结果
      */
-    public int insertAlipayUserInfo(AlipayUserInfo alipayUserInfo);
+    public int insertAliaUserInfo(AlipayUserInfo alipayUserInfo);
 
     /**
      * 修改用户详情

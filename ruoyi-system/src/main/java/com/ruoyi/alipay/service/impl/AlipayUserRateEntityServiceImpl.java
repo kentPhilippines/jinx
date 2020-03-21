@@ -29,6 +29,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
 	 * @return 用户产品费率
 	 */
 	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
 	public AlipayUserRateEntity selectAlipayUserRateEntityById(Long id) {
 		return alipayUserRateEntityMapper.selectAlipayUserRateEntityById(id);
 	}

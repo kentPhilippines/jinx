@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.constant.UserConstants;
-import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.HashKit;
@@ -37,7 +36,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayUserInfo selectAlipayUserInfoById(Long id) {
-        return alipayUserInfoMapper.selectAlipayUserInfoById(id);
+        return alipayUserInfoMapper.selectAliasUserInfoById(id);
     }
 
     /**
@@ -49,7 +48,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserInfo> selectAlipayUserInfoList(AlipayUserInfo alipayUserInfo) {
-        return alipayUserInfoMapper.selectAlipayUserInfoList(alipayUserInfo);
+        return alipayUserInfoMapper.selectAliaUserInfoList(alipayUserInfo);
     }
 
     /**
@@ -60,7 +59,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
      */
     @Override
     public int insertAlipayUserInfo(AlipayUserInfo alipayUserInfo) {
-        return alipayUserInfoMapper.insertAlipayUserInfo(alipayUserInfo);
+        return alipayUserInfoMapper.insertAliaUserInfo(alipayUserInfo);
     }
 
     /**
@@ -121,7 +120,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public String resetLoginPwd(Long id) {
-        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAlipayUserInfoById(id);
+        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAliasUserInfoById(id);
         if (alipayUserInfo == null) {
             throw new BusinessException("ID不能为空或此用户不存在");
         }
@@ -141,7 +140,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public String resetWithdrawalPwd(Long id) {
-        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAlipayUserInfoById(id);
+        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAliasUserInfoById(id);
         if (alipayUserInfo == null) {
             throw new BusinessException("ID不能为空或此用户不存在");
         }

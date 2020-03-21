@@ -41,8 +41,9 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
      * @param id 商户信息ID
      * @return 商户信息
      */
-    @Override
-    public MerchantInfoEntity selectMerchantInfoEntityById(Long id) {
+    @DataScope()
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserInfo selectMerchantInfoEntityById(Long id) {
         return merchantInfoEntityMapper.selectMerchantInfoEntityById(id);
     }
 

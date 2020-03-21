@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayUserInfoMapper">
-    
+
     <resultMap type="AlipayUserInfo" id="AlipayUserInfoResult">
         <result property="id"    column="id"    />
         <result property="userId"    column="userId"    />
@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="credit"    column="credit"    />
         <result property="receiveOrderState"    column="receiveOrderState"    />
         <result property="remitOrderState"    column="remitOrderState"    />
-        <result property="qq"    column="QQ"    />
+        <result property="QQ"    column="QQ"    />
         <result property="telegram"    column="telegram"    />
         <result property="skype"    column="skype"    />
         <result property="createTime"    column="createTime"    />
@@ -28,105 +28,156 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="status"    column="status"    />
         <result property="privateKey"    column="privateKey"    />
         <result property="publicKey"    column="publicKey"    />
-        <result property="retain3"    column="retain3"    />
-        <result property="retain4"    column="retain4"    />
+        <result property="minAmount"    column="minAmount"    />
+        <result property="maxAmount"    column="maxAmount"    />
+        <result property="timesTotal"    column="timesTotal"    />
+        <result property="startTime"    column="startTime"    />
+        <result property="endTime"    column="endTime"    />
     </resultMap>
 
     <sql id="selectAlipayUserInfoVo">
-        select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status, priavateKey, publicKey, retain3, retain4 from alipay_user_info
+        select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status, privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime from alipay_user_info
     </sql>
 
-    <!--<select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">-->
-        <!--<include refid="selectAlipayUserInfoVo"/>-->
-        <!--<where>  -->
-            <!--<if test="username != null  and username != ''"> and userName like concat('%', #{userName}, '%')</if>-->
-            <!--<if test="password != null  and password != ''"> and password = #{password}</if>-->
-            <!--<if test="paypasword != null  and paypasword != ''"> and payPasword = #{paypasword}</if>-->
-            <!--<if test="salt != null  and salt != ''"> and salt = #{salt}</if>-->
-            <!--<if test="usertype != null "> and userType = #{usertype}</if>-->
-            <!--<if test="switchs != null "> and switchs = #{switchs}</if>-->
-            <!--<if test="usernode != null  and usernode != ''"> and userNode = #{usernode}</if>-->
-            <!--<if test="email != null  and email != ''"> and email = #{email}</if>-->
-            <!--<if test="agent != null  and agent != ''"> and agent = #{agent}</if>-->
-            <!--<if test="isagent != null  and isagent != ''"> and isAgent = #{isagent}</if>-->
-            <!--<if test="credit != null "> and credit = #{credit}</if>-->
-            <!--<if test="receiveorderstate != null "> and receiveOrderState = #{receiveorderstate}</if>-->
-            <!--<if test="remitorderstate != null "> and remitOrderState = #{remitorderstate}</if>-->
-            <!--<if test="qq != null  and qq != ''"> and QQ = #{qq}</if>-->
-            <!--<if test="telegram != null  and telegram != ''"> and telegram = #{telegram}</if>-->
-            <!--<if test="skype != null  and skype != ''"> and skype = #{skype}</if>-->
-            <!--<if test="createtime != null "> and createTime = #{createtime}</if>-->
-            <!--<if test="submittime != null "> and submitTime = #{submittime}</if>-->
-            <!--<if test="status != null "> and status = #{status}</if>-->
-            <!--<if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>-->
-            <!--<if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>-->
-            <!--<if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>-->
-            <!--<if test="retain4 != null  and retain4 != ''"> and retain4 = #{retain4}</if>-->
-        <!--</where>-->
-    <!--</select>-->
-    
+    <select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">
+        <include refid="selectAlipayUserInfoVo"/>
+        <where>
+            <if test="userName != null  and userName != ''"> and userName like concat('%', #{userName}, '%')</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="payPasword != null  and payPasword != ''"> and payPasword = #{payPasword}</if>
+            <if test="salt != null  and salt != ''"> and salt = #{salt}</if>
+            <if test="userType != null "> and userType = #{userType}</if>
+            <if test="switchs != null "> and switchs = #{switchs}</if>
+            <if test="userNode != null  and userNode != ''"> and userNode = #{userNode}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="agent != null  and agent != ''"> and agent = #{agent}</if>
+            <if test="isAgent != null  and isAgent != ''"> and isAgent = #{isAgent}</if>
+            <if test="credit != null "> and credit = #{credit}</if>
+            <if test="receiveOrderState != null "> and receiveOrderState = #{receiveOrderState}</if>
+            <if test="remitOrderState != null "> and remitOrderState = #{remitOrderState}</if>
+            <if test="QQ != null  and QQ != ''"> and QQ = #{QQ}</if>
+            <if test="telegram != null  and telegram != ''"> and telegram = #{telegram}</if>
+            <if test="skype != null  and skype != ''"> and skype = #{skype}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="privateKey != null  and privateKey != ''"> and privateKey = #{privateKey}</if>
+            <if test="publicKey != null  and publicKey != ''"> and publicKey = #{publicKey}</if>
+            <if test="minAmount != null "> and minAmount = #{minAmount}</if>
+            <if test="maxAmount != null "> and maxAmount = #{maxAmount}</if>
+            <if test="timesTotal != null "> and timesTotal = #{timesTotal}</if>
+            <if test="startTime != null  and startTime != ''"> and startTime = #{startTime}</if>
+            <if test="endTime != null  and endTime != ''"> and endTime = #{endTime}</if>
+        </where>
+    </select>
+
+    <select id="selectAlipayUserInfoById" parameterType="Long" resultMap="AlipayUserInfoResult">
+        <include refid="selectAlipayUserInfoVo"/>
+        where id = #{id}
+    </select>
+
     <insert id="insertAlipayUserInfo" parameterType="AlipayUserInfo" useGeneratedKeys="true" keyProperty="id">
         insert into alipay_user_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userid != null  and userid != ''">userId,</if>
-            <if test="username != null  and username != ''">userName,</if>
+            <if test="userId != null  and userId != ''">userId,</if>
+            <if test="userName != null  and userName != ''">userName,</if>
             <if test="password != null  and password != ''">password,</if>
-            <if test="paypasword != null  and paypasword != ''">payPasword,</if>
+            <if test="payPasword != null  and payPasword != ''">payPasword,</if>
             <if test="salt != null  and salt != ''">salt,</if>
-            <if test="usertype != null ">userType,</if>
+            <if test="userType != null ">userType,</if>
             <if test="switchs != null ">switchs,</if>
-            <if test="usernode != null  and usernode != ''">userNode,</if>
+            <if test="userNode != null  and userNode != ''">userNode,</if>
             <if test="email != null  and email != ''">email,</if>
             <if test="agent != null  and agent != ''">agent,</if>
-            <if test="isagent != null  and isagent != ''">isAgent,</if>
+            <if test="isAgent != null  and isAgent != ''">isAgent,</if>
             <if test="credit != null ">credit,</if>
-            <if test="receiveorderstate != null ">receiveOrderState,</if>
-            <if test="remitorderstate != null ">remitOrderState,</if>
-            <if test="qq != null  and qq != ''">QQ,</if>
+            <if test="receiveOrderState != null ">receiveOrderState,</if>
+            <if test="remitOrderState != null ">remitOrderState,</if>
+            <if test="QQ != null  and QQ != ''">QQ,</if>
             <if test="telegram != null  and telegram != ''">telegram,</if>
             <if test="skype != null  and skype != ''">skype,</if>
-            <if test="createtime != null ">createTime,</if>
-            <if test="submittime != null ">submitTime,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
             <if test="status != null ">status,</if>
-            <if test="retain1 != null  and retain1 != ''">retain1,</if>
-            <if test="retain2 != null  and retain2 != ''">retain2,</if>
-            <if test="retain3 != null  and retain3 != ''">retain3,</if>
-            <if test="retain4 != null  and retain4 != ''">retain4,</if>
-         </trim>
+            <if test="privateKey != null  and privateKey != ''">privateKey,</if>
+            <if test="publicKey != null  and publicKey != ''">publicKey,</if>
+            <if test="minAmount != null ">minAmount,</if>
+            <if test="maxAmount != null ">maxAmount,</if>
+            <if test="timesTotal != null ">timesTotal,</if>
+            <if test="startTime != null  and startTime != ''">startTime,</if>
+            <if test="endTime != null  and endTime != ''">endTime,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userid != null  and userid != ''">#{userid},</if>
-            <if test="username != null  and username != ''">#{username},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
             <if test="password != null  and password != ''">#{password},</if>
-            <if test="paypasword != null  and paypasword != ''">#{paypasword},</if>
+            <if test="payPasword != null  and payPasword != ''">#{payPasword},</if>
             <if test="salt != null  and salt != ''">#{salt},</if>
-            <if test="usertype != null ">#{usertype},</if>
+            <if test="userType != null ">#{userType},</if>
             <if test="switchs != null ">#{switchs},</if>
-            <if test="usernode != null  and usernode != ''">#{usernode},</if>
+            <if test="userNode != null  and userNode != ''">#{userNode},</if>
             <if test="email != null  and email != ''">#{email},</if>
             <if test="agent != null  and agent != ''">#{agent},</if>
-            <if test="isagent != null  and isagent != ''">#{isagent},</if>
+            <if test="isAgent != null  and isAgent != ''">#{isAgent},</if>
             <if test="credit != null ">#{credit},</if>
-            <if test="receiveorderstate != null ">#{receiveorderstate},</if>
-            <if test="remitorderstate != null ">#{remitorderstate},</if>
-            <if test="qq != null  and qq != ''">#{qq},</if>
+            <if test="receiveOrderState != null ">#{receiveOrderState},</if>
+            <if test="remitOrderState != null ">#{remitOrderState},</if>
+            <if test="QQ != null  and QQ != ''">#{QQ},</if>
             <if test="telegram != null  and telegram != ''">#{telegram},</if>
             <if test="skype != null  and skype != ''">#{skype},</if>
-            <if test="createtime != null ">#{createtime},</if>
-            <if test="submittime != null ">#{submittime},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
             <if test="status != null ">#{status},</if>
+            <if test="privateKey != null  and privateKey != ''">#{privateKey},</if>
             <if test="publicKey != null  and publicKey != ''">#{publicKey},</if>
-            <if test="privateKey != null  and retain2 != ''">#{privateKey},</if>
-            <if test="retain3 != null  and retain3 != ''">#{retain3},</if>
-            <if test="retain4 != null  and retain4 != ''">#{retain4},</if>
-         </trim>
+            <if test="minAmount != null ">#{minAmount},</if>
+            <if test="maxAmount != null ">#{maxAmount},</if>
+            <if test="timesTotal != null ">#{timesTotal},</if>
+            <if test="startTime != null  and startTime != ''">#{startTime},</if>
+            <if test="endTime != null  and endTime != ''">#{endTime},</if>
+        </trim>
     </insert>
+
+    <update id="updateAlipayUserInfo" parameterType="AlipayUserInfo">
+        update alipay_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">userId = #{userId},</if>
+            <if test="userName != null  and userName != ''">userName = #{userName},</if>
+            <if test="password != null  and password != ''">password = #{password},</if>
+            <if test="payPasword != null  and payPasword != ''">payPasword = #{payPasword},</if>
+            <if test="salt != null  and salt != ''">salt = #{salt},</if>
+            <if test="userType != null ">userType = #{userType},</if>
+            <if test="switchs != null ">switchs = #{switchs},</if>
+            <if test="userNode != null  and userNode != ''">userNode = #{userNode},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="agent != null  and agent != ''">agent = #{agent},</if>
+            <if test="isAgent != null  and isAgent != ''">isAgent = #{isAgent},</if>
+            <if test="credit != null ">credit = #{credit},</if>
+            <if test="receiveOrderState != null ">receiveOrderState = #{receiveOrderState},</if>
+            <if test="remitOrderState != null ">remitOrderState = #{remitOrderState},</if>
+            <if test="QQ != null  and QQ != ''">QQ = #{QQ},</if>
+            <if test="telegram != null  and telegram != ''">telegram = #{telegram},</if>
+            <if test="skype != null  and skype != ''">skype = #{skype},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="privateKey != null  and privateKey != ''">privateKey = #{privateKey},</if>
+            <if test="publicKey != null  and publicKey != ''">publicKey = #{publicKey},</if>
+            <if test="minAmount != null ">minAmount = #{minAmount},</if>
+            <if test="maxAmount != null ">maxAmount = #{maxAmount},</if>
+            <if test="timesTotal != null ">timesTotal = #{timesTotal},</if>
+            <if test="startTime != null  and startTime != ''">startTime = #{startTime},</if>
+            <if test="endTime != null  and endTime != ''">endTime = #{endTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
 
     <delete id="deleteAlipayUserInfoById" parameterType="Long">
         delete from alipay_user_info where id = #{id}
     </delete>
 
     <delete id="deleteAlipayUserInfoByIds" parameterType="String">
-        delete from alipay_user_info where id in 
+        delete from alipay_user_info where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

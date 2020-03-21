@@ -11,68 +11,36 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <p>用户id【登录账号】：</p>
+                                <p>用户id：</p>
                                 <input type="text" name="userId"/>
                             </li>
-                            <li>
+                            <!--<li>
                                 <p>用户类型,商户1 码商2：</p>
-                                <select name="userType" th:with="type=${@dict.getType('')}">
+                                <select name="userType" th:with="type=${@dict.getType('userType')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
-                            </li>
+                            </li>-->
                             <li>
-                                <p>当前用户总开关 1开启0关闭【码商商户后台控制,该数据只能在后台显示】：</p>
-                                <input type="text" name="switchs"/>
+                                <p>开关：</p>
+                                <select name="switchs" th:with="type=${@dict.getType('userSwitchs')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <p>产品类型：</p>
-                                <input type="text" name="payTypr"/>
-                            </li>
-                            <li>
-                                <p>费率数值：</p>
-                                <input type="text" name="fee"/>
-                            </li>
-                            <li>
-                                <p>费率类型:1交易费率，2代付费率：</p>
-                                <select name="feeType" th:with="type=${@dict.getType('')}">
+                                <select name="payTypr" th:with="type=${@dict.getType('payTypr')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
-                            <li class="select-time">
-                                <p>数据创建时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <p>最后一次数据修改时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
-                            </li>
                             <li>
-                                <p>数据是否可用:1数据可用2数据无用：</p>
-                                <select name="status">
+                                <p>费率类型: </p>
+                                <select name="feeType" th:with="type=${@dict.getType('feeType')}">
                                     <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
-                            </li>
-                            <li>
-                                <p>预留，添加业务使用：</p>
-                                <input type="text" name="retain1"/>
-                            </li>
-                            <li>
-                                <p>预留，添加业务使用：</p>
-                                <input type="text" name="retain2"/>
-                            </li>
-                            <li>
-                                <p>预留，添加业务使用：</p>
-                                <input type="text" name="retain3"/>
-                            </li>
-                            <li>
-                                <p>预留，添加业务使用：</p>
-                                <input type="text" name="retain4"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -120,25 +88,50 @@
                     checkbox: true
                 },
                 {
-                    field : 'id', 
-                    title : '数据id',
-                    visible: false
-                },
-                {
                     field : 'userId', 
-                    title : '用户id【登录账号】'
+                    title : '用户id'
                 },
                 {
                     field : 'userType', 
-                    title : '用户类型,商户1 码商2'
+                    title : '用户类型',
+                    formatter: function (value, item, index) {
+                        if (item.userType == '1') {
+                            return '<span>商户</span>';
+                        } else if (item.userType == '2') {
+                            return '<span>码商</span>';
+                        }
+                    }
                 },
-                {
-                    field : 'switchs', 
-                    title : '当前用户总开关 1开启0关闭【码商商户后台控制,该数据只能在后台显示】'
-                },
+           /*     {
+                    field : 'switchs',
+                    title : '费率开关 ',
+                    formatter: function (value, item, index) {
+                        if (item.switchs == '1') {
+                            return '<span>开启</span>';
+                        } else if (item.switchs == '2') {
+                            return '<span>关闭</span>';
+                        }
+                    }
+                },*/
+
+                    {
+                        visible: editFlag == 'hidden' ? false : true,
+                        title: '费率开关',
+                        align: 'switchs',
+                        formatter: function (value, row, index) {
+                            return statusTools(row);
+                        }
+                    },
                 {
                     field : 'payTypr', 
-                    title : '产品类型'
+                    title : '产品类型',
+                    formatter: function (value, item, index) {
+                        if (item.payTypr == 'ALIPAY_SCAN') {
+                            return '<span>支付宝扫码</span>';
+                        } else if (item.payTypr == 'ALIPAY_H5') {
+                            return '<span>支付宝H5</span>';
+                        }
+                    }
                 },
                 {
                     field : 'fee', 
@@ -146,35 +139,18 @@
                 },
                 {
                     field : 'feeType', 
-                    title : '费率类型:1交易费率，2代付费率'
+                    title : '费率类型 ',
+                    formatter: function (value, item, index) {
+                        if (item.feeType == '1') {
+                            return '<span>交易费率</span>';
+                        } else if (item.feeType == '2') {
+                            return '<span>代付费率</span>';
+                        }
+                    }
                 },
                 {
                     field : 'createTime', 
                     title : '数据创建时间'
-                },
-                {
-                    field : 'submitTime', 
-                    title : '最后一次数据修改时间'
-                },
-                {
-                    field : 'status', 
-                    title : '数据是否可用:1数据可用2数据无用'
-                },
-                {
-                    field : 'retain1', 
-                    title : '预留，添加业务使用'
-                },
-                {
-                    field : 'retain2', 
-                    title : '预留，添加业务使用'
-                },
-                {
-                    field : 'retain3', 
-                    title : '预留，添加业务使用'
-                },
-                {
-                    field : 'retain4', 
-                    title : '预留，添加业务使用'
                 },
                 {
                     title: '操作',
@@ -189,6 +165,27 @@
             };
             $.table.init(options);
         });
+        /* 用户费率状态显示 */
+        function statusTools(row) {
+            if (row.switchs == 0) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.userId + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
+            }
+        }
+        /* 用户费率-停用 */
+        function disable(userId) {
+            $.modal.confirm("确认要停用该条费率吗？", function () {
+                $.operate.post(prefix + "/changeStatus", {"userId": userId, "switchs": 0});
+            })
+        }
+
+        /* 用户费率-开启 */
+        function enable(userId) {
+            $.modal.confirm("确认要启用该条费率吗？", function () {
+                $.operate.post(prefix + "/changeStatus", {"userId": userId, "switchs": 1});
+            })
+        }
     </script>
 </body>
 </html>

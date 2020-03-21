@@ -74,8 +74,8 @@ public class MerchantInfoEntityController extends BaseController {
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-        MerchantInfoEntity merchantInfoEntity = merchantInfoEntityService.selectMerchantInfoEntityById(id);
-        mmap.put("merchantInfoEntity", merchantInfoEntity);
+        AlipayUserInfo userInfo = merchantInfoEntityService.selectMerchantInfoEntityById(id);
+        mmap.put("alipayUserInfo", userInfo);
         return prefix + "/edit";
     }
 
