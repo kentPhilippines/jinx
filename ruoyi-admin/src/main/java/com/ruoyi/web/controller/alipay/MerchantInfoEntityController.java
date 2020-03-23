@@ -13,7 +13,11 @@ import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.NoUtils;
 import com.ruoyi.common.utils.RSAUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,9 +50,12 @@ public class MerchantInfoEntityController extends BaseController {
     private IMerchantInfoEntityService merchantInfoEntityService;
     @Autowired
     private DictionaryUtils dictionaryUtils;
+    @Autowired
+    private SysPasswordService passwordService;
 
     @RequiresPermissions("alipay:merchant:view")
     @GetMapping()
+
     public String merchant() {
         return prefix + "/merchant";
     }
@@ -71,6 +78,17 @@ public class MerchantInfoEntityController extends BaseController {
     @GetMapping("/add")
     public String add() {
         return prefix + "/add";
+    }
+
+    /**
+     * 新增下级开户页面显示
+     */
+    @GetMapping("/open/account/{userId}")
+    public String open(@PathVariable("userId") String userId,ModelMap mmap) {
+        AlipayUserInfo userInfo = new AlipayUserInfo();
+        userInfo.setAgent(userId);
+        mmap.put("userInfo", userInfo);
+        return prefix + "/children";
     }
 
     /**
@@ -200,6 +218,36 @@ public class MerchantInfoEntityController extends BaseController {
             return error("操作失败");
         }
         return success("重置成功，新的提现密码：" + resetPwd);
+    }
+
+    /**
+     * 验证用户的登陆密码
+     *
+     * @return
+     */
+    @PostMapping("/verify/password")
+    @ResponseBody
+    public AjaxResult verifyPassword(String password) {
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        String verify = passwordService.encryptPassword(currentUser.getLoginName(), password, currentUser.getSalt());
+        if(currentUser.getPassword().equals(verify)){
+            return AjaxResult.success("验证通过");
+        }else{
+            return AjaxResult.error("密码验证失败");
+        }
+
+    }
+
+    /**
+     * 新增下级开户保存信息
+     */
+        @RequiresPermissions("alipay:merchant:save:children")
+    @Log(title = "商户信息", businessType = BusinessType.INSERT)
+    @PostMapping("/save/children")
+    @ResponseBody
+    public AjaxResult saveChildrenAccount(AlipayUserInfo merchantInfoEntity) {
+        return toAjax(merchantInfoEntityService.insertMerchantInfoEntity(merchantInfoEntity));
     }
 
 }

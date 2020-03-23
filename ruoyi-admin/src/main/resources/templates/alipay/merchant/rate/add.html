@@ -63,7 +63,6 @@
 
     /*监听事件*/
     $('#feeType').on('select2:select', function (e) {
-        debugger;
         var feeType = $('#feeType').select2('val');
         if (feeType == 2) {
             $("#payTypr").select2("val", [""]);

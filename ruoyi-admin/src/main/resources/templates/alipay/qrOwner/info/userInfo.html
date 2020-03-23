@@ -15,7 +15,7 @@
                             <input type="text" name="userId" id="userId"/>
                         </li>
                         <li>
-                            <p>代理商ID：</p>
+                            <p>上级代理ID：</p>
                             <input type="text" name="agent" id="agent"/>
                         </li>
                         <li>
@@ -84,26 +84,26 @@
                 },
                 {
                     field: 'userId',
-                    title: '登录账号'
+                    title: '码商账号'
                 },
                 {
                     field: 'userName',
-                    title: '用户昵称'
+                    title: '码商昵称'
                 },
-                {
-                    field: 'userType',
-                    title: '用户类型',
-                    formatter: function (value, item, index) {
-                        if (item.userType == '1') {
-                            return '<span>商户</span>';
-                        } else if (item.userType == '2') {
-                            return '<span>码商</span>';
-                        }
-                    }
-                },
+                // {
+                //     field: 'userType',
+                //     title: '用户类型',
+                //     formatter: function (value, item, index) {
+                //         if (item.userType == '1') {
+                //             return '<span>商户</span>';
+                //         } else if (item.userType == '2') {
+                //             return '<span>码商</span>';
+                //         }
+                //     }
+                // },
                 {
                     field: 'agent',
-                    title: '代理商ID',
+                    title: '上级代理ID',
                     align: 'center'
                 },
                 {

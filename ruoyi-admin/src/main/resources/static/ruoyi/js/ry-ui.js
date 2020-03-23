@@ -981,6 +981,11 @@ var table = {
             	table.set();
             	$.modal.open("添加" + table.options.modalName, $.operate.addUrl(id));
             },
+            // 商户下级开户
+            openAccount: function(id) {
+            	table.set();
+            	$.modal.open("添加下级商户代理商", $.operate.openUrl(id));
+            },
             // 添加信息，以tab页展现
             addTab: function (id) {
             	table.set();
@@ -996,6 +1001,20 @@ var table = {
             addUrl: function(id) {
             	var url = $.common.isEmpty(id) ? table.options.createUrl.replace("{id}", "") : table.options.createUrl.replace("{id}", id);
                 return url;
+            },
+            // 添加下级开户地址
+            openUrl: function(id) {
+				var url = "/404.html";
+				if ($.common.isNotEmpty(id)) {
+					url = table.options.openUrl.replace("{userId}", id);
+				} else {
+					if (id.length == 0) {
+						$.modal.alertWarning("未获取到参数值");
+						return;
+					}
+					url = table.options.openUrl.replace("{userId}", id);
+				}
+				return url;
             },
             // 修改信息
             edit: function(id) {

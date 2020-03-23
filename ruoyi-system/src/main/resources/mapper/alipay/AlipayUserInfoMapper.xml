@@ -33,10 +33,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="timesTotal"    column="timesTotal"    />
         <result property="startTime"    column="startTime"    />
         <result property="endTime"    column="endTime"    />
+        <result property="witip"    column="witip"    />
     </resultMap>
 
     <sql id="selectAlipayUserInfoVo">
-        select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status, privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime from alipay_user_info
+        select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status, privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip from alipay_user_info
     </sql>
 
     <select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">
@@ -68,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timesTotal != null "> and timesTotal = #{timesTotal}</if>
             <if test="startTime != null  and startTime != ''"> and startTime = #{startTime}</if>
             <if test="endTime != null  and endTime != ''"> and endTime = #{endTime}</if>
+            <if test="witip != null  and witip != ''"> and witip = #{witip}</if>
         </where>
     </select>
 
@@ -106,6 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timesTotal != null ">timesTotal,</if>
             <if test="startTime != null  and startTime != ''">startTime,</if>
             <if test="endTime != null  and endTime != ''">endTime,</if>
+            <if test="witip != null  and witip != ''">witip,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null  and userId != ''">#{userId},</if>
@@ -135,6 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timesTotal != null ">#{timesTotal},</if>
             <if test="startTime != null  and startTime != ''">#{startTime},</if>
             <if test="endTime != null  and endTime != ''">#{endTime},</if>
+            <if test="witip != null  and witip != ''">#{witip},</if>
         </trim>
     </insert>
 
@@ -168,6 +172,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timesTotal != null ">timesTotal = #{timesTotal},</if>
             <if test="startTime != null  and startTime != ''">startTime = #{startTime},</if>
             <if test="endTime != null  and endTime != ''">endTime = #{endTime},</if>
+            <if test="witip != null  and witip != ''">witip = #{witip},</if>
         </trim>
         where id = #{id}
     </update>

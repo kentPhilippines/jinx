@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
@@ -79,11 +80,13 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         }
         String salt = HashKit.randomSalt();
         String md5 = HashKit.encodePassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPassword(), salt);//登陆密码
-        String cash = HashKit.encodePassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getPayPasword(), salt);//提现密码
+        String dealKey = UUID.randomUUID().toString().replace("-", "").toUpperCase();
         merchantInfoEntity.setPassword(md5);
         merchantInfoEntity.setSalt(salt);
-        merchantInfoEntity.setPayPasword(cash);
+        merchantInfoEntity.setPayPasword(dealKey);
         merchantInfoEntity.setUserType(1);
+        merchantInfoEntity.setIsAgent("1");
+        merchantInfoEntity.setAgent(merchantInfoEntity.getAgent());
         merchantInfoEntity.setIsAgent(String.valueOf(1));
         merchantInfoEntity.setPublicKey(keys.get(0));
         merchantInfoEntity.setPrivateKey(keys.get(1));

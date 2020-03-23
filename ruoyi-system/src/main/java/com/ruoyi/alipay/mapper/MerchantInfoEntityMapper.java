@@ -64,8 +64,10 @@ public interface MerchantInfoEntityMapper  {
      * @return 结果
      */
 
-    @Insert("insert into alipay_user_info (userId,userName,password,salt,payPasword,userType,email," +
-            "QQ,telegram,skype,privateKey,publicKey) values (#{userId},#{userName},#{password},#{salt},#{payPasword},#{userType},#{email},#{QQ},#{telegram},#{skype},#{privateKey},#{publicKey})")
+    @Insert("insert into alipay_user_info (userId,userName,password,salt,payPasword,userType,email, " +
+            "QQ,telegram,skype,privateKey,publicKey,agent,isAgent,userNode) values " +
+            "(#{userId},#{userName},#{password},#{salt},#{payPasword},#{userType},#{email}," +
+            "#{QQ},#{telegram},#{skype},#{privateKey},#{publicKey},#{agent},#{isAgent},#{userNode})")
     public int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
 
     /**
