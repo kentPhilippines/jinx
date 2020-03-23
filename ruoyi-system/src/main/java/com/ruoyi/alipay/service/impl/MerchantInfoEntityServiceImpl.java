@@ -145,4 +145,20 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         int j = alipayUserInfoMapper.updateWithdrawalPwd(alipayUserInfo);
         return j == 1 ? resetPwd : "false";
     }
+
+
+
+
+    /*下面是风控模块处理逻辑*/
+
+    /**
+     *
+     * @param merchantInfoEntity
+     * @return
+     */
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserInfo> selectMerchantControlList(AlipayUserInfo merchantInfoEntity) {
+        return merchantInfoEntityMapper.selectMerchantControlList(merchantInfoEntity);
+    }
 }

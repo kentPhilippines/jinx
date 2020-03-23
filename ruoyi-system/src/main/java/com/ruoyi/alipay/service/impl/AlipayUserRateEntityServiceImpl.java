@@ -74,6 +74,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         if (result.getSwitchs() == 2) {
             throw new BusinessException("此商户已被停用");
         }
+
         return alipayUserRateEntityMapper.insertAlipayUserRateEntity(alipayUserRateEntity);
     }
 

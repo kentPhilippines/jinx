@@ -66,4 +66,15 @@ public interface IMerchantInfoEntityService
      * @return
      */
     String resetPayPassword(Long id);
+
+
+
+    /*下面处理风控模块的业务逻辑*/
+
+    /**
+     *  风控信息列表
+     * @param merchantInfoEntity
+     * @return
+     */
+    List<AlipayUserInfo> selectMerchantControlList(AlipayUserInfo merchantInfoEntity);
 }

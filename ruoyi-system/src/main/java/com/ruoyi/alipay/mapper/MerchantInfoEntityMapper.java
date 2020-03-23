@@ -93,4 +93,35 @@ public interface MerchantInfoEntityMapper  {
      * @return 结果
      */
     public int deleteMerchantInfoEntityByIds(String[] ids);
+
+
+
+    /*下面是处理风控模块的逻辑*/
+
+    /**
+     *  查询商户风控列表信息
+     * @param merchantInfoEntity
+     * @return
+     */
+    @Select("<script>" +
+            "SELECT " +
+            " id,userId, userName, userType, switchs,agent, minAmount, maxAmount, timesTotal, startTime, endTime, witip " +
+            " FROM " +
+            " alipay_user_info" +
+            " where userType = 1 " +
+            "<if test=\"userId != null and userId != ''\">" +
+            " and userId = #{userId}" +
+            "</if>" +
+            "<if test=\"switchs != null and switchs != ''\">" +
+            " and switchs = #{switchs}" +
+            "</if>" +
+            "<if test=\"params.beginTime != null and params.beginTime != ''\">" +
+            " and date_format(u.createTime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')" +
+            "</if>" +
+            "<if test=\"params.endTime != null and params.endTime != ''\">" +
+            " and date_format(u.createTime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')" +
+            "</if>" +
+            " order by switchs desc, createTime desc " +
+            "</script>")
+    List<AlipayUserInfo> selectMerchantControlList(AlipayUserInfo merchantInfoEntity);
 }

@@ -55,7 +55,6 @@ public class MerchantInfoEntityController extends BaseController {
 
     @RequiresPermissions("alipay:merchant:view")
     @GetMapping()
-
     public String merchant() {
         return prefix + "/merchant";
     }
