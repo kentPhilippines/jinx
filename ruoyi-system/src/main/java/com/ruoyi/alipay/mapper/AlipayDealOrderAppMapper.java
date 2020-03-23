@@ -43,19 +43,4 @@ public interface AlipayDealOrderAppMapper
      */
     public int updateAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
 
-    /**
-     * 删除商户订单登记
-     * 
-     * @param id 商户订单登记ID
-     * @return 结果
-     */
-    public int deleteAlipayDealOrderAppById(Long id);
-
-    /**
-     * 批量删除商户订单登记
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteAlipayDealOrderAppByIds(String[] ids);
 }

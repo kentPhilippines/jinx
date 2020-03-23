@@ -11,36 +11,36 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <p>流水订单id：</p>
-                                <input type="text" name="orderId"/>
+                                <span>流水订单号：</span>
+                                <input type="text" id="orderId" name="orderId"/>
                             </li>
                             <li>
-                                <p>关联订单号：</p>
+                                <span>关联订单号：</span>
                                 <input type="text" name="associatedId"/>
                             </li>
                             <li>
-                                <p>关联账户：</p>
+                                <span>关联账户：</span>
                                 <input type="text" name="orderAccount"/>
                             </li>
                             <li>
-                                <p>流水类型：</p>
+                                <span>流水类型：</span>
                                 <select name="runOrderType" th:with="type=${@dict.getType('runOrderType')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <p>流水关联ip：</p>
+                                <span>流水关联ip：</span>
                                 <input type="text" name="generationIp"/>
                             </li>
                             <li class="select-time">
-                                <p>流水创建时间：</p>
+                                <span>流水创建时间：</span>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
                             </li>
                             <li>
-                                <p>流水状态：</p>
+                                <span>流水状态：</span>
                                 <select name="runType" th:with="type=${@dict.getType('runType')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
@@ -144,7 +144,7 @@
                 },
                 {
                     field : 'createTime', 
-                    title : '数据创建时间'
+                    title : '创建时间'
                 },
                 {
                     field : 'runType', 

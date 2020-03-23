@@ -106,14 +106,4 @@ public class AlipayDealOrderEntityController extends BaseController {
 		return toAjax(alipayDealOrderEntityService.updateAlipayDealOrderEntity(alipayDealOrderEntity));
 	}
 
-	/**
-	 * 删除交易订单
-	 */
-	@RequiresPermissions("alipay:orderDeal:remove")
-	@Log(title = "交易订单", businessType = BusinessType.DELETE)
-	@PostMapping("/remove")
-	@ResponseBody
-	public AjaxResult remove(String ids) {
-		return toAjax(alipayDealOrderEntityService.deleteAlipayDealOrderEntityByIds(ids));
-	}
 }

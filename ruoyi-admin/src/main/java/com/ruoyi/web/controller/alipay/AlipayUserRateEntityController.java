@@ -28,7 +28,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @Controller
 @RequestMapping("/alipay/rate")
 public class AlipayUserRateEntityController extends BaseController {
-	private String prefix = "alipay/rate";
+	private String prefix = "alipay/merchant/rate";
 
 	@Autowired
 	private IAlipayUserRateEntityService alipayUserRateEntityService;
@@ -114,4 +114,16 @@ public class AlipayUserRateEntityController extends BaseController {
 	public AjaxResult remove(String ids) {
 		return toAjax(alipayUserRateEntityService.deleteAlipayUserRateEntityByIds(ids));
 	}
+
+	/**
+	 * 商户费率状态更新
+	 */
+	@RequiresPermissions("alipay:rate:status")
+	@Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
+	@PostMapping("/changeStatus")
+	@ResponseBody
+	public AjaxResult updateStatus(String id, String userId, String feeType, String switchs) {
+		return toAjax(alipayUserRateEntityService.changeStatus(id, userId, feeType, switchs));
+	}
+
 }

@@ -11,27 +11,27 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <p>账户id：</p>
+                                <span>账户id：</span>
                                 <input type="text" name="userId"/>
                             </li>
                             <li>
-                                <p>账户昵称：</p>
+                                <span>账户昵称：</span>
                                 <input type="text" name="userName"/>
                             </li>
                             <li>
-                                <p>账户类型：</p>
+                                <span>账户类型：</span>
                                 <select name="userType" th:with="type=${@dict.getType('userType')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <p>上级代理商：</p>
+                                <span>上级代理商：</span>
                                 <input type="text" name="agent"/>
                             </li>
 
                             <li class="select-time">
-                                <p>数据创建时间：</p>
+                                <span>创建时间：</span>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
@@ -144,7 +144,7 @@
                 },
                 {
                     field : 'createTime', 
-                    title : '数据创建时间'
+                    title : '创建时间'
                 },
                 {
                     title: '操作',

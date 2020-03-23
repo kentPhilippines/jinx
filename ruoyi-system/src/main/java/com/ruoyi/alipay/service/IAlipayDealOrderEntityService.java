@@ -43,19 +43,4 @@ public interface IAlipayDealOrderEntityService
      */
     public int updateAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity);
 
-    /**
-     * 批量删除交易订单
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteAlipayDealOrderEntityByIds(String ids);
-
-    /**
-     * 删除交易订单信息
-     * 
-     * @param id 交易订单ID
-     * @return 结果
-     */
-    public int deleteAlipayDealOrderEntityById(Long id);
 }

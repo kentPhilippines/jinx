@@ -27,9 +27,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAlipayUserRateEntityList" parameterType="AlipayUserRateEntity" resultMap="AlipayUserRateEntityResult">
         <include refid="selectAlipayUserRateEntityVo"/>
-        <where>  
+        <where>
+            userType = 1
             <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
-            <if test="userType != null "> and userType = #{userType}</if>
             <if test="switchs != null "> and switchs = #{switchs}</if>
             <if test="payTypr != null  and payTypr != ''"> and payTypr = #{payTypr}</if>
             <if test="fee != null "> and fee = #{fee}</if>
@@ -37,10 +37,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null "> and createTime = #{createTime}</if>
             <if test="submitTime != null "> and submitTime = #{submitTime}</if>
             <if test="status != null "> and status = #{status}</if>
-            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
-            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
-            <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
-            <if test="retain4 != null  and retain4 != ''"> and retain4 = #{retain4}</if>
         </where>
     </select>
     
@@ -61,10 +57,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">createTime,</if>
             <if test="submitTime != null ">submitTime,</if>
             <if test="status != null ">status,</if>
-            <if test="retain1 != null  and retain1 != ''">retain1,</if>
-            <if test="retain2 != null  and retain2 != ''">retain2,</if>
-            <if test="retain3 != null  and retain3 != ''">retain3,</if>
-            <if test="retain4 != null  and retain4 != ''">retain4,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null  and userId != ''">#{userId},</if>
@@ -76,10 +68,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="submitTime != null ">#{submitTime},</if>
             <if test="status != null ">#{status},</if>
-            <if test="retain1 != null  and retain1 != ''">#{retain1},</if>
-            <if test="retain2 != null  and retain2 != ''">#{retain2},</if>
-            <if test="retain3 != null  and retain3 != ''">#{retain3},</if>
-            <if test="retain4 != null  and retain4 != ''">#{retain4},</if>
          </trim>
     </insert>
 
@@ -95,10 +83,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">createTime = #{createTime},</if>
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
             <if test="status != null ">status = #{status},</if>
-            <if test="retain1 != null  and retain1 != ''">retain1 = #{retain1},</if>
-            <if test="retain2 != null  and retain2 != ''">retain2 = #{retain2},</if>
-            <if test="retain3 != null  and retain3 != ''">retain3 = #{retain3},</if>
-            <if test="retain4 != null  and retain4 != ''">retain4 = #{retain4},</if>
         </trim>
         where id = #{id}
     </update>
@@ -113,5 +97,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+
+
+    <!-- 查询码商的费率-->
+
+    <select id="selectUserRateEntityList_qr" parameterType="AlipayUserRateEntity" resultMap="AlipayUserRateEntityResult">
+        <include refid="selectAlipayUserRateEntityVo"/>
+        <where>
+            userType = 2
+            <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
+            <if test="switchs != null "> and switchs = #{switchs}</if>
+            <if test="payTypr != null  and payTypr != ''"> and payTypr = #{payTypr}</if>
+            <if test="fee != null "> and fee = #{fee}</if>
+            <if test="feeType != null "> and feeType = #{feeType}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+
+    <insert id="insertAlipayUserRateEntity_qr" parameterType="AlipayUserRateEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_user_rate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">userId,</if>
+            <if test="userType != null ">userType,</if>
+            <if test="switchs != null ">switchs,</if>
+            <if test="payTypr != null  and payTypr != ''">payTypr,</if>
+            <if test="fee != null ">fee,</if>
+            <if test="feeType != null ">feeType,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+            <if test="status != null ">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="userType != null ">#{userType},</if>
+            <if test="switchs != null ">#{switchs},</if>
+            <if test="payTypr != null  and payTypr != ''">#{payTypr},</if>
+            <if test="fee != null ">#{fee},</if>
+            <if test="feeType != null ">#{feeType},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+            <if test="status != null ">#{status},</if>
+        </trim>
+    </insert>
     
 </mapper>

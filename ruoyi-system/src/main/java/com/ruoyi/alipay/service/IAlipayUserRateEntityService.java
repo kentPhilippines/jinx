@@ -1,19 +1,19 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayUserRateEntity;
+
 import java.util.List;
 
 /**
  * 用户产品费率Service接口
- * 
+ *
  * @author kiwi
  * @date 2020-03-18
  */
-public interface IAlipayUserRateEntityService 
-{
+public interface IAlipayUserRateEntityService {
     /**
      * 查询用户产品费率
-     * 
+     *
      * @param id 用户产品费率ID
      * @return 用户产品费率
      */
@@ -21,7 +21,7 @@ public interface IAlipayUserRateEntityService
 
     /**
      * 查询用户产品费率列表
-     * 
+     *
      * @param alipayUserRateEntity 用户产品费率
      * @return 用户产品费率集合
      */
@@ -29,7 +29,7 @@ public interface IAlipayUserRateEntityService
 
     /**
      * 新增用户产品费率
-     * 
+     *
      * @param alipayUserRateEntity 用户产品费率
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface IAlipayUserRateEntityService
 
     /**
      * 修改用户产品费率
-     * 
+     *
      * @param alipayUserRateEntity 用户产品费率
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface IAlipayUserRateEntityService
 
     /**
      * 批量删除用户产品费率
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -53,9 +53,34 @@ public interface IAlipayUserRateEntityService
 
     /**
      * 删除用户产品费率信息
-     * 
+     *
      * @param id 用户产品费率ID
      * @return 结果
      */
     public int deleteAlipayUserRateEntityById(Long id);
+
+    /**
+     * 查询码商的费率
+     *
+     * @param alipayUserRateEntity
+     * @return
+     */
+    List<AlipayUserRateEntity> selectUserRateEntityList_qr(AlipayUserRateEntity alipayUserRateEntity);
+
+    /**
+     * @param alipayUserRateEntity
+     * @return
+     */
+    int insertAlipayUserRateEntity_qr(AlipayUserRateEntity alipayUserRateEntity);
+
+    /**
+     * 费率开关
+     *
+     * @param id
+     * @param userId
+     * @param feeType
+     * @param switchs
+     * @return
+     */
+    int changeStatus(String id, String userId, String feeType, String switchs);
 }

@@ -69,25 +69,4 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
 		return alipayDealOrderAppMapper.updateAlipayDealOrderApp(alipayDealOrderApp);
 	}
 
-	/**
-	 * 删除商户订单登记对象
-	 * 
-	 * @param ids 需要删除的数据ID
-	 * @return 结果
-	 */
-	@Override
-	public int deleteAlipayDealOrderAppByIds(String ids) {
-		return alipayDealOrderAppMapper.deleteAlipayDealOrderAppByIds(Convert.toStrArray(ids));
-	}
-
-	/**
-	 * 删除商户订单登记信息
-	 * 
-	 * @param id 商户订单登记ID
-	 * @return 结果
-	 */
-	@Override
-	public int deleteAlipayDealOrderAppById(Long id) {
-		return alipayDealOrderAppMapper.deleteAlipayDealOrderAppById(id);
-	}
 }

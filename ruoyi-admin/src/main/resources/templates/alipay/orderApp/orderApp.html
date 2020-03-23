@@ -1,222 +1,139 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('商户订单登记列表')" />
+    <th:block th:include="include :: header('商户订单登记列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <p>订单类型:1交易,5代付：</p>
-                                <select name="orderType" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>订单关联商户账号：</p>
-                                <input type="text" name="orderAccount"/>
-                            </li>
-                            <li>
-                                <p>订单状态:1处理中2成功3未收到回调4失败5超时6订单申述7人工处理：</p>
-                                <select name="orderStatus">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>交易备注：</p>
-                                <input type="text" name="dealDescribe"/>
-                            </li>
-                            <li>
-                                <p>订单金额(原始金额)：</p>
-                                <input type="text" name="orderAmount"/>
-                            </li>
-                            <li>
-                                <p>订单生成IP(源头ip)：</p>
-                                <input type="text" name="orderIp"/>
-                            </li>
-                            <li>
-                                <p>交易外部订单号：</p>
-                                <input type="text" name="appOrderId"/>
-                            </li>
-                            <li>
-                                <p>使用费率id：</p>
-                                <input type="text" name="feeId"/>
-                            </li>
-                            <li>
-                                <p>订单异步回调地址：</p>
-                                <input type="text" name="notify"/>
-                            </li>
-                            <li>
-                                <p>订单同步回调地址：</p>
-                                <input type="text" name="back"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据修改时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据生成时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li>
-                                <p>状态:1可使用；0不可使用：</p>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>备用字段添加业务使用：</p>
-                                <input type="text" name="retain1"/>
-                            </li>
-                            <li>
-                                <p>备用字段添加业务使用：</p>
-                                <input type="text" name="retain2"/>
-                            </li>
-                            <li>
-                                <p>备用字段添加业务使用：</p>
-                                <input type="text" name="retain3"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <span>商户账号：</span>
+                            <input type="text" id="orderAccount" name="orderAccount"/>
+                        </li>
+                        <li>
+                            <span>订单状态：</span>
+                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <span>商户订单号：</span>
+                            <input type="text" name="appOrderId"/>
+                        </li>
+                        <li class="select-time">
+                            <span>创建时间：</span>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginCreateTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endCreateTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:orderApp:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:orderApp:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:orderApp:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:orderApp:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:orderApp:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="alipay:orderApp:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:orderApp:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('alipay:orderApp:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('alipay:orderApp:remove')}]];
-        var prefix = ctx + "alipay/orderApp";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('alipay:orderApp:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('alipay:orderApp:remove')}]];
+    var prefix = ctx + "alipay/orderApp";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "商户订单登记",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "商户订单登记",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'id', 
-                    title : '数据id',
+                    field: 'id',
+                    title: '数据id',
                     visible: false
                 },
                 {
-                    field : 'orderId', 
-                    title : '订单号',
+                    field: 'orderId',
+                    title: '订单号',
                     visible: false
                 },
                 {
-                    field : 'orderType', 
-                    title : '订单类型:1交易,5代付'
+                    field: 'orderAccount',
+                    title: '商户账号'
                 },
                 {
-                    field : 'orderAccount', 
-                    title : '订单关联商户账号'
+                    field: 'appOrderId',
+                    title: '交易外部订单号'
                 },
                 {
-                    field : 'orderStatus', 
-                    title : '订单状态:1处理中2成功3未收到回调4失败5超时6订单申述7人工处理'
+                    field: 'orderStatus',
+                    title: '订单状态'
                 },
                 {
-                    field : 'dealDescribe', 
-                    title : '交易备注'
+                    field: 'orderAmount',
+                    title: '订单金额(原始金额)'
                 },
                 {
-                    field : 'orderAmount', 
-                    title : '订单金额(原始金额)'
+                    field: 'feeId',
+                    title: '费率'
                 },
                 {
-                    field : 'orderIp', 
-                    title : '订单生成IP(源头ip)'
+                    field: 'orderIp',
+                    title: '订单生成IP'
                 },
                 {
-                    field : 'appOrderId', 
-                    title : '交易外部订单号'
+                    field: 'createTime',
+                    title: '创建时间'
                 },
                 {
-                    field : 'feeId', 
-                    title : '使用费率id'
-                },
-                {
-                    field : 'notify', 
-                    title : '订单异步回调地址'
-                },
-                {
-                    field : 'back', 
-                    title : '订单同步回调地址'
-                },
-                {
-                    field : 'submitTime', 
-                    title : '数据修改时间'
-                },
-                {
-                    field : 'createTime', 
-                    title : '数据生成时间'
-                },
-                {
-                    field : 'status', 
-                    title : '状态:1可使用；0不可使用'
-                },
-                {
-                    field : 'retain1', 
-                    title : '备用字段添加业务使用'
-                },
-                {
-                    field : 'retain2', 
-                    title : '备用字段添加业务使用'
-                },
-                {
-                    field : 'retain3', 
-                    title : '备用字段添加业务使用'
+                    field: 'dealDescribe',
+                    title: '交易备注'
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
-    </script>
+        };
+        $.table.init(options);
+    });
+</script>
 </body>
 </html>
