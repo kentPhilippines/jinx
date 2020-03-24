@@ -123,16 +123,19 @@ public interface MerchantInfoEntityMapper  {
             "<if test=\"userId != null and userId != ''\">" +
             " and userId = #{userId}" +
             "</if>" +
+            "<if test=\"userName != null and userName != ''\">" +
+            " and userName = #{userName}" +
+            "</if>" +
             "<if test=\"switchs != null and switchs != ''\">" +
             " and switchs = #{switchs}" +
             "</if>" +
             "<if test=\"params.beginTime != null and params.beginTime != ''\">" +
-            " and date_format(u.createTime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%dm%d')" +
+            " and date_format(u.submitTime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%dm%d')" +
             "</if>" +
             "<if test=\"params.endTime != null and params.endTime != ''\">" +
-            " and date_format(u.createTime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')" +
+            " and date_format(u.submitTime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')" +
             "</if>" +
-            " order by switchs desc, createTime desc " +
+            " order by switchs desc, submitTime desc " +
             "</script>")
     List<AlipayUserInfo> selectMerchantControlList(AlipayUserInfo merchantInfoEntity);
 }
