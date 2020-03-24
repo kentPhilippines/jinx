@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayAmountEntityMapper">
+    
+    <resultMap type="AlipayAmountEntity" id="AlipayAmountEntityResult">
+        <result property="id"    column="id"    />
+        <result property="orderId"    column="orderId"    />
+        <result property="userId"    column="userId"    />
+        <result property="amountType"    column="amountType"    />
+        <result property="accname"    column="accname"    />
+        <result property="orderStatus"    column="orderStatus"    />
+        <result property="amount"    column="amount"    />
+        <result property="fee"    column="fee"    />
+        <result property="actualAmount"    column="actualAmount"    />
+        <result property="dealDescribe"    column="dealDescribe"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="submitTime"    column="submitTime"    />
+        <result property="status"    column="status"    />
+        <result property="retain1"    column="retain1"    />
+        <result property="retain2"    column="retain2"    />
+    </resultMap>
+
+    <sql id="selectAlipayAmountEntityVo">
+        select id, orderId, userId, amountType, accname, orderStatus, amount, fee, actualAmount, dealDescribe, createTime, submitTime, status, retain1, retain2 from alipay_amount
+    </sql>
+
+    <select id="selectAlipayAmountEntityList" parameterType="AlipayAmountEntity" resultMap="AlipayAmountEntityResult">
+        <include refid="selectAlipayAmountEntityVo"/>
+        <where>  
+            <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
+            <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
+            <if test="amountType != null  and amountType != ''"> and amountType = #{amountType}</if>
+            <if test="accname != null  and accname != ''"> and accname like concat('%', #{accname}, '%')</if>
+            <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="fee != null "> and fee = #{fee}</if>
+            <if test="actualAmount != null "> and actualAmount = #{actualAmount}</if>
+            <if test="dealDescribe != null  and dealDescribe != ''"> and dealDescribe = #{dealDescribe}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
+            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayAmountEntityById" parameterType="Long" resultMap="AlipayAmountEntityResult">
+        <include refid="selectAlipayAmountEntityVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayAmountEntity" parameterType="AlipayAmountEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_amount
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">orderId,</if>
+            <if test="userId != null  and userId != ''">userId,</if>
+            <if test="amountType != null  and amountType != ''">amountType,</if>
+            <if test="accname != null  and accname != ''">accname,</if>
+            <if test="orderStatus != null  and orderStatus != ''">orderStatus,</if>
+            <if test="amount != null ">amount,</if>
+            <if test="fee != null ">fee,</if>
+            <if test="actualAmount != null ">actualAmount,</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">dealDescribe,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+            <if test="status != null ">status,</if>
+            <if test="retain1 != null  and retain1 != ''">retain1,</if>
+            <if test="retain2 != null  and retain2 != ''">retain2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">#{orderId},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="amountType != null  and amountType != ''">#{amountType},</if>
+            <if test="accname != null  and accname != ''">#{accname},</if>
+            <if test="orderStatus != null  and orderStatus != ''">#{orderStatus},</if>
+            <if test="amount != null ">#{amount},</if>
+            <if test="fee != null ">#{fee},</if>
+            <if test="actualAmount != null ">#{actualAmount},</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">#{dealDescribe},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="retain1 != null  and retain1 != ''">#{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">#{retain2},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayAmountEntity" parameterType="AlipayAmountEntity">
+        update alipay_amount
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">orderId = #{orderId},</if>
+            <if test="userId != null  and userId != ''">userId = #{userId},</if>
+            <if test="amountType != null  and amountType != ''">amountType = #{amountType},</if>
+            <if test="accname != null  and accname != ''">accname = #{accname},</if>
+            <if test="orderStatus != null  and orderStatus != ''">orderStatus = #{orderStatus},</if>
+            <if test="amount != null ">amount = #{amount},</if>
+            <if test="fee != null ">fee = #{fee},</if>
+            <if test="actualAmount != null ">actualAmount = #{actualAmount},</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">dealDescribe = #{dealDescribe},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="retain1 != null  and retain1 != ''">retain1 = #{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">retain2 = #{retain2},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayAmountEntityById" parameterType="Long">
+        delete from alipay_amount where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayAmountEntityByIds" parameterType="String">
+        delete from alipay_amount where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

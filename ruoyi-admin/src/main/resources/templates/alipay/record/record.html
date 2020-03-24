@@ -15,44 +15,28 @@
                                 <input type="text" name="orderId"/>
                             </li>
                             <li>
-                                <p>用户id：</p>
+                                <p>码商ID：</p>
                                 <input type="text" name="userId"/>
                             </li>
                             <li>
-                                <p>媒介数据id：</p>
+                                <p>媒介ID：</p>
                                 <input type="text" name="mediumId"/>
                             </li>
                             <li>
-                                <p>二维码数据id：</p>
+                                <p>二维码ID：</p>
                                 <input type="text" name="qrId"/>
                             </li>
                             <li>
-                                <p>流动金额：</p>
-                                <input type="text" name="amount"/>
-                            </li>
-                            <li>
-                                <p>订单状态  与交易订单 一样：</p>
+                                <p>状态：</p>
                                 <select name="orderStatus">
                                     <option value="">所有</option>
                                 </select>
                             </li>
-                            <li>
-                                <p>状态:1可使用；0不可使用：</p>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
                             <li class="select-time">
-                                <p>数据创建时间：</p>
+                                <p>创建时间：</p>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据最后一次修改时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -110,15 +94,15 @@
                 },
                 {
                     field : 'userId', 
-                    title : '用户id'
+                    title : '码商ID'
                 },
                 {
                     field : 'mediumId', 
-                    title : '媒介数据id'
+                    title : '媒介ID'
                 },
                 {
                     field : 'qrId', 
-                    title : '二维码数据id'
+                    title : '二维码ID'
                 },
                 {
                     field : 'amount', 
@@ -126,19 +110,11 @@
                 },
                 {
                     field : 'orderStatus', 
-                    title : '订单状态  与交易订单 一样'
-                },
-                {
-                    field : 'status', 
-                    title : '状态:1可使用；0不可使用'
+                    title : '订单状态'
                 },
                 {
                     field : 'createTime', 
-                    title : '数据创建时间'
-                },
-                {
-                    field : 'submitTime', 
-                    title : '数据最后一次修改时间'
+                    title : '创建时间'
                 },
                 {
                     title: '操作',

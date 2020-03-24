@@ -11,98 +11,36 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <p>码商充值订单id订单号长度最多为32位(全文唯一索引)：</p>
+                                <span>订单号：</span>
                                 <input type="text" name="orderId"/>
                             </li>
                             <li>
-                                <p>充值码商Id(码商唯一识别号)(index索引)：</p>
+                                <span>码商ID：</span>
                                 <input type="text" name="userId"/>
                             </li>
                             <li>
-                                <p>充值交易种类:宝转宝ailipay_qr,宝转卡alipay_card,微信二维码wechar_code,..........(index索引)：</p>
+                                <span>充值类型:：</span>
                                 <select name="rechargeType" th:with="type=${@dict.getType('')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <p>充值理由：</p>
-                                <input type="text" name="chargeReason"/>
-                            </li>
-                            <li>
-                                <p>1存在三方收款渠道；2不存在三方收款渠道(index索引)：</p>
-                                <input type="text" name="isTripartite"/>
-                            </li>
-                            <li>
-                                <p>0预下单1处理中2成功3失败：</p>
-                                <select name="orderStatus">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>充值人姓名：</p>
-                                <input type="text" name="depositor"/>
-                            </li>
-                            <li>
-                                <p>充值金额：</p>
-                                <input type="text" name="amount"/>
-                            </li>
-                            <li>
-                                <p>充值类型:1码商充值：</p>
-                                <select name="orderType" th:with="type=${@dict.getType('')}">
+                                <span>状态：</span>
+                                <select name="orderStatus" th:with="type=${@dict.getType('')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <p>手续费：</p>
-                                <input type="text" name="fee"/>
-                            </li>
-                            <li>
-                                <p>真实到账金额：</p>
-                                <input type="text" name="actualAmount"/>
-                            </li>
-                            <li>
-                                <p>充值银行卡：</p>
-                                <input type="text" name="chargeBankcard"/>
-                            </li>
-                            <li>
-                                <p>充值手机号：</p>
+                                <span>充值手机号：</span>
                                 <input type="text" name="phone"/>
                             </li>
-                            <li>
-                                <p>充值回调地址：</p>
-                                <input type="text" name="notfiy"/>
-                            </li>
-                            <li>
-                                <p>银行卡号：</p>
-                                <input type="text" name="chargeCard"/>
-                            </li>
-                            <li>
-                                <p>充值银行卡对应的账户人：</p>
-                                <input type="text" name="chargePerson"/>
-                            </li>
                             <li class="select-time">
-                                <p>数据创建时间：</p>
+                                <span>创建时间：</span>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据修改时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
-                            </li>
-                            <li>
-                                <p>1数据可用2数据无用：</p>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>备用字段添加业务使用：</p>
-                                <input type="text" name="retain1"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -114,15 +52,6 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:deposit:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:deposit:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:deposit:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deposit:export">
                     <i class="fa fa-download"></i> 导出
                  </a>
@@ -145,38 +74,26 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "充值记录",
+                modalName: "码商充值记录",
                 columns: [{
                     checkbox: true
                 },
                 {
                     field : 'id', 
-                    title : '数据id(主键索引)',
+                    title : '数据ID',
                     visible: false
                 },
                 {
                     field : 'orderId', 
-                    title : '码商充值订单id订单号长度最多为32位(全文唯一索引)'
+                    title : '订单号'
                 },
                 {
                     field : 'userId', 
-                    title : '充值码商Id(码商唯一识别号)(index索引)'
+                    title : '码商ID'
                 },
                 {
                     field : 'rechargeType', 
-                    title : '充值交易种类:宝转宝ailipay_qr,宝转卡alipay_card,微信二维码wechar_code,..........(index索引)'
-                },
-                {
-                    field : 'chargeReason', 
-                    title : '充值理由'
-                },
-                {
-                    field : 'isTripartite', 
-                    title : '1存在三方收款渠道；2不存在三方收款渠道(index索引)'
-                },
-                {
-                    field : 'orderStatus', 
-                    title : '0预下单1处理中2成功3失败'
+                    title : '充值类型'
                 },
                 {
                     field : 'depositor', 
@@ -187,28 +104,20 @@
                     title : '充值金额'
                 },
                 {
-                    field : 'orderType', 
-                    title : '充值类型:1码商充值'
-                },
-                {
                     field : 'fee', 
                     title : '手续费'
                 },
                 {
-                    field : 'actualAmount', 
-                    title : '真实到账金额'
+                    field : 'orderStatus',
+                    title : '状态'
                 },
                 {
                     field : 'chargeBankcard', 
-                    title : '充值银行卡'
+                    title : '银行卡'
                 },
                 {
                     field : 'phone', 
-                    title : '充值手机号'
-                },
-                {
-                    field : 'notfiy', 
-                    title : '充值回调地址'
+                    title : '手机号'
                 },
                 {
                     field : 'chargeCard', 
@@ -223,24 +132,16 @@
                     title : '数据创建时间'
                 },
                 {
-                    field : 'submitTime', 
-                    title : '数据修改时间'
-                },
-                {
-                    field : 'status', 
-                    title : '1数据可用2数据无用'
-                },
-                {
-                    field : 'retain1', 
-                    title : '备用字段添加业务使用'
+                    field : 'chargeReason',
+                    title : '备注'
                 },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        // actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        // actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]

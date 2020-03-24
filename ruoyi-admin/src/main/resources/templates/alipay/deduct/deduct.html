@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('会员提现记录列表')" />
+    <th:block th:include="include :: header('手动加扣款记录列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -23,13 +23,22 @@
                                 <input type="text" name="accname"/>
                             </li>
                             <li>
-                                <span>状态：</span>
-                                <select name="orderStatus">
+                                <p>操作类型：</p>
+                                <select name="amountType" th:with="type=${@dict.getType('amountType')}">
                                     <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
+                            <li>
+                                <span>状态：</span>
+                                <select name="orderStatus" th:with="type=${@dict.getType('orderStatusAmount')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
                             <li class="select-time">
-                                <span>创建时间：</span>
+                                <p>创建时间：</p>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
@@ -44,16 +53,16 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:withdrawal:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:deduct:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:withdrawal:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:deduct:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:withdrawal:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:deduct:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:withdrawal:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deduct:export">
                     <i class="fa fa-download"></i> 导出
                  </a>
             </div>
@@ -64,9 +73,11 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('alipay:withdrawal:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('alipay:withdrawal:remove')}]];
-        var prefix = ctx + "alipay/withdrawal";
+        var editFlag = [[${@permission.hasPermi('alipay:deduct:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('alipay:deduct:remove')}]];
+        var amountTypeDatas = [[${@dict.getType('amountType')}]];
+        var orderStatusDatas = [[${@dict.getType('orderStatusAmount')}]];
+        var prefix = ctx + "alipay/deduct";
 
         $(function() {
             var options = {
@@ -75,13 +86,13 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "会员提现记录",
+                modalName: "加减款记录",
                 columns: [{
                     checkbox: true
                 },
                 {
                     field : 'id', 
-                    title : '数据ID',
+                    title : '数据id',
                     visible: false
                 },
                 {
@@ -90,39 +101,41 @@
                 },
                 {
                     field : 'userId', 
-                    title : '商户ID'
+                    title : '账号ID'
                 },
                 {
-                    field : 'bankNo', 
-                    title : '银行卡号'
+                    field : 'amountType', 
+                    title : '操作类型',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(amountTypeDatas, value);
+                    }
                 },
                 {
                     field : 'accname', 
-                    title : '提现人姓名'
+                    title : '申请人'
                 },
                 {
                     field : 'orderStatus', 
-                    title : '状态'
-                },
-                {
-                    field : 'bankName', 
-                    title : '开户行姓名'
+                    title : '状态',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(orderStatusDatas, value);
+                    }
                 },
                 {
                     field : 'amount', 
-                    title : '提现金额'
+                    title : '金额'
+                },
+                {
+                    field : 'actualAmount',
+                    title : '实际金额'
                 },
                 {
                     field : 'fee', 
                     title : '手续费'
                 },
                 {
-                    field : 'actualAmount', 
-                    title : '实际到账'
-                },
-                {
-                    field : 'mobile', 
-                    title : '手机号'
+                    field : 'dealDescribe', 
+                    title : '加扣款描述'
                 },
                 {
                     field : 'createTime', 
