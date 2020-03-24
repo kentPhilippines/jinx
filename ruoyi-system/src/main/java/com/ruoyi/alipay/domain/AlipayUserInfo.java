@@ -147,6 +147,12 @@ public class AlipayUserInfo extends BaseEntity {
     private Double maxAmount;
 
     /**
+     * 最大金额
+     */
+    @Excel(name = "总金额限制")
+    private Double totalAmount;
+
+    /**
      * 下单次数
      */
     @Excel(name = "下单次数")
@@ -392,6 +398,14 @@ public class AlipayUserInfo extends BaseEntity {
         this.witip = witip;
     }
 
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -420,6 +434,7 @@ public class AlipayUserInfo extends BaseEntity {
                 .append("publicKey", getPublicKey())
                 .append("minAmount", getMinAmount())
                 .append("maxAmount", getMaxAmount())
+                .append("totalAmount", getTotalAmount())
                 .append("timesTotal", getTimesTotal())
                 .append("startTime", getStartTime())
                 .append("endTime", getEndTime())

@@ -5,6 +5,7 @@ import com.ruoyi.alipay.domain.MerchantInfoEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -76,7 +77,17 @@ public interface MerchantInfoEntityMapper  {
      * @param merchantInfoEntity 商户信息
      * @return 结果
      */
-    public int updateMerchantInfoEntity(MerchantInfoEntity merchantInfoEntity);
+    @Update("update alipay_user_info set " +
+            "minAmount = #{minAmount}," +
+            "maxAmount = #{maxAmount}," +
+            "totalAmount = #{totalAmount}," +
+            "startTime = #{startTime}," +
+            "endTime = #{endTime}," +
+            "witip = #{witip}," +
+            "timesTotal = #{timesTotal}," +
+            "submitTime = #{submitTime} " +
+            "where id = #{id} ")
+    int updateMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
 
     /**
      * 删除商户信息
@@ -104,9 +115,9 @@ public interface MerchantInfoEntityMapper  {
      * @return
      */
     @Select("<script>" +
-            "SELECT " +
-            " id,userId, userName, userType, switchs,agent, minAmount, maxAmount, timesTotal, startTime, endTime, witip " +
-            " FROM " +
+            "select " +
+            " id,userId, userName, userType, switchs, agent, minAmount, maxAmount,totalAmount, timesTotal, startTime, endTime, witip, submitTime " +
+            " from " +
             " alipay_user_info" +
             " where userType = 1 " +
             "<if test=\"userId != null and userId != ''\">" +
@@ -116,7 +127,7 @@ public interface MerchantInfoEntityMapper  {
             " and switchs = #{switchs}" +
             "</if>" +
             "<if test=\"params.beginTime != null and params.beginTime != ''\">" +
-            " and date_format(u.createTime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')" +
+            " and date_format(u.createTime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%dm%d')" +
             "</if>" +
             "<if test=\"params.endTime != null and params.endTime != ''\">" +
             " and date_format(u.createTime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')" +

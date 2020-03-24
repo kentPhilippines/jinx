@@ -105,8 +105,9 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
      * @return 结果
      */
     @Override
-    public int updateMerchantInfoEntity(MerchantInfoEntity merchantInfoEntity) {
-        merchantInfoEntity.setUpdateTime(DateUtils.getNowDate());
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int updateMerchantInfoEntity(AlipayUserInfo merchantInfoEntity) {
+        merchantInfoEntity.setSubmitTime(DateUtils.getNowDate());
         return merchantInfoEntityMapper.updateMerchantInfoEntity(merchantInfoEntity);
     }
 

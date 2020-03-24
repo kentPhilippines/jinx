@@ -42,7 +42,7 @@ public interface IMerchantInfoEntityService
      * @param merchantInfoEntity 商户信息
      * @return 结果
      */
-     int updateMerchantInfoEntity(MerchantInfoEntity merchantInfoEntity);
+     int updateMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
 
     /**
      * 批量删除商户信息
