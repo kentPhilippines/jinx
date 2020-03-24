@@ -1,166 +1,153 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('收款媒介列列表')" />
+    <th:block th:include="include :: header('收款媒介列列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <p>收款媒介持有人：</p>
-                                <input type="text" name="mediumHolder"/>
-                            </li>
-                            <li>
-                                <p>备注：</p>
-                                <input type="text" name="mediumNote"/>
-                            </li>
-                            <li>
-                                <p>收款媒介绑定手机号：</p>
-                                <input type="text" name="mediumPhone"/>
-                            </li>
-                            <li>
-                                <p>收款媒介所属商户：</p>
-                                <input type="text" name="qrcodeId"/>
-                            </li>
-                            <li>
-                                <p>收款媒介标识:alipay(支付宝),weichar(微信),card(银行卡),other(暂未开放)：</p>
-                                <input type="text" name="code"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据生成时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据修改时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
-                            </li>
-                            <li>
-                                <p>状态:1可使用；0不可使用：</p>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>是否逻辑删除：1删除2可用：</p>
-                                <input type="text" name="isDeal"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>码商ID：</p>
+                            <input type="text" name="qrcodeId"/>
+                        </li>
+                        <li>
+                            <p>手机号：</p>
+                            <input type="text" name="mediumPhone"/>
+                        </li>
+                        <li>
+                            <p>媒介类型：</p>
+                            <input type="text" name="code"/>
+                        </li>
+                        <li class="select-time">
+                            <span>创建时间：</span>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginCreateTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endCreateTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:medium:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:medium:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:medium:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:medium:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:medium:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="alipay:medium:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="alipay:medium:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:medium:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('alipay:medium:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('alipay:medium:remove')}]];
-        var prefix = ctx + "alipay/medium";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('alipay:medium:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('alipay:medium:remove')}]];
+    var prefix = ctx + "alipay/medium";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "收款媒介列",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "收款媒介列",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'id', 
-                    title : '数据id',
+                    field: 'id',
+                    title: 'ID',
                     visible: false
                 },
                 {
-                    field : 'mediumId', 
-                    title : '收款媒介id(本地编号)',
-                    visible: false
+                    field: 'mediumId',
+                    title: '媒介ID',
                 },
                 {
-                    field : 'mediumNumber', 
-                    title : '收款媒介登录账号',
-                    visible: false
+                    field: 'mediumNumber',
+                    title: '媒介账号',
                 },
                 {
-                    field : 'mediumHolder', 
-                    title : '收款媒介持有人'
+                    field: 'mediumHolder',
+                    title: '所属人'
                 },
                 {
-                    field : 'mediumNote', 
-                    title : '备注'
+                    field: 'mediumPhone',
+                    title: '绑定手机号'
                 },
                 {
-                    field : 'mediumPhone', 
-                    title : '收款媒介绑定手机号'
+                    field: 'qrcodeId',
+                    title: '码商ID'
                 },
                 {
-                    field : 'qrcodeId', 
-                    title : '收款媒介所属商户'
+                    field: 'code',
+                    title: '收款媒介标识:alipay(支付宝),weichar(微信),card(银行卡),other(暂未开放)',
+                    formatter: function (value, row, index) {
+                        if (row.status === 1) {
+                            return '<span style="color:#00B83F;">开启</span>';
+                        } else if (row.status === 2) {
+                            return '<span style="color: #cc0000;">关闭</span>';
+                        }
+                    }
                 },
                 {
-                    field : 'code', 
-                    title : '收款媒介标识:alipay(支付宝),weichar(微信),card(银行卡),other(暂未开放)'
+                    field: 'status',
+                    title: '接单状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (row.status === 1) {
+                            return '<span style="color:#00B83F;">开启</span>';
+                        } else if (row.status === 2) {
+                            return '<span style="color: #cc0000;">关闭</span>';
+                        }
+                    }
                 },
                 {
-                    field : 'createTime', 
-                    title : '数据生成时间'
+                    field: 'createTime',
+                    title: '创建时间'
                 },
                 {
-                    field : 'submitTime', 
-                    title : '数据修改时间'
-                },
-                {
-                    field : 'status', 
-                    title : '状态:1可使用；0不可使用'
-                },
-                {
-                    field : 'isDeal', 
-                    title : '是否逻辑删除：1删除2可用'
+                    field: 'mediumNote',
+                    title: '备注'
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
-    </script>
+        };
+        $.table.init(options);
+    });
+</script>
 </body>
 </html>

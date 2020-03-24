@@ -161,10 +161,10 @@ public class MerchantInfoEntityController extends BaseController {
     @ResponseBody
     public AjaxResult changeStatus(AlipayUserInfo user) {
         //获取alipay处理接口URL
-        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        /*String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_ERVICE_API_KEY, StaticConstants.ALIPAY_ERVICE_API_VALUE);
         Map<String, Object> mapParam = Maps.newHashMap();
-        mapParam.put("switchs", user.getSwitchs());
+        mapParam.put(user.getParams().get("paramKey").toString(),user.getParams().get("paramValue"));
         mapParam.put("userId", user.getUserId());
         String flag = HttpUtils.sendPost(ipPort + urlPath, MapDataUtil.createParam(mapParam));
         if ("ConnectException".equals(flag)) {
@@ -179,6 +179,9 @@ public class MerchantInfoEntityController extends BaseController {
                 String message = json.getString("message");
                 return error(message);
         }
+        return null;*/
+
+
         return null;
     }
 

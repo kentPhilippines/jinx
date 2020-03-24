@@ -21,14 +21,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 手动加扣款记录Controller
- * 
+ *
  * @author kiwi
  * @date 2020-03-24
  */
 @Controller
 @RequestMapping("/alipay/deduct")
-public class AlipayAmountEntityController extends BaseController
-{
+public class AlipayAmountEntityController extends BaseController {
     private String prefix = "alipay/deduct";
 
     @Autowired
@@ -36,8 +35,7 @@ public class AlipayAmountEntityController extends BaseController
 
     @RequiresPermissions("alipay:deduct:view")
     @GetMapping()
-    public String deduct()
-    {
+    public String deduct() {
         return prefix + "/deduct";
     }
 
@@ -47,8 +45,7 @@ public class AlipayAmountEntityController extends BaseController
     @RequiresPermissions("alipay:deduct:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(AlipayAmountEntity alipayAmountEntity)
-    {
+    public TableDataInfo list(AlipayAmountEntity alipayAmountEntity) {
         startPage();
         List<AlipayAmountEntity> list = alipayAmountEntityService.selectAlipayAmountEntityList(alipayAmountEntity);
         return getDataTable(list);
@@ -61,8 +58,7 @@ public class AlipayAmountEntityController extends BaseController
     @Log(title = "手动加扣款记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(AlipayAmountEntity alipayAmountEntity)
-    {
+    public AjaxResult export(AlipayAmountEntity alipayAmountEntity) {
         List<AlipayAmountEntity> list = alipayAmountEntityService.selectAlipayAmountEntityList(alipayAmountEntity);
         ExcelUtil<AlipayAmountEntity> util = new ExcelUtil<AlipayAmountEntity>(AlipayAmountEntity.class);
         return util.exportExcel(list, "deduct");
@@ -72,8 +68,7 @@ public class AlipayAmountEntityController extends BaseController
      * 新增手动加扣款记录
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -84,8 +79,7 @@ public class AlipayAmountEntityController extends BaseController
     @Log(title = "手动加扣款记录", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(AlipayAmountEntity alipayAmountEntity)
-    {
+    public AjaxResult addSave(AlipayAmountEntity alipayAmountEntity) {
         return toAjax(alipayAmountEntityService.insertAlipayAmountEntity(alipayAmountEntity));
     }
 
@@ -93,8 +87,7 @@ public class AlipayAmountEntityController extends BaseController
      * 修改手动加扣款记录
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayAmountEntity alipayAmountEntity = alipayAmountEntityService.selectAlipayAmountEntityById(id);
         mmap.put("alipayAmountEntity", alipayAmountEntity);
         return prefix + "/edit";
@@ -107,8 +100,7 @@ public class AlipayAmountEntityController extends BaseController
     @Log(title = "手动加扣款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(AlipayAmountEntity alipayAmountEntity)
-    {
+    public AjaxResult editSave(AlipayAmountEntity alipayAmountEntity) {
         return toAjax(alipayAmountEntityService.updateAlipayAmountEntity(alipayAmountEntity));
     }
 
@@ -117,10 +109,9 @@ public class AlipayAmountEntityController extends BaseController
      */
     @RequiresPermissions("alipay:deduct:remove")
     @Log(title = "手动加扣款记录", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(alipayAmountEntityService.deleteAlipayAmountEntityByIds(ids));
     }
 }
