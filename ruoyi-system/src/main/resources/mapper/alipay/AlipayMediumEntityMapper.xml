@@ -25,7 +25,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAlipayMediumEntityList" parameterType="AlipayMediumEntity" resultMap="AlipayMediumEntityResult">
         <include refid="selectAlipayMediumEntityVo"/>
-        <where>  
+        <where>
+            isDeal = 2
             <if test="mediumHolder != null  and mediumHolder != ''"> and mediumHolder = #{mediumHolder}</if>
             <if test="mediumNote != null  and mediumNote != ''"> and mediumNote = #{mediumNote}</if>
             <if test="mediumPhone != null  and mediumPhone != ''"> and mediumPhone = #{mediumPhone}</if>
@@ -34,8 +35,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null "> and createTime = #{createTime}</if>
             <if test="submitTime != null "> and submitTime = #{submitTime}</if>
             <if test="status != null "> and status = #{status}</if>
-            <if test="isDeal != null  and isDeal != ''"> and isDeal = #{isDeal}</if>
         </where>
+        order by qrcodeId, createTime desc
     </select>
     
     <select id="selectAlipayMediumEntityById" parameterType="Long" resultMap="AlipayMediumEntityResult">

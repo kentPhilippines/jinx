@@ -11,16 +11,19 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>码商ID：</p>
+                            <span>码商ID：</span>
                             <input type="text" name="qrcodeId"/>
                         </li>
                         <li>
-                            <p>手机号：</p>
+                            <span>手机号：</span>
                             <input type="text" name="mediumPhone"/>
                         </li>
                         <li>
-                            <p>媒介类型：</p>
-                            <input type="text" name="code"/>
+                            <span>媒介类型：</span>
+                            <select id="code" name="code" th:with="type=${@dict.getType('medium_type')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
                         </li>
                         <li class="select-time">
                             <span>创建时间：</span>
@@ -42,20 +45,6 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:medium:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="alipay:medium:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="alipay:medium:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:medium:export">
-                <i class="fa fa-download"></i> 导出
-            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -66,6 +55,8 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('alipay:medium:edit')}]];
     var removeFlag = [[${@permission.hasPermi('alipay:medium:remove')}]];
+
+    var mediumType = [[${@dict.getType('medium_type')}]];
     var prefix = ctx + "alipay/medium";
 
     $(function () {
@@ -106,13 +97,9 @@
                 },
                 {
                     field: 'code',
-                    title: '收款媒介标识:alipay(支付宝),weichar(微信),card(银行卡),other(暂未开放)',
-                    formatter: function (value, row, index) {
-                        if (row.status === 1) {
-                            return '<span style="color:#00B83F;">开启</span>';
-                        } else if (row.status === 2) {
-                            return '<span style="color: #cc0000;">关闭</span>';
-                        }
+                    title: '媒介类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(mediumType, value);
                     }
                 },
                 {
@@ -122,7 +109,7 @@
                     formatter: function (value, row, index) {
                         if (row.status === 1) {
                             return '<span style="color:#00B83F;">开启</span>';
-                        } else if (row.status === 2) {
+                        } else if (row.status === 0) {
                             return '<span style="color: #cc0000;">关闭</span>';
                         }
                     }

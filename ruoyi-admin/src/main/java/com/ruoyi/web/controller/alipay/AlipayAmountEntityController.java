@@ -114,4 +114,19 @@ public class AlipayAmountEntityController extends BaseController {
     public AjaxResult remove(String ids) {
         return toAjax(alipayAmountEntityService.deleteAlipayAmountEntityByIds(ids));
     }
+
+    /*处理加减款的controller逻辑处理*/
+
+    /**
+     * 财务审核加减款记录
+     */
+    @RequiresPermissions("alipay:deduct:edit:approval")
+    @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
+    @PostMapping("/approval")
+    @ResponseBody
+    public AjaxResult apporval(){
+
+        return toAjax(1);
+    }
+
 }
