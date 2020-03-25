@@ -12,6 +12,7 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.NoUtils;
 import com.ruoyi.common.utils.RSAUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
@@ -121,7 +122,7 @@ public class MerchantInfoEntityController extends BaseController {
     public AjaxResult editSave(AlipayUserInfo merchantInfoEntity) {
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_ERVICE_API_KEY, StaticConstants.ALIPAY_ERVICE_API_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
         //获取数据库内请求路径
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("id", merchantInfoEntity.getId());
@@ -153,7 +154,7 @@ public class MerchantInfoEntityController extends BaseController {
     }
 
     /**
-     * 码商状态修改（调用api）
+     * 商户修改状态（调用api）
      */
     @Log(title = "码商查询", businessType = BusinessType.UPDATE)
     @RequiresPermissions("alipay:merchant:switch")
@@ -161,14 +162,18 @@ public class MerchantInfoEntityController extends BaseController {
     @ResponseBody
     public AjaxResult changeStatus(AlipayUserInfo user) {
         //获取alipay处理接口URL
-        /*String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_ERVICE_API_KEY, StaticConstants.ALIPAY_ERVICE_API_VALUE);
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_2);
         Map<String, Object> mapParam = Maps.newHashMap();
-        mapParam.put(user.getParams().get("paramKey").toString(),user.getParams().get("paramValue"));
+        mapParam.put("paramKey",user.getParams().get("paramKey").toString());
+        mapParam.put("paramValue",user.getParams().get("paramValue").toString());
         mapParam.put("userId", user.getUserId());
         String flag = HttpUtils.sendPost(ipPort + urlPath, MapDataUtil.createParam(mapParam));
         if ("ConnectException".equals(flag)) {
             throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
+        }
+        if(StringUtils.isEmpty(flag)){
+            throw new BusinessException("操作失败，请刷新重试");
         }
         JSONObject json = JSONObject.parseObject(flag);
         String result = json.getString("success");
@@ -179,9 +184,6 @@ public class MerchantInfoEntityController extends BaseController {
                 String message = json.getString("message");
                 return error(message);
         }
-        return null;*/
-
-
         return null;
     }
 

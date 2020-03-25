@@ -12,6 +12,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.MapDataUtil;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -76,7 +77,7 @@ public class AlipayUserInfoController extends BaseController {
     public AjaxResult addSave(AlipayUserInfo alipayUserInfo) {
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_ERVICE_API_KEY, StaticConstants.ALIPAY_ERVICE_API_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
         //获取数据库内请求路径
 //        String url1 = "http://10.14.180.64:5055/api-alipay/account-api/add-account";
         Map<String, Object> mapParam = Maps.newHashMap();
@@ -93,6 +94,9 @@ public class AlipayUserInfoController extends BaseController {
         String flag = HttpUtils.sendPost(ipPort + urlPath, MapDataUtil.createParam(mapParam));
         if ("ConnectException".equals(flag)) {
             throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
+        }
+        if(StringUtils.isEmpty(flag)){
+            throw new BusinessException("新增失败，接口返回参数为空");
         }
         JSONObject json = JSONObject.parseObject(flag);
         String result = json.getString("success");
@@ -126,7 +130,7 @@ public class AlipayUserInfoController extends BaseController {
     public AjaxResult editSave(AlipayUserInfo alipayUserInfo) {
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_ERVICE_API_KEY, StaticConstants.ALIPAY_ERVICE_API_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
         //获取数据库内请求路径
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("userName", alipayUserInfo.getUserName());
@@ -186,7 +190,7 @@ public class AlipayUserInfoController extends BaseController {
     public AjaxResult changeStatus(AlipayUserInfo user) {
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_ERVICE_API_KEY, StaticConstants.ALIPAY_ERVICE_API_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
         Map<String, Object> mapParam = Maps.newHashMap();
         mapParam.put("switchs", user.getSwitchs());
         mapParam.put("userId", user.getUserId());
