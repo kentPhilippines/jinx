@@ -8,19 +8,17 @@ import com.ruoyi.common.core.controller.BaseController;
 
 /**
  * build 表单构建
- * 
+ *
  * @author ruoyi
  */
 @Controller
 @RequestMapping("/tool/build")
-public class BuildController extends BaseController
-{
+public class BuildController extends BaseController {
     private String prefix = "tool/build";
 
     @RequiresPermissions("tool:build:view")
     @GetMapping()
-    public String build()
-    {
+    public String build() {
         return prefix + "/build";
     }
 }

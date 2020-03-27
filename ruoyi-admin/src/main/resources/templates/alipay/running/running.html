@@ -110,22 +110,22 @@
                     field : 'amount', 
                     title : '流水金额'
                 },
-                {
+                /*{
                     field : 'generationIp', 
                     title : '流水关联ip'
-                },
-                {
+                },*/
+              /*  {
                     field : 'dealDescribe', 
                     title : '流水描述'
-                },
-                {
+                },*/
+               /* {
                     field : 'acountR', 
                     title : '入款记录账户'
                 },
                 {
                     field : 'accountW', 
                     title : '出款记录账户'
-                },
+                },*/
                 {
                     field : 'createTime', 
                     title : '创建时间'
@@ -147,7 +147,7 @@
                     formatter: function (value, item, index) {
                         if (item.amountType == '1') {
                             return '<span>支出</span>';
-                        }else if (item.amountType == '2') {
+                        }else if (item.amountType == '0') {
                             return '<span>收入</span>';
                         }
                     }

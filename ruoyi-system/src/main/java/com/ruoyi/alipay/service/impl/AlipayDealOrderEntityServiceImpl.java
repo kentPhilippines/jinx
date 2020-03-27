@@ -44,6 +44,11 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
 	public List<AlipayDealOrderEntity> selectAlipayDealOrderEntityList(AlipayDealOrderEntity alipayDealOrderEntity) {
 		return alipayDealOrderEntityMapper.selectAlipayDealOrderEntityList(alipayDealOrderEntity);
 	}
+	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
+	public List<AlipayDealOrderEntity> selectAlipayOrderList(AlipayDealOrderEntity alipayDealOrderEntity) {
+		return alipayDealOrderEntityMapper.selectAlipayOrderList(alipayDealOrderEntity);
+	}
 
 	/**
 	 * 新增交易订单

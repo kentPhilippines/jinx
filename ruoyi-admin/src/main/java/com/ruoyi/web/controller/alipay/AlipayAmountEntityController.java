@@ -97,6 +97,7 @@ public class AlipayAmountEntityController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(AlipayAmountEntity alipayAmountEntity) {
+
         return toAjax(alipayAmountEntityService.insertAlipayAmountEntity(alipayAmountEntity));
     }
 
@@ -154,24 +155,8 @@ public class AlipayAmountEntityController extends BaseController {
         mapParam.put("orderStatus", alipayAmountEntity.getOrderStatus());//审核通过
         mapParam.put("orderId", alipayAmountEntity.getOrderId());//订单号
         mapParam.put("approval", currentUser.getLoginName());//审核人
-        String cipherText = RSAUtils.getEncryptPublicKey(mapParam, StaticConstants.INNER_PLATFORM_PUBLIC_KEY);
-        String flag = HttpUtils.sendPost(ipPort + urlPath, null);
-        if ("ConnectException".equals(flag)) {
-            throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
-        }
-        if (StringUtils.isEmpty(flag)) {
-            throw new BusinessException("操作失败，请刷新重试");
-        }
-        JSONObject json = JSONObject.parseObject(flag);
-        String result = json.getString("success");
-        switch (result) {
-            case "true":
-                return toAjax(1);
-            case "false":
-                String message = json.getString("message");
-                return error(message);
-        }
-        return null;
+        mapParam.put("comment",alipayAmountEntity.getComment());//审核人
+     return post(ipPort+urlPath,mapParam);
     }
 
     /**
@@ -192,24 +177,7 @@ public class AlipayAmountEntityController extends BaseController {
         mapParam.put("orderStatus", alipayAmountEntity.getOrderStatus());//审核通过
         mapParam.put("orderId", alipayAmountEntity.getOrderId());//订单号
         mapParam.put("approval", currentUser.getLoginName());//审核人
-        String cipherText = RSAUtils.getEncryptPublicKey(mapParam, StaticConstants.INNER_PLATFORM_PUBLIC_KEY);
-        String flag = HttpUtils.sendPost(ipPort + urlPath + "/" + cipherText, null);
-        if ("ConnectException".equals(flag)) {
-            throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
-        }
-        if (StringUtils.isEmpty(flag)) {
-            throw new BusinessException("操作失败，请刷新重试");
-        }
-        JSONObject json = JSONObject.parseObject(flag);
-        String result = json.getString("success");
-        switch (result) {
-            case "true":
-                return toAjax(1);
-            case "false":
-                String message = json.getString("message");
-                return error(message);
-        }
-        return null;
+        return  post(ipPort+urlPath,mapParam);
     }
 
 }

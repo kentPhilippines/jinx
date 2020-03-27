@@ -58,4 +58,6 @@ public interface IAlipayAmountEntityService
      * @return 结果
      */
     public int deleteAlipayAmountEntityById(Long id);
+
+
 }

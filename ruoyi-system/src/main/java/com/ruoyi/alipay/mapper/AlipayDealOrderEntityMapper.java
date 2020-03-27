@@ -27,6 +27,9 @@ public interface AlipayDealOrderEntityMapper
      */
     public List<AlipayDealOrderEntity> selectAlipayDealOrderEntityList(AlipayDealOrderEntity alipayDealOrderEntity);
 
+    public List<AlipayDealOrderEntity> selectAlipayOrderList(AlipayDealOrderEntity alipayDealOrderEntity);
+
+
     /**
      * 新增交易订单
      * 

@@ -21,11 +21,18 @@ public interface IAlipayDealOrderEntityService
 
     /**
      * 查询交易订单列表
-     * 
+     *
      * @param alipayDealOrderEntity 交易订单
      * @return 交易订单集合
      */
     public List<AlipayDealOrderEntity> selectAlipayDealOrderEntityList(AlipayDealOrderEntity alipayDealOrderEntity);
+  /**
+     * 根据财务角色查看财务角色特定的  交易订单
+     *
+     * @param alipayDealOrderEntity 交易订单
+     * @return 交易订单集合
+     */
+    public List<AlipayDealOrderEntity> selectAlipayOrderList(AlipayDealOrderEntity alipayDealOrderEntity);
 
     /**
      * 新增交易订单

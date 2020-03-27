@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAlipayDealOrderEntityList" parameterType="AlipayDealOrderEntity" resultMap="AlipayDealOrderEntityResult">
         <include refid="selectAlipayDealOrderEntityVo"/>
-        <where>  
+        <where>
             <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
             <if test="associatedId != null  and associatedId != ''"> and associatedId = #{associatedId}</if>
             <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
@@ -59,10 +59,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null "> and submitTime = #{submitTime}</if>
             <if test="feeId != null "> and feeId = #{feeId}</if>
             <if test="status != null "> and status = #{status}</if>
-            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
-            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
-            <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
-            <if test="retain4 != null  and retain4 != ''"> and retain4 = #{retain4}</if>
+        </where>
+    </select>
+
+
+    <select id="selectAlipayOrderList" parameterType="AlipayDealOrderEntity" resultMap="AlipayDealOrderEntityResult">
+        <include refid="selectAlipayDealOrderEntityVo"/>
+        <where>
+            <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
+            <if test="associatedId != null  and associatedId != ''"> and associatedId = #{associatedId}</if>
+            <choose>
+                <when test="orderStatus != null  and orderStatus != ''">
+                    and orderStatus = #{orderStatus}
+                </when>
+                <otherwise>
+                    and (orderStatus = 2 or orderStatus = 7 )
+                </otherwise>
+            </choose>
+            <if test="orderType != null  and orderType != ''"> and orderType = #{orderType}</if>
+            <if test="orderAccount != null  and orderAccount != ''"> and orderAccount = #{orderAccount}</if>
+            <if test="orderQrUser != null  and orderQrUser != ''"> and orderQrUser = #{orderQrUser}</if>
+            <if test="orderQr != null  and orderQr != ''"> and orderQr = #{orderQr}</if>
+            <if test="externalOrderId != null  and externalOrderId != ''"> and externalOrderId = #{externalOrderId}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+            <if test="status != null "> and status = #{status}</if>
         </where>
     </select>
     

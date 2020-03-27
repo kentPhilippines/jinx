@@ -30,6 +30,7 @@ public interface StaticConstants {
     public static final String ALIPAY_SERVICE_API_VALUE_1 = "account-api-add-account"; //开户
     public static final String ALIPAY_SERVICE_API_VALUE_2 = "account-api-audit-merchant-status";//修改商户状态
     public static final String ALIPAY_SERVICE_API_VALUE_3 = "account-api-amount"; //资金账户加减款
+    public static final String ALIPAY_SERVICE_API_VALUE_4 = "order-api-enter-order-qr"; //码商订单确认
 
 
     //dealpay网关地址ip

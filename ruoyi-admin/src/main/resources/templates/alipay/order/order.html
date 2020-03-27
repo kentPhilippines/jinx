@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('交易订单列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <span>订单号：</span>
+                            <input type="text" name="orderId"/>
+                        </li>
+                        <li>
+                            <span>关联订单号：</span>
+                            <input type="text" name="associatedId"/>
+                        </li>
+                        <li>
+                            <span>订单状态：</span>
+                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}">
+                                <option value="7">人工处理</option>
+                                <option value="2">成功</option>
+                             ${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <span>码商账户：</span>
+                            <input type="text" name="orderQrUser"/>
+                        </li>
+                        <li class="select-time">
+                            <span>创建时间：</span>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginCreateTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endCreateTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:order:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var enterOrder = [[${@permission.hasPermi('alipay:order:enterOrder')}]];
+    var prefix = ctx + "alipay/order";
+    var orderstatusDatas = [[${@dict.getType('orderStatus')}]];
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            exportUrl: prefix + "/export",
+            modalName: "交易订单",
+            columns: [{
+                checkbox: true
+            },
+                {   field: 'id',            title: '数据id',          visible: false  },
+                {   field: 'orderId',       title: '订单号'    },
+                {   field: 'associatedId',  title: '关联订单号'  },
+                {   field: 'orderQrUser',   title: '码商账户'   },
+                {   field: 'orderStatus',   title: '订单状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(orderstatusDatas, value);
+                    }
+                },
+                {   field: 'dealAmount',    title: '交易金额'   },
+                {   field: 'createTime',    title: '数据生成时间' },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if(row.orderStatus == 7 ){
+                            actions.push('<a class="btn btn-danger btn-xs ' + enterOrder + '" href="javascript:void(0)" onclick="onEnterOrder(\'' + row.id + '\',\'' + "SU" + '\' )"><i class="fa fa-google-wallet"></i>置为成功</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + enterOrder + '" href="javascript:void(0)" onclick="onEnterOrder(\'' + row.id + '\',\'' + "ER" + '\' )"><i class="fa fa-google-wallet"></i>置为失败</a> ');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+    function onEnterOrder (id,orderStatus) {
+        $.modal.confirm("确认修改订单？", function () {
+            $.operate.post(prefix + "/updataOrder", {"id": id,"orderStatus":orderStatus});
+        })
+    }
+</script>
+</body>
+</html>
