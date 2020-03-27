@@ -1,65 +1,57 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('资金账户加款')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: header('资金账户加款')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-fund-add">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">加款账号：</label>
-                    <div class="col-sm-9">
-                        <input type="text" name="userId" class="form-control" placeholder="请输入账号">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">加款金额：</label>
-                    <div class="col-sm-9">
-                        <input type="text" name="amount" class="form-control" placeholder="请输入账号">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">加款理由：</label>
-                    <div class="col-sm-9">
-                        <textarea type="text" name="" class="form-control" placeholder="请输入文本"></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">资金密码：</label>
-                    <div class="col-sm-9">
-                        <input type="password" class="form-control" name="password" placeholder="请输入密码">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-12 col-sm-offset-3">
-                        <button type="submit" class="btn btn-primary">提交申请</button>
-                        <button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
-                    </div>
-                </div>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-fund-refund" th:object="${userFund}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">加款账号ID：</label>
+            <div class="col-sm-9">
+                <input id="userId" name="userId" th:field="*{userId}" class="form-control" type="text" readonly>
             </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
-    <script type="text/javascript">
-        var prefix = ctx + "alipay/fund"
-        $("#form-fund-add").validate({
-            focusCleanup: true
-        });
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">加款金额：</label>
+            <div class="col-sm-9">
+                <input type="number" min="0" id="amount" name="amount" class="form-control" placeholder="请输入加款金额" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">加款理由：</label>
+            <div class="col-sm-9">
+                <textarea type="text" id="dealDescribe" name="dealDescribe" class="form-control" placeholder="请输入文本" required></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">资金密码：</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" name="params[password]" placeholder="请输入密码" required>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "alipay/fund"
+    $("#form-fund-refund").validate({
+        focusCleanup: true
+    });
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-fund-add').serialize());
-            }
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/refund", $('#form-fund-refund').serialize());
         }
+    }
 
-        $("input[name='submitTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
-    </script>
+    $("input[name='submitTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
 </body>
 </html>

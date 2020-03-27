@@ -18,12 +18,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="createTime"    />
         <result property="submitTime"    column="submitTime"    />
         <result property="status"    column="status"    />
-        <result property="retain1"    column="retain1"    />
-        <result property="retain2"    column="retain2"    />
+        <result property="approval"    column="approval"    />
+        <result property="comment"    column="comment"    />
     </resultMap>
 
     <sql id="selectAlipayAmountEntityVo">
-        select id, orderId, userId, amountType, accname, orderStatus, amount, fee, actualAmount, dealDescribe, createTime, submitTime, status, retain1, retain2 from alipay_amount
+        select id, orderId, userId, amountType, accname, orderStatus, amount, fee, actualAmount, dealDescribe, createTime, submitTime, status, approval, comment from alipay_amount
     </sql>
 
     <select id="selectAlipayAmountEntityList" parameterType="AlipayAmountEntity" resultMap="AlipayAmountEntityResult">
@@ -41,8 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null "> and createTime = #{createTime}</if>
             <if test="submitTime != null "> and submitTime = #{submitTime}</if>
             <if test="status != null "> and status = #{status}</if>
-            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
-            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
+            <if test="approval != null "> and approval = #{approval}</if>
         </where>
     </select>
     
@@ -66,8 +65,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">createTime,</if>
             <if test="submitTime != null ">submitTime,</if>
             <if test="status != null ">status,</if>
-            <if test="retain1 != null  and retain1 != ''">retain1,</if>
-            <if test="retain2 != null  and retain2 != ''">retain2,</if>
+            <if test="approval != null  and approval != ''">approval,</if>
+            <if test="comment != null  and comment != ''">comment,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderId != null  and orderId != ''">#{orderId},</if>
@@ -82,8 +81,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="submitTime != null ">#{submitTime},</if>
             <if test="status != null ">#{status},</if>
-            <if test="retain1 != null  and retain1 != ''">#{retain1},</if>
-            <if test="retain2 != null  and retain2 != ''">#{retain2},</if>
+            <if test="approval != null  and approval != ''">#{approval},</if>
+            <if test="comment != null  and comment != ''">#{comment},</if>
          </trim>
     </insert>
 
@@ -102,8 +101,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">createTime = #{createTime},</if>
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
             <if test="status != null ">status = #{status},</if>
-            <if test="retain1 != null  and retain1 != ''">retain1 = #{retain1},</if>
-            <if test="retain2 != null  and retain2 != ''">retain2 = #{retain2},</if>
+            <if test="approval != null  and approval != ''">approval = #{approval},</if>
+            <if test="comment != null  and comment != ''">comment = #{comment},</if>
         </trim>
         where id = #{id}
     </update>

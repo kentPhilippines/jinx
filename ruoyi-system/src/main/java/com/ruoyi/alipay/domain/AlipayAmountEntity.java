@@ -63,13 +63,13 @@ public class AlipayAmountEntity extends BaseEntity
     @Excel(name = "1数据可用2数据无用")
     private Integer status;
 
-    /** 备用字段添加业务使用 */
-    @Excel(name = "备用字段添加业务使用")
-    private String retain1;
+    /** 审核人 */
+    @Excel(name = "审核人")
+    private String approval;
 
-    /** 备用字段添加业务使用 */
-    @Excel(name = "备用字段添加业务使用")
-    private String retain2;
+    /** 审核意见 */
+    @Excel(name = "审核意见")
+    private String comment;
 
     public void setId(Long id) 
     {
@@ -179,23 +179,21 @@ public class AlipayAmountEntity extends BaseEntity
     {
         return status;
     }
-    public void setRetain1(String retain1) 
-    {
-        this.retain1 = retain1;
+
+    public String getApproval() {
+        return approval;
     }
 
-    public String getRetain1() 
-    {
-        return retain1;
-    }
-    public void setRetain2(String retain2) 
-    {
-        this.retain2 = retain2;
+    public void setApproval(String approval) {
+        this.approval = approval;
     }
 
-    public String getRetain2() 
-    {
-        return retain2;
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @Override
@@ -214,8 +212,8 @@ public class AlipayAmountEntity extends BaseEntity
             .append("createTime", getCreateTime())
             .append("submitTime", getSubmitTime())
             .append("status", getStatus())
-            .append("retain1", getRetain1())
-            .append("retain2", getRetain2())
+            .append("approval", getApproval())
+            .append("comment", getComment())
             .toString();
     }
 }

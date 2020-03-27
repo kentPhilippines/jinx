@@ -33,7 +33,7 @@ public interface IAlipayAmountEntityService
      * @param alipayAmountEntity 手动加扣款记录
      * @return 结果
      */
-    public int insertAlipayAmountEntity(AlipayAmountEntity alipayAmountEntity);
+    int insertAlipayAmountEntity(AlipayAmountEntity alipayAmountEntity);
 
     /**
      * 修改手动加扣款记录

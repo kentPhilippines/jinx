@@ -18,6 +18,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +87,12 @@ public class HttpUtils {
         BufferedReader in = null;
         StringBuilder result = new StringBuilder();
         try {
-            String urlNameString = url + "?" + param;
+            String urlNameString = null;
+            if(StringUtils.isEmpty(param)){
+                urlNameString = url;
+            }else {
+                urlNameString = url + "?" + param;
+            }
             log.info("sendPost - {}", urlNameString);
             URL realUrl = new URL(urlNameString);
             URLConnection conn = realUrl.openConnection();

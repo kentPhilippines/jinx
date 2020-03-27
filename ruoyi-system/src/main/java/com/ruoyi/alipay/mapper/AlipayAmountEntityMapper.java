@@ -25,7 +25,8 @@ public interface AlipayAmountEntityMapper
      * @param alipayAmountEntity 手动加扣款记录
      * @return 手动加扣款记录集合
      */
-    public List<AlipayAmountEntity> selectAlipayAmountEntityList(AlipayAmountEntity alipayAmountEntity);
+
+    List<AlipayAmountEntity> selectAlipayAmountEntityList(AlipayAmountEntity alipayAmountEntity);
 
     /**
      * 新增手动加扣款记录
@@ -33,7 +34,7 @@ public interface AlipayAmountEntityMapper
      * @param alipayAmountEntity 手动加扣款记录
      * @return 结果
      */
-    public int insertAlipayAmountEntity(AlipayAmountEntity alipayAmountEntity);
+    int insertAlipayAmountEntity(AlipayAmountEntity alipayAmountEntity);
 
     /**
      * 修改手动加扣款记录

@@ -3,8 +3,10 @@ package com.ruoyi.alipay.service.impl;
 import java.util.List;
 
 import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.GenerateOrderNo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.alipay.mapper.AlipayAmountEntityMapper;
@@ -30,6 +32,7 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
      * @return 手动加扣款记录
      */
     @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayAmountEntity selectAlipayAmountEntityById(Long id) {
         return alipayAmountEntityMapper.selectAlipayAmountEntityById(id);
     }
@@ -53,8 +56,13 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int insertAlipayAmountEntity(AlipayAmountEntity alipayAmountEntity) {
         alipayAmountEntity.setCreateTime(DateUtils.getNowDate());
+        alipayAmountEntity.setOrderId(GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_REFUND));
+        alipayAmountEntity.setAmountType("1");
+        alipayAmountEntity.setOrderStatus("2");
+        alipayAmountEntity.setActualAmount(alipayAmountEntity.getAmount());
         return alipayAmountEntityMapper.insertAlipayAmountEntity(alipayAmountEntity);
     }
 
@@ -81,9 +89,9 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
     }
 
     /**
-     * 删除手动加扣款记录信息
+     * 审核加减款申请
      *
-     * @param id 手动加扣款记录ID
+     * @param id 加减款记录ID
      * @return 结果
      */
     @Override
