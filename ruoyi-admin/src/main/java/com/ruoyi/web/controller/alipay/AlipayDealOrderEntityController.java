@@ -1,6 +1,9 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
+
+import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.framework.util.DictionaryUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +32,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/alipay/orderDeal")
 public class AlipayDealOrderEntityController extends BaseController {
 	private String prefix = "alipay/orderDeal";
-
+	@Autowired
+	private DictionaryUtils dictionaryUtils;
 	@Autowired
 	private IAlipayDealOrderEntityService alipayDealOrderEntityService;
 
@@ -51,6 +55,23 @@ public class AlipayDealOrderEntityController extends BaseController {
 				.selectAlipayDealOrderEntityList(alipayDealOrderEntity);
 		return getDataTable(list);
 	}
+
+
+
+	@RequiresPermissions("alipay:orderDeal:updataOrder")
+	@PostMapping("/updataOrder")
+	@ResponseBody
+	public  AjaxResult updataOrder(String id){
+		AlipayDealOrderEntity order = alipayDealOrderEntityService.selectAlipayDealOrderEntityById(Long.valueOf(id));
+		order.setOrderStatus("7");//人工处理
+		int i = alipayDealOrderEntityService.updateAlipayDealOrderEntity(order);
+		return toAjax(i);
+	}
+
+
+
+
+
 
 	/**
 	 * 导出交易订单列表

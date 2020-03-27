@@ -62,6 +62,7 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
 	 * @return 结果
 	 */
 	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
 	public int updateAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity) {
 		return alipayDealOrderEntityMapper.updateAlipayDealOrderEntity(alipayDealOrderEntity);
 	}

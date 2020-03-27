@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
@@ -91,7 +92,7 @@ public class AlipayUserInfoController extends BaseController {
         mapParam.put("QQ", alipayUserInfo.getQQ());
         mapParam.put("telegram", alipayUserInfo.getTelegram());
         mapParam.put("skype", alipayUserInfo.getSkype());
-        String flag = HttpUtils.sendPost(ipPort + urlPath, MapDataUtil.createParam(mapParam));
+        String flag = HttpUtil.post(ipPort + urlPath,mapParam);
         if ("ConnectException".equals(flag)) {
             throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
         }

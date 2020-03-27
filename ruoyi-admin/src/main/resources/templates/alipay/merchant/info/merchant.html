@@ -26,8 +26,7 @@
                             <span>状态：</span>
                             <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
                                 <option value="">所有</option>
-                                <option th:value="0">开通</option>
-                                <option th:value="-1">关闭</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>

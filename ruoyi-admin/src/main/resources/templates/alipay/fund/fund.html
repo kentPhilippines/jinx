@@ -59,7 +59,7 @@
     <script th:inline="javascript">
         var refundFlag = [[${@permission.hasPermi('alipay:fund:refund')}]];
         var deductFlag = [[${@permission.hasPermi('alipay:fund:deduct')}]];
-
+        var userType = [[${@dict.getType('userType')}]];
         var prefix = ctx + "alipay/fund";
 
         $(function() {
@@ -116,12 +116,8 @@
                 {
                     field : 'userType', 
                     title : '用户类型',
-                    formatter: function (value, item, index) {
-                        if (item.userType == '1') {
-                            return '<span>商户</span>';
-                        } else if (item.userType == '2') {
-                            return '<span>码商</span>';
-                        }
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(userType, value);
                     }
                 },
                 {

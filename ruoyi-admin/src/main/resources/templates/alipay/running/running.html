@@ -70,7 +70,7 @@
         var editFlag = [[${@permission.hasPermi('alipay:running:edit')}]];
         var removeFlag = [[${@permission.hasPermi('alipay:running:remove')}]];
         var prefix = ctx + "alipay/running";
-
+        var orderRunType = [[${@dict.getType('runOrderType')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -102,24 +102,8 @@
                 {
                     field : 'runOrderType', 
                     title : '流水类型',
-                    formatter: function (value, item, index) {
-                        if (item.runOrderType == '11') {
-                            return '<span>账户充值</span>';
-                        } else if (item.runOrderType == '9') {
-                            return '<span>代付手续费</span>';
-                        }else if (item.runOrderType == '10') {
-                            return '<span>代付</span>';
-                        }else if (item.runOrderType == '14') {
-                            return '<span>交易分润</span>';
-                        }else if (item.runOrderType == '13') {
-                            return '<span>代理商分润</span>';
-                        }else if (item.runOrderType == '12') {
-                            return '<span>交易点数扣除</span>';
-                        }else if (item.runOrderType == '18') {
-                            return '<span>人工扣款</span>';
-                        }else if (item.runOrderType == '17') {
-                            return '<span>人工加款\t</span>';
-                        }
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(orderRunType, value);
                     }
                 },
                 {
