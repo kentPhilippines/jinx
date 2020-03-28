@@ -155,8 +155,8 @@ public class AlipayAmountEntityController extends BaseController {
         mapParam.put("orderStatus", alipayAmountEntity.getOrderStatus());//审核通过
         mapParam.put("orderId", alipayAmountEntity.getOrderId());//订单号
         mapParam.put("approval", currentUser.getLoginName());//审核人
-        mapParam.put("comment",alipayAmountEntity.getComment());//审核人
-     return post(ipPort+urlPath,mapParam);
+        mapParam.put("comment", alipayAmountEntity.getComment());//审核人
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
 
     /**
@@ -173,11 +173,14 @@ public class AlipayAmountEntityController extends BaseController {
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_3);
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        mapParam.put("id", alipayAmountEntity.getId());
+        mapParam.put("userId", alipayAmountEntity.getUserId());
         mapParam.put("amount", alipayAmountEntity.getAmount());
         mapParam.put("orderStatus", alipayAmountEntity.getOrderStatus());//审核通过
         mapParam.put("orderId", alipayAmountEntity.getOrderId());//订单号
         mapParam.put("approval", currentUser.getLoginName());//审核人
-        return  post(ipPort+urlPath,mapParam);
+        mapParam.put("comment", alipayAmountEntity.getComment());
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
 
 }

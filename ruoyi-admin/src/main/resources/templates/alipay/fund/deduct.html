@@ -29,7 +29,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">资金密码：</label>
             <div class="col-sm-9">
-                <input type="password" class="form-control" name="password" placeholder="请输入密码">
+                <input type="password" class="form-control" id="password" name="params[password]" placeholder="请输入密码">
             </div>
         </div>
     </form>
@@ -38,13 +38,13 @@
 <th:block th:include="include :: datetimepicker-js"/>
 <script type="text/javascript">
     var prefix = ctx + "alipay/fund";
-    $("#form-fund-edit").validate({
+    $("#form-fund-deduct").validate({
         focusCleanup: true
     });
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/edit", $('#form-fund-edit').serialize());
+            $.operate.save(prefix + "/deduct", $('#form-fund-deduct').serialize());
         }
     }
 

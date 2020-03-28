@@ -86,7 +86,7 @@
         }
     }
 
-    function reject() {
+    function reject(status) {
         $("#orderStatus").val(status);
         if ($.validate.form()) {
             $.operate.save(prefix + "/deduct", $('#form-deduct-edit').serialize());

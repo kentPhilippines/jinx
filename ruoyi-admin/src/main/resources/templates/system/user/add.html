@@ -79,24 +79,32 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">用户状态：</label>
+                        <label class="col-sm-4 control-label is-required">资金密码：</label>
                         <div class="col-sm-8">
-                            <label class="toggle-switch switch-solid">
-	                            <input type="checkbox" id="status" checked>
-	                            <span></span>
-	                        </label>
+                            <input name="fundPassword" placeholder="请输入资金管理密码" class="form-control" type="password" th:value="${@config.getKey('sys.user.initPassword')}" required>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-            	<div class="col-sm-12">
+            	<div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-xs-2 control-label">岗位：</label>
-                        <div class="col-xs-4">
+                        <label class="col-sm-4 control-label">岗位：</label>
+                        <div class="col-sm-8">
                             <select id="post" class="form-control select2-multiple" multiple>
 								<option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:disabled="${post.status == '1'}"></option>
 							</select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">用户状态：</label>
+                        <div class="col-sm-8">
+                            <label class="toggle-switch switch-solid">
+                                <input type="checkbox" id="status" checked>
+                                <span></span>
+                            </label>
                         </div>
                     </div>
                 </div>

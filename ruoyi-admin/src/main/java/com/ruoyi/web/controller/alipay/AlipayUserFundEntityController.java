@@ -10,6 +10,8 @@ import com.ruoyi.alipay.domain.AlipayAmountEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayAmountEntityService;
 import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.enums.DeductStatusEnum;
+import com.ruoyi.common.enums.RefundDeductType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.GenerateOrderNo;
 import com.ruoyi.common.utils.MapDataUtil;
@@ -20,6 +22,7 @@ import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
+import com.sun.org.apache.regexp.internal.RE;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -201,7 +204,7 @@ public class AlipayUserFundEntityController extends BaseController {
      * 减款保存用户减款记录
      */
     @RequiresPermissions("alipay:fund:deduct")
-    @Log(title = "", businessType = BusinessType.UPDATE)
+    @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/deduct")
     @ResponseBody
     public AjaxResult deductSave(AlipayAmountEntity alipayAmountEntity) {
@@ -215,33 +218,16 @@ public class AlipayUserFundEntityController extends BaseController {
         }
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_3);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_5);
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("userId", alipayAmountEntity.getUserId());
         mapParam.put("amount", alipayAmountEntity.getAmount());
         mapParam.put("dealDescribe", alipayAmountEntity.getDealDescribe());
-        mapParam.put("amountType", "2");//减款
+        mapParam.put("amountType", RefundDeductType.DEDUCT_TYPE.getCode());//减款
         mapParam.put("accname", currentUser.getLoginName());//申请人
-        mapParam.put("orderStatus", "2");
+        mapParam.put("orderStatus", DeductStatusEnum.DEDUCT_STATUS_PROCESS.getCode());
         mapParam.put("orderId", GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_DEDUCT));
-        String cipherText = RSAUtils.getEncryptPublicKey(mapParam, StaticConstants.INNER_PLATFORM_PUBLIC_KEY);
-        String flag = HttpUtils.sendPost(ipPort + urlPath + "/" + cipherText, null);
-        if ("ConnectException".equals(flag)) {
-            throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
-        }
-        if (StringUtils.isEmpty(flag)) {
-            throw new BusinessException("操作失败，请刷新重试");
-        }
-        JSONObject json = JSONObject.parseObject(flag);
-        String result = json.getString("success");
-        switch (result) {
-            case "true":
-                return toAjax(1);
-            case "false":
-                String message = json.getString("message");
-                return error(message);
-        }
-        return null;
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
 
 }
