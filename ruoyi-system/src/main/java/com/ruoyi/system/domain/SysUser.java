@@ -81,6 +81,8 @@ public class SysUser extends BaseEntity {
      * 密码
      */
     private String password;
+    /** 资金管理密码 */
+    private String fundPassword;
 
     /**
      * 盐加密
@@ -118,6 +120,8 @@ public class SysUser extends BaseEntity {
             @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)
     })
     private SysDept dept;
+
+    private String merchantId;
 
     private List<SysRole> roles;
 
@@ -316,29 +320,47 @@ public class SysUser extends BaseEntity {
         this.postIds = postIds;
     }
 
+    public String getFundPassword() {
+        return fundPassword;
+    }
+
+    public void setFundPassword(String fundPassword) {
+        this.fundPassword = fundPassword;
+    }
+
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("userId", getUserId())
-                .append("deptId", getDeptId())
-                .append("loginName", getLoginName())
-                .append("userName", getUserName())
-                .append("email", getEmail())
-                .append("phonenumber", getPhonenumber())
-                .append("sex", getSex())
-                .append("avatar", getAvatar())
-                .append("password", getPassword())
-                .append("salt", getSalt())
-                .append("status", getStatus())
-                .append("delFlag", getDelFlag())
-                .append("loginIp", getLoginIp())
-                .append("loginDate", getLoginDate())
-                .append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime())
-                .append("remark", getRemark())
-                .append("dept", getDept())
-                .toString();
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("userId", getUserId())
+            .append("deptId", getDeptId())
+            .append("loginName", getLoginName())
+            .append("userName", getUserName())
+            .append("email", getEmail())
+            .append("phonenumber", getPhonenumber())
+            .append("sex", getSex())
+            .append("avatar", getAvatar())
+            .append("password", getPassword())
+            .append("salt", getSalt())
+            .append("status", getStatus())
+            .append("delFlag", getDelFlag())
+            .append("loginIp", getLoginIp())
+            .append("loginDate", getLoginDate())
+            .append("createBy", getCreateBy())
+            .append("createTime", getCreateTime())
+            .append("updateBy", getUpdateBy())
+            .append("updateTime", getUpdateTime())
+            .append("remark", getRemark())
+            .append("dept", getDept())
+            .append("fundPassword", getFundPassword())
+            .append("merchantId", getMerchantId())
+            .toString();
     }
 }
