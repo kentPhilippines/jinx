@@ -10,6 +10,7 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -18,6 +19,10 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.RSAUtils;
 import com.ruoyi.common.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +34,27 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpUtils {
     private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
+
+    public static AjaxResult adminRequest2Gateway(Map<String, Object> map, String url) {
+        String cipherText = RSAUtils.getEncryptPublicKey(map, StaticConstants.INNER_PLATFORM_PUBLIC_KEY);
+        String flag = sendPost(url + "/" + cipherText, null);
+        if ("ConnectException".equals(flag)) {
+            throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + url);
+        }
+        if (StringUtils.isEmpty(flag)) {
+            throw new BusinessException("操作失败，请刷新重试");
+        }
+        JSONObject json = JSONObject.parseObject(flag);
+        String result = json.getString("success");
+        switch (result) {
+            case "true":
+                return AjaxResult.success();
+            case "false":
+                String message = json.getString("message");
+                return AjaxResult.error(message);
+        }
+        return AjaxResult.warn("请求出错，请联系技术人员");
+    }
 
     /**
      * 向指定 URL 发送GET方法的请求
@@ -88,9 +114,9 @@ public class HttpUtils {
         StringBuilder result = new StringBuilder();
         try {
             String urlNameString = null;
-            if(StringUtils.isEmpty(param)){
+            if (StringUtils.isEmpty(param)) {
                 urlNameString = url;
-            }else {
+            } else {
                 urlNameString = url + "?" + param;
             }
             log.info("sendPost - {}", urlNameString);
