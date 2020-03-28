@@ -6,7 +6,7 @@ import com.ruoyi.common.exception.BusinessException;
 import java.util.Map;
 
 /**
- * 接单状态，代付状态
+ * 加减款状态
  */
 public enum DeductStatusEnum {
 

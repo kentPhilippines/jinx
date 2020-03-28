@@ -77,4 +77,18 @@ public interface IMerchantInfoEntityService
      * @return
      */
     List<AlipayUserInfo> selectMerchantControlList(AlipayUserInfo merchantInfoEntity);
+
+    /**
+     * 根据userId查询商户详情
+     * @param userId
+     * @return
+     */
+    AlipayUserInfo selectBackUserByUserId(String userId);
+
+    /**
+     * 商户自行修改保存信息
+     * @param alipayUserInfo
+     * @return
+     */
+    int updateMerchantByBackAdmin(AlipayUserInfo alipayUserInfo);
 }

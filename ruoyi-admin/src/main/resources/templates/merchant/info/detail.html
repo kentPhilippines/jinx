@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('商户详细信息')"/>
+    <style>
+        hr {
+            margin: 4px;
+        }
+    </style>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-merchant-detail" th:object="${userInfo}">
+        <input type="hidden" id="publicKey" name="publicKey" th:field="*{publicKey}"/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">商户ID：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="userId" type="text" style="border-width: 0;background-color:white;"
+                       th:field="*{userId}"
+                       readonly>
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">商户名称：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="userName" type="text" style="border-width: 0;background-color:white;"
+                       th:field="*{userName}"
+                       readonly>
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">账户余额：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="userName" type="text"
+                       style="border-width: 0;background-color:white;font-size: 18px; font-weight: bold;"
+                       th:field="*{params[cashBalance]}"
+                       readonly>
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">商户公钥：</label>
+            <div class="col-sm-8">
+                <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;"
+                   title="点击下载公钥" aria-hidden="true"
+                   onclick="typePassword()"></a>
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">创建时间：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="createTime" id="createTime"
+                       style="border-width: 0;background-color:white;" th:field="*{createTime}" readonly>
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">安全邮箱：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="email" id="email"
+                       style="border-width: 0;background-color:white;" th:field="*{email}" readonly="readonly">
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">QQ号码：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" id="QQ" name="QQ"
+                       style="border-width: 0;background-color:white;"
+                       th:field="*{QQ}"
+                       readonly="readonly">
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">小飞机号：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" id="telegram" name="telegram" th:field="*{telegram}"
+                       style="border-width: 0;background-color:white;" readonly="readonly">
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">Skype：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="skype" id="skype" th:field="*{skype}"
+                       style="border-width: 0;background-color:white;" readonly="readonly">
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label is-required"
+                   style="font-weight: bold;font-size:15px;font-family: sans-serif;">IP白名单：</label>
+            <div class="col-sm-8">
+                <textarea id="witip" name="witip" maxlength="500" class="form-control" rows="3"
+                          style="border-width: 0; background-color: white " readonly="readonly"
+                          required>[[*{witip}]]</textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<div style="text-align: center;margin-bottom: 5px;">
+    <div style="text-align: center;">
+        <a id="audit" name="audit" class="btn btn-w-m btn-danger" href="javascript:void(0)"
+           onclick="audit();">修改 </a>
+        <a id="toSave" name="toSave" class="btn btn-w-m btn-primary" href="javascript:void(0)" style="display: none;"
+           onclick="toSave();"> 保存</a>
+        <a id="cancel" name="cancel" class="btn btn-w-m btn-default" href="javascript:void(0)" style="display: none;"
+           onclick="toCancel();"> 取消</a>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript" th:src="@{/static/js/download.js}"></script>
+<script type="text/javascript">
+    var prefix = ctx + "back/merchant/admin";
+
+    /*输入密码下载*/
+    function typePassword() {
+        let publicKey = $("#publicKey").val();
+        let username = $("#userName").val();
+        layer.prompt({title: '请输入密码下载密钥', formType: 1}, function (pass, index) {
+            layer.close(index);
+            jQuery.ajax({
+                type: "post",
+                url: prefix + "/verify/password",
+                data: {
+                    "password": pass
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (0 == data.code) {
+                        txtDownload(publicKey, username);
+                    } else {
+                        layer.msg(data.msg, {icon: 2, time: 1000}, function () {
+                            typePassword();
+                        });
+                    }
+                }
+            });
+        });
+    }
+
+    /*下载txt*/
+    function txtDownload(content, filename) {
+        var eleLink = document.createElement('a');
+        var blob = new Blob([content]);
+        eleLink.href = URL.createObjectURL(blob);
+        eleLink.download = filename + '公钥.txt';
+        eleLink.click();
+    }
+
+
+    function audit() {
+        $("#email").removeAttr("style").removeAttrs("readonly");
+        $("#QQ").removeAttr("style").removeAttrs("readonly");
+        $("#telegram").removeAttr("style").removeAttrs("readonly");
+        $("#skype").removeAttr("style").removeAttrs("readonly");
+        $("#witip").removeAttr("style").removeAttrs("readonly");
+        $("#audit").attr("style", "display:none");
+        $("#toSave").removeAttr("style");
+        $("#cancel").removeAttr("style");
+    }
+
+    function toCancel() {
+        window.location.reload();
+    }
+
+    function toSave() {
+        let userId = $("#userId").val();
+        let email = $("#email").val();
+        let QQ = $("#QQ").val();
+        let telegram = $("#telegram").val();
+        let skype = $("#skype").val();
+        let witip = $("#witip").val();
+        layer.confirm('确认要保存此商户的信息？', {
+            title: "系统提示",
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            jQuery.ajax({
+                type: "post",
+                url: prefix + "/audit",
+                data: {
+                    "userId": userId, "email": email, "QQ": QQ, "telegram": telegram, "skype": skype, "witip": witip
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (0 == data.code) {
+                        layer.msg("修改成功", {icon: 1, time: 2000})
+                        $("#toSave").attr("style", "display:none");
+                        $("#cancel").attr("style", "display:none");
+                        $("#audit").removeAttr("style");
+                    } else {
+                        layer.msg(data.msg, {icon: 2, time: 1000}, function () {
+                        });
+                    }
+                }
+            });
+        });
+    }
+
+</script>
+</body>
+</html>

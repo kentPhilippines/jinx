@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.service.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
@@ -161,5 +162,31 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserInfo> selectMerchantControlList(AlipayUserInfo merchantInfoEntity) {
         return merchantInfoEntityMapper.selectMerchantControlList(merchantInfoEntity);
+    }
+
+     /*商户后台管理员登陆的逻辑处理*/
+    /**
+     *  查询实体对象
+     * @param userId    商户ID
+     * @return
+     */
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserInfo selectBackUserByUserId(String userId) {
+        try {
+            AlipayUserInfo alipayUserInfo = merchantInfoEntityMapper.findBackUserByUserId(userId);
+            Map<String, Object> map = merchantInfoEntityMapper.findFundUserBalanceByUserId(userId);
+            alipayUserInfo.getParams().put("cashBalance",map.get("cashBalance"));
+            return alipayUserInfo;
+        }catch (Exception e){
+            throw new BusinessException("查询结果不唯一,请核实");
+        }
+    }
+
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public int updateMerchantByBackAdmin(AlipayUserInfo alipayUserInfo) {
+        alipayUserInfo.setSubmitTime(DateUtils.getNowDate());
+        return merchantInfoEntityMapper.updateMerchantByBackAdmin(alipayUserInfo);
     }
 }

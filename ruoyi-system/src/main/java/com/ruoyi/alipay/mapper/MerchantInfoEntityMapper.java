@@ -2,32 +2,30 @@ package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.domain.MerchantInfoEntity;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商户信息Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2020-03-18
  */
-public interface MerchantInfoEntityMapper  {
+public interface MerchantInfoEntityMapper {
     /**
      * 查询商户信息
-     * 
+     *
      * @param id 商户信息ID
      * @return 商户信息
      */
     @Select("select * from alipay_user_info where id = #{id}")
-    public AlipayUserInfo selectMerchantInfoEntityById( @Param("id") Long id);
+    public AlipayUserInfo selectMerchantInfoEntityById(@Param("id") Long id);
 
     /**
      * 查询商户信息列表
-     * 
+     *
      * @param merchantInfoEntity 商户信息
      * @return 商户信息集合
      */
@@ -60,7 +58,7 @@ public interface MerchantInfoEntityMapper  {
 
     /**
      * 新增商户信息
-     * 
+     *
      * @param merchantInfoEntity 商户信息
      * @return 结果
      */
@@ -73,7 +71,7 @@ public interface MerchantInfoEntityMapper  {
 
     /**
      * 修改商户信息
-     * 
+     *
      * @param merchantInfoEntity 商户信息
      * @return 结果
      */
@@ -91,7 +89,7 @@ public interface MerchantInfoEntityMapper  {
 
     /**
      * 删除商户信息
-     * 
+     *
      * @param id 商户信息ID
      * @return 结果
      */
@@ -99,7 +97,7 @@ public interface MerchantInfoEntityMapper  {
 
     /**
      * 批量删除商户信息
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -110,7 +108,8 @@ public interface MerchantInfoEntityMapper  {
     /*下面是处理风控模块的逻辑*/
 
     /**
-     *  查询商户风控列表信息
+     * 查询商户风控列表信息
+     *
      * @param merchantInfoEntity
      * @return
      */
@@ -138,4 +137,28 @@ public interface MerchantInfoEntityMapper  {
             " order by switchs desc, submitTime desc " +
             "</script>")
     List<AlipayUserInfo> selectMerchantControlList(AlipayUserInfo merchantInfoEntity);
+
+    @Select("<script>" +
+            "select u.id, u.userId, u.userName, u.userType, u.switchs, u.email, u.agent, u.isAgent, u.credit, u.QQ, u.telegram, u.skype, " +
+            "u.createTime, u.submitTime, u.status, u.privateKey, u.publicKey, " +
+            "u.minAmount, u.maxAmount, u.timesTotal, u.startTime, u.endTime, u.witip " +
+            " from alipay_user_info u " +
+            " where u.userId = #{userId} " +
+            "</script>")
+    @ResultType(AlipayUserInfo.class)
+    AlipayUserInfo findBackUserByUserId(@Param("userId") String userId);
+
+
+    @Select("select cashBalance,freezeBalance from alipay_user_fund where userId = #{userId}")
+    @ResultType(Map.class)
+    Map<String, Object> findFundUserBalanceByUserId(@Param("userId") String userId);
+
+    @Update("update alipay_user_info set " +
+            "email = #{email}," +
+            "QQ = #{QQ}," +
+            "telegram = #{telegram}," +
+            "skype = #{skype}," +
+            "witip = #{witip} " +
+            " where userId = #{userId} ")
+    int updateMerchantByBackAdmin(AlipayUserInfo alipayUserInfo);
 }

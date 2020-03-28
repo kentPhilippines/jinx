@@ -1,43 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('商户列表')" />
+	<th:block th:include="include :: header('商户详细信息')" />
 </head>
 <body class="gray-bg">
 	<div class="container-div">
 		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="role-form">
-					<div class="select-list">
-						<ul>
-							<li>
-								代理商ID：<input type="text" name="agentId" id="agentId"/>
-							</li>
-							<li>
-								代理商名称：<input type="text" name="agentName" id="agentName"/>
-							</li>
-							<li>
-								一级代理：<select name="productName" th:with="type=${@dict.getType('sys_normal_disable')}">
-									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-								</select>
-							</li>
-							<li>
-								状态：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
-									<option value="">所有</option>
-									<option th:value="0">开通</option>
-									<option th:value="-1">关闭</option>
-								</select>
-							</li>
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-		
 			<div class="btn-group-sm" id="toolbar" role="group">
 				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="merchant:auth:add">
 	                <i class="fa fa-plus"></i> 新增
