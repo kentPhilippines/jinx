@@ -188,7 +188,12 @@
                 dataType: "json",
                 success: function (data) {
                     if (0 == data.code) {
-                        layer.msg("修改成功", {icon: 1, time: 2000})
+                        layer.msg("修改成功", {icon: 1, time: 2000});
+                        $("#email").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
+                        $("#QQ").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
+                        $("#telegram").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
+                        $("#skype").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
+                        $("#witip").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
                         $("#toSave").attr("style", "display:none");
                         $("#cancel").attr("style", "display:none");
                         $("#audit").removeAttr("style");
