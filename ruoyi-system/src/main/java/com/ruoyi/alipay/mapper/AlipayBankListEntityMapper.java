@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayBankListEntity;
+import org.apache.ibatis.annotations.Update;
+
 import java.util.List;
 
 /**
@@ -25,7 +27,7 @@ public interface AlipayBankListEntityMapper
      * @param alipayBankListEntity 银行卡列表
      * @return 银行卡列表集合
      */
-    public List<AlipayBankListEntity> selectAlipayBankListEntityList(AlipayBankListEntity alipayBankListEntity);
+    List<AlipayBankListEntity> selectAlipayBankListEntityList(AlipayBankListEntity alipayBankListEntity);
 
     /**
      * 新增银行卡列表
@@ -51,5 +53,6 @@ public interface AlipayBankListEntityMapper
      */
     int deleteAlipayBankListEntityByIds(String[] ids);
 
-
+    @Update("update alipay_bank_list set status = #{status} where id = #{id} ")
+    int updateBankCardStatusById(AlipayBankListEntity alipayBankListEntity);
 }

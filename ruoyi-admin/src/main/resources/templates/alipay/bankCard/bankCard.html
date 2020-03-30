@@ -11,83 +11,36 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <p>银行卡号：</p>
-                                <input type="text" name="bankcardAccount"/>
-                            </li>
-                            <li>
-                                <p>银行卡开户人：</p>
-                                <input type="text" name="accountHolder"/>
-                            </li>
-                            <li>
-                                <p>银行卡开户行：</p>
-                                <input type="text" name="openAccountBank"/>
-                            </li>
-                            <li>
-                                <p>银行英文简写：</p>
-                                <select name="bankType" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>银行卡类型:R收款W出款：</p>
-                                <input type="text" name="bankcode"/>
-                            </li>
-                            <li>
-                                <p>系统状态 1黑卡  2 可正常使用：</p>
-                                <select name="sysTYpe" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>关联账户：</p>
+                                <span>账号ID：</span>
                                 <input type="text" name="account"/>
                             </li>
                             <li>
-                                <p>银行卡手机号：</p>
-                                <input type="text" name="phone"/>
+                                <span>银行卡号：</span>
+                                <input type="text" name="bankcardAccount"/>
                             </li>
                             <li>
-                                <p>当日交易限制金额：</p>
-                                <input type="text" name="limitAmount"/>
+                                <span>开户人：</span>
+                                <input type="text" name="accountHolder"/>
                             </li>
                             <li>
-                                <p>银行卡余额：</p>
-                                <input type="text" name="bankAmount"/>
-                            </li>
-                            <li>
-                                <p>系统的卡1，码商的卡2，商户的卡3：</p>
-                                <select name="cardType" th:with="type=${@dict.getType('')}">
+                                <span>收支类型：</span>
+                                <select name="bankcode" th:with="type=${@dict.getType('R_W_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <p>备注：</p>
-                                <input type="text" name="qrcodeNote"/>
-                            </li>
-                            <li>
-                                <p>状态:1可使用；0不可使用：</p>
-                                <select name="status">
+                                <span>银行卡类型：</span>
+                                <select name="cardType" th:with="type=${@dict.getType('object_bankcard_type')}">
                                     <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
-                            <li>
-                                <p>是否逻辑删除：1删除2可用：</p>
-                                <input type="text" name="isDeal"/>
-                            </li>
                             <li class="select-time">
-                                <p>数据生成时间：</p>
+                                <span>创建时间：</span>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据修改时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -121,6 +74,9 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('alipay:bankCard:edit')}]];
         var removeFlag = [[${@permission.hasPermi('alipay:bankCard:remove')}]];
+
+        var objectCard = [[${@dict.getType('object_bankcard_type')}]];
+        let bankCode = [[${@dict.getType('R_W_type')}]];
         var prefix = ctx + "alipay/bankCard";
 
         $(function() {
@@ -136,13 +92,17 @@
                 },
                 {
                     field : 'id', 
-                    title : '数据id',
+                    title : '数据ID',
                     visible: false
                 },
                 {
                     field : 'bankcardId', 
-                    title : '银行卡(本地编号)',
+                    title : '编号',
                     visible: false
+                },
+                {
+                    field : 'account',
+                    title : '账户ID'
                 },
                 {
                     field : 'bankcardAccount', 
@@ -150,63 +110,58 @@
                 },
                 {
                     field : 'accountHolder', 
-                    title : '银行卡开户人'
+                    title : '开户人'
                 },
                 {
                     field : 'openAccountBank', 
-                    title : '银行卡开户行'
-                },
-                {
-                    field : 'bankType', 
-                    title : '银行英文简写'
+                    title : '开户行'
                 },
                 {
                     field : 'bankcode', 
-                    title : '银行卡类型:R收款W出款'
+                    title : '收支类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(bankCode, value);
+                    }
                 },
                 {
-                    field : 'sysTYpe', 
-                    title : '系统状态 1黑卡  2 可正常使用'
-                },
-                {
-                    field : 'account', 
-                    title : '关联账户'
+                    field : 'cardType',
+                    title : '银行卡类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(objectCard, value);
+                    }
                 },
                 {
                     field : 'phone', 
-                    title : '银行卡手机号'
+                    title : '手机号'
                 },
                 {
                     field : 'limitAmount', 
-                    title : '当日交易限制金额'
+                    title : '交易限额/日'
                 },
                 {
                     field : 'bankAmount', 
-                    title : '银行卡余额'
-                },
-                {
-                    field : 'cardType', 
-                    title : '系统的卡1，码商的卡2，商户的卡3'
+                    title : '余额'
                 },
                 {
                     field : 'qrcodeNote', 
                     title : '备注'
                 },
                 {
-                    field : 'status', 
-                    title : '状态:1可使用；0不可使用'
-                },
-                {
-                    field : 'isDeal', 
-                    title : '是否逻辑删除：1删除2可用'
+                    field : 'status',
+                    title : '状态',
+                    align : 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
                 },
                 {
                     field : 'createTime', 
-                    title : '数据生成时间'
+                    title : '创建时间'
                 },
                 {
-                    field : 'submitTime', 
-                    title : '数据修改时间'
+                    field : 'submitTime',
+                    title : '更新时间',
+                    visible: false
                 },
                 {
                     title: '操作',
@@ -221,6 +176,29 @@
             };
             $.table.init(options);
         });
+
+        /* 银行卡状态显示 */
+        function statusTools(row) {
+            if (row.status === 0) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\')"></i> ';
+            }
+        }
+
+        /* 银行卡-停用 */
+        function disable(id) {
+            $.modal.confirm("确认要【停用】此银行卡吗", function () {
+                $.operate.post(prefix + "/changeStatus", {"id": id, "status" : 0});
+            })
+        }
+
+        /* 银行卡-启用 */
+        function enable(id) {
+            $.modal.confirm("确认要【启用】此银行卡吗", function () {
+                $.operate.post(prefix + "/changeStatus", {"id": id, "status" : 1});
+            })
+        }
     </script>
 </body>
 </html>

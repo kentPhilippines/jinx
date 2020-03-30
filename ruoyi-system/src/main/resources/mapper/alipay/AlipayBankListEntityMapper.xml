@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null "> and createTime = #{createTime}</if>
             <if test="submitTime != null "> and submitTime = #{submitTime}</if>
         </where>
+        order by cardType, createTime desc
     </select>
     
     <select id="selectAlipayBankListEntityById" parameterType="Long" resultMap="AlipayBankListEntityResult">

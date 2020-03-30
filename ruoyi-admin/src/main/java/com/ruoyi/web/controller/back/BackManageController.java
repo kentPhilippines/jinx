@@ -202,7 +202,7 @@ public class BackManageController extends BaseController {
         mapParam.put("acctno", alipayWithdrawEntity.getBankNo());
         mapParam.put("accname", currentUser.getLoginName());
         mapParam.put("mobile", alipayWithdrawEntity.getMobile());
-        mapParam.put("bankcode", "R");//减款
+        mapParam.put("bankcode", "R");//入款
         mapParam.put("orderStatus", WithdrawalStatusEnum.WITHDRAWAL_STATUS_PROCESS.getCode());
         mapParam.put("orderId", GenerateOrderNo.getInstance().Generate(StaticConstants.MERCHANT_WITHDRAWAL));
         mapParam.put("rsasign", HashKit.md5(MapDataUtil.createParam(mapParam)));
@@ -225,7 +225,7 @@ public class BackManageController extends BaseController {
     public TableDataInfo list(AlipayBankListEntity alipayBankListEntity) {
         SysUser sysUser = ShiroUtils.getSysUser();
         alipayBankListEntity.setAccount(sysUser.getMerchantId());
-        alipayBankListEntity.setIsDeal(2);
+        alipayBankListEntity.setStatus(1);
         startPage();
         List<AlipayBankListEntity> list = alipayBankListEntityService.selectAlipayBankListEntityList(alipayBankListEntity);
         return getDataTable(list);

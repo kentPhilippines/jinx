@@ -1,5 +1,6 @@
 package com.ruoyi.alipay.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.annotation.DataSource;
@@ -34,12 +35,13 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
      * @return 银行卡列表
      */
     @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
     public AlipayBankListEntity selectAlipayBankListEntityById(Long id) {
         return alipayBankListEntityMapper.selectAlipayBankListEntityById(id);
     }
 
     /**
-     * 查询银行卡列表列表
+     * 商户提现申请，有效银行卡
      *
      * @param alipayBankListEntity 银行卡列表
      * @return 银行卡列表
@@ -47,7 +49,6 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayBankListEntity> selectAlipayBankListEntityList(AlipayBankListEntity alipayBankListEntity) {
-        alipayBankListEntity.setStatus(1);
         alipayBankListEntity.setIsDeal(2);
         return alipayBankListEntityMapper.selectAlipayBankListEntityList(alipayBankListEntity);
     }
@@ -75,7 +76,9 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
     public int updateAlipayBankListEntity(AlipayBankListEntity alipayBankListEntity) {
+        alipayBankListEntity.setSubmitTime(new Date());
         return alipayBankListEntityMapper.updateAlipayBankListEntity(alipayBankListEntity);
     }
 
@@ -89,6 +92,12 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int deleteAlipayBankListEntityByIds(String ids) {
         return alipayBankListEntityMapper.deleteAlipayBankListEntityByIds(Convert.toStrArray(ids));
+    }
+
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public int updateBankCardStatusById(AlipayBankListEntity alipayBankListEntity) {
+        return alipayBankListEntityMapper.updateBankCardStatusById(alipayBankListEntity);
     }
 
 }

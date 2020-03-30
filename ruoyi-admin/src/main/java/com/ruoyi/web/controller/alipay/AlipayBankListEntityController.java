@@ -1,7 +1,15 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
+import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
+import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.MapDataUtil;
+import com.ruoyi.common.utils.http.HttpUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,8 +55,7 @@ public class AlipayBankListEntityController extends BaseController {
     @ResponseBody
     public TableDataInfo list(AlipayBankListEntity alipayBankListEntity) {
         startPage();
-        List<AlipayBankListEntity> list = alipayBankListEntityService
-                .selectAlipayBankListEntityList(alipayBankListEntity);
+        List<AlipayBankListEntity> list = alipayBankListEntityService.selectAlipayBankListEntityList(alipayBankListEntity);
         return getDataTable(list);
     }
 
@@ -115,5 +122,16 @@ public class AlipayBankListEntityController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(alipayBankListEntityService.deleteAlipayBankListEntityByIds(ids));
+    }
+
+    /**
+     * 码商状态修改（调用api）
+     */
+    @Log(title = "码商查询", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("alipay:bankCard:status")
+    @PostMapping("/changeStatus")
+    @ResponseBody
+    public AjaxResult changeStatus(AlipayBankListEntity alipayBankListEntity) {
+        return toAjax(alipayBankListEntityService.updateBankCardStatusById(alipayBankListEntity));
     }
 }

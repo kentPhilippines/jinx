@@ -51,4 +51,10 @@ public interface IAlipayBankListEntityService
      */
     public int deleteAlipayBankListEntityByIds(String ids);
 
+    /**
+     *
+     * @param alipayBankListEntity
+     * @return
+     */
+    int updateBankCardStatusById(AlipayBankListEntity alipayBankListEntity);
 }
