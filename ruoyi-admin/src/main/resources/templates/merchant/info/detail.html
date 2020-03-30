@@ -35,9 +35,10 @@
             <div class="col-sm-8">
                 <input class="form-control" name="userName" type="text"
                        style="border-width: 0;background-color:white;font-size: 18px; font-weight: bold;"
-                       th:field="*{params[cashBalance]}"
+                       th:field="*{params[rechargeNumber]}"
                        readonly>
             </div>
+
         </div>
         <hr/>
         <div class="form-group">
@@ -116,6 +117,8 @@
 <script type="text/javascript" th:src="@{/static/js/download.js}"></script>
 <script type="text/javascript">
     var prefix = ctx + "back/merchant/admin";
+    let verify = ctx + "alipay/merchant";
+
 
     /*输入密码下载*/
     function typePassword() {
@@ -125,7 +128,7 @@
             layer.close(index);
             jQuery.ajax({
                 type: "post",
-                url: prefix + "/verify/password",
+                url: verify + "/verify/password",
                 data: {
                     "password": pass
                 },

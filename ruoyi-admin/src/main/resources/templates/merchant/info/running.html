@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('流水记录')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <span>关联订单号：</span>
+                                <input type="text" name="associatedId"/>
+                            </li>
+                            <li>
+                                <span>流水类型：</span>
+                                <select name="runOrderType" th:with="type=${@dict.getType('runOrderType')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <span>操作类型：</span>
+                                <select name="runType" th:with="type=${@dict.getType('runType')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <span>创建时间：</span>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:running:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('alipay:running:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('alipay:running:remove')}]];
+        var prefix = ctx + "back/merchant/admin";
+        var orderRunType = [[${@dict.getType('runOrderType')}]];
+        $(function() {
+            var options = {
+                url: prefix + "/running/list",
+                exportUrl: prefix + "/running/export",
+                modalName: "流水订单记录",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'orderId', 
+                    title : '订单号 '
+                },
+                {
+                    field : 'associatedId', 
+                    title : '关联订单号 '
+                },
+                {
+                    field : 'orderAccount', 
+                    title : '商户ID'
+                },
+                {
+                    field : 'runOrderType', 
+                    title : '流水类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(orderRunType, value);
+                    }
+                },
+                {
+                    field : 'amount', 
+                    title : '流水金额'
+                },
+                {
+                    field : 'createTime', 
+                    title : '创建时间'
+                },
+                {
+                    field : 'runType', 
+                    title : '操作类型',
+                    formatter: function (value, item, index) {
+                        if (item.runType == '1') {
+                            return '<span>系统</span>';
+                        }else if (item.runType == '2') {
+                            return '<span>人工</span>';
+                        }
+                    }
+                },
+                {
+                    field : 'amountType', 
+                    title : '账变类型',
+                    formatter: function (value, item, index) {
+                        if (item.amountType == '1') {
+                            return '<span>支出</span>';
+                        }else if (item.amountType == '0') {
+                            return '<span>收入</span>';
+                        }
+                    }
+                },
+                {
+                    field : 'amountNow', 
+                    title : '账户余额'
+                }
+                ]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -122,15 +122,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteAlipayBankListEntityById" parameterType="Long">
-        delete from alipay_bank_list where id = #{id}
-    </delete>
-
-    <delete id="deleteAlipayBankListEntityByIds" parameterType="String">
-        delete from alipay_bank_list where id in 
+    <update id="deleteAlipayBankListEntityByIds" parameterType="String">
+        update alipay_bank_list set status = 0, isDeal = 1 where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
-    </delete>
+    </update>
     
 </mapper>

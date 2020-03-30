@@ -149,7 +149,7 @@ public interface MerchantInfoEntityMapper {
     AlipayUserInfo findBackUserByUserId(@Param("userId") String userId);
 
 
-    @Select("select cashBalance,freezeBalance from alipay_user_fund where userId = #{userId}")
+    @Select("select cashBalance,freezeBalance, rechargeNumber, accountBalance from alipay_user_fund where userId = #{userId}")
     @ResultType(Map.class)
     Map<String, Object> findFundUserBalanceByUserId(@Param("userId") String userId);
 

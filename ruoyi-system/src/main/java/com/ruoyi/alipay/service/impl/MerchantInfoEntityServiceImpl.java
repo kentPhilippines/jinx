@@ -176,7 +176,7 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         try {
             AlipayUserInfo alipayUserInfo = merchantInfoEntityMapper.findBackUserByUserId(userId);
             Map<String, Object> map = merchantInfoEntityMapper.findFundUserBalanceByUserId(userId);
-            alipayUserInfo.getParams().put("cashBalance",map.get("cashBalance"));
+            alipayUserInfo.getParams().put("rechargeNumber",map.get("rechargeNumber"));
             return alipayUserInfo;
         }catch (Exception e){
             throw new BusinessException("查询结果不唯一,请核实");

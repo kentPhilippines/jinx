@@ -58,4 +58,11 @@ public interface IAlipayUserFundEntityService
      * @return 结果
      */
     public int deleteAlipayUserFundEntityById(Long id);
+
+    /**
+     * 根据userId查询用户的资金账户对象
+     * @param merchantId
+     * @return
+     */
+    AlipayUserFundEntity findAlipayUserFundByUserId(String merchantId);
 }

@@ -51,11 +51,4 @@ public interface IAlipayBankListEntityService
      */
     public int deleteAlipayBankListEntityByIds(String ids);
 
-    /**
-     * 删除银行卡列表信息
-     * 
-     * @param id 银行卡列表ID
-     * @return 结果
-     */
-    public int deleteAlipayBankListEntityById(Long id);
 }

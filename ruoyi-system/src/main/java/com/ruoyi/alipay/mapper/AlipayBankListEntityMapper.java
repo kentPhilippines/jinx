@@ -41,15 +41,7 @@ public interface AlipayBankListEntityMapper
      * @param alipayBankListEntity 银行卡列表
      * @return 结果
      */
-    public int updateAlipayBankListEntity(AlipayBankListEntity alipayBankListEntity);
-
-    /**
-     * 删除银行卡列表
-     * 
-     * @param id 银行卡列表ID
-     * @return 结果
-     */
-    public int deleteAlipayBankListEntityById(Long id);
+    int updateAlipayBankListEntity(AlipayBankListEntity alipayBankListEntity);
 
     /**
      * 批量删除银行卡列表
@@ -57,5 +49,7 @@ public interface AlipayBankListEntityMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteAlipayBankListEntityByIds(String[] ids);
+    int deleteAlipayBankListEntityByIds(String[] ids);
+
+
 }

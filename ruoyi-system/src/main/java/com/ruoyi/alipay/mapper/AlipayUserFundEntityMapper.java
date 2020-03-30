@@ -3,6 +3,9 @@ package com.ruoyi.alipay.mapper;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -63,4 +66,7 @@ public interface AlipayUserFundEntityMapper {
 
     @Insert("insert into alipay_user_fund (userId,userName,userType,isAgent) values(#{userId},#{userName},#{userType},#{isAgent})")
     int insertAlipayUserFundInfo(AlipayUserInfo merchantInfoEntity);
+
+    @Select("select cashBalance, accountBalance, rechargeNumber  from alipay_user_fund where userId = #{merchantId}")
+    AlipayUserFundEntity selectAlipayUserFundByUserId(@Param("merchantId") String merchantId);
 }
