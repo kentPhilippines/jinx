@@ -200,7 +200,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">status,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			<if test="remark != null and remark != ''">remark,</if>
- 			<if test="remark != merchantId and mercahntId != ''">merchant_id,</if>
+ 			<if test="remark != merchantId and merchantId != ''">merchant_id,</if>
  			create_time
  		)values(
  			<if test="userId != null and userId != ''">#{userId},</if>
@@ -212,12 +212,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
  			<if test="sex != null and sex != ''">#{sex},</if>
  			<if test="password != null and password != ''">#{password},</if>
-		<if test="fundPassword != null and fundPassword != ''">fundPassword,</if>
+		<if test="fundPassword != null and fundPassword != ''">#{fundPassword},</if>
  			<if test="salt != null and salt != ''">#{salt},</if>
  			<if test="status != null and status != ''">#{status},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
-		<if test="remark != merchantId and mercahntId != ''">merchantId,</if>
+		<if test="remark != merchantId and merchantId != ''">#{merchantId},</if>
  			sysdate()
  		)
 	</insert>

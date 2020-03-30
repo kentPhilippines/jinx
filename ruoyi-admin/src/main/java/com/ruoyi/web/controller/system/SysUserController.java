@@ -121,6 +121,7 @@ public class SysUserController extends BaseController {
         }
         user.setSalt(ShiroUtils.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
+        user.setFundPassword(passwordService.encryptPassword(user.getLoginName(),user.getFundPassword(),user.getSalt()));
         user.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(userService.insertUser(user));
     }

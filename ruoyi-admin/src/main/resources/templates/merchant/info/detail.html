@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('商户详细信息')"/>
     <style>
@@ -44,7 +44,7 @@
         <div class="form-group">
             <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">商户公钥：</label>
             <div class="col-sm-8">
-                <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;"
+                <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;" shiro:hasPermission="back:merchant:download"
                    title="点击下载公钥" aria-hidden="true"
                    onclick="typePassword()"></a>
             </div>
@@ -105,7 +105,7 @@
 </div>
 <div style="text-align: center;margin-bottom: 5px;">
     <div style="text-align: center;">
-        <a id="audit" name="audit" class="btn btn-w-m btn-danger" href="javascript:void(0)"
+        <a id="audit" name="audit" class="btn btn-w-m btn-danger" href="javascript:void(0)" shiro:hasPermission="back:merchant:edit"
            onclick="audit();">修改 </a>
         <a id="toSave" name="toSave" class="btn btn-w-m btn-primary" href="javascript:void(0)" style="display: none;"
            onclick="toSave();"> 保存</a>
