@@ -179,6 +179,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="loginDate != null">login_date = #{loginDate},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			<if test="remark != null">remark = #{remark},</if>
+ 			<if test="merchantId != null and merchantId != ''">merchant_id = #{merchantId},</if>
  			update_time = sysdate()
  		</set>
  		where user_id = #{userId}
@@ -212,12 +213,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
  			<if test="sex != null and sex != ''">#{sex},</if>
  			<if test="password != null and password != ''">#{password},</if>
-		<if test="fundPassword != null and fundPassword != ''">#{fundPassword},</if>
+			<if test="fundPassword != null and fundPassword != ''">#{fundPassword},</if>
  			<if test="salt != null and salt != ''">#{salt},</if>
  			<if test="status != null and status != ''">#{status},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
-		<if test="remark != merchantId and merchantId != ''">#{merchantId},</if>
+			<if test="remark != merchantId and merchantId != ''">#{merchantId},</if>
  			sysdate()
  		)
 	</insert>

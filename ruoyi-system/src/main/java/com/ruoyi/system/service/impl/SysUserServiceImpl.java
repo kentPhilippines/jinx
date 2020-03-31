@@ -173,6 +173,14 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     @Transactional
     public int insertUser(SysUser user) {
+        if (user.getParams().isEmpty()) {
+            throw new BusinessException("请选择用户类型");
+        }
+        if ("1".equals(user.getParams().get("BackUserType").toString())) {
+            if (StringUtils.isEmpty(user.getMerchantId())) {
+                throw new BusinessException("商户ID不能为空");
+            }
+        }
         // 新增用户信息
         int rows = userMapper.insertUser(user);
         // 新增用户岗位关联

@@ -60,12 +60,9 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">用户状态：</label>
+                        <label class="col-sm-4 control-label">商户ID：</label>
                         <div class="col-sm-8">
-                            <label class="toggle-switch switch-solid">
-	                            <input type="checkbox" id="status" th:checked="${user.status == '0' ? true : false}">
-	                            <span></span>
-	                        </label>
+                            <input name="merchantId" placeholder="商户后台开户必填项" class="form-control" type="text" th:field="*{merchantId}">
                         </div>
                     </div>
                 </div>

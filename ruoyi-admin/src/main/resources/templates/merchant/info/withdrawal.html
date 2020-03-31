@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('会员提现记录列表')" />
+    <th:block th:include="include :: header('商户提现记录')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -41,7 +41,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="back:withdrawal:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="back:withdrawal:apply">
                     <i class="fa fa-plus"></i> 提现申请
                 </a>
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="back:withdrawal:export">

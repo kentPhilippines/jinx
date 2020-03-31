@@ -89,22 +89,32 @@
             <div class="row">
             	<div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">岗位：</label>
+                        <label class="col-sm-4 control-label">用户类型：</label>
                         <div class="col-sm-8">
-                            <select id="post" class="form-control select2-multiple" multiple>
-								<option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:disabled="${post.status == '1'}"></option>
-							</select>
+                            <div class="radio-box" th:each="dict : ${@dict.getType('back_user_type')}">
+                                <input type="radio" th:id="${dict.dictCode}" name="params[BackUserType]" th:value="${dict.dictValue}">
+                                <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">用户状态：</label>
+                        <label class="col-sm-4 control-label">商户ID：</label>
                         <div class="col-sm-8">
-                            <label class="toggle-switch switch-solid">
-                                <input type="checkbox" id="status" checked>
-                                <span></span>
-                            </label>
+                            <input name="merchantId" placeholder="商户后台开户必填项" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">岗位：</label>
+                        <div class="col-sm-8">
+                            <select id="post" class="form-control select2-multiple" multiple>
+                                <option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:disabled="${post.status == '1'}"></option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -144,7 +154,7 @@
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: select2-js" />
 	<script>
-	    var prefix = ctx + "system/user";
+	    let prefix = ctx + "system/user";
 	
         $("#form-user-add").validate({
         	onkeyup: false,
@@ -202,6 +212,7 @@
                         }
                     }
         		},
+
         	},
         	messages: {
                 "loginName": {
@@ -220,10 +231,8 @@
         function submitHandler() {
 	        if ($.validate.form()) {
 	        	var data = $("#form-user-add").serializeArray();
-	        	var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
 	        	var roleIds = $.form.selectCheckeds("role");
 	        	var postIds = $.form.selectSelects("post");
-	        	data.push({"name": "status", "value": status});
 	        	data.push({"name": "roleIds", "value": roleIds});
 	        	data.push({"name": "postIds", "value": postIds});
 	        	$.operate.saveTab(prefix + "/add", data);
