@@ -71,4 +71,14 @@ public interface ShiroConstants
      * 系统活跃用户缓存
      */
     public static final String SYS_USERCACHE = "sys-userCache";
+
+    /**
+     * 未绑定异常
+     */
+    public static final String GOOGLE_UNBIND = "googleBindError";
+
+    /**
+     * 未绑定异常
+     */
+    public static final String USER_UNBIND = "googleBind";
 }

@@ -3,6 +3,8 @@ package com.ruoyi.framework.shiro.realm;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.exception.user.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -20,12 +22,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.ruoyi.common.exception.user.CaptchaException;
-import com.ruoyi.common.exception.user.RoleBlockedException;
-import com.ruoyi.common.exception.user.UserBlockedException;
-import com.ruoyi.common.exception.user.UserNotExistsException;
-import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
-import com.ruoyi.common.exception.user.UserPasswordRetryLimitExceedException;
 import com.ruoyi.framework.shiro.service.SysLoginService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
@@ -99,6 +95,8 @@ public class UserRealm extends AuthorizingRealm {
             throw new LockedAccountException(e.getMessage(), e);
         } catch (RoleBlockedException e) {
             throw new LockedAccountException(e.getMessage(), e);
+        } catch (UserGoogleUnbindException e){
+            throw new AuthenticationException(e.getMessage(), e);
         } catch (Exception e) {
             log.info("对用户[" + username + "]进行登录验证..验证未通过{}", e.getMessage());
             throw new AuthenticationException(e.getMessage(), e);

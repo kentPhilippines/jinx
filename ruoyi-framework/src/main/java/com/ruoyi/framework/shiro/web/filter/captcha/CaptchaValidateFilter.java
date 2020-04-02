@@ -57,12 +57,15 @@ public class CaptchaValidateFilter extends AccessControlFilter {
         return validateResponse(httpServletRequest, httpServletRequest.getParameter(ShiroConstants.CURRENT_VALIDATECODE));
     }
 
-    public boolean validateResponse(HttpServletRequest request, String validateCode) {
+    public boolean validateResponse(HttpServletRequest request, String validateCode) throws Exception{
         Object type = request.getAttribute("captchaType");
         if ("google".equals(type)) {
             String username = request.getParameter("username");
-            boolean isCorrect = googleUtils.verifyGoogleCode(username, validateCode);
-            if (!isCorrect) {
+            int isCorrect = googleUtils.verifyGoogleCode(username, validateCode);
+            if (isCorrect == 0) {
+                request.setAttribute(ShiroConstants.USER_UNBIND, ShiroConstants.GOOGLE_UNBIND);
+                return false;
+            }else if(isCorrect == 2){
                 return false;
             }
         }else{

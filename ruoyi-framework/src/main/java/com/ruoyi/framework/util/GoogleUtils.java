@@ -14,14 +14,15 @@ public class GoogleUtils {
     @Autowired
     private ISysUserGoogleService sysUserGoogleService;
 
-    public boolean verifyGoogleCode(String username, String validateCode) {
+    public int verifyGoogleCode(String username, String validateCode) {
         SysUserGoogle sysUserGoogle = sysUserGoogleService.selectSysUserGoogleByUsername(username);
         if (sysUserGoogle == null) {
-            throw new BusinessException("用户名输入有误");
+            return 0;
         }
         String key = sysUserGoogle.getSecretKey();
         Long now = System.currentTimeMillis();
-       return GoogleAuthenticator.check_code(key, validateCode, now);
+
+       return GoogleAuthenticator.check_code(key, validateCode, now) ? 1 : 2 ;
     }
 
     public String getSecretKey(){

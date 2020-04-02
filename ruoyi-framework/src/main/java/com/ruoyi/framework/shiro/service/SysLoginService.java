@@ -1,5 +1,7 @@
 package com.ruoyi.framework.shiro.service;
 
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.exception.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -7,11 +9,6 @@ import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.ShiroConstants;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.enums.UserStatus;
-import com.ruoyi.common.exception.user.CaptchaException;
-import com.ruoyi.common.exception.user.UserBlockedException;
-import com.ruoyi.common.exception.user.UserDeleteException;
-import com.ruoyi.common.exception.user.UserNotExistsException;
-import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.MessageUtils;
 import com.ruoyi.common.utils.ServletUtils;
@@ -38,6 +35,11 @@ public class SysLoginService {
      * 登录
      */
     public SysUser login(String username, String password) {
+        //验证是否绑定谷歌
+        if (!StringUtils.isEmpty(ServletUtils.getRequest().getAttribute(ShiroConstants.USER_UNBIND))) {
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.google.unbind.error")));
+            throw new UserGoogleUnbindException();
+        }
         // 验证码校验
         if (!StringUtils.isEmpty(ServletUtils.getRequest().getAttribute(ShiroConstants.CURRENT_CAPTCHA))) {
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.error")));
