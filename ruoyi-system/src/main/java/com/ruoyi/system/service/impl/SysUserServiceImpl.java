@@ -220,10 +220,7 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     @Transactional
     public int updateUserInfo(SysUser user) {
-        throw
-                new
-                        BusinessException("更新user表失败");
-        //return userMapper.updateUser(user);
+        return userMapper.updateUser(user);
     }
 
     /**
