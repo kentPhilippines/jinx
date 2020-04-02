@@ -5,6 +5,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Hex;
 
@@ -19,6 +20,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class GoogleAuthenticator {
+
+    static int window_size = 3; // default 3 - max 17 (from google docs)最多可偏移的时间
+
     public static String getRandomSecretKey() {
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[20];
@@ -40,31 +44,30 @@ public class GoogleAuthenticator {
         return TOTP.generateTOTP(hexKey, hexTime, "6");
     }
 
-    public static String getGoogleAuthenticatorBarCode(String secretKey, String account, String issuer) {
-        String normalizedBase32Key = secretKey.replace(" ", "").toUpperCase();
-        try {
-            return "otpauth://totp/"
-                    + URLEncoder.encode(issuer + ":" + account, "UTF-8")
-                    .replace("+", "%20")
-                    + "?secret="
-                    + URLEncoder.encode(normalizedBase32Key, "UTF-8").replace(
-                    "+", "%20") + "&issuer="
-                    + URLEncoder.encode(issuer, "UTF-8").replace("+", "%20");
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException(e);
-        }
+    /**
+     * 根据user和secret生成二维码URL
+     *
+     * @param user
+     * @param host
+     * @param secret
+     * @return
+     */
+    public static String getQRBarcodeURL(String user, String host, String secret) {
+        String format = "http://www.google.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=otpauth://totp/%s@%s?secret=%s";
+        return String.format(format, user, host, secret);
     }
 
-    public static void createQRCode(String barCodeData, String filePath,
-                                    int height, int width) throws WriterException, IOException {
-        BitMatrix matrix = new MultiFormatWriter().encode(barCodeData,
-                BarcodeFormat.QR_CODE, width, height);
-        try (FileOutputStream out = new FileOutputStream(filePath)) {
-            MatrixToImageWriter.writeToStream(matrix, "png", out);
-        }
+    /**
+     * 这个format不可以修改，身份验证器无法识别二维码
+     *
+     * @param user
+     * @param secret
+     * @return
+     */
+    public static String getQRBarcode(String user, String secret) {
+        String format = "otpauth://totp/%s?secret=%s";
+        return String.format(format, user, secret);
     }
-
-    static int window_size = 3; // default 3 - max 17 (from google docs)最多可偏移的时间
 
     /**
      * set the windows size. This is an integer value representing the number of
@@ -86,7 +89,7 @@ public class GoogleAuthenticator {
      * @param timeMsec The time in msec (System.currentTimeMillis() for example)
      * @return
      */
-    public static boolean check_code(String secret, long code, long timeMsec) {
+    public static boolean check_code(String secret, String code, long timeMsec) {
         Base32 codec = new Base32();
         byte[] decodedKey = codec.decode(secret);
         // convert unix msec time into a 30 second "window"
@@ -102,11 +105,10 @@ public class GoogleAuthenticator {
                 // Yes, this is bad form - but
                 // the exceptions thrown would be rare and a static
                 // configuration problem
-                // e.printStackTrace();
+                e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
-                // return false;
             }
-            if (hash == code) {
+            if (code.equals(addZero(hash))) {
                 return true;
             }
         }
@@ -136,6 +138,10 @@ public class GoogleAuthenticator {
         truncatedHash &= 0x7FFFFFFF;
         truncatedHash %= 1000000;
         return (int) truncatedHash;
+    }
+
+    private static String addZero(long code) {
+        return String.format("%06d", code);
     }
 
 }

@@ -179,4 +179,11 @@ public interface ISysUserService {
      * @return 结果
      */
     int changeStatus(SysUser user);
+
+    /**
+     *  绑定用户的Google验证器
+     * @param user 用户信息
+     * @return 结果
+     */
+    int updateGoogleBind(SysUser user);
 }

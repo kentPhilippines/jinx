@@ -2,9 +2,14 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
+import com.ruoyi.framework.util.GoogleUtils;
+import com.ruoyi.system.domain.SysUserGoogle;
+import com.ruoyi.system.service.ISysUserGoogleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +32,8 @@ import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 用户信息
  *
@@ -48,6 +55,13 @@ public class SysUserController extends BaseController {
 
     @Autowired
     private SysPasswordService passwordService;
+
+    @Autowired
+    private GoogleUtils googleUtils;
+
+    @Autowired
+    private ISysUserGoogleService sysUserGoogleService;
+
 
     @RequiresPermissions("system:user:view")
     @GetMapping()
@@ -121,7 +135,7 @@ public class SysUserController extends BaseController {
         }
         user.setSalt(ShiroUtils.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
-        user.setFundPassword(passwordService.encryptPassword(user.getLoginName(),user.getFundPassword(),user.getSalt()));
+        user.setFundPassword(passwordService.encryptPassword(user.getLoginName(), user.getFundPassword(), user.getSalt()));
         user.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(userService.insertUser(user));
     }
@@ -230,4 +244,54 @@ public class SysUserController extends BaseController {
         userService.checkUserAllowed(user);
         return toAjax(userService.changeStatus(user));
     }
+
+    /**
+     * 用户Google验证器修改
+     */
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("system:user:bind")
+    @PostMapping("/bind")
+    @ResponseBody
+    @Transactional
+    public AjaxResult googleBind(HttpServletRequest request, SysUser user) {
+        SysUser oUser = userService.selectUserById(user.getUserId());
+        if ("1".equals(oUser.getStatus()))
+            return AjaxResult.error("此用户已被停用，无法操作");
+        if ("1".equals(user.getIsBind())) {//绑定
+            //插入记录
+            String secretKey = googleUtils.getSecretKey();
+            StringBuffer url = request.getRequestURL();
+            String host = url.delete(url.length() - request.getRequestURI().length(), url.length()).toString();
+            String QRUrl = googleUtils.getGoogleQRCodeURL(user.getLoginName(), host, secretKey);
+            SysUserGoogle sysUserGoogle = new SysUserGoogle();
+            sysUserGoogle.setLoginName(user.getLoginName());
+            sysUserGoogle.setGoogleUrl(QRUrl);
+            sysUserGoogle.setHost(host);
+            sysUserGoogle.setSecretKey(secretKey);
+            sysUserGoogle.setCreateBy(ShiroUtils.getLoginName());
+            sysUserGoogle.setExpireTime(Long.parseLong("15"));
+            int i = sysUserGoogleService.insertSysUserGoogle(sysUserGoogle);
+            if (i == 1) {
+                int j = userService.updateUserInfo(user);
+                if (j == 1) {
+                    return AjaxResult.success();
+                } else {
+                    return AjaxResult.error("绑定失败");
+                }
+            }
+        }
+        if ("0".equals(user.getIsBind())) { //解绑
+            int i = sysUserGoogleService.deleteSysUserGoogleByLoginName(user.getLoginName());
+            if (i == 1) {
+                int j = userService.updateUserInfo(user);
+                if(j == 1){
+                    return AjaxResult.success();
+                }else{
+                    return AjaxResult.error("解绑失败");
+                }
+            }
+        }
+        return null;
+    }
+
 }

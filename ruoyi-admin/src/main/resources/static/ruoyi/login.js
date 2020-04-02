@@ -93,3 +93,24 @@ function getParam(paramName) {
     if (r != null) return decodeURI(r[2]);
     return null;
 }
+
+function bind() {
+    let username = $.common.trim($("input[name='username']").val());
+    let password = $.common.trim($("input[name='password']").val());
+    $.ajax({
+        type: "post",
+        url: ctx + "bind",
+        data: {
+            "username": username,
+            "password": password
+        },
+        success: function(r) {
+            if (r.code == 0) {
+                $.modal.openCode(null,r.data.google,200,200,null);
+            } else {
+                $.modal.msg(r.msg);
+            }
+        }
+    });
+
+}

@@ -14,7 +14,9 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class TOTP {
+
     private static final Logger log = LoggerFactory.getLogger(TOTP.class);
+
     private TOTP() {
     }
 
@@ -112,8 +114,7 @@ public class TOTP {
      * @return: a numeric String in base 10 that includes
      */
 
-    public static String generateTOTP(String key, String time,
-                                      String returnDigits, String crypto) {
+    public static String generateTOTP(String key, String time, String returnDigits, String crypto) {
         int codeDigits = Integer.decode(returnDigits).intValue();
         String result = null;
 

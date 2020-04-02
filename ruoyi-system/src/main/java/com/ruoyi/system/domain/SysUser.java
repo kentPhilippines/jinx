@@ -123,6 +123,11 @@ public class SysUser extends BaseEntity {
 
     private String merchantId;
 
+    /**
+     * 是否绑定Google验证码
+     */
+    private String isBind;
+
     private List<SysRole> roles;
 
     /**
@@ -336,6 +341,14 @@ public class SysUser extends BaseEntity {
         this.merchantId = merchantId;
     }
 
+    public String getIsBind() {
+        return isBind;
+    }
+
+    public void setIsBind(String isBind) {
+        this.isBind = isBind;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -361,6 +374,7 @@ public class SysUser extends BaseEntity {
             .append("dept", getDept())
             .append("fundPassword", getFundPassword())
             .append("merchantId", getMerchantId())
+            .append("isBind", getIsBind())
             .toString();
     }
 }

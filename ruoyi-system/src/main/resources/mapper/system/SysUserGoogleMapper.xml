@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysUserGoogleMapper">
+    
+    <resultMap type="SysUserGoogle" id="SysUserGoogleResult">
+        <result property="id"    column="id"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="googleUrl"    column="google_url"    />
+        <result property="secretKey"    column="secret_key"    />
+        <result property="host"    column="host"    />
+        <result property="expireTime"    column="expire_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSysUserGoogleVo">
+        select id, login_name, google_url, secret_key, host, expire_time, create_by, create_time, remark from sys_user_google
+    </sql>
+
+    <select id="selectSysUserGoogleList" parameterType="SysUserGoogle" resultMap="SysUserGoogleResult">
+        <include refid="selectSysUserGoogleVo"/>
+        <where>  
+            <if test="loginName != null  and loginName != ''"> and login_name like concat('%', #{loginName}, '%')</if>
+            <if test="googleUrl != null  and googleUrl != ''"> and google_url = #{googleUrl}</if>
+            <if test="secretKey != null  and secretKey != ''"> and secret_key = #{secretKey}</if>
+            <if test="host != null  and host != ''"> and host = #{host}</if>
+            <if test="expireTime != null "> and expire_time = #{expireTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysUserGoogleById" parameterType="Long" resultMap="SysUserGoogleResult">
+        <include refid="selectSysUserGoogleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysUserGoogle" parameterType="SysUserGoogle" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user_google
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''">login_name,</if>
+            <if test="googleUrl != null  and googleUrl != ''">google_url,</if>
+            <if test="secretKey != null  and secretKey != ''">secret_key,</if>
+            <if test="host != null  and host != ''">host,</if>
+            <if test="expireTime != null ">expire_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''">#{loginName},</if>
+            <if test="googleUrl != null  and googleUrl != ''">#{googleUrl},</if>
+            <if test="secretKey != null  and secretKey != ''">#{secretKey},</if>
+            <if test="host != null  and host != ''">#{host},</if>
+            <if test="expireTime != null ">#{expireTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysUserGoogle" parameterType="SysUserGoogle">
+        update sys_user_google
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''">login_name = #{loginName},</if>
+            <if test="googleUrl != null  and googleUrl != ''">google_url = #{googleUrl},</if>
+            <if test="secretKey != null  and secretKey != ''">secret_key = #{secretKey},</if>
+            <if test="host != null  and host != ''">host = #{host},</if>
+            <if test="expireTime != null ">expire_time = #{expireTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysUserGoogleById" parameterType="Long">
+        delete from sys_user_google where id = #{id}
+    </delete>
+
+    <delete id="deleteSysUserGoogleByIds" parameterType="String">
+        delete from sys_user_google where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

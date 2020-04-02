@@ -218,8 +218,12 @@ public class SysUserServiceImpl implements ISysUserService {
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateUserInfo(SysUser user) {
-        return userMapper.updateUser(user);
+        throw
+                new
+                        BusinessException("更新user表失败");
+        //return userMapper.updateUser(user);
     }
 
     /**
@@ -435,5 +439,15 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public int changeStatus(SysUser user) {
         return userMapper.updateUser(user);
+    }
+
+    @Override
+    public int updateGoogleBind(SysUser user) {
+        //绑定
+        if ("1".equals(user.getIsBind())) {
+            //插入记录
+        }
+        //解绑
+        return 0;
     }
 }

@@ -47,7 +47,7 @@
                     <p class="m-t-md">跃创理财，我们更专业</p>
                     <input type="text"     name="username" class="form-control uname"     placeholder="用户名" value=""    />
                     <input type="password" name="password" class="form-control pword"     placeholder="密码"   value="" />
-					<div class="row m-t" th:if="${captchaEnabled==true}">
+					<div class="row m-t" th:if="${captchaEnabled==true && captchaType ne 'google'}">
 						<div class="col-xs-6">
 						    <input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5" autocomplete="off">
 						</div>
@@ -57,9 +57,16 @@
 							</a>
 						</div>
 					</div>
-                    <div class="checkbox-custom" th:classappend="${captchaEnabled==false} ? 'm-t'">
-				        <input type="checkbox" id="rememberme" name="rememberme"> <label for="rememberme">记住我</label>
-				    </div>
+					<div class="row m-t" th:if="${captchaEnabled==true && captchaType eq 'google'}">
+						<div class="col-xs-6">
+						    <input type="text" name="validateCode" class="form-control code" placeholder="谷歌验证码" maxlength="6" autocomplete="off">
+						</div>
+                        <div class="col-xs-6">
+                            <a href="javascript:void(0);" title="点击绑定Google验证器" class="btn btn-w-m btn-primary" style="min-width: 103px;margin-top: 0px;" onclick="bind();">
+                                绑定Google
+                            </a>
+                        </div>
+					</div>
                     <button class="btn btn-success btn-block" id="btnSubmit" data-loading="正在验证登录，请稍后...">登录</button>
                 </form>
             </div>
