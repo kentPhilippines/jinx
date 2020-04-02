@@ -4,13 +4,12 @@ import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.annotation.RepeatSubmit;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.enums.DeductStatusEnum;
-import com.ruoyi.common.enums.RefundDeductType;
 import com.ruoyi.common.enums.WithdrawalStatusEnum;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.GenerateOrderNo;
@@ -19,9 +18,11 @@ import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.GoogleUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -63,6 +64,9 @@ public class BackManageController extends BaseController {
 
     @Autowired
     private IAlipayBankListEntityService alipayBankListEntityService;
+
+    @Autowired
+    private GoogleUtils googleUtils;
 
     /**
      * 商户后台用户登陆显示详细信息
@@ -183,6 +187,7 @@ public class BackManageController extends BaseController {
     @Log(title = "加减款记录", businessType = BusinessType.INSERT)
     @PostMapping("/withdrawal/save")
     @ResponseBody
+    @RepeatSubmit
     public AjaxResult witSave(AlipayWithdrawEntity alipayWithdrawEntity) {
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
@@ -190,6 +195,14 @@ public class BackManageController extends BaseController {
         String verify = passwordService.encryptPassword(currentUser.getLoginName(), payPassword, currentUser.getSalt());
         if (!currentUser.getPassword().equals(verify)) {
             return AjaxResult.error("密码验证失败");
+        }
+        //验证谷歌验证码
+        String googleCode = alipayWithdrawEntity.getParams().get("googleCode").toString();
+        int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
+        if (is == 0) {
+            return AjaxResult.error("未绑定谷歌验证器");
+        } else if (is - 1 > 0) {
+            return AjaxResult.error("谷歌验证码验证失败");
         }
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
@@ -261,7 +274,6 @@ public class BackManageController extends BaseController {
     public AjaxResult remove(String ids) {
         return toAjax(alipayBankListEntityService.deleteAlipayBankListEntityByIds(ids));
     }
-
 
 
 }
