@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('交易订单列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -11,36 +12,37 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <span>订单号：</span>
+                            <span>平台订单：</span>
                             <input type="text" name="orderId"/>
                         </li>
                         <li>
-                            <span>关联订单号：</span>
+                            <span>关联订单：</span>
                             <input type="text" name="associatedId"/>
                         </li>
                         <li>
-                            <span>订单状态：</span>
-                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
+                            <span>外部订单：</span>
+                            <input type="text" name="externalOrderId"/>
                         </li>
                         <li>
                             <span>商户账号：</span>
                             <input type="text" name="orderAccount"/>
                         </li>
                         <li>
-                            <span>关联二维码：</span>
-                            <input type="text" name="orderQr"/>
-                        </li>
-                        <li>
                             <span>码商账户：</span>
                             <input type="text" name="orderQrUser"/>
                         </li>
                         <li>
-                            <span>外部订单号：</span>
-                            <input type="text" name="externalOrderId"/>
+                            <span>二维码ID：</span>
+                            <input type="text" name="orderQr"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>订单状态： </label>
+                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
                         </li>
                         <li class="select-time">
                             <span>创建时间：</span>
@@ -72,6 +74,7 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('alipay:orderDeal:edit')}]];
     var removeFlag = [[${@permission.hasPermi('alipay:orderDeal:remove')}]];

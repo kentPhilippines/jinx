@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('商户详情列表')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -22,11 +23,13 @@
                             <span>商户名称：</span>
                             <input type="text" id="userName" name="userName"/>
                         </li>
-                        <li>
-                            <span>状态：</span>
-                            <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
+                        <li class="select-selectpicker">
+                            <label>状态： </label>
+                            <select id="switchs" name="switchs" th:with="type=${@dict.getType('userSwitchs')}"
+                                    class="selectpicker" data-none-selected-text="请选择" >
                                 <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
@@ -59,6 +62,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script type="text/javascript" th:src="@{/static/js/download.js}"></script>
+<th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('alipay:merchant:edit')}]];
     var removeFlag = [[${@permission.hasPermi('alipay:merchant:remove')}]];

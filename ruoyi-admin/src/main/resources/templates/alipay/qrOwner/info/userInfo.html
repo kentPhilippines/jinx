@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('用户详情列表')"/>
+    <th:block th:include="include :: header('码商详情列表')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -11,21 +12,24 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>登陆账号：</p>
+                            <span>登陆账号：</span>
                             <input type="text" name="userId" id="userId"/>
                         </li>
                         <li>
-                            <p>上级代理ID：</p>
+                            <span>上级代理：</span>
                             <input type="text" name="agent" id="agent"/>
                         </li>
-                        <li>
-                            <p>用户状态：</p><select id="switchs" name="switchs" th:with="type=${@dict.getType('qr_user_switchs')}">
-                            <option value="">所有</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                        </select>
+                        <li class="select-selectpicker">
+                            <label>状态： </label>
+                            <select id="switchs" name="switchs" th:with="type=${@dict.getType('qr_user_switchs')}"
+                                    class="selectpicker" data-none-selected-text="请选择" >
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
                         </li>
                         <li class="select-time">
-                            <p>创建时间：</p>
+                            <span>创建时间：</span>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
                                    name="params[beginTime]"/>
                             <span>-</span>
@@ -60,6 +64,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
     var resetLoginFlag = [[${@permission.hasPermi('alipay:userInfo:reset:login')}]];
     var resetWithdrawalFlag = [[${@permission.hasPermi('alipay:userInfo:reset:withdrawal')}]];

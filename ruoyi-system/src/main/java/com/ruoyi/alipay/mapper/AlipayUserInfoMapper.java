@@ -43,7 +43,7 @@ public interface AlipayUserInfoMapper {
             "<if test=\"agent != null and agent != ''\">" +
             " and agent = #{agent}" +
             "</if>" +
-            "<if test=\"switchs != null and switchs != ''\">" +
+            "<if test=\"switchs == 0 and switchs ==1\">" +
             " and switchs = #{switchs}" +
             "</if>" +
             "<if test=\"params.beginTime != null and params.beginTime != ''\">" +

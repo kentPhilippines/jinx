@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('商户订单登记列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -11,20 +12,21 @@
                 <div class="select-list">
                     <ul>
                         <li>
+                            <span>商户订单号：</span>
+                            <input type="text" name="appOrderId"/>
+                        </li>
+                        <li>
                             <span>商户账号：</span>
                             <input type="text" id="orderAccount" name="orderAccount"/>
                         </li>
-                        <li>
-                            <span>订单状态：</span>
-                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}">
+                        <li class="select-selectpicker">
+                            <label>状态： </label>
+                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
-                        </li>
-                        <li>
-                            <span>商户订单号：</span>
-                            <input type="text" name="appOrderId"/>
                         </li>
                         <li class="select-time">
                             <span>创建时间：</span>
@@ -56,6 +58,7 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('alipay:orderApp:edit')}]];
     var removeFlag = [[${@permission.hasPermi('alipay:orderApp:remove')}]];

@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('充值记录列表')" />
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -18,18 +19,13 @@
                                 <span>码商ID：</span>
                                 <input type="text" name="userId"/>
                             </li>
-                            <li>
-                                <span>充值类型:：</span>
-                                <select name="rechargeType" th:with="type=${@dict.getType('')}">
+                            <li class="select-selectpicker">
+                                <label>订单状态： </label>
+                                <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('qr_deposit_status')}"
+                                        class="selectpicker" data-none-selected-text="请选择">
                                     <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <span>状态：</span>
-                                <select name="orderStatus" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
@@ -62,6 +58,7 @@
         </div>
     </div>
     <th:block th:include="include :: footer" />
+     <th:block th:include="include :: bootstrap-select-js"/>
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('alipay:deposit:edit')}]];
         var removeFlag = [[${@permission.hasPermi('alipay:deposit:remove')}]];
@@ -121,7 +118,7 @@
                 },
                 {
                     field : 'createTime', 
-                    title : '数据创建时间'
+                    title : '创建时间'
                 },
                 {
                     field : 'chargeReason',
