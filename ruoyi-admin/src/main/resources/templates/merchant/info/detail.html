@@ -96,9 +96,9 @@
             <label class="col-sm-2 control-label is-required"
                    style="font-weight: bold;font-size:15px;font-family: sans-serif;">IP白名单：</label>
             <div class="col-sm-8">
-                <textarea id="witip" name="witip" maxlength="500" class="form-control" rows="3"
+                <textarea id="dealUrl" name="dealUrl" maxlength="500" class="form-control" rows="3"
                           style="border-width: 0; background-color: white " readonly="readonly"
-                          required>[[*{witip}]]</textarea>
+                          required>[[*{dealUrl}]]</textarea>
             </div>
         </div>
     </form>
@@ -161,7 +161,7 @@
         $("#QQ").removeAttr("style").removeAttrs("readonly");
         $("#telegram").removeAttr("style").removeAttrs("readonly");
         $("#skype").removeAttr("style").removeAttrs("readonly");
-        $("#witip").removeAttr("style").removeAttrs("readonly");
+        $("#dealUrl").removeAttr("style").removeAttrs("readonly");
         $("#audit").attr("style", "display:none");
         $("#toSave").removeAttr("style");
         $("#cancel").removeAttr("style");
@@ -177,7 +177,7 @@
         let QQ = $("#QQ").val();
         let telegram = $("#telegram").val();
         let skype = $("#skype").val();
-        let witip = $("#witip").val();
+        let dealUrl = $("#dealUrl").val();
         layer.confirm('确认要保存此商户的信息？', {
             title: "系统提示",
             btn: ['确认', '取消'] //按钮
@@ -186,7 +186,7 @@
                 type: "post",
                 url: prefix + "/audit",
                 data: {
-                    "userId": userId, "email": email, "QQ": QQ, "telegram": telegram, "skype": skype, "witip": witip
+                    "userId": userId, "email": email, "QQ": QQ, "telegram": telegram, "skype": skype, "dealUrl": dealUrl
                 },
                 dataType: "json",
                 success: function (data) {
@@ -196,7 +196,7 @@
                         $("#QQ").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
                         $("#telegram").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
                         $("#skype").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
-                        $("#witip").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
+                        $("#dealUrl").attr("style","border-width: 0;background-color:white;").attr("readonly","readonly");
                         $("#toSave").attr("style", "display:none");
                         $("#cancel").attr("style", "display:none");
                         $("#audit").removeAttr("style");

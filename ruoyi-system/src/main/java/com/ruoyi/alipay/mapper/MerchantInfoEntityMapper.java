@@ -159,7 +159,7 @@ public interface MerchantInfoEntityMapper {
             "QQ = #{QQ}," +
             "telegram = #{telegram}," +
             "skype = #{skype}," +
-            "witip = #{witip} " +
+            "dealUrl = #{dealUrl} " +
             " where userId = #{userId} ")
     int updateMerchantByBackAdmin(AlipayUserInfo alipayUserInfo);
 }
