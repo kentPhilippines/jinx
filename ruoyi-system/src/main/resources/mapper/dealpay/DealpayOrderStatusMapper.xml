@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dealpay.mapper.DealpayOrderStatusMapper">
+
+    <resultMap type="DealpayOrderStatusEntity" id="DealpayOrderStatusResult">
+        <result property="id" column="id"/>
+        <result property="orderId" column="orderId"/>
+        <result property="orderStatusApp" column="orderStatusApp"/>
+        <result property="orderStatusCard" column="orderStatusCard"/>
+        <result property="createTime" column="createTime"/>
+        <result property="submitTime" column="submitTime"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectDealpayOrderStatusVo">
+        select id, orderId, orderStatusApp, orderStatusCard, createTime, submitTime, status from dealpay_order_status
+    </sql>
+
+    <select id="selectDealpayOrderStatusList" parameterType="DealpayOrderStatusEntity" resultMap="DealpayOrderStatusResult">
+        <include refid="selectDealpayOrderStatusVo"/>
+        <where>
+            <if test="orderId != null  and orderId != ''">and orderId = #{orderId}</if>
+            <if test="orderStatusApp != null  and orderStatusApp != ''">and orderStatusApp = #{orderStatusApp}</if>
+            <if test="orderStatusCard != null  and orderStatusCard != ''">and orderStatusCard = #{orderStatusCard}</if>
+            <if test="createTime != null ">and createTime = #{createTime}</if>
+            <if test="submitTime != null ">and submitTime = #{submitTime}</if>
+            <if test="status != null ">and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectDealpayOrderStatusById" parameterType="Long" resultMap="DealpayOrderStatusResult">
+        <include refid="selectDealpayOrderStatusVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDealpayOrderStatus" parameterType="DealpayOrderStatusEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into dealpay_order_status
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">orderId,</if>
+            <if test="orderStatusApp != null  and orderStatusApp != ''">orderStatusApp,</if>
+            <if test="orderStatusCard != null  and orderStatusCard != ''">orderStatusCard,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+            <if test="status != null ">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">#{orderId},</if>
+            <if test="orderStatusApp != null  and orderStatusApp != ''">#{orderStatusApp},</if>
+            <if test="orderStatusCard != null  and orderStatusCard != ''">#{orderStatusCard},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+            <if test="status != null ">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDealpayOrderStatus" parameterType="DealpayOrderStatusEntity">
+        update dealpay_order_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">orderId = #{orderId},</if>
+            <if test="orderStatusApp != null  and orderStatusApp != ''">orderStatusApp = #{orderStatusApp},</if>
+            <if test="orderStatusCard != null  and orderStatusCard != ''">orderStatusCard = #{orderStatusCard},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+            <if test="status != null ">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDealpayOrderStatusById" parameterType="Long">
+        delete from dealpay_order_status where id = #{id}
+    </delete>
+
+    <delete id="deleteDealpayOrderStatusByIds" parameterType="String">
+        delete from dealpay_order_status where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

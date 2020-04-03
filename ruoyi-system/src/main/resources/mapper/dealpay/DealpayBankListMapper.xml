@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dealpay.mapper.DealpayBankListMapper">
+
+    <resultMap type="DealpayBankListEntity" id="DealpayBankListResult">
+        <result property="id" column="id"/>
+        <result property="bankcardId" column="bankcardId"/>
+        <result property="bankcardAccount" column="bankcardAccount"/>
+        <result property="accountHolder" column="accountHolder"/>
+        <result property="openAccountBank" column="openAccountBank"/>
+        <result property="bankType" column="bankType"/>
+        <result property="bankcode" column="bankcode"/>
+        <result property="sysTYpe" column="sysTYpe"/>
+        <result property="account" column="account"/>
+        <result property="phone" column="phone"/>
+        <result property="limitAmount" column="limitAmount"/>
+        <result property="bankAmount" column="bankAmount"/>
+        <result property="cardType" column="cardType"/>
+        <result property="qrcodeNote" column="qrcodeNote"/>
+        <result property="status" column="status"/>
+        <result property="isDeal" column="isDeal"/>
+        <result property="createTime" column="createTime"/>
+        <result property="submitTime" column="submitTime"/>
+    </resultMap>
+
+    <sql id="selectDealpayBankListVo">
+        select id, bankcardId, bankcardAccount, accountHolder, openAccountBank, bankType, bankcode, sysTYpe, account, phone, limitAmount, bankAmount, cardType, qrcodeNote, status, isDeal, createTime, submitTime from dealpay_bank_list
+    </sql>
+
+    <select id="selectDealpayBankListList" parameterType="DealpayBankListEntity" resultMap="DealpayBankListResult">
+        <include refid="selectDealpayBankListVo"/>
+        <where>
+            <if test="bankcardAccount != null  and bankcardAccount != ''">and bankcardAccount = #{bankcardAccount}</if>
+            <if test="accountHolder != null  and accountHolder != ''">and accountHolder = #{accountHolder}</if>
+            <if test="openAccountBank != null  and openAccountBank != ''">and openAccountBank = #{openAccountBank}</if>
+            <if test="bankType != null  and bankType != ''">and bankType = #{bankType}</if>
+            <if test="bankcode != null  and bankcode != ''">and bankcode = #{bankcode}</if>
+            <if test="sysTYpe != null ">and sysTYpe = #{sysTYpe}</if>
+            <if test="account != null  and account != ''">and account = #{account}</if>
+            <if test="phone != null  and phone != ''">and phone = #{phone}</if>
+            <if test="limitAmount != null ">and limitAmount = #{limitAmount}</if>
+            <if test="bankAmount != null ">and bankAmount = #{bankAmount}</if>
+            <if test="cardType != null ">and cardType = #{cardType}</if>
+            <if test="qrcodeNote != null  and qrcodeNote != ''">and qrcodeNote = #{qrcodeNote}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="isDeal != null ">and isDeal = #{isDeal}</if>
+            <if test="createTime != null ">and createTime = #{createTime}</if>
+            <if test="submitTime != null ">and submitTime = #{submitTime}</if>
+        </where>
+    </select>
+
+    <select id="selectDealpayBankListById" parameterType="Long" resultMap="DealpayBankListResult">
+        <include refid="selectDealpayBankListVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDealpayBankList" parameterType="DealpayBankListEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into dealpay_bank_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bankcardId != null  and bankcardId != ''">bankcardId,</if>
+            <if test="bankcardAccount != null  and bankcardAccount != ''">bankcardAccount,</if>
+            <if test="accountHolder != null  and accountHolder != ''">accountHolder,</if>
+            <if test="openAccountBank != null  and openAccountBank != ''">openAccountBank,</if>
+            <if test="bankType != null  and bankType != ''">bankType,</if>
+            <if test="bankcode != null  and bankcode != ''">bankcode,</if>
+            <if test="sysTYpe != null ">sysTYpe,</if>
+            <if test="account != null  and account != ''">account,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="limitAmount != null ">limitAmount,</if>
+            <if test="bankAmount != null ">bankAmount,</if>
+            <if test="cardType != null ">cardType,</if>
+            <if test="qrcodeNote != null  and qrcodeNote != ''">qrcodeNote,</if>
+            <if test="status != null ">status,</if>
+            <if test="isDeal != null ">isDeal,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bankcardId != null  and bankcardId != ''">#{bankcardId},</if>
+            <if test="bankcardAccount != null  and bankcardAccount != ''">#{bankcardAccount},</if>
+            <if test="accountHolder != null  and accountHolder != ''">#{accountHolder},</if>
+            <if test="openAccountBank != null  and openAccountBank != ''">#{openAccountBank},</if>
+            <if test="bankType != null  and bankType != ''">#{bankType},</if>
+            <if test="bankcode != null  and bankcode != ''">#{bankcode},</if>
+            <if test="sysTYpe != null ">#{sysTYpe},</if>
+            <if test="account != null  and account != ''">#{account},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="limitAmount != null ">#{limitAmount},</if>
+            <if test="bankAmount != null ">#{bankAmount},</if>
+            <if test="cardType != null ">#{cardType},</if>
+            <if test="qrcodeNote != null  and qrcodeNote != ''">#{qrcodeNote},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="isDeal != null ">#{isDeal},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDealpayBankList" parameterType="DealpayBankListEntity">
+        update dealpay_bank_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bankcardId != null  and bankcardId != ''">bankcardId = #{bankcardId},</if>
+            <if test="bankcardAccount != null  and bankcardAccount != ''">bankcardAccount = #{bankcardAccount},</if>
+            <if test="accountHolder != null  and accountHolder != ''">accountHolder = #{accountHolder},</if>
+            <if test="openAccountBank != null  and openAccountBank != ''">openAccountBank = #{openAccountBank},</if>
+            <if test="bankType != null  and bankType != ''">bankType = #{bankType},</if>
+            <if test="bankcode != null  and bankcode != ''">bankcode = #{bankcode},</if>
+            <if test="sysTYpe != null ">sysTYpe = #{sysTYpe},</if>
+            <if test="account != null  and account != ''">account = #{account},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="limitAmount != null ">limitAmount = #{limitAmount},</if>
+            <if test="bankAmount != null ">bankAmount = #{bankAmount},</if>
+            <if test="cardType != null ">cardType = #{cardType},</if>
+            <if test="qrcodeNote != null  and qrcodeNote != ''">qrcodeNote = #{qrcodeNote},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="isDeal != null ">isDeal = #{isDeal},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDealpayBankListById" parameterType="Long">
+        delete from dealpay_bank_list where id = #{id}
+    </delete>
+
+    <delete id="deleteDealpayBankListByIds" parameterType="String">
+        delete from dealpay_bank_list where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

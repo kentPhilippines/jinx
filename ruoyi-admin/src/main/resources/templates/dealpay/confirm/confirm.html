@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('双方确认订单状态列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>需要确认的订单号：</p>
+                            <input type="text" name="orderId"/>
+                        </li>
+                        <li>
+                            <p>下游确认的订单状态：</p>
+                            <input type="text" name="orderStatusApp"/>
+                        </li>
+                        <li>
+                            <p>卡商确认的订单状态：</p>
+                            <input type="text" name="orderStatusCard"/>
+                        </li>
+                        <li class="select-time">
+                            <p>数据生成时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginCreateTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endCreateTime]"/>
+                        </li>
+                        <li class="select-time">
+                            <p>数据修改时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginSubmitTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endSubmitTime]"/>
+                        </li>
+                        <li>
+                            <p>1数据可用2数据无用：</p>
+                            <select name="status">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="dealpay:confirm:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="dealpay:confirm:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="dealpay:confirm:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dealpay:confirm:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('dealpay:confirm:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('dealpay:confirm:remove')}]];
+    var prefix = ctx + "dealpay/confirm";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "双方确认订单状态",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '数据id',
+                    visible: false
+                },
+                {
+                    field: 'orderId',
+                    title: '需要确认的订单号'
+                },
+                {
+                    field: 'orderStatusApp',
+                    title: '下游确认的订单状态'
+                },
+                {
+                    field: 'orderStatusCard',
+                    title: '卡商确认的订单状态'
+                },
+                {
+                    field: 'createTime',
+                    title: '数据生成时间'
+                },
+                {
+                    field: 'submitTime',
+                    title: '数据修改时间'
+                },
+                {
+                    field: 'status',
+                    title: '1数据可用2数据无用'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

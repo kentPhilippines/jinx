@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dealpay.mapper.DealpayWithdrawalEntityMapper">
+    
+    <resultMap type="DealpayWithdrawalEntity" id="DealpayWithdrawalEntityResult">
+        <result property="id"    column="id"    />
+        <result property="orderId"    column="orderId"    />
+        <result property="userId"    column="userId"    />
+        <result property="withdrawType"    column="withdrawType"    />
+        <result property="bankNo"    column="bankNo"    />
+        <result property="accname"    column="accname"    />
+        <result property="orderStatus"    column="orderStatus"    />
+        <result property="bankName"    column="bankName"    />
+        <result property="amount"    column="amount"    />
+        <result property="fee"    column="fee"    />
+        <result property="actualAmount"    column="actualAmount"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="notify"    column="notify"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="submitTime"    column="submitTime"    />
+        <result property="status"    column="status"    />
+        <result property="witType"    column="witType"    />
+        <result property="retain1"    column="retain1"    />
+        <result property="retain2"    column="retain2"    />
+    </resultMap>
+
+    <sql id="selectDealpayWithdrawalEntityVo">
+        select id, orderId, userId, withdrawType, bankNo, accname, orderStatus, bankName, amount, fee, actualAmount, mobile, notify, createTime, submitTime, status, witType, retain1, retain2 from dealpay_withdraw
+    </sql>
+
+    <select id="selectDealpayWithdrawalEntityList" parameterType="DealpayWithdrawalEntity" resultMap="DealpayWithdrawalEntityResult">
+        <include refid="selectDealpayWithdrawalEntityVo"/>
+        <where>  
+            <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
+            <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
+            <if test="withdrawType != null "> and withdrawType = #{withdrawType}</if>
+            <if test="bankNo != null  and bankNo != ''"> and bankNo = #{bankNo}</if>
+            <if test="accname != null  and accname != ''"> and accname like concat('%', #{accname}, '%')</if>
+            <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
+            <if test="bankName != null  and bankName != ''"> and bankName like concat('%', #{bankName}, '%')</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="fee != null "> and fee = #{fee}</if>
+            <if test="actualAmount != null "> and actualAmount = #{actualAmount}</if>
+            <if test="mobile != null  and mobile != ''"> and mobile = #{mobile}</if>
+            <if test="notify != null  and notify != ''"> and notify = #{notify}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="witType != null  and witType != ''"> and witType = #{witType}</if>
+            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
+            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
+        </where>
+    </select>
+    
+    <select id="selectDealpayWithdrawalEntityById" parameterType="Long" resultMap="DealpayWithdrawalEntityResult">
+        <include refid="selectDealpayWithdrawalEntityVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDealpayWithdrawalEntity" parameterType="DealpayWithdrawalEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into dealpay_withdraw
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">orderId,</if>
+            <if test="userId != null  and userId != ''">userId,</if>
+            <if test="withdrawType != null ">withdrawType,</if>
+            <if test="bankNo != null  and bankNo != ''">bankNo,</if>
+            <if test="accname != null  and accname != ''">accname,</if>
+            <if test="orderStatus != null  and orderStatus != ''">orderStatus,</if>
+            <if test="bankName != null  and bankName != ''">bankName,</if>
+            <if test="amount != null ">amount,</if>
+            <if test="fee != null ">fee,</if>
+            <if test="actualAmount != null ">actualAmount,</if>
+            <if test="mobile != null  and mobile != ''">mobile,</if>
+            <if test="notify != null  and notify != ''">notify,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+            <if test="status != null ">status,</if>
+            <if test="witType != null  and witType != ''">witType,</if>
+            <if test="retain1 != null  and retain1 != ''">retain1,</if>
+            <if test="retain2 != null  and retain2 != ''">retain2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">#{orderId},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="withdrawType != null ">#{withdrawType},</if>
+            <if test="bankNo != null  and bankNo != ''">#{bankNo},</if>
+            <if test="accname != null  and accname != ''">#{accname},</if>
+            <if test="orderStatus != null  and orderStatus != ''">#{orderStatus},</if>
+            <if test="bankName != null  and bankName != ''">#{bankName},</if>
+            <if test="amount != null ">#{amount},</if>
+            <if test="fee != null ">#{fee},</if>
+            <if test="actualAmount != null ">#{actualAmount},</if>
+            <if test="mobile != null  and mobile != ''">#{mobile},</if>
+            <if test="notify != null  and notify != ''">#{notify},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="witType != null  and witType != ''">#{witType},</if>
+            <if test="retain1 != null  and retain1 != ''">#{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">#{retain2},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDealpayWithdrawalEntity" parameterType="DealpayWithdrawalEntity">
+        update dealpay_withdraw
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null  and orderId != ''">orderId = #{orderId},</if>
+            <if test="userId != null  and userId != ''">userId = #{userId},</if>
+            <if test="withdrawType != null ">withdrawType = #{withdrawType},</if>
+            <if test="bankNo != null  and bankNo != ''">bankNo = #{bankNo},</if>
+            <if test="accname != null  and accname != ''">accname = #{accname},</if>
+            <if test="orderStatus != null  and orderStatus != ''">orderStatus = #{orderStatus},</if>
+            <if test="bankName != null  and bankName != ''">bankName = #{bankName},</if>
+            <if test="amount != null ">amount = #{amount},</if>
+            <if test="fee != null ">fee = #{fee},</if>
+            <if test="actualAmount != null ">actualAmount = #{actualAmount},</if>
+            <if test="mobile != null  and mobile != ''">mobile = #{mobile},</if>
+            <if test="notify != null  and notify != ''">notify = #{notify},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="witType != null  and witType != ''">witType = #{witType},</if>
+            <if test="retain1 != null  and retain1 != ''">retain1 = #{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">retain2 = #{retain2},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDealpayWithdrawalEntityById" parameterType="Long">
+        delete from dealpay_withdraw where id = #{id}
+    </delete>
+
+    <delete id="deleteDealpayWithdrawalEntityByIds" parameterType="String">
+        delete from dealpay_withdraw where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

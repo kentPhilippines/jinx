@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('用户详情列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>用户id【登录账号】：</p>
+                            <input type="text" name="userId"/>
+                        </li>
+                        <li>
+                            <p>用户昵称：</p>
+                            <input type="text" name="userName"/>
+                        </li>
+                        <li>
+                            <p>shiro加密秘钥【登录】：</p>
+                            <input type="text" name="password"/>
+                        </li>
+                        <li>
+                            <p>shiro加密秘钥【资金】【商户则为交易秘钥】：</p>
+                            <input type="text" name="payPasword"/>
+                        </li>
+                        <li>
+                            <p>秘钥加密盐值【加密算法】：</p>
+                            <input type="text" name="salt"/>
+                        </li>
+                        <li>
+                            <p>用户类型,商户1 码商2：</p>
+                            <select name="userType" th:with="type=${@dict.getType('')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>当前用户总开关 1开启0关闭【码商商户后台控制,该值只能在后台显示】：</p>
+                            <input type="text" name="switchs"/>
+                        </li>
+                        <li>
+                            <p>组群备注：</p>
+                            <input type="text" name="userNode"/>
+                        </li>
+                        <li>
+                            <p>邮箱【修改账号秘钥邮件发送地址】：</p>
+                            <input type="text" name="email"/>
+                        </li>
+                        <li>
+                            <p>代理商id【如果存在代理商则存在数据,如果不存在代理商则为null】：</p>
+                            <input type="text" name="agent"/>
+                        </li>
+                        <li>
+                            <p>是否为代理商:1代理商2普通码商【分润结算类型看用户类型userType】：</p>
+                            <input type="text" name="isAgent"/>
+                        </li>
+                        <li>
+                            <p>信用等级为默认为100,掉单一次,或者出现故障一次减分0.001分,可人为加分：</p>
+                            <input type="text" name="credit"/>
+                        </li>
+                        <li>
+                            <p>是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以交易】：</p>
+                            <input type="text" name="receiveOrderState"/>
+                        </li>
+                        <li>
+                            <p>是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以代付】：</p>
+                            <input type="text" name="remitOrderState"/>
+                        </li>
+                        <li>
+                            <p>QQ联系方式：</p>
+                            <input type="text" name="QQ"/>
+                        </li>
+                        <li>
+                            <p>小飞机：</p>
+                            <input type="text" name="telegram"/>
+                        </li>
+                        <li>
+                            <p>skype：</p>
+                            <input type="text" name="skype"/>
+                        </li>
+                        <li class="select-time">
+                            <p>数据创建时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginCreateTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endCreateTime]"/>
+                        </li>
+                        <li class="select-time">
+                            <p>最后一次数据修改时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginSubmitTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endSubmitTime]"/>
+                        </li>
+                        <li>
+                            <p>数据是否可用:1数据可用2数据无用：</p>
+                            <select name="status">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>商户私钥：</p>
+                            <input type="text" name="privateKey"/>
+                        </li>
+                        <li>
+                            <p>商户公钥：</p>
+                            <input type="text" name="publicKey"/>
+                        </li>
+                        <li>
+                            <p>最小金额：</p>
+                            <input type="text" name="minAmount"/>
+                        </li>
+                        <li>
+                            <p>最大金额：</p>
+                            <input type="text" name="maxAmount"/>
+                        </li>
+                        <li>
+                            <p>总金额限制：</p>
+                            <input type="text" name="totalAmount"/>
+                        </li>
+                        <li>
+                            <p>下单次数：</p>
+                            <input type="text" name="timesTotal"/>
+                        </li>
+                        <li>
+                            <p>限制时间-开始时间：</p>
+                            <input type="text" name="startTime"/>
+                        </li>
+                        <li>
+                            <p>限制时间-结束时间：</p>
+                            <input type="text" name="endTime"/>
+                        </li>
+                        <li>
+                            <p>代付ip：</p>
+                            <input type="text" name="witip"/>
+                        </li>
+                        <li>
+                            <p>供应队列code：</p>
+                            <input type="text" name="queueList"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="dealpay:cardInfo:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="dealpay:cardInfo:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="dealpay:cardInfo:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dealpay:cardInfo:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('dealpay:cardInfo:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('dealpay:cardInfo:remove')}]];
+    var prefix = ctx + "dealpay/cardInfo";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "用户详情",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '数据id',
+                    visible: false
+                },
+                {
+                    field: 'userId',
+                    title: '用户id【登录账号】'
+                },
+                {
+                    field: 'userName',
+                    title: '用户昵称'
+                },
+                {
+                    field: 'password',
+                    title: 'shiro加密秘钥【登录】'
+                },
+                {
+                    field: 'payPasword',
+                    title: 'shiro加密秘钥【资金】【商户则为交易秘钥】'
+                },
+                {
+                    field: 'salt',
+                    title: '秘钥加密盐值【加密算法】'
+                },
+                {
+                    field: 'userType',
+                    title: '用户类型,商户1 码商2'
+                },
+                {
+                    field: 'switchs',
+                    title: '当前用户总开关 1开启0关闭【码商商户后台控制,该值只能在后台显示】'
+                },
+                {
+                    field: 'userNode',
+                    title: '组群备注'
+                },
+                {
+                    field: 'email',
+                    title: '邮箱【修改账号秘钥邮件发送地址】'
+                },
+                {
+                    field: 'agent',
+                    title: '代理商id【如果存在代理商则存在数据,如果不存在代理商则为null】'
+                },
+                {
+                    field: 'isAgent',
+                    title: '是否为代理商:1代理商2普通码商【分润结算类型看用户类型userType】'
+                },
+                {
+                    field: 'credit',
+                    title: '信用等级为默认为100,掉单一次,或者出现故障一次减分0.001分,可人为加分'
+                },
+                {
+                    field: 'receiveOrderState',
+                    title: '是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以交易】'
+                },
+                {
+                    field: 'remitOrderState',
+                    title: '是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以代付】'
+                },
+                {
+                    field: 'QQ',
+                    title: 'QQ联系方式'
+                },
+                {
+                    field: 'telegram',
+                    title: '小飞机'
+                },
+                {
+                    field: 'skype',
+                    title: 'skype'
+                },
+                {
+                    field: 'createTime',
+                    title: '数据创建时间'
+                },
+                {
+                    field: 'submitTime',
+                    title: '最后一次数据修改时间'
+                },
+                {
+                    field: 'status',
+                    title: '数据是否可用:1数据可用2数据无用'
+                },
+                {
+                    field: 'privateKey',
+                    title: '商户私钥'
+                },
+                {
+                    field: 'publicKey',
+                    title: '商户公钥'
+                },
+                {
+                    field: 'minAmount',
+                    title: '最小金额'
+                },
+                {
+                    field: 'maxAmount',
+                    title: '最大金额'
+                },
+                {
+                    field: 'totalAmount',
+                    title: '总金额限制'
+                },
+                {
+                    field: 'timesTotal',
+                    title: '下单次数'
+                },
+                {
+                    field: 'startTime',
+                    title: '限制时间-开始时间'
+                },
+                {
+                    field: 'endTime',
+                    title: '限制时间-结束时间'
+                },
+                {
+                    field: 'witip',
+                    title: '代付ip'
+                },
+                {
+                    field: 'queueList',
+                    title: '供应队列code'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>
