@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.dealpay.mapper.DealpayRechargeMapper">
     
-    <resultMap type="DealpayRecharge" id="DealpayRechargeResult">
+    <resultMap type="DealpayRechargeEntity" id="DealpayRechargeResult">
         <result property="id"    column="id"    />
         <result property="orderId"    column="orderId"    />
         <result property="userId"    column="userId"    />
@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, orderId, userId, rechargeType, chargeReason, orderStatus, depositor, amount, fee, actualAmount, chargeBankcard, phone, notfiy, chargeCard, chargePerson, createTime, submitTime, status, retain1 from dealpay_recharge
     </sql>
 
-    <select id="selectDealpayRechargeList" parameterType="DealpayRecharge" resultMap="DealpayRechargeResult">
+    <select id="selectDealpayRechargeList" parameterType="DealpayRechargeEntity" resultMap="DealpayRechargeResult">
         <include refid="selectDealpayRechargeVo"/>
         <where>  
             <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertDealpayRecharge" parameterType="DealpayRecharge" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertDealpayRecharge" parameterType="DealpayRechargeEntity" useGeneratedKeys="true" keyProperty="id">
         insert into dealpay_recharge
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderId != null  and orderId != ''">orderId,</if>
@@ -103,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateDealpayRecharge" parameterType="DealpayRecharge">
+    <update id="updateDealpayRecharge" parameterType="DealpayRechargeEntity">
         update dealpay_recharge
         <trim prefix="SET" suffixOverrides=",">
             <if test="orderId != null  and orderId != ''">orderId = #{orderId},</if>
