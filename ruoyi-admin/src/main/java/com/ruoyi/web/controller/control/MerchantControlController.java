@@ -57,7 +57,6 @@ public class MerchantControlController extends BaseController {
         List<AlipayUserInfo> list = merchantInfoEntityService.selectMerchantControlList(merchantInfoEntity);
         return getDataTable(list);
     }
-
     /**
      * 显示商户风控信息
      */

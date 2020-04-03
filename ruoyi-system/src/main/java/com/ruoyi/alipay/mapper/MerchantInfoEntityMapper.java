@@ -82,6 +82,7 @@ public interface MerchantInfoEntityMapper {
             "startTime = #{startTime}," +
             "endTime = #{endTime}," +
             "witip = #{witip}," +
+            "dealUrl = #{dealUrl}," +
             "timesTotal = #{timesTotal}," +
             "submitTime = #{submitTime} " +
             "where id = #{id} ")
@@ -115,7 +116,7 @@ public interface MerchantInfoEntityMapper {
      */
     @Select("<script>" +
             "select " +
-            " id,userId, userName, userType, switchs, agent, minAmount, maxAmount,totalAmount, timesTotal, startTime, endTime, witip, submitTime " +
+            " id,userId, userName, userType, switchs, agent, minAmount, maxAmount,totalAmount, timesTotal, startTime, endTime, witip, dealUrl, submitTime " +
             " from " +
             " alipay_user_info" +
             " where userType = 1 " +
@@ -141,7 +142,7 @@ public interface MerchantInfoEntityMapper {
     @Select("<script>" +
             "select u.id, u.userId, u.userName, u.userType, u.switchs, u.email, u.agent, u.isAgent, u.credit, u.QQ, u.telegram, u.skype, " +
             "u.createTime, u.submitTime, u.status, u.privateKey, u.publicKey, " +
-            "u.minAmount, u.maxAmount, u.timesTotal, u.startTime, u.endTime, u.witip " +
+            "u.minAmount, u.maxAmount, u.timesTotal, u.startTime, u.endTime, u.witip, u.dealUrl " +
             " from alipay_user_info u " +
             " where u.userId = #{userId} " +
             "</script>")

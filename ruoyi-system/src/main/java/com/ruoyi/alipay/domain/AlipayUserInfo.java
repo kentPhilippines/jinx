@@ -174,6 +174,11 @@ public class AlipayUserInfo extends BaseEntity {
     @Excel(name = "代付ip")
     private String witip;
 
+    /**
+     * 交易IP地址
+     */
+    private String dealUrl;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -406,6 +411,14 @@ public class AlipayUserInfo extends BaseEntity {
         this.totalAmount = totalAmount;
     }
 
+    public String getDealUrl() {
+        return dealUrl;
+    }
+
+    public void setDealUrl(String dealUrl) {
+        this.dealUrl = dealUrl;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -439,6 +452,7 @@ public class AlipayUserInfo extends BaseEntity {
                 .append("startTime", getStartTime())
                 .append("endTime", getEndTime())
                 .append("witip", getWitip())
+                .append("dealUrl", getDealUrl())
                 .toString();
     }
 }
