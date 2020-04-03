@@ -53,7 +53,7 @@ public class GoogleAuthenticator {
      * @return
      */
     public static String getQRBarcodeURL(String user, String host, String secret) {
-        String format = "http://www.google.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=otpauth://totp/%s@%s?secret=%s";
+        String format = "http://chart.apis.google.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=otpauth://totp/%s@%s?secret=%s";
         return String.format(format, user, host, secret);
     }
 
