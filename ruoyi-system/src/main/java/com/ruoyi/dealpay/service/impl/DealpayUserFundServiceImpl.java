@@ -2,6 +2,8 @@ package com.ruoyi.dealpay.service.impl;
 
 import java.util.List;
 
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class DealpayUserFundServiceImpl implements IDealpayUserFundService {
      * @return 用户资金账户
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public DealpayUserFundEntity selectDealpayUserFundById(Long id) {
         return dealpayUserFundMapper.selectDealpayUserFundById(id);
     }
@@ -39,6 +42,7 @@ public class DealpayUserFundServiceImpl implements IDealpayUserFundService {
      * @return 用户资金账户
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public List<DealpayUserFundEntity> selectDealpayUserFundList(DealpayUserFundEntity dealpayUserFund) {
         return dealpayUserFundMapper.selectDealpayUserFundList(dealpayUserFund);
     }
@@ -50,6 +54,7 @@ public class DealpayUserFundServiceImpl implements IDealpayUserFundService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int insertDealpayUserFund(DealpayUserFundEntity dealpayUserFund) {
         dealpayUserFund.setCreateTime(DateUtils.getNowDate());
         return dealpayUserFundMapper.insertDealpayUserFund(dealpayUserFund);

@@ -98,7 +98,9 @@ shiro:
     # 验证码开关
     captchaEnabled: true
     # 验证码类型 math 数组计算 char 字符 google 谷歌动态口令
-    captchaType: google
+  # captchaType: google
+  #  captchaType: math
+    captchaType: char
   cookie:
     # 设置Cookie的域名 默认空，即当前访问的域名
     domain:

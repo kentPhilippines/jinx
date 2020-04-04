@@ -71,6 +71,7 @@
         var removeFlag = [[${@permission.hasPermi('alipay:running:remove')}]];
         var prefix = ctx + "alipay/running";
         var orderRunType = [[${@dict.getType('runOrderType')}]];
+        var runType = [[${@dict.getType('runType')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -133,12 +134,8 @@
                 {
                     field : 'runType', 
                     title : '流水状态',
-                    formatter: function (value, item, index) {
-                        if (item.runType == '1') {
-                            return '<span>自然状态</span>';
-                        }else if (item.runType == '2') {
-                            return '<span>人工操作</span>';
-                        }
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(runType, value);
                     }
                 },
                 {

@@ -30,6 +30,7 @@ public class DealpayDealOrderServiceImpl implements IDealpayDealOrderService {
      * @return 交易订单
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public DealpayDealOrderEntity selectDealpayDealOrderById(Long id) {
         return dealpayDealOrderMapper.selectDealpayDealOrderById(id);
     }
