@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectAlipayBankListEntityList" parameterType="AlipayBankListEntity" resultMap="AlipayBankListEntityResult">
         <include refid="selectAlipayBankListEntityVo"/>
         <where>  
-            <if test="bankcardAccount != null  and bankcardA    ccount != ''"> and bankcardAccount = #{bankcardAccount}</if>
+            <if test="bankcardAccount != null  and bankcardAccount != ''"> and bankcardAccount = #{bankcardAccount}</if>
             <if test="accountHolder != null  and accountHolder != ''"> and accountHolder = #{accountHolder}</if>
             <if test="openAccountBank != null  and openAccountBank != ''"> and openAccountBank = #{openAccountBank}</if>
             <if test="bankType != null  and bankType != ''"> and bankType = #{bankType}</if>
