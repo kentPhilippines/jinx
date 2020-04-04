@@ -2,7 +2,8 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('修改手动加扣款记录')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: select2-css"/>
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -23,8 +24,11 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">1 加款类型  2 扣款类型：</label>
                 <div class="col-sm-8">
-                    <select name="amountType" class="form-control m-b" required>
+                    <select name="amountType" class="form-control m-b" th:with="type=${@dict.getType('amountType')}">
                         <option value="">所有</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                                th:field="*{amountType}">
+                        </option>
                     </select>
                     <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
@@ -103,7 +107,8 @@
         </form>
     </div>
     <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: datetimepicker-js"/>
+    <th:block th:include="include :: select2-js"/>
     <script type="text/javascript">
         var prefix = ctx + "dealpay/dealDeduct";
         $("#form-dealDeduct-edit").validate({

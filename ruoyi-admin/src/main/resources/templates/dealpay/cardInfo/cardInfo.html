@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('用户详情列表')"/>
+
     <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
@@ -12,43 +13,65 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>用户id：</p>
+                            <p>用户id【登录账号】：</p>
                             <input type="text" name="userId"/>
                         </li>
                         <li>
-                            <p>用户类型 ：</p>
-                            <select name="userType" th:with="type=${@dict.getType('bankcard_userType')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li  >
-                              <span>入款接单状态 ：  </span>
-                            <select name="receiveOrderState" th:with="type=${@dict.getType('bankcard_isdeal')}"   >
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li >
-                             <span>出款接单状态： </span>
-                            <select name="remitOrderState" th:with="type=${@dict.getType('bankcard_isdeal')}"  >
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
+                            <p>用户昵称：</p>
+                            <input type="text" name="userName"/>
                         </li>
                         <li>
-                            <p>组群备注：</p>
-                            <input type="text" name="userNode"/>
+                            <p>用户类型：</p>
+                            <select name="userType" th:with="type=${@dict.getType('userType')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
                         </li>
-
-                        <li>
-                            <p>代理商id：</p>
-                            <input type="text" name="agent"/>
-                        </li>
-
+<!--                        <li>-->
+<!--                            <p>当前用户总开关 1开启0关闭【码商商户后台控制,该值只能在后台显示】：</p>-->
+<!--                            <input type="text" name="switchs"/>-->
+<!--                        </li>-->
+<!--                            <li> &lt;!&ndash;- 【如果存在代理商则存在数据,如果不存在代理商则为null】&ndash;&gt;-->
+<!--                                <p>代理商id：</p>-->
+<!--                                <input type="text" name="agent"/>-->
+<!--                            </li>-->
+<!--                         <li> &lt;!&ndash;-1代理商2普通码商【分润结算类型看用户类型userType】 &ndash;&gt;-->
+<!--                            <p>是否为代理商:：</p>-->
+<!--                            <input type="text" name="isAgent"/>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <p>信用等级为默认为100,掉单一次,或者出现故障一次减分0.001分,可人为加分：</p>-->
+<!--                            <input type="text" name="credit"/>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <p>是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以交易】：</p>-->
+<!--                            <input type="text" name="receiveOrderState"/>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <p>是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以代付】：</p>-->
+<!--                            <input type="text" name="remitOrderState"/>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <p>最小金额：</p>-->
+<!--                            <input type="text" name="minAmount"/>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <p>最大金额：</p>-->
+<!--                            <input type="text" name="maxAmount"/>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <p>下单次数：</p>-->
+<!--                            <input type="text" name="timesTotal"/>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <p>代付ip：</p>-->
+<!--                            <input type="text" name="witip"/>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <p>供应队列code：</p>-->
+<!--                            <input type="text" name="queueList"/>-->
+<!--                        </li>-->
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
@@ -86,9 +109,7 @@
     var editFlag = [[${@permission.hasPermi('dealpay:cardInfo:edit')}]];
     var removeFlag = [[${@permission.hasPermi('dealpay:cardInfo:remove')}]];
     var prefix = ctx + "dealpay/cardInfo";
-    var userType = [[${@dict.getType('bankcard_userType')}]];
-    var isdeal = [[${@dict.getType('bankcard_isdeal')}]];
-    var isAgent = [[${@dict.getType('bankcard_isAgent')}]];
+
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -107,55 +128,59 @@
                 },
                 {
                     field: 'userId',
-                    title: '用户id '
+                    title: '用户id【登录账号】'
                 },
                 {
                     field: 'userName',
                     title: '用户昵称'
                 },
                 {
-                    field: 'userType',
-                    title: '用户类型',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(userType, value);
-                    }
+                    field: 'password',
+                    title: 'shiro加密秘钥【登录】'
                 },
                 {
-                    visible: editFlag == 'hidden' ? false : true,
-                    title: '用户开关',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        return statusTools(row, 'switchs');
-                    }
+                    field: 'payPasword',
+                    title: 'shiro加密秘钥【资金】【商户则为交易秘钥】'
+                },
+                {
+                    field: 'salt',
+                    title: '秘钥加密盐值【加密算法】'
+                },
+                {
+                    field: 'userType',
+                    title: '用户类型,商户1 码商2'
+                },
+                {
+                    field: 'switchs',
+                    title: '当前用户总开关 1开启0关闭【码商商户后台控制,该值只能在后台显示】'
                 },
                 {
                     field: 'userNode',
                     title: '组群备注'
                 },
                 {
+                    field: 'email',
+                    title: '邮箱【修改账号秘钥邮件发送地址】'
+                },
+                {
                     field: 'agent',
-                    title: '代理商id'
+                    title: '代理商id【如果存在代理商则存在数据,如果不存在代理商则为null】'
                 },
                 {
                     field: 'isAgent',
-                    title: '账号性质',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(isAgent, value);
-                    }
+                    title: '是否为代理商:1代理商2普通码商【分润结算类型看用户类型userType】'
+                },
+                {
+                    field: 'credit',
+                    title: '信用等级为默认为100,掉单一次,或者出现故障一次减分0.001分,可人为加分'
                 },
                 {
                     field: 'receiveOrderState',
-                    title: '入款接单状态',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(isdeal, value);
-                    }
+                    title: '是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以交易】'
                 },
                 {
                     field: 'remitOrderState',
-                    title: ' 出款接单状态 ',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(isdeal, value);
-                    }
+                    title: '是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以代付】'
                 },
                 {
                     field: 'QQ',
@@ -174,6 +199,54 @@
                     title: '数据创建时间'
                 },
                 {
+                    field: 'submitTime',
+                    title: '最后一次数据修改时间'
+                },
+                {
+                    field: 'status',
+                    title: '数据是否可用:1数据可用2数据无用'
+                },
+                {
+                    field: 'privateKey',
+                    title: '商户私钥'
+                },
+                {
+                    field: 'publicKey',
+                    title: '商户公钥'
+                },
+                {
+                    field: 'minAmount',
+                    title: '最小金额'
+                },
+                {
+                    field: 'maxAmount',
+                    title: '最大金额'
+                },
+                {
+                    field: 'totalAmount',
+                    title: '总金额限制'
+                },
+                {
+                    field: 'timesTotal',
+                    title: '下单次数'
+                },
+                {
+                    field: 'startTime',
+                    title: '限制时间-开始时间'
+                },
+                {
+                    field: 'endTime',
+                    title: '限制时间-结束时间'
+                },
+                {
+                    field: 'witip',
+                    title: '代付ip'
+                },
+                {
+                    field: 'queueList',
+                    title: '供应队列code'
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
@@ -186,33 +259,6 @@
         };
         $.table.init(options);
     });
-    /* 用户状态显示 */
-    function statusTools(row, param) {
-        if (param === 'switchs') {
-            if (row.switchs == 0) {
-                let msg = "确认要【启用】此商户的【用户状态】吗？";
-                let val = 1;
-                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
-            } else {
-                let msg = "确认要【停用】此商户【用户状态】吗？";
-                let val = 0;
-                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
-            }
-        }
-    }
-    /* 账户管理-停用 */
-    function disable(userId, param, msg, val) {
-        $.modal.confirm(msg, function () {
-            $.operate.post(prefix + "/changeStatus", {"userId": userId, "params[paramKey]":param,"params[paramValue]": val});
-        })
-    }
-
-    /* 账户管理-启用 */
-    function enable(userId, param, msg, val) {
-        $.modal.confirm(msg, function () {
-            $.operate.post(prefix + "/changeStatus", {"userId": userId, "params[paramKey]":param,"params[paramValue]": val});
-        })
-    }
 </script>
 </body>
 </html>
