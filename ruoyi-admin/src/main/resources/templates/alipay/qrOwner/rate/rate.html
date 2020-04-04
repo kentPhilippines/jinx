@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('码商通道费率列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -14,25 +15,28 @@
                             <p>码商ID：</p>
                             <input type="text" name="userId"/>
                         </li>
-                        <li>
-                            <p>通道状态：</p>
-                            <select name="switchs" th:with="type=${@dict.getType('userSwitchs')}">
+                        <li class="select-selectpicker">
+                            <label>通道状态：</label>
+                            <select name="switchs" th:with="type=${@dict.getType('userSwitchs')}" class="selectpicker"
+                                    data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
-                        <li>
-                            <p>产品类型：</p>
-                            <select name="payTypr" th:with="type=${@dict.getType('payTypr')}">
+                        <li class="select-selectpicker">
+                            <label>产品类型：</label>
+                            <select name="payTypr" th:with="type=${@dict.getType('payTypr')}" class="selectpicker"
+                                    data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
-                        <li>
-                            <p>费率类型: </p>
-                            <select name="feeType" th:with="type=${@dict.getType('feeType')}">
+                        <li class="select-selectpicker">
+                            <label>费率类型：</label>
+                            <select name="feeType" th:with="type=${@dict.getType('feeType')}" class="selectpicker"
+                                    data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
@@ -67,6 +71,7 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('alipay:qr:rate:edit')}]];
     var removeFlag = [[${@permission.hasPermi('alipay:qr:rate:remove')}]];

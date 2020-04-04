@@ -106,13 +106,14 @@ public class DealpayUserRateController extends BaseController {
     }
 
     /**
-     * 删除费率
+     * 商户费率状态更新
      */
-    @RequiresPermissions("dealpay:dealRate:remove")
-    @Log(title = "费率", businessType = BusinessType.DELETE)
-    @PostMapping("/remove")
+    @RequiresPermissions("dealpay:dealRate:status")
+    @Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
+    @PostMapping("/changeStatus")
     @ResponseBody
-    public AjaxResult remove(String ids) {
-        return toAjax(dealpayUserRateEntityService.deleteDealpayUserRateEntityByIds(ids));
+    public AjaxResult updateStatus(String id, String userId, String feeType, String switchs) {
+        return toAjax(dealpayUserRateEntityService.changeStatus(id, userId, feeType, switchs));
     }
+
 }

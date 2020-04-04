@@ -1,284 +1,175 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('交易订单列表')" />
+    <th:block th:include="include :: header('交易订单列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <p>订单号：</p>
-                                <input type="text" name="orderId"/>
-                            </li>
-                            <li>
-                                <p>关联订单号：</p>
-                                <input type="text" name="associatedId"/>
-                            </li>
-                            <li>
-                                <p>订单状态:0预下单1处理中2成功3未收到回调4失败5超时6订单申述7人工处理：</p>
-                                <select name="orderStatus">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>订单交易金额：</p>
-                                <input type="text" name="dealAmount"/>
-                            </li>
-                            <li>
-                                <p>订单交易手续费：</p>
-                                <input type="text" name="dealFee"/>
-                            </li>
-                            <li>
-                                <p>实际到账金额：</p>
-                                <input type="text" name="actualAmount"/>
-                            </li>
-                            <li>
-                                <p>订单类型:1 出款交易     2  入款交易：</p>
-                                <select name="orderType" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>订单关联商户账号：</p>
-                                <input type="text" name="orderAccount"/>
-                            </li>
-                            <li>
-                                <p>关联卡商商账户：</p>
-                                <input type="text" name="orderQrUser"/>
-                            </li>
-                            <li>
-                                <p>银行卡系统编号：</p>
-                                <input type="text" name="orderQr"/>
-                            </li>
-                            <li>
-                                <p>外部订单号(下游商户请求参数,用户数据回调)：</p>
-                                <input type="text" name="externalOrderId"/>
-                            </li>
-                            <li>
-                                <p>订单生成IP(客户端ip或者是下游商户id)：</p>
-                                <input type="text" name="generationIp"/>
-                            </li>
-                            <li>
-                                <p>交易备注：</p>
-                                <input type="text" name="dealDescribe"/>
-                            </li>
-                            <li>
-                                <p>订单异步回调地址：</p>
-                                <input type="text" name="notify"/>
-                            </li>
-                            <li>
-                                <p>订单同步回调地址：</p>
-                                <input type="text" name="back"/>
-                            </li>
-                            <li>
-                                <p>是否發送通知 //  YES 已發送    NO 未發送：</p>
-                                <input type="text" name="isNotify"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据生成时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据修改时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
-                            </li>
-                            <li>
-                                <p>使用费率id：</p>
-                                <input type="text" name="feeId"/>
-                            </li>
-                            <li>
-                                <p>状态:1可使用；0不可使用：</p>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>交易产品类型：</p>
-                                <select name="productType" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>备用字段添加业务使用：</p>
-                                <input type="text" name="retain2"/>
-                            </li>
-                            <li>
-                                <p>备用字段添加业务使用：</p>
-                                <input type="text" name="retain3"/>
-                            </li>
-                            <li>
-                                <p>备用字段添加业务使用：</p>
-                                <input type="text" name="retain4"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>平台订单：</label>
+                            <input type="text" name="orderId"/>
+                        </li>
+                        <li>
+                            <label>关联订单：</label>
+                            <input type="text" name="associatedId"/>
+                        </li>
+                        <li>
+                            <label>外部订单：</label>
+                            <input type="text" name="externalOrderId"/>
+                        </li>
+                        <li>
+                            <label>商户账号：</label>
+                            <input type="text" name="orderAccount"/>
+                        </li>
+                        <li>
+                            <label>卡商账户：</label>
+                            <input type="text" name="orderQrUser"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>订单类型：</label>
+                            <select id="orderType" name="orderType" th:with="type=${@dict.getType('card_dealOrder_type')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>订单状态： </label>
+                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <p>创建时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginCreateTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endCreateTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="dealpay:dealOrder:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="dealpay:dealOrder:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="dealpay:dealOrder:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dealpay:dealOrder:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dealpay:dealOrder:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('dealpay:dealOrder:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('dealpay:dealOrder:remove')}]];
-        var prefix = ctx + "dealpay/dealOrder";
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    let editFlag = [[${@permission.hasPermi('dealpay:dealOrder:edit')}]];
+    let removeFlag = [[${@permission.hasPermi('dealpay:dealOrder:remove')}]];
+    let orderStatus = [[${@dict.getType('orderStatus')}]];
+    let orderType = [[${@dict.getType('card_dealOrder_type')}]];
+    let prefix = ctx + "dealpay/dealOrder";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "交易订单",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            updateUrl: prefix + "/edit/{id}",
+            exportUrl: prefix + "/export",
+            modalName: "交易订单",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'id', 
-                    title : '数据id',
+                    field: 'id',
+                    title: '数据ID',
                     visible: false
                 },
                 {
-                    field : 'orderId', 
-                    title : '订单号'
+                    field: 'orderId',
+                    title: '平台订单'
                 },
                 {
-                    field : 'associatedId', 
-                    title : '关联订单号'
+                    field: 'associatedId',
+                    title: '关联订单'
                 },
                 {
-                    field : 'orderStatus', 
-                    title : '订单状态:0预下单1处理中2成功3未收到回调4失败5超时6订单申述7人工处理'
+                    field: 'externalOrderId',
+                    title: '外部订单'
                 },
                 {
-                    field : 'dealAmount', 
-                    title : '订单交易金额'
+                    field: 'orderAccount',
+                    title: '商户账号'
                 },
                 {
-                    field : 'dealFee', 
-                    title : '订单交易手续费'
+                    field: 'orderQrUser',
+                    title: '卡商账户'
                 },
                 {
-                    field : 'actualAmount', 
-                    title : '实际到账金额'
+                    field: 'orderStatus',
+                    title: '订单状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(orderStatus, value);
+                    }
                 },
                 {
-                    field : 'orderType', 
-                    title : '订单类型:1 出款交易     2  入款交易'
+                    field: 'dealAmount',
+                    title: '交易金额'
                 },
                 {
-                    field : 'orderAccount', 
-                    title : '订单关联商户账号'
+                    field: 'dealFee',
+                    title: '手续费'
                 },
                 {
-                    field : 'orderQrUser', 
-                    title : '关联卡商商账户'
+                    field: 'orderType',
+                    title: '订单类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(orderStatus, value);
+                    }
                 },
                 {
-                    field : 'orderQr', 
-                    title : '银行卡系统编号'
+                    field: 'feeId',
+                    title: '费率'
                 },
                 {
-                    field : 'externalOrderId', 
-                    title : '外部订单号(下游商户请求参数,用户数据回调)'
+                    field: 'dealDescribe',
+                    title: '交易备注'
                 },
                 {
-                    field : 'generationIp', 
-                    title : '订单生成IP(客户端ip或者是下游商户id)'
+                    field: 'isNotify',
+                    title: '是否通知'
                 },
                 {
-                    field : 'dealDescribe', 
-                    title : '交易备注'
-                },
-                {
-                    field : 'notify', 
-                    title : '订单异步回调地址'
-                },
-                {
-                    field : 'back', 
-                    title : '订单同步回调地址'
-                },
-                {
-                    field : 'isNotify', 
-                    title : '是否發送通知 //  YES 已發送    NO 未發送'
-                },
-                {
-                    field : 'createTime', 
-                    title : '数据生成时间'
-                },
-                {
-                    field : 'submitTime', 
-                    title : '数据修改时间'
-                },
-                {
-                    field : 'feeId', 
-                    title : '使用费率id'
-                },
-                {
-                    field : 'status', 
-                    title : '状态:1可使用；0不可使用'
-                },
-                {
-                    field : 'productType', 
-                    title : '交易产品类型'
-                },
-                {
-                    field : 'retain2', 
-                    title : '备用字段添加业务使用'
-                },
-                {
-                    field : 'retain3', 
-                    title : '备用字段添加业务使用'
-                },
-                {
-                    field : 'retain4', 
-                    title : '备用字段添加业务使用'
+                    field: 'createTime',
+                    title: '创建时间'
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
-    </script>
+        };
+        $.table.init(options);
+    });
+</script>
 </body>
 </html>

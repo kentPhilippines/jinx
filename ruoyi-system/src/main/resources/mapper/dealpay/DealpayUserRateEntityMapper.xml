@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.dealpay.mapper.DealpayUserRateEntityMapper">
+<mapper namespace="com.ruoyi.dealpay.mapper.DealpayUserRateMapper">
 
     <resultMap type="DealpayUserRateEntity" id="DealpayUserRateEntityResult">
         <result property="id" column="id"/>
@@ -24,10 +24,10 @@
         select id, userId, userType, switchs, fee, feeType, createTime, submitTime, status, retain1, retain2, retain3, retain4 from dealpay_user_rate
     </sql>
 
-    <select id="selectDealpayUserRateEntityList" parameterType="DealpayUserRateEntity"
-            resultMap="DealpayUserRateEntityResult">
+    <select id="selectDealpayUserRateEntityList" parameterType="DealpayUserRateEntity" resultMap="DealpayUserRateEntityResult">
         <include refid="selectDealpayUserRateEntityVo"/>
         <where>
+        1=1
             <if test="userId != null  and userId != ''">and userId = #{userId}</if>
             <if test="userType != null ">and userType = #{userType}</if>
             <if test="switchs != null ">and switchs = #{switchs}</if>
@@ -95,16 +95,5 @@
         </trim>
         where id = #{id}
     </update>
-
-    <delete id="deleteDealpayUserRateEntityById" parameterType="Long">
-        delete from dealpay_user_rate where id = #{id}
-    </delete>
-
-    <delete id="deleteDealpayUserRateEntityByIds" parameterType="String">
-        delete from dealpay_user_rate where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
 
 </mapper>
