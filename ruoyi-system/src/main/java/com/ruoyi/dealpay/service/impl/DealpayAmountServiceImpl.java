@@ -30,6 +30,7 @@ public class DealpayAmountServiceImpl implements IDealpayAmountService {
      * @return 手动加扣款记录
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public DealpayAmountEntity selectDealpayAmountById(Long id) {
         return dealpayAmountMapper.selectDealpayAmountById(id);
     }
@@ -53,6 +54,7 @@ public class DealpayAmountServiceImpl implements IDealpayAmountService {
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int insertDealpayAmount(DealpayAmountEntity dealpayAmount) {
         dealpayAmount.setCreateTime(DateUtils.getNowDate());
         return dealpayAmountMapper.insertDealpayAmount(dealpayAmount);
@@ -65,6 +67,7 @@ public class DealpayAmountServiceImpl implements IDealpayAmountService {
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int updateDealpayAmount(DealpayAmountEntity dealpayAmount) {
         return dealpayAmountMapper.updateDealpayAmount(dealpayAmount);
     }
@@ -76,6 +79,7 @@ public class DealpayAmountServiceImpl implements IDealpayAmountService {
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayAmountByIds(String ids) {
         return dealpayAmountMapper.deleteDealpayAmountByIds(Convert.toStrArray(ids));
     }
@@ -87,6 +91,7 @@ public class DealpayAmountServiceImpl implements IDealpayAmountService {
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayAmountById(Long id) {
         return dealpayAmountMapper.deleteDealpayAmountById(id);
     }

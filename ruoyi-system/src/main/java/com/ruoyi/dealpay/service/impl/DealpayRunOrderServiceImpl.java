@@ -42,7 +42,7 @@ public class DealpayRunOrderServiceImpl implements IDealpayRunOrderService {
      * @return 流水订单记录
      */
     @Override
-    @DataSource(DataSourceType.DEALPAY_SLAVE)
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public List<DealpayRunOrderEntity> selectDealpayRunOrderList(DealpayRunOrderEntity dealpayRunOrder) {
         return dealpayRunOrderMapper.selectDealpayRunOrderList(dealpayRunOrder);
     }
@@ -54,6 +54,7 @@ public class DealpayRunOrderServiceImpl implements IDealpayRunOrderService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int insertDealpayRunOrder(DealpayRunOrderEntity dealpayRunOrder) {
         dealpayRunOrder.setCreateTime(DateUtils.getNowDate());
         return dealpayRunOrderMapper.insertDealpayRunOrder(dealpayRunOrder);
@@ -66,6 +67,7 @@ public class DealpayRunOrderServiceImpl implements IDealpayRunOrderService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int updateDealpayRunOrder(DealpayRunOrderEntity dealpayRunOrder) {
         return dealpayRunOrderMapper.updateDealpayRunOrder(dealpayRunOrder);
     }
@@ -77,6 +79,7 @@ public class DealpayRunOrderServiceImpl implements IDealpayRunOrderService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayRunOrderByIds(String ids) {
         return dealpayRunOrderMapper.deleteDealpayRunOrderByIds(Convert.toStrArray(ids));
     }
@@ -88,6 +91,7 @@ public class DealpayRunOrderServiceImpl implements IDealpayRunOrderService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayRunOrderById(Long id) {
         return dealpayRunOrderMapper.deleteDealpayRunOrderById(id);
     }

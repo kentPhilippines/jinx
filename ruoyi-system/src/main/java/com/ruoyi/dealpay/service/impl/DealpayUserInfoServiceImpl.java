@@ -67,6 +67,7 @@ public class DealpayUserInfoServiceImpl implements IDealpayUserInfoService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int updateDealpayUserInfo(DealpayUserInfoEntity dealpayUserInfo) {
         return dealpayUserInfoMapper.updateDealpayUserInfo(dealpayUserInfo);
     }
@@ -78,6 +79,7 @@ public class DealpayUserInfoServiceImpl implements IDealpayUserInfoService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayUserInfoByIds(String ids) {
         return dealpayUserInfoMapper.deleteDealpayUserInfoByIds(Convert.toStrArray(ids));
     }
@@ -89,6 +91,7 @@ public class DealpayUserInfoServiceImpl implements IDealpayUserInfoService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayUserInfoById(Long id) {
         return dealpayUserInfoMapper.deleteDealpayUserInfoById(id);
     }

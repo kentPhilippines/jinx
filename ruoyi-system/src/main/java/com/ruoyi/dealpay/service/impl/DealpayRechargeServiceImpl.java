@@ -25,71 +25,80 @@ public class DealpayRechargeServiceImpl implements IDealpayRechargeService {
 
     /**
      * 查询充值记录
-     *
+     * 
      * @param id 充值记录ID
      * @return 充值记录
      */
     @Override
-    @DataSource(DataSourceType.DEALPAY_SLAVE)
-    public DealpayRechargeEntity selectDealpayRechargeById(Long id) {
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public DealpayRechargeEntity selectDealpayRechargeById(Long id)
+    {
         return dealpayRechargeMapper.selectDealpayRechargeById(id);
     }
 
     /**
      * 查询充值记录列表
-     *
+     * 
      * @param dealpayRecharge 充值记录
      * @return 充值记录
      */
     @Override
-    @DataSource(DataSourceType.DEALPAY_SLAVE)
-    public List<DealpayRechargeEntity> selectDealpayRechargeList(DealpayRechargeEntity dealpayRecharge) {
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public List<DealpayRechargeEntity> selectDealpayRechargeList(DealpayRechargeEntity dealpayRecharge)
+    {
         return dealpayRechargeMapper.selectDealpayRechargeList(dealpayRecharge);
     }
 
     /**
      * 新增充值记录
-     *
+     * 
      * @param dealpayRecharge 充值记录
      * @return 结果
      */
     @Override
-    @DataSource(DataSourceType.DEALPAY_SLAVE)
-    public int insertDealpayRecharge(DealpayRechargeEntity dealpayRecharge) {
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public int insertDealpayRecharge(DealpayRechargeEntity dealpayRecharge)
+    {
         dealpayRecharge.setCreateTime(DateUtils.getNowDate());
         return dealpayRechargeMapper.insertDealpayRecharge(dealpayRecharge);
     }
 
     /**
      * 修改充值记录
-     *
+     * 
      * @param dealpayRecharge 充值记录
      * @return 结果
      */
     @Override
-    public int updateDealpayRecharge(DealpayRechargeEntity dealpayRecharge) {
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public int updateDealpayRecharge(DealpayRechargeEntity dealpayRecharge)
+    {
         return dealpayRechargeMapper.updateDealpayRecharge(dealpayRecharge);
     }
 
     /**
      * 删除充值记录对象
-     *
+     * 
      * @param ids 需要删除的数据ID
      * @return 结果
      */
     @Override
-    public int deleteDealpayRechargeByIds(String ids) {
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public int deleteDealpayRechargeByIds(String ids)
+    {
         return dealpayRechargeMapper.deleteDealpayRechargeByIds(Convert.toStrArray(ids));
     }
 
     /**
      * 删除充值记录信息
-     *
+     * 
      * @param id 充值记录ID
      * @return 结果
      */
     @Override
-    public int deleteDealpayRechargeById(Long id) {
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public int deleteDealpayRechargeById(Long id)
+    {
         return dealpayRechargeMapper.deleteDealpayRechargeById(id);
     }
 }

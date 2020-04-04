@@ -54,6 +54,7 @@ public class DealpayDealOrderServiceImpl implements IDealpayDealOrderService {
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int insertDealpayDealOrder(DealpayDealOrderEntity dealpayDealOrder) {
         dealpayDealOrder.setCreateTime(DateUtils.getNowDate());
         return dealpayDealOrderMapper.insertDealpayDealOrder(dealpayDealOrder);
@@ -66,6 +67,7 @@ public class DealpayDealOrderServiceImpl implements IDealpayDealOrderService {
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int updateDealpayDealOrder(DealpayDealOrderEntity dealpayDealOrder) {
         return dealpayDealOrderMapper.updateDealpayDealOrder(dealpayDealOrder);
     }
@@ -77,6 +79,7 @@ public class DealpayDealOrderServiceImpl implements IDealpayDealOrderService {
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayDealOrderByIds(String ids) {
         return dealpayDealOrderMapper.deleteDealpayDealOrderByIds(Convert.toStrArray(ids));
     }
@@ -88,6 +91,7 @@ public class DealpayDealOrderServiceImpl implements IDealpayDealOrderService {
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayDealOrderById(Long id) {
         return dealpayDealOrderMapper.deleteDealpayDealOrderById(id);
     }

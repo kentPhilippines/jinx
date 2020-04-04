@@ -30,6 +30,7 @@ public class DealpayWithdrawalEntityServiceImpl implements IDealpayWithdrawalEnt
      * @return 卡商出款记录表
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public DealpayWithdrawalEntity selectDealpayWithdrawalEntityById(Long id) {
         return dealpayWithdrawalEntityMapper.selectDealpayWithdrawalEntityById(id);
     }
@@ -53,6 +54,7 @@ public class DealpayWithdrawalEntityServiceImpl implements IDealpayWithdrawalEnt
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int insertDealpayWithdrawalEntity(DealpayWithdrawalEntity dealpayWithdrawalEntity) {
         dealpayWithdrawalEntity.setCreateTime(DateUtils.getNowDate());
         return dealpayWithdrawalEntityMapper.insertDealpayWithdrawalEntity(dealpayWithdrawalEntity);
@@ -65,6 +67,7 @@ public class DealpayWithdrawalEntityServiceImpl implements IDealpayWithdrawalEnt
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int updateDealpayWithdrawalEntity(DealpayWithdrawalEntity dealpayWithdrawalEntity) {
         return dealpayWithdrawalEntityMapper.updateDealpayWithdrawalEntity(dealpayWithdrawalEntity);
     }
@@ -76,6 +79,7 @@ public class DealpayWithdrawalEntityServiceImpl implements IDealpayWithdrawalEnt
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayWithdrawalEntityByIds(String ids) {
         return dealpayWithdrawalEntityMapper.deleteDealpayWithdrawalEntityByIds(Convert.toStrArray(ids));
     }
@@ -87,6 +91,7 @@ public class DealpayWithdrawalEntityServiceImpl implements IDealpayWithdrawalEnt
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayWithdrawalEntityById(Long id) {
         return dealpayWithdrawalEntityMapper.deleteDealpayWithdrawalEntityById(id);
     }

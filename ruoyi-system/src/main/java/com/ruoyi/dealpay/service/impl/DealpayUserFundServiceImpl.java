@@ -67,6 +67,7 @@ public class DealpayUserFundServiceImpl implements IDealpayUserFundService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int updateDealpayUserFund(DealpayUserFundEntity dealpayUserFund) {
         return dealpayUserFundMapper.updateDealpayUserFund(dealpayUserFund);
     }
@@ -78,6 +79,7 @@ public class DealpayUserFundServiceImpl implements IDealpayUserFundService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayUserFundByIds(String ids) {
         return dealpayUserFundMapper.deleteDealpayUserFundByIds(Convert.toStrArray(ids));
     }
@@ -89,6 +91,7 @@ public class DealpayUserFundServiceImpl implements IDealpayUserFundService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayUserFundById(Long id) {
         return dealpayUserFundMapper.deleteDealpayUserFundById(id);
     }

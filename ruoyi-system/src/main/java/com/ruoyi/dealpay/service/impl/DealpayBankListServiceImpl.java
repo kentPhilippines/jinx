@@ -30,6 +30,7 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
      * @return 银行卡列
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public DealpayBankListEntity selectDealpayBankListById(Long id) {
         return dealpayBankListMapper.selectDealpayBankListById(id);
     }
@@ -53,6 +54,7 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int insertDealpayBankList(DealpayBankListEntity dealpayBankList) {
         dealpayBankList.setCreateTime(DateUtils.getNowDate());
         return dealpayBankListMapper.insertDealpayBankList(dealpayBankList);
@@ -65,6 +67,7 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int updateDealpayBankList(DealpayBankListEntity dealpayBankList) {
         return dealpayBankListMapper.updateDealpayBankList(dealpayBankList);
     }
@@ -76,6 +79,7 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayBankListByIds(String ids) {
         return dealpayBankListMapper.deleteDealpayBankListByIds(Convert.toStrArray(ids));
     }
@@ -87,6 +91,7 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayBankListById(Long id) {
         return dealpayBankListMapper.deleteDealpayBankListById(id);
     }
