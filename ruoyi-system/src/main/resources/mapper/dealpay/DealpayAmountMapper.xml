@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.dealpay.mapper.DealpayAmountMapper">
     
-    <resultMap type="DealpayAmount" id="DealpayAmountResult">
+    <resultMap type="DealpayAmountEntity" id="DealpayAmountResult">
         <result property="id"    column="id"    />
         <result property="orderId"    column="orderId"    />
         <result property="userId"    column="userId"    />
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, orderId, userId, amountType, accname, orderStatus, amount, fee, actualAmount, dealDescribe, createTime, submitTime, status, approval, comment from dealpay_amount
     </sql>
 
-    <select id="selectDealpayAmountList" parameterType="DealpayAmount" resultMap="DealpayAmountResult">
+    <select id="selectDealpayAmountList" parameterType="DealpayAmountEntity" resultMap="DealpayAmountResult">
         <include refid="selectDealpayAmountVo"/>
         <where>  
             <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertDealpayAmount" parameterType="DealpayAmount" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertDealpayAmount" parameterType="DealpayAmountEntity" useGeneratedKeys="true" keyProperty="id">
         insert into dealpay_amount
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderId != null  and orderId != ''">orderId,</if>
@@ -87,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateDealpayAmount" parameterType="DealpayAmount">
+    <update id="updateDealpayAmount" parameterType="DealpayAmountEntity">
         update dealpay_amount
         <trim prefix="SET" suffixOverrides=",">
             <if test="orderId != null  and orderId != ''">orderId = #{orderId},</if>

@@ -1,75 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayUserInfoMapper">
 
     <resultMap type="AlipayUserInfo" id="AlipayUserInfoResult">
-        <result property="id"    column="id"    />
-        <result property="userId"    column="userId"    />
-        <result property="userName"    column="userName"    />
-        <result property="password"    column="password"    />
-        <result property="payPasword"    column="payPasword"    />
-        <result property="salt"    column="salt"    />
-        <result property="userType"    column="userType"    />
-        <result property="switchs"    column="switchs"    />
-        <result property="userNode"    column="userNode"    />
-        <result property="email"    column="email"    />
-        <result property="agent"    column="agent"    />
-        <result property="isAgent"    column="isAgent"    />
-        <result property="credit"    column="credit"    />
-        <result property="receiveOrderState"    column="receiveOrderState"    />
-        <result property="remitOrderState"    column="remitOrderState"    />
-        <result property="QQ"    column="QQ"    />
-        <result property="telegram"    column="telegram"    />
-        <result property="skype"    column="skype"    />
-        <result property="createTime"    column="createTime"    />
-        <result property="submitTime"    column="submitTime"    />
-        <result property="status"    column="status"    />
-        <result property="privateKey"    column="privateKey"    />
-        <result property="publicKey"    column="publicKey"    />
-        <result property="minAmount"    column="minAmount"    />
-        <result property="maxAmount"    column="maxAmount"    />
-        <result property="timesTotal"    column="timesTotal"    />
-        <result property="startTime"    column="startTime"    />
-        <result property="endTime"    column="endTime"    />
-        <result property="witip"    column="witip"    />
+        <result property="id" column="id"/>
+        <result property="userId" column="userId"/>
+        <result property="userName" column="userName"/>
+        <result property="password" column="password"/>
+        <result property="payPasword" column="payPasword"/>
+        <result property="salt" column="salt"/>
+        <result property="userType" column="userType"/>
+        <result property="switchs" column="switchs"/>
+        <result property="userNode" column="userNode"/>
+        <result property="email" column="email"/>
+        <result property="agent" column="agent"/>
+        <result property="isAgent" column="isAgent"/>
+        <result property="credit" column="credit"/>
+        <result property="receiveOrderState" column="receiveOrderState"/>
+        <result property="remitOrderState" column="remitOrderState"/>
+        <result property="QQ" column="QQ"/>
+        <result property="telegram" column="telegram"/>
+        <result property="skype" column="skype"/>
+        <result property="createTime" column="createTime"/>
+        <result property="submitTime" column="submitTime"/>
+        <result property="status" column="status"/>
+        <result property="privateKey" column="privateKey"/>
+        <result property="publicKey" column="publicKey"/>
+        <result property="minAmount" column="minAmount"/>
+        <result property="maxAmount" column="maxAmount"/>
+        <result property="timesTotal" column="timesTotal"/>
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <result property="witip" column="witip"/>
+        <result property="dealUrl" column="dealUrl"/>
     </resultMap>
 
     <sql id="selectAlipayUserInfoVo">
-        select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status, privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip from alipay_user_info
+        select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status, privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip, dealUrl from alipay_user_info
     </sql>
 
     <select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">
         <include refid="selectAlipayUserInfoVo"/>
         <where>
-            <if test="userName != null  and userName != ''"> and userName like concat('%', #{userName}, '%')</if>
-            <if test="password != null  and password != ''"> and password = #{password}</if>
-            <if test="payPasword != null  and payPasword != ''"> and payPasword = #{payPasword}</if>
-            <if test="salt != null  and salt != ''"> and salt = #{salt}</if>
-            <if test="userType != null "> and userType = #{userType}</if>
-            <if test="switchs != null "> and switchs = #{switchs}</if>
-            <if test="userNode != null  and userNode != ''"> and userNode = #{userNode}</if>
-            <if test="email != null  and email != ''"> and email = #{email}</if>
-            <if test="agent != null  and agent != ''"> and agent = #{agent}</if>
-            <if test="isAgent != null  and isAgent != ''"> and isAgent = #{isAgent}</if>
-            <if test="credit != null "> and credit = #{credit}</if>
-            <if test="receiveOrderState != null "> and receiveOrderState = #{receiveOrderState}</if>
-            <if test="remitOrderState != null "> and remitOrderState = #{remitOrderState}</if>
-            <if test="QQ != null  and QQ != ''"> and QQ = #{QQ}</if>
-            <if test="telegram != null  and telegram != ''"> and telegram = #{telegram}</if>
-            <if test="skype != null  and skype != ''"> and skype = #{skype}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="privateKey != null  and privateKey != ''"> and privateKey = #{privateKey}</if>
-            <if test="publicKey != null  and publicKey != ''"> and publicKey = #{publicKey}</if>
-            <if test="minAmount != null "> and minAmount = #{minAmount}</if>
-            <if test="maxAmount != null "> and maxAmount = #{maxAmount}</if>
-            <if test="timesTotal != null "> and timesTotal = #{timesTotal}</if>
-            <if test="startTime != null  and startTime != ''"> and startTime = #{startTime}</if>
-            <if test="endTime != null  and endTime != ''"> and endTime = #{endTime}</if>
-            <if test="witip != null  and witip != ''"> and witip = #{witip}</if>
+            <if test="userName != null  and userName != ''">and userName like concat('%', #{userName}, '%')</if>
+            <if test="password != null  and password != ''">and password = #{password}</if>
+            <if test="payPasword != null  and payPasword != ''">and payPasword = #{payPasword}</if>
+            <if test="salt != null  and salt != ''">and salt = #{salt}</if>
+            <if test="userType != null ">and userType = #{userType}</if>
+            <if test="switchs != null ">and switchs = #{switchs}</if>
+            <if test="userNode != null  and userNode != ''">and userNode = #{userNode}</if>
+            <if test="email != null  and email != ''">and email = #{email}</if>
+            <if test="agent != null  and agent != ''">and agent = #{agent}</if>
+            <if test="isAgent != null  and isAgent != ''">and isAgent = #{isAgent}</if>
+            <if test="credit != null ">and credit = #{credit}</if>
+            <if test="receiveOrderState != null ">and receiveOrderState = #{receiveOrderState}</if>
+            <if test="remitOrderState != null ">and remitOrderState = #{remitOrderState}</if>
+            <if test="createTime != null ">and createTime = #{createTime}</if>
+            <if test="submitTime != null ">and submitTime = #{submitTime}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="minAmount != null ">and minAmount = #{minAmount}</if>
+            <if test="maxAmount != null ">and maxAmount = #{maxAmount}</if>
+            <if test="timesTotal != null ">and timesTotal = #{timesTotal}</if>
+            <if test="startTime != null  and startTime != ''">and startTime = #{startTime}</if>
+            <if test="endTime != null  and endTime != ''">and endTime = #{endTime}</if>
+            <if test="witip != null  and witip != ''">and witip = #{witip}</if>
         </where>
     </select>
 
@@ -109,6 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="startTime != null  and startTime != ''">startTime,</if>
             <if test="endTime != null  and endTime != ''">endTime,</if>
             <if test="witip != null  and witip != ''">witip,</if>
+            <if test="dealUrl != null  and dealUrl != ''">dealUrl,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null  and userId != ''">#{userId},</if>
@@ -139,6 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="startTime != null  and startTime != ''">#{startTime},</if>
             <if test="endTime != null  and endTime != ''">#{endTime},</if>
             <if test="witip != null  and witip != ''">#{witip},</if>
+            <if test="dealUrl != null  and dealUrl != ''">#{dealUrl},</if>
         </trim>
     </insert>
 
@@ -173,6 +171,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="startTime != null  and startTime != ''">startTime = #{startTime},</if>
             <if test="endTime != null  and endTime != ''">endTime = #{endTime},</if>
             <if test="witip != null  and witip != ''">witip = #{witip},</if>
+            <if test="dealUrl != null  and dealUrl != ''">dealUrl = #{dealUrl},</if>
         </trim>
         where id = #{id}
     </update>
@@ -187,5 +186,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>
