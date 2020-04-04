@@ -36,7 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping("back/merchant/admin")
+@RequestMapping("/back/merchant/admin")
 @Controller
 public class BackManageController extends BaseController {
     private String prefix = "/merchant/info";

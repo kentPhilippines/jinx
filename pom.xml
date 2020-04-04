@@ -52,7 +52,11 @@
 	            <artifactId>druid-spring-boot-starter</artifactId>
 	            <version>${druid.version}</version>
 	        </dependency>
-	        
+			<dependency>
+				<groupId>com.jianggujin</groupId>
+				<artifactId>IKAnalyzer-lucene</artifactId>
+				<version>8.0.0</version>
+			</dependency>
 	        <!--验证码 -->
 			<dependency>
 				<groupId>com.github.penggle</groupId>
