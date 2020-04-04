@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('卡商出款记录表列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -11,96 +12,33 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>会员提现单号：</p>
+                            <span>订单号：</span>
                             <input type="text" name="orderId"/>
                         </li>
                         <li>
-                            <p>提现关联账号：</p>
+                            <span>账号ID：</span>
                             <input type="text" name="userId"/>
                         </li>
                         <li>
-                            <p>商户提现1，卡商提现2：</p>
-                            <select name="withdrawType" th:with="type=${@dict.getType('')}">
+                            <span>申请人：</span>
+                            <input type="text" name="accname"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>订单状态： </label>
+                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('withdrawal_status')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
-                        <li>
-                            <p>银行卡号：</p>
-                            <input type="text" name="bankNo"/>
-                        </li>
-                        <li>
-                            <p>提现人姓名：</p>
-                            <input type="text" name="accname"/>
-                        </li>
-                        <li>
-                            <p>0预下单1处理中2成功3失败：</p>
-                            <select name="orderStatus">
-                                <option value="">所有</option>
-                            </select>
-                        </li>
-                        <li>
-                            <p>开户行姓名：</p>
-                            <input type="text" name="bankName"/>
-                        </li>
-                        <li>
-                            <p>提现金额：</p>
-                            <input type="text" name="amount"/>
-                        </li>
-                        <li>
-                            <p>手续费：</p>
-                            <input type="text" name="fee"/>
-                        </li>
-                        <li>
-                            <p>真实到账金额：</p>
-                            <input type="text" name="actualAmount"/>
-                        </li>
-                        <li>
-                            <p>手机号：</p>
-                            <input type="text" name="mobile"/>
-                        </li>
-                        <li>
-                            <p>提现成功回调地址：</p>
-                            <input type="text" name="notify"/>
-                        </li>
                         <li class="select-time">
-                            <p>数据创建时间：</p>
+                            <span>创建时间：</span>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
                                    name="params[beginCreateTime]"/>
                             <span>-</span>
                             <input type="text" class="time-input" id="endTime" placeholder="结束时间"
                                    name="params[endCreateTime]"/>
-                        </li>
-                        <li class="select-time">
-                            <p>数据修改时间：</p>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                   name="params[beginSubmitTime]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                   name="params[endSubmitTime]"/>
-                        </li>
-                        <li>
-                            <p>1数据可用2数据无用：</p>
-                            <select name="status">
-                                <option value="">所有</option>
-                            </select>
-                        </li>
-                        <li>
-                            <p>代付产品类型：</p>
-                            <select name="witType" th:with="type=${@dict.getType('')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li>
-                            <p>代付来源 1API 2后台 3 卡商客户端：</p>
-                            <input type="text" name="retain1"/>
-                        </li>
-                        <li>
-                            <p>代付发起ip地址：</p>
-                            <input type="text" name="retain2"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -114,17 +52,6 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="dealpay:cardWithdrawal:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="dealpay:cardWithdrawal:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="dealpay:cardWithdrawal:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()"
                shiro:hasPermission="dealpay:cardWithdrawal:export">
                 <i class="fa fa-download"></i> 导出
@@ -136,6 +63,7 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('dealpay:cardWithdrawal:edit')}]];
     var removeFlag = [[${@permission.hasPermi('dealpay:cardWithdrawal:remove')}]];
@@ -146,7 +74,6 @@
             url: prefix + "/list",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "卡商出款记录表",
             columns: [{
@@ -154,22 +81,19 @@
             },
                 {
                     field: 'id',
-                    title: '数据id(主键索引)',
+                    title: '数据ID',
                     visible: false
                 },
                 {
                     field: 'orderId',
-                    title: '会员提现单号'
+                    title: '订单号'
                 },
                 {
                     field: 'userId',
-                    title: '提现关联账号'
+                    title: '商户ID'
                 },
                 {
-                    field: 'withdrawType',
-                    title: '商户提现1，卡商提现2'
-                },
-                {
+
                     field: 'bankNo',
                     title: '银行卡号'
                 },
@@ -179,7 +103,10 @@
                 },
                 {
                     field: 'orderStatus',
-                    title: '0预下单1处理中2成功3失败'
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(orderStatus, value);
+                    }
                 },
                 {
                     field: 'bankName',
@@ -195,39 +122,15 @@
                 },
                 {
                     field: 'actualAmount',
-                    title: '真实到账金额'
+                    title: '实际到账'
                 },
                 {
                     field: 'mobile',
                     title: '手机号'
                 },
                 {
-                    field: 'notify',
-                    title: '提现成功回调地址'
-                },
-                {
                     field: 'createTime',
-                    title: '数据创建时间'
-                },
-                {
-                    field: 'submitTime',
-                    title: '数据修改时间'
-                },
-                {
-                    field: 'status',
-                    title: '1数据可用2数据无用'
-                },
-                {
-                    field: 'witType',
-                    title: '代付产品类型'
-                },
-                {
-                    field: 'retain1',
-                    title: '代付来源  1API   2后台   3 卡商客户端'
-                },
-                {
-                    field: 'retain2',
-                    title: '代付发起ip地址'
+                    title: '创建时间'
                 },
                 {
                     title: '操作',

@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('流水订单记录列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -11,88 +12,62 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>流水订单id(全局唯一索引)：</p>
+                            <label>平台订单：</label>
                             <input type="text" name="orderId"/>
                         </li>
                         <li>
-                            <p>关联订单号(普通索引)：</p>
+                            <label>关联订单：</label>
                             <input type="text" name="associatedId"/>
                         </li>
                         <li>
-                            <p>关联账户：</p>
+                            <label>关联账户：</label>
                             <input type="text" name="orderAccount"/>
                         </li>
                         <li>
-                            <p>
-                                流水类型(1充值交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费,7冻结,8解冻,9代付手手续费冻结,10代付冻结,11增加交易点数,12点数扣除,13代理商分润，14码商分润，17人工加点数，18人工减点数，19
-                                卡商交易加钱，20下游商户交易加款，21下游商户交易手续费扣款)：</p>
-                            <select name="runOrderType" th:with="type=${@dict.getType('')}">
+                            <label>入款账户：</label>
+                            <input type="text" name="acountR"/>
+                        </li>
+                        <li>
+                            <label>出款账户：</label>
+                            <input type="text" name="accountW"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>订单类型：</label>
+                            <select id="runOrderType" name="runOrderType"
+                                    th:with="type=${@dict.getType('dealpay_running_type')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
-                        <li>
-                            <p>流水金额：</p>
-                            <input type="text" name="amount"/>
+                        <li class="select-selectpicker">
+                            <label>流水状态：</label>
+                            <select id="runType" name="runType"
+                                    th:with="type=${@dict.getType('runType')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
                         </li>
-                        <li>
-                            <p>流水关联ip：</p>
-                            <input type="text" name="generationIp"/>
-                        </li>
-                        <li>
-                            <p>流水描述：</p>
-                            <input type="text" name="dealDescribe"/>
-                        </li>
-                        <li>
-                            <p>入款记录账户：</p>
-                            <input type="text" name="acountR"/>
-                        </li>
-                        <li>
-                            <p>出款记录账户：</p>
-                            <input type="text" name="accountW"/>
+                        <li class="select-selectpicker">
+                            <label>收支类型：</label>
+                            <select id="amountType" name="amountType"
+                                    th:with="type=${@dict.getType('income_out_type')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
                         </li>
                         <li class="select-time">
-                            <p>数据创建时间：</p>
+                            <label>创建时间：</label>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
                                    name="params[beginCreateTime]"/>
                             <span>-</span>
                             <input type="text" class="time-input" id="endTime" placeholder="结束时间"
                                    name="params[endCreateTime]"/>
-                        </li>
-                        <li class="select-time">
-                            <p>数据最近一次修改时间：</p>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                   name="params[beginSubmitTime]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                   name="params[endSubmitTime]"/>
-                        </li>
-                        <li>
-                            <p>状态:1可使用；0不可使用：</p>
-                            <select name="status">
-                                <option value="">所有</option>
-                            </select>
-                        </li>
-                        <li>
-                            <p>流水状态 1.自然状态 2.人工操作：</p>
-                            <select name="runType" th:with="type=${@dict.getType('')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li>
-                            <p>1支出0收入：</p>
-                            <select name="amountType" th:with="type=${@dict.getType('')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li>
-                            <p>当前账户余额：</p>
-                            <input type="text" name="amountNow"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -106,17 +81,6 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="dealpay:runOrder:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="dealpay:runOrder:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="dealpay:runOrder:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dealpay:runOrder:export">
                 <i class="fa fa-download"></i> 导出
             </a>
@@ -127,6 +91,7 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('dealpay:runOrder:edit')}]];
     var removeFlag = [[${@permission.hasPermi('dealpay:runOrder:remove')}]];
@@ -145,16 +110,16 @@
             },
                 {
                     field: 'id',
-                    title: '数据id',
+                    title: '数据ID',
                     visible: false
                 },
                 {
                     field: 'orderId',
-                    title: '流水订单id(全局唯一索引)'
+                    title: '平台订单'
                 },
                 {
                     field: 'associatedId',
-                    title: '关联订单号(普通索引)'
+                    title: '关联订单'
                 },
                 {
                     field: 'orderAccount',
@@ -162,51 +127,40 @@
                 },
                 {
                     field: 'runOrderType',
-                    title: '流水类型(1充值交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费,7冻结,8解冻,9代付手手续费冻结,10代付冻结,11增加交易点数,12点数扣除,13代理商分润，14码商分润，17人工加点数，18人工减点数，19 卡商交易加钱，20下游商户交易加款，21下游商户交易手续费扣款)'
+                    title: '流水类型',
+
                 },
                 {
                     field: 'amount',
                     title: '流水金额'
                 },
                 {
-                    field: 'generationIp',
-                    title: '流水关联ip'
+                    field: 'acountR',
+                    title: '入款账户'
+                },
+                {
+                    field: 'accountW',
+                    title: '出款账户'
+                },
+                {
+                    field: 'runType',
+                    title: '流水状态'
+                },
+                {
+                    field: 'amountType',
+                    title: '收支类型'
+                },
+                {
+                    field: 'amountNow',
+                    title: '账户余额'
                 },
                 {
                     field: 'dealDescribe',
                     title: '流水描述'
                 },
                 {
-                    field: 'acountR',
-                    title: '入款记录账户'
-                },
-                {
-                    field: 'accountW',
-                    title: '出款记录账户'
-                },
-                {
                     field: 'createTime',
-                    title: '数据创建时间'
-                },
-                {
-                    field: 'submitTime',
-                    title: '数据最近一次修改时间'
-                },
-                {
-                    field: 'status',
-                    title: '状态:1可使用；0不可使用'
-                },
-                {
-                    field: 'runType',
-                    title: '流水状态  1.自然状态 2.人工操作'
-                },
-                {
-                    field: 'amountType',
-                    title: '1支出0收入'
-                },
-                {
-                    field: 'amountNow',
-                    title: '当前账户余额'
+                    title: '创建时间'
                 },
                 {
                     title: '操作',

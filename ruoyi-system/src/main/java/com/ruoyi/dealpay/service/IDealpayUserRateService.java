@@ -44,18 +44,12 @@ public interface IDealpayUserRateService {
     public int updateDealpayUserRateEntity(DealpayUserRateEntity dealpayUserRateEntity);
 
     /**
-     * 批量删除费率
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
+     * 修改费率通道的状态
+     * @param id
+     * @param userId
+     * @param feeType
+     * @param switchs
+     * @return
      */
-    public int deleteDealpayUserRateEntityByIds(String ids);
-
-    /**
-     * 删除费率信息
-     *
-     * @param id 费率ID
-     * @return 结果
-     */
-    public int deleteDealpayUserRateEntityById(Long id);
+    int changeStatus(String id, String userId, String feeType, String switchs);
 }

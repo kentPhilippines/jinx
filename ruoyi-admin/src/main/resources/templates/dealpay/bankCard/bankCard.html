@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('银行卡列列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -11,90 +12,42 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>银行卡号：</p>
-                            <input type="text" name="bankcardAccount"/>
-                        </li>
-                        <li>
-                            <p>银行卡开户人：</p>
-                            <input type="text" name="accountHolder"/>
-                        </li>
-                        <li>
-                            <p>银行卡开户行：</p>
-                            <input type="text" name="openAccountBank"/>
-                        </li>
-                        <li>
-                            <p>银行英文简写：</p>
-                            <select name="bankType" th:with="type=${@dict.getType('')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li>
-                            <p>银行卡类型:R收款W出款：</p>
-                            <input type="text" name="bankcode"/>
-                        </li>
-                        <li>
-                            <p>系统状态 1黑卡 2 可正常使用：</p>
-                            <select name="sysTYpe" th:with="type=${@dict.getType('')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li>
-                            <p>关联账户：</p>
+                            <span>账号ID：</span>
                             <input type="text" name="account"/>
                         </li>
                         <li>
-                            <p>银行卡手机号：</p>
-                            <input type="text" name="phone"/>
+                            <span>银行卡号：</span>
+                            <input type="text" name="bankcardAccount"/>
                         </li>
                         <li>
-                            <p>当日交易限制金额：</p>
-                            <input type="text" name="limitAmount"/>
+                            <span>开户人：</span>
+                            <input type="text" name="accountHolder"/>
                         </li>
-                        <li>
-                            <p>银行卡余额：</p>
-                            <input type="text" name="bankAmount"/>
-                        </li>
-                        <li>
-                            <p>系统的卡1，码商的卡2，商户的卡3：</p>
-                            <select name="cardType" th:with="type=${@dict.getType('')}">
+                        <li class="select-selectpicker">
+                            <label>收支类型：</label>
+                            <select name="bankcode" th:with="type=${@dict.getType('R_W_type')}" class="selectpicker"
+                                    data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
-                        <li>
-                            <p>备注：</p>
-                            <input type="text" name="qrcodeNote"/>
-                        </li>
-                        <li>
-                            <p>状态:1可使用；0不可使用：</p>
-                            <select name="status">
+                        <li class="select-selectpicker">
+                            <label>银行卡类型：</label>
+                            <select name="cardType" th:with="type=${@dict.getType('object_bankcard_type')}" class="selectpicker"
+                                    data-none-selected-text="请选择">
                                 <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
-                        <li>
-                            <p>是否逻辑删除：1删除2可用：</p>
-                            <input type="text" name="isDeal"/>
-                        </li>
                         <li class="select-time">
-                            <p>数据生成时间：</p>
+                            <span>创建时间：</span>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
                                    name="params[beginCreateTime]"/>
                             <span>-</span>
                             <input type="text" class="time-input" id="endTime" placeholder="结束时间"
                                    name="params[endCreateTime]"/>
-                        </li>
-                        <li class="select-time">
-                            <p>数据修改时间：</p>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                   name="params[beginSubmitTime]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                   name="params[endSubmitTime]"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -111,16 +64,11 @@
             <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="dealpay:bankCard:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="dealpay:bankCard:edit">
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="dealpay:bankCard:edit">
                 <i class="fa fa-edit"></i> 修改
             </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="dealpay:bankCard:remove">
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="dealpay:bankCard:remove">
                 <i class="fa fa-remove"></i> 删除
-            </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dealpay:bankCard:export">
-                <i class="fa fa-download"></i> 导出
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -129,10 +77,14 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('dealpay:bankCard:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('dealpay:bankCard:remove')}]];
-    var prefix = ctx + "dealpay/bankCard";
+    let editFlag = [[${@permission.hasPermi('dealpay:bankCard:edit')}]];
+    let removeFlag = [[${@permission.hasPermi('dealpay:bankCard:remove')}]];
+
+    let objectCard = [[${@dict.getType('object_bankcard_type')}]];
+    let bankCode = [[${@dict.getType('R_W_type')}]];
+    let prefix = ctx + "dealpay/bankCard";
 
     $(function () {
         var options = {
@@ -140,20 +92,23 @@
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
-            exportUrl: prefix + "/export",
             modalName: "银行卡列",
             columns: [{
                 checkbox: true
             },
                 {
                     field: 'id',
-                    title: '数据id',
+                    title: '数据ID',
                     visible: false
                 },
                 {
                     field: 'bankcardId',
-                    title: '银行卡(本地编号)',
+                    title: '编号',
                     visible: false
+                },
+                {
+                    field: 'account',
+                    title: '账户ID'
                 },
                 {
                     field: 'bankcardAccount',
@@ -161,43 +116,37 @@
                 },
                 {
                     field: 'accountHolder',
-                    title: '银行卡开户人'
+                    title: '开户人'
                 },
                 {
                     field: 'openAccountBank',
-                    title: '银行卡开户行'
-                },
-                {
-                    field: 'bankType',
-                    title: '银行英文简写'
+                    title: '开户行'
                 },
                 {
                     field: 'bankcode',
-                    title: '银行卡类型:R收款W出款'
-                },
-                {
-                    field: 'sysTYpe',
-                    title: '系统状态 1黑卡  2 可正常使用'
-                },
-                {
-                    field: 'account',
-                    title: '关联账户'
-                },
-                {
-                    field: 'phone',
-                    title: '银行卡手机号'
-                },
-                {
-                    field: 'limitAmount',
-                    title: '当日交易限制金额'
-                },
-                {
-                    field: 'bankAmount',
-                    title: '银行卡余额'
+                    title: '收支类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(bankCode, value);
+                    }
                 },
                 {
                     field: 'cardType',
-                    title: '系统的卡1，码商的卡2，商户的卡3'
+                    title: '银行卡类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(objectCard, value);
+                    }
+                },
+                {
+                    field: 'phone',
+                    title: '手机号'
+                },
+                {
+                    field: 'limitAmount',
+                    title: '交易限额/日'
+                },
+                {
+                    field: 'bankAmount',
+                    title: '余额'
                 },
                 {
                     field: 'qrcodeNote',
@@ -205,19 +154,20 @@
                 },
                 {
                     field: 'status',
-                    title: '状态:1可使用；0不可使用'
-                },
-                {
-                    field: 'isDeal',
-                    title: '是否逻辑删除：1删除2可用'
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
                 },
                 {
                     field: 'createTime',
-                    title: '数据生成时间'
+                    title: '创建时间'
                 },
                 {
                     field: 'submitTime',
-                    title: '数据修改时间'
+                    title: '更新时间',
+                    visible: false
                 },
                 {
                     title: '操作',

@@ -1,6 +1,8 @@
 package com.ruoyi.dealpay.service.impl;
 
+import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.dealpay.domain.DealpayRunOrderEntity;
 import com.ruoyi.dealpay.mapper.DealpayRunOrderMapper;
@@ -39,6 +41,7 @@ public class DealpayRunOrderServiceImpl implements IDealpayRunOrderService {
      * @return 流水订单记录
      */
     @Override
+    @DataSource(DataSourceType.DEALPAY_SLAVE)
     public List<DealpayRunOrderEntity> selectDealpayRunOrderList(DealpayRunOrderEntity dealpayRunOrder) {
         return dealpayRunOrderMapper.selectDealpayRunOrderList(dealpayRunOrder);
     }

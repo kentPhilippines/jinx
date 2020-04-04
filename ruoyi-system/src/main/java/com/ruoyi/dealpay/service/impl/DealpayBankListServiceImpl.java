@@ -2,6 +2,8 @@ package com.ruoyi.dealpay.service.impl;
 
 import java.util.List;
 
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
      * @return 银行卡列
      */
     @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public List<DealpayBankListEntity> selectDealpayBankListList(DealpayBankListEntity dealpayBankList) {
         return dealpayBankListMapper.selectDealpayBankListList(dealpayBankList);
     }
