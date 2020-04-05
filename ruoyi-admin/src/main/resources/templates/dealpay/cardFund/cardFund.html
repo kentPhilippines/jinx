@@ -58,7 +58,7 @@
 <th:block th:include="include :: footer" />
 <script th:inline="javascript">
     var refundFlag = [[${@permission.hasPermi('dealpay:cardFund:refund')}]];
-    var deductFlag = [[${@permission.hasPermi('dealpay:cardFund:carddeduct')}]];
+    var deductFlag = [[${@permission.hasPermi('dealpay:cardFund:deduct')}]];
     var userType = [[${@dict.getType('userType')}]];
     var prefix = ctx + "dealpay/cardFund";
 

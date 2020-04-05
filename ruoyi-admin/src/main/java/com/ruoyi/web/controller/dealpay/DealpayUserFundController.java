@@ -155,13 +155,13 @@ public class DealpayUserFundController extends BaseController {
         DealpayUserFundEntity dealpayUserFundEntity = new DealpayUserFundEntity();
         dealpayUserFundEntity.setUserId(userId);
         mmap.put("userFund", dealpayUserFundEntity);
-        return prefix + "/add";
+        return prefix + "/cardrefund";
     }
 
     /**
      * 加款保存用户加款记录
      */
-    @RequiresPermissions("dealpay:fund:refund")
+    @RequiresPermissions("dealpay:cardFund:refund")
     @Log(title = "用户资金账户", businessType = BusinessType.UPDATE)
     @PostMapping("/refund")
     @ResponseBody
@@ -186,13 +186,13 @@ public class DealpayUserFundController extends BaseController {
         DealpayUserFundEntity dealpayUserFundEntity = new DealpayUserFundEntity();
         dealpayUserFundEntity.setUserId(userId);
         mmap.put("userFund", dealpayUserFundEntity);
-        return prefix + "/deduct";
+        return prefix + "/carddeduct";
     }
 
     /**
      * 减款保存卡商减款记录
      */
-    @RequiresPermissions("dealpay:fund:deduct")
+    @RequiresPermissions("dealpay:cardFund:deduct")
     @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/deduct")
     @ResponseBody
