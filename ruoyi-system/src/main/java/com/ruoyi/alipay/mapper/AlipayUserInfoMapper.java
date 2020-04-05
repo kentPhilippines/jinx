@@ -110,7 +110,7 @@ public interface AlipayUserInfoMapper {
 
 
     @Select("<script>" +
-            "select id, userId, userName, switchs, qrRechargeList from alipay_user_info where agent is null and status = 1 " +
+            "select id, userId, userName, switchs, qrRechargeList,submitTime from alipay_user_info where agent is null and status = 1 " +
             "<if test=\"userType == 1 or userType == 2\">" +
             " and userType = #{userType}" +
             "</if>" +
@@ -140,6 +140,6 @@ public interface AlipayUserInfoMapper {
      * @param id
      * @return
      */
-    @Update("update alipay_user_info set qrRechargeList = null where id = #{id}")
+    @Update("update alipay_user_info set qrRechargeList = null and submitTime = sysdate() where id = #{id}")
     int clearAlipayQrChargeListById(@Param("id") Long id);
 }

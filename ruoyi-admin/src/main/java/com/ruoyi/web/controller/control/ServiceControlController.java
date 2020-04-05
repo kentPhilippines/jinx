@@ -4,9 +4,11 @@ import com.beust.jcommander.internal.Lists;
 import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayUserInfoService;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.dealpay.domain.DealpayUserInfoEntity;
@@ -83,6 +85,7 @@ public class ServiceControlController extends BaseController {
      * 保存码商风控卡商服务群信息
      */
     @RequiresPermissions("qr:service:save")
+    @Log(title = "码商服务群", businessType = BusinessType.UPDATE)
     @PostMapping("/qr/save")
     @ResponseBody
     public AjaxResult qrSave(AlipayUserInfo alipayUserInfo) {
@@ -138,7 +141,9 @@ public class ServiceControlController extends BaseController {
     /**
      * 保存码商风控卡商服务群信息
      */
+
     @RequiresPermissions("merchant:service:save")
+    @Log(title = "商户服务群", businessType = BusinessType.UPDATE)
     @PostMapping("/merchant/save")
     @ResponseBody
     public AjaxResult merchantSave(AlipayUserInfo alipayUserInfo) {

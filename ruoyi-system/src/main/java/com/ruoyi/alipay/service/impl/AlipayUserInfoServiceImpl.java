@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.service.impl;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.annotation.DataSource;
@@ -172,6 +173,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
         if (StringUtils.isNotEmpty(str)) {
             String qrCharge = StringUtils.join(str,",");
             alipayUserInfo.setQrRechargeList(qrCharge);
+            alipayUserInfo.setSubmitTime(new Date());
         }else{
             return alipayUserInfoMapper.clearAlipayQrChargeListById(alipayUserInfo.getId());
         }
