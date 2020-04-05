@@ -126,74 +126,87 @@
                     title: '数据id',
                     visible: false
                 },
-                {
+                {  //用户id【登录账号】
                     field: 'userId',
-                    title: '用户id【登录账号】'
+                    title: '登录账号'
                 },
                 {
                     field: 'userName',
                     title: '用户昵称'
                 },
-                {
-                    field: 'password',
-                    title: 'shiro加密秘钥【登录】'
-                },
-                {
-                    field: 'payPasword',
-                    title: 'shiro加密秘钥【资金】【商户则为交易秘钥】'
-                },
-                {
-                    field: 'salt',
-                    title: '秘钥加密盐值【加密算法】'
-                },
-                {
+                // {
+                //     field: 'password',
+                //     title: 'shiro加密秘钥【登录】',
+                //     visible: false
+                // },
+                // {
+                //     field: 'payPasword',
+                //     title: 'shiro加密秘钥【资金】【商户则为交易秘钥】',
+                //     visible: false
+                // },
+                // {
+                //     field: 'salt',
+                //     title: '秘钥加密盐值【加密算法】',
+                //     visible: false
+                // },
+                { //用户类型,商户1 码商2
                     field: 'userType',
-                    title: '用户类型,商户1 码商2'
+                    title: '用户类型'
                 },
-                {
-                    field: 'switchs',
-                    title: '当前用户总开关 1开启0关闭【码商商户后台控制,该值只能在后台显示】'
-                },
+                // {
+                //     field: 'switchs',
+                //     title: '当前用户总开关 1开启0关闭【码商商户后台控制,该值只能在后台显示】',
+                //     visible: false
+                // },
                 {
                     field: 'userNode',
                     title: '组群备注'
                 },
-                {
-                    field: 'email',
-                    title: '邮箱【修改账号秘钥邮件发送地址】'
-                },
-                {
-                    field: 'agent',
-                    title: '代理商id【如果存在代理商则存在数据,如果不存在代理商则为null】'
-                },
-                {
-                    field: 'isAgent',
-                    title: '是否为代理商:1代理商2普通码商【分润结算类型看用户类型userType】'
-                },
-                {
-                    field: 'credit',
-                    title: '信用等级为默认为100,掉单一次,或者出现故障一次减分0.001分,可人为加分'
-                },
-                {
-                    field: 'receiveOrderState',
-                    title: '是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以交易】'
-                },
-                {
-                    field: 'remitOrderState',
-                    title: '是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以代付】'
-                },
-                {
-                    field: 'QQ',
-                    title: 'QQ联系方式'
-                },
-                {
-                    field: 'telegram',
-                    title: '小飞机'
-                },
-                {
-                    field: 'skype',
-                    title: 'skype'
-                },
+                // { //邮箱【修改账号秘钥邮件发送地址】
+                //     field: 'email',
+                //     title: '邮箱',
+                //     visible: false
+                // },
+                // {
+                //     field: 'agent',
+                //     title: '代理商id【如果存在代理商则存在数据,如果不存在代理商则为null】',
+                //     visible: false
+                // },
+                // {
+                //     field: 'isAgent',
+                //     title: '是否为代理商:1代理商2普通码商【分润结算类型看用户类型userType】',
+                //     visible: false
+                // },
+                // {
+                //     field: 'credit',
+                //     title: '信用等级为默认为100,掉单一次,或者出现故障一次减分0.001分,可人为加分',
+                //     visible: false
+                // },
+                // {
+                //     field: 'receiveOrderState',
+                //     title: '是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以交易】',
+                //     visible: false
+                // },
+                // {
+                //     field: 'remitOrderState',
+                //     title: '是否处于入款接单状态 1 接单 2 暂停接单【下游商户则为是否可以代付】',
+                //     visible: false
+                // },
+                // {
+                //     field: 'QQ',
+                //     title: 'QQ联系方式',
+                //     visible: false
+                // },
+                // {
+                //     field: 'telegram',
+                //     title: '小飞机',
+                //     visible: false
+                // },
+                // {
+                //     field: 'skype',
+                //     title: 'skype',
+                //     visible: false
+                // },
                 {
                     field: 'createTime',
                     title: '数据创建时间'
@@ -202,18 +215,20 @@
                     field: 'submitTime',
                     title: '最后一次数据修改时间'
                 },
-                {
+                { //数据是否可用:1数据可用2数据无用
                     field: 'status',
-                    title: '数据是否可用:1数据可用2数据无用'
+                    title: '数据状态'
                 },
-                {
-                    field: 'privateKey',
-                    title: '商户私钥'
-                },
-                {
-                    field: 'publicKey',
-                    title: '商户公钥'
-                },
+                // {
+                //     field: 'privateKey',
+                //     title: '商户私钥',
+                //     visible: false
+                // },
+                // {
+                //     field: 'publicKey',
+                //     title: '商户公钥',
+                //     visible: false
+                // },
                 {
                     field: 'minAmount',
                     title: '最小金额'
@@ -230,14 +245,16 @@
                     field: 'timesTotal',
                     title: '下单次数'
                 },
-                {
-                    field: 'startTime',
-                    title: '限制时间-开始时间'
-                },
-                {
-                    field: 'endTime',
-                    title: '限制时间-结束时间'
-                },
+                // {
+                //     field: 'startTime',
+                //     title: '限制时间-开始时间',
+                //     visible: false
+                // },
+                // {
+                //     field: 'endTime',
+                //     title: '限制时间-结束时间',
+                //     visible: false
+                // },
                 {
                     field: 'witip',
                     title: '代付ip'

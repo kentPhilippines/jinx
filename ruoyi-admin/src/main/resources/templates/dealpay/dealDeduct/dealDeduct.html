@@ -14,35 +14,40 @@
                                 <p>手动加扣款订单号：</p>
                                 <input type="text" name="orderId"/>
                             </li>
-                            <li>
-                                <p>会员id(唯一识别号)(index索引)：</p>
-                                <input type="text" name="userId"/>
-                            </li>
-                            <li>
-                                <p>1 加款类型  2 扣款类型：</p>
-                                <select name="amountType" th:with="type=${@dict.getType('')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>申请人姓名【后台管理人员】：</p>
-                                <input type="text" name="accname"/>
-                            </li>
-                            <li>
-                                <p>1申请 2审批中  3成功  4失败 5挂起：</p>
-                                <select name="orderStatus">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>金额：</p>
-                                <input type="text" name="amount"/>
-                            </li>
-                            <li>
+<!--                            <li>-->
+<!--                                <p>会员id(唯一识别号)(index索引)：</p>-->
+<!--                                <input type="text" name="userId"/>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <p>加扣款类型：</p>-->
+<!--                                <select name="amountType" th:with="type=${@dict.getType('amountType')}">-->
+<!--                                    <option value="">所有</option>-->
+<!--                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
+<!--                                </select>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <p>申请人姓名【后台管理人员】：</p>-->
+<!--                                <input type="text" name="accname"/>-->
+<!--                            </li>-->
+<!--                            <li> &lt;!&ndash;  1申请 2审批中  3成功  4失败 5挂起：-&ndash;&gt;-->
+<!--                                <p>订单状态</p>-->
+<!--                                <select name="orderStatus">-->
+<!--                                    <option value="">所有</option>-->
+<!--                                    <option value="1">申请</option>-->
+<!--                                    <option value="2">审批中</option>-->
+<!--                                    <option value="3">成功</option>-->
+<!--                                    <option value="4">失败</option>-->
+<!--                                    <option value="5">挂起</option>-->
+<!--                                </select>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <p>金额：</p>-->
+<!--                                <input type="text" name="amount"/>-->
+<!--                            </li>-->
+                               <li>
                                 <p>手续费：</p>
                                 <input type="text" name="fee"/>
-                            </li>
+                              </li>
                             <li>
                                 <p>真实到账金额：</p>
                                 <input type="text" name="actualAmount"/>
@@ -51,32 +56,34 @@
                                 <p>加扣款描述：</p>
                                 <input type="text" name="dealDescribe"/>
                             </li>
-                            <li class="select-time">
-                                <p>数据创建时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据修改时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>
-                            </li>
+<!--                            <li class="select-time">-->
+<!--                                <p>数据创建时间：</p>-->
+<!--                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>-->
+<!--                                <span>-</span>-->
+<!--                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>-->
+<!--                            </li>-->
+<!--                            <li class="select-time">-->
+<!--                                <p>数据修改时间：</p>-->
+<!--                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSubmitTime]"/>-->
+<!--                                <span>-</span>-->
+<!--                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmitTime]"/>-->
+<!--                            </li>-->
                             <li>
-                                <p>1数据可用2数据无用：</p>
+                                <p>数据状态：</p>
                                 <select name="status">
                                     <option value="">所有</option>
+                                    <option value="1">数据可用</option>
+                                    <option value="2">数据无用</option>
                                 </select>
                             </li>
                             <li>
                                 <p>审核人：</p>
                                 <input type="text" name="approval"/>
                             </li>
-                            <li>
-                                <p>审核意见：</p>
-                                <input type="text" name="comment"/>
-                            </li>
+<!--                            <li>-->
+<!--                                <p>审核意见：</p>-->
+<!--                                <input type="text" name="comment"/>-->
+<!--                            </li>-->
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -131,21 +138,21 @@
                     field : 'orderId', 
                     title : '手动加扣款订单号'
                 },
-                {
+                {  //会员id(唯一识别号)(index索引)
                     field : 'userId', 
-                    title : '会员id(唯一识别号)(index索引)'
+                    title : '会员id'
                 },
-                {
+                { //1 加款类型  2 扣款类型
                     field : 'amountType', 
-                    title : '1 加款类型  2 扣款类型'
+                    title : '加扣款类型'
                 },
-                {
+                { //申请人姓名【后台管理人员】
                     field : 'accname', 
-                    title : '申请人姓名【后台管理人员】'
+                    title : '申请人姓名'
                 },
-                {
+                { //1申请 2审批中  3成功  4失败 5挂起
                     field : 'orderStatus', 
-                    title : '1申请 2审批中  3成功  4失败 5挂起'
+                    title : '申请状态'
                 },
                 {
                     field : 'amount', 
@@ -155,14 +162,16 @@
                     field : 'fee', 
                     title : '手续费'
                 },
-                {
-                    field : 'actualAmount', 
-                    title : '真实到账金额'
-                },
-                {
-                    field : 'dealDescribe', 
-                    title : '加扣款描述'
-                },
+                // {
+                //     field : 'actualAmount',
+                //     title : '真实到账金额',
+                //     visible: false
+                // },
+                // {
+                //     field : 'dealDescribe',
+                //     title : '加扣款描述',
+                //     visible: false
+                // },
                 {
                     field : 'createTime', 
                     title : '数据创建时间'
@@ -171,9 +180,9 @@
                     field : 'submitTime', 
                     title : '数据修改时间'
                 },
-                {
+                { //1数据可用2数据无用
                     field : 'status', 
-                    title : '1数据可用2数据无用'
+                    title : '数据状态'
                 },
                 {
                     field : 'approval', 
