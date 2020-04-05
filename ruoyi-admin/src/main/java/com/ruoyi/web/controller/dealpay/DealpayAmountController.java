@@ -1,7 +1,17 @@
 package com.ruoyi.web.controller.dealpay;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
+import com.ruoyi.alipay.domain.AlipayAmountEntity;
+import com.ruoyi.alipay.service.IAlipayAmountEntityService;
+import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +43,8 @@ public class DealpayAmountController extends BaseController {
 
     @Autowired
     private IDealpayAmountService dealpayAmountService;
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
 
     @RequiresPermissions("dealpay:dealDeduct:view")
     @GetMapping()
@@ -46,9 +58,9 @@ public class DealpayAmountController extends BaseController {
     @RequiresPermissions("dealpay:dealDeduct:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(DealpayAmountEntity dealpayAmount) {
+    public TableDataInfo list(DealpayAmountEntity dealpayAmountEntity) {
         startPage();
-        List<DealpayAmountEntity> list = dealpayAmountService.selectDealpayAmountList(dealpayAmount);
+        List<DealpayAmountEntity> list = dealpayAmountService.selectDealpayAmountList(dealpayAmountEntity);
         return getDataTable(list);
     }
 
@@ -59,10 +71,10 @@ public class DealpayAmountController extends BaseController {
     @Log(title = "手动加扣款记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(DealpayAmountEntity dealpayAmount) {
-        List<DealpayAmountEntity> list = dealpayAmountService.selectDealpayAmountList(dealpayAmount);
+    public AjaxResult export(DealpayAmountEntity dealpayAmountEntity) {
+        List<DealpayAmountEntity> list = dealpayAmountService.selectDealpayAmountList(dealpayAmountEntity);
         ExcelUtil<DealpayAmountEntity> util = new ExcelUtil<DealpayAmountEntity>(DealpayAmountEntity.class);
-        return util.exportExcel(list, "dealDeduct");
+        return util.exportExcel(list, "deduct");
     }
 
     /**
@@ -80,8 +92,8 @@ public class DealpayAmountController extends BaseController {
     @Log(title = "手动加扣款记录", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(DealpayAmountEntity dealpayAmount) {
-        return toAjax(dealpayAmountService.insertDealpayAmount(dealpayAmount));
+    public AjaxResult addSave(DealpayAmountEntity dealpayAmountEntity) {
+        return toAjax(dealpayAmountService.insertDealpayAmount(dealpayAmountEntity));
     }
 
     /**
@@ -114,5 +126,55 @@ public class DealpayAmountController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(dealpayAmountService.deleteDealpayAmountByIds(ids));
+    }
+
+    /*处理加减款的controller逻辑处理*/
+
+    /**
+     * 财务审核加减款记录
+     */
+    @RequiresPermissions("dealpay:deduct:edit:approval")
+    @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
+    @PostMapping("/approval")
+    @ResponseBody
+    public AjaxResult apporval(DealpayAmountEntity dealpayAmountEntity) {
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        //获取alipay处理接口URL
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_3);
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        mapParam.put("id", dealpayAmountEntity.getId());
+        mapParam.put("userId", dealpayAmountEntity.getUserId());
+        mapParam.put("amount", dealpayAmountEntity.getAmount());
+        mapParam.put("orderStatus", dealpayAmountEntity.getOrderStatus());//审核通过
+        mapParam.put("orderId", dealpayAmountEntity.getOrderId());//订单号
+        mapParam.put("approval", currentUser.getLoginName());//审核人
+        mapParam.put("comment", dealpayAmountEntity.getComment());//审核人
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
+    }
+
+    /**
+     * 财务审核加减款记录
+     */
+    @RequiresPermissions("dealpay:deduct:edit:approval")
+    @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
+    @PostMapping("/deduct")
+    @ResponseBody
+    public AjaxResult deduct(DealpayAmountEntity dealpayAmountEntity) {
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        //获取alipay处理接口URL
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_3);
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        mapParam.put("id", dealpayAmountEntity.getId());
+        mapParam.put("userId", dealpayAmountEntity.getUserId());
+        mapParam.put("amount", dealpayAmountEntity.getAmount());
+        mapParam.put("orderStatus", dealpayAmountEntity.getOrderStatus());//审核通过
+        mapParam.put("orderId", dealpayAmountEntity.getOrderId());//订单号
+        mapParam.put("approval", currentUser.getLoginName());//审核人
+        mapParam.put("comment", dealpayAmountEntity.getComment());
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
 }
