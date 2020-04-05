@@ -35,23 +35,21 @@
         <result property="endTime" column="endTime"/>
         <result property="witip" column="witip"/>
         <result property="dealUrl" column="dealUrl"/>
+        <result property="qrRechargeList" column="qrRechargeList"/>
     </resultMap>
 
     <sql id="selectAlipayUserInfoVo">
-        select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status, privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip, dealUrl from alipay_user_info
+        select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent,
+        isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status,
+        privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip, dealUrl, qrRechargeList from alipay_user_info
     </sql>
 
     <select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">
         <include refid="selectAlipayUserInfoVo"/>
         <where>
             <if test="userName != null  and userName != ''">and userName like concat('%', #{userName}, '%')</if>
-            <if test="password != null  and password != ''">and password = #{password}</if>
-            <if test="payPasword != null  and payPasword != ''">and payPasword = #{payPasword}</if>
-            <if test="salt != null  and salt != ''">and salt = #{salt}</if>
             <if test="userType != null ">and userType = #{userType}</if>
             <if test="switchs != null ">and switchs = #{switchs}</if>
-            <if test="userNode != null  and userNode != ''">and userNode = #{userNode}</if>
-            <if test="email != null  and email != ''">and email = #{email}</if>
             <if test="agent != null  and agent != ''">and agent = #{agent}</if>
             <if test="isAgent != null  and isAgent != ''">and isAgent = #{isAgent}</if>
             <if test="credit != null ">and credit = #{credit}</if>
@@ -172,6 +170,7 @@
             <if test="endTime != null  and endTime != ''">endTime = #{endTime},</if>
             <if test="witip != null  and witip != ''">witip = #{witip},</if>
             <if test="dealUrl != null  and dealUrl != ''">dealUrl = #{dealUrl},</if>
+            <if test="qrRechargeList != null  and qrRechargeList != ''">qrRechargeList = #{qrRechargeList},</if>
         </trim>
         where id = #{id}
     </update>

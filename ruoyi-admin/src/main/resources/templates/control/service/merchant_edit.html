@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('配置商户服务群')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-control-merchant-edit" th:object="${alipayInfo}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">商户账户：</label>
+            <div class="col-sm-8">
+                <input name="userId" th:field="*{userId}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">商户名称：</label>
+            <div class="col-sm-8">
+                <input name="userName" th:field="*{userName}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-3 control-label">卡商代理：</label>
+            <div class="col-xs-8">
+                <label th:each="card:${cardInfo}" class="check-box">
+                    <input name="userIds" type="checkbox" th:value="${card.userId}" th:text="${card.userId}" th:checked="${card.checkFlag}"
+                           th:disabled="${card.switchs == 0}">
+                </label>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    let prefix = ctx + "control/service";
+    $("#form-control-merchant-save").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            let data = $("#form-control-merchant-save").serializeArray();
+            let id = $("#id").val();
+            let userIds = $.form.selectCheckeds("userIds");
+            data.push({"name": "id", "value": id});
+            data.push({"name": "paramStr", "value": userIds});
+            $.operate.save(prefix + "/merchant/save", data);
+        }
+    }
+
+</script>
+</body>
+</html>

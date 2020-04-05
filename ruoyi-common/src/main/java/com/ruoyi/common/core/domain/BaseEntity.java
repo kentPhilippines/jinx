@@ -38,6 +38,11 @@ public class BaseEntity implements Serializable
     /** 请求参数 */
     private Map<String, Object> params;
 
+    /** checkbox 是否被选中 */
+    private boolean checkFlag = false;
+
+    private String[] paramStr;
+
     public String getSearchValue()
     {
         return searchValue;
@@ -110,5 +115,21 @@ public class BaseEntity implements Serializable
     public void setParams(Map<String, Object> params)
     {
         this.params = params;
+    }
+
+    public String[] getParamStr() {
+        return paramStr;
+    }
+
+    public void setParamStr(String[] paramStr) {
+        this.paramStr = paramStr;
+    }
+
+    public boolean isCheckFlag() {
+        return checkFlag;
+    }
+
+    public void setCheckFlag(boolean checkFlag) {
+        this.checkFlag = checkFlag;
     }
 }

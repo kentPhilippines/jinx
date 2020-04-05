@@ -80,4 +80,7 @@ public interface IDealpayUserInfoService {
      * @return 影响行数
      */
     String resetWithdrawalPwd(Long id);
+
+
+    List<DealpayUserInfoEntity> selectdealpayUserInfoByAgent(DealpayUserInfoEntity dealpayUserInfoEntity);
 }

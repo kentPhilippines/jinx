@@ -85,8 +85,23 @@ public interface IAlipayUserInfoService {
 
     /**
      * 根据商户号查询商户
+     *
      * @param userId
      * @return
      */
     AlipayUserInfo findMerchantInfoByUserId(String userId);
+
+    /**
+     * 查询顶代和会员
+     *
+     * @param alipayUserInfo
+     * @return
+     */
+    List<AlipayUserInfo> selectAlipayUserInfoByControl(AlipayUserInfo alipayUserInfo);
+
+    /**
+     * 保存码商服务群
+     * @param alipayUserInfo
+     */
+    int toSaveQrChargeList(AlipayUserInfo alipayUserInfo);
 }

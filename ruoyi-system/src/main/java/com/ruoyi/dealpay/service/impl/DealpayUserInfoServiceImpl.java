@@ -149,4 +149,10 @@ public class DealpayUserInfoServiceImpl implements IDealpayUserInfoService {
         int j = dealpayUserInfoMapper.updateWithdrawalPwd(dealpayUserInfoEntity);
         return j == 1 ? resetPwd : "false";
     }
+
+    @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public List<DealpayUserInfoEntity> selectdealpayUserInfoByAgent(DealpayUserInfoEntity dealpayUserInfoEntity) {
+        return dealpayUserInfoMapper.selectdealpayUserInfoByAgent(dealpayUserInfoEntity);
+    }
 }

@@ -1,5 +1,6 @@
 package com.ruoyi.alipay.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.ruoyi.common.annotation.DataSource;
@@ -36,7 +37,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayUserInfo selectAlipayUserInfoById(Long id) {
-        return alipayUserInfoMapper.selectAliasUserInfoById(id);
+        return alipayUserInfoMapper.selectAlipayUserInfoById(id);
     }
 
     /**
@@ -120,7 +121,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public String resetLoginPwd(Long id) {
-        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAliasUserInfoById(id);
+        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAlipayUserInfoById(id);
         if (alipayUserInfo == null) {
             throw new BusinessException("ID不能为空或此用户不存在");
         }
@@ -140,7 +141,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public String resetWithdrawalPwd(Long id) {
-        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAliasUserInfoById(id);
+        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAlipayUserInfoById(id);
         if (alipayUserInfo == null) {
             throw new BusinessException("ID不能为空或此用户不存在");
         }
@@ -155,5 +156,25 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayUserInfo findMerchantInfoByUserId(String userId) {
         return alipayUserInfoMapper.selectMerhantInfoByUserId(userId);
+    }
+
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserInfo> selectAlipayUserInfoByControl(AlipayUserInfo alipayUserInfo) {
+        return alipayUserInfoMapper.selectAlipayUserInfoListByControl(alipayUserInfo);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int toSaveQrChargeList(AlipayUserInfo alipayUserInfo) {
+        String[] str = alipayUserInfo.getParamStr();
+        if (StringUtils.isNotEmpty(str)) {
+            String qrCharge = StringUtils.join(str,",");
+            alipayUserInfo.setQrRechargeList(qrCharge);
+        }else{
+            return alipayUserInfoMapper.clearAlipayQrChargeListById(alipayUserInfo.getId());
+        }
+        return alipayUserInfoMapper.updateAlipayUserInfo(alipayUserInfo);
     }
 }

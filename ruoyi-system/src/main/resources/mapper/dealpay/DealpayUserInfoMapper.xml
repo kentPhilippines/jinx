@@ -75,6 +75,7 @@
             <if test="endTime != null  and endTime != ''">and endTime = #{endTime}</if>
             <if test="witip != null  and witip != ''">and witip = #{witip}</if>
             <if test="queueList != null  and queueList != ''">and queueList = #{queueList}</if>
+            <if test="queueList != null  and queueList != ''">and queueList = #{queueList}</if>
         </where>
     </select>
 

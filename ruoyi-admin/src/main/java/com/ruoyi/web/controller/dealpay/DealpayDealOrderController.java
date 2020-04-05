@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.dealpay;
 
 import java.util.List;
 
+import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -105,14 +106,15 @@ public class DealpayDealOrderController extends BaseController {
         return toAjax(dealpayDealOrderService.updateDealpayDealOrder(dealpayDealOrder));
     }
 
-    /**
-     * 删除交易订单
-     */
-    @RequiresPermissions("dealpay:dealOrder:remove")
-    @Log(title = "交易订单", businessType = BusinessType.DELETE)
-    @PostMapping("/remove")
+
+    @RequiresPermissions("dealpay:orderDeal:updataOrder")
+    @PostMapping("/updataOrder")
     @ResponseBody
-    public AjaxResult remove(String ids) {
-        return toAjax(dealpayDealOrderService.deleteDealpayDealOrderByIds(ids));
+    public  AjaxResult updataOrder(String id){
+        DealpayDealOrderEntity order = dealpayDealOrderService.selectDealpayDealOrderById(Long.valueOf(id));
+        order.setOrderStatus("7");//人工处理
+        int i = dealpayDealOrderService.updateDealpayDealOrder(order);
+        return toAjax(i);
     }
+
 }

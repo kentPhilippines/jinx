@@ -91,4 +91,13 @@ public interface DealpayUserInfoMapper {
      */
     @Update("update alipay_user_info set payPasword = #{payPasword} where id = #{id}")
     int updateWithdrawalPwd(DealpayUserInfoEntity dealpayUserInfoEntity);
+
+    /**
+     *
+     * @param dealpayUserInfoEntity
+     * @return
+     */
+    @Select("select id, userId, userName,  userType, switchs, userNode, submitTime from dealpay_user_info " +
+            "where agent is null and isAgent = 1 and status = 1 ")
+    List<DealpayUserInfoEntity> selectdealpayUserInfoByAgent(DealpayUserInfoEntity dealpayUserInfoEntity);
 }

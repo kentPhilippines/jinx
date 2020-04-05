@@ -137,7 +137,7 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public String resetPayPassword(Long id) {
-        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAliasUserInfoById(id);
+        AlipayUserInfo alipayUserInfo = alipayUserInfoMapper.selectAlipayUserInfoById(id);
         if (alipayUserInfo == null) {
             throw new BusinessException("ID不能为空或此用户不存在");
         }

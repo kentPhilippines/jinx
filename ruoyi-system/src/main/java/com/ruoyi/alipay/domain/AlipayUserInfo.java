@@ -179,6 +179,8 @@ public class AlipayUserInfo extends BaseEntity {
      */
     private String dealUrl;
 
+    private String qrRechargeList;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -419,6 +421,14 @@ public class AlipayUserInfo extends BaseEntity {
         this.dealUrl = dealUrl;
     }
 
+    public String getQrRechargeList() {
+        return qrRechargeList;
+    }
+
+    public void setQrRechargeList(String qrRechargeList) {
+        this.qrRechargeList = qrRechargeList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -453,6 +463,7 @@ public class AlipayUserInfo extends BaseEntity {
                 .append("endTime", getEndTime())
                 .append("witip", getWitip())
                 .append("dealUrl", getDealUrl())
+                .append("qrRechargeList", getQrRechargeList())
                 .toString();
     }
 }
