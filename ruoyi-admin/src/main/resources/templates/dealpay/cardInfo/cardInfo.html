@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('码商详情列表')"/>
+    <th:block th:include="include :: header('卡商详情列表')"/>
     <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="gray-bg">
@@ -49,11 +49,11 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:userInfo:add">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="dealpay:cardInfo:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
             <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="alipay:userInfo:edit">
+               shiro:hasPermission="dealpay:cardInfo:edit">
                 <i class="fa fa-edit"></i> 修改
             </a>
         </div>
@@ -66,10 +66,10 @@
 <th:block th:include="include :: layout-latest-js"/>
 <th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
-    var resetLoginFlag = [[${@permission.hasPermi('alipay:userInfo:reset:login')}]];
-    var resetWithdrawalFlag = [[${@permission.hasPermi('alipay:userInfo:reset:withdrawal')}]];
-    var editFlag = [[${@permission.hasPermi('alipay:userInfo:edit')}]];
-    var prefix = ctx + "alipay/userInfo";
+    var resetLoginFlag = [[${@permission.hasPermi('dealpay:cardInfo:reset:login')}]];
+    var resetWithdrawalFlag = [[${@permission.hasPermi('dealpay:cardInfo:reset:withdrawal')}]];
+    var editFlag = [[${@permission.hasPermi('dealpay:cardInfo:edit')}]];
+    var prefix = ctx + "dealpay/cardInfo";
 
     $(function () {
         var options = {
@@ -78,7 +78,7 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
-            modalName: "码商详情",
+            modalName: "卡商详情",
             columns: [{
                 checkbox: true
             },

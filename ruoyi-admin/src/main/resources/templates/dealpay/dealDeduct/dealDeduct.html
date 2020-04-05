@@ -53,16 +53,16 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:deduct:add">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="dealpay:dealDeduct:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="alipay:deduct:edit">
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="dealpay:dealDeduct:edit">
                 <i class="fa fa-edit"></i> 修改
             </a>
-            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:deduct:remove">
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="dealpay:dealDeduct:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deduct:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dealpay:dealDeduct:export">
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
@@ -74,12 +74,12 @@
 <th:block th:include="include :: footer" />
 <script th:inline="javascript">
     //权限标识
-    var editFlag = [[${@permission.hasPermi('alipay:deduct:edit')}]];
-    var approvalFlag = [[${@permission.hasPermi('alipay:deduct:edit:approval')}]];
+    var editFlag = [[${@permission.hasPermi('dealpay:dealDeduct:edit')}]];
+    var approvalFlag = [[${@permission.hasPermi('dealpay:dealDeduct:edit:approval')}]];
     //列表
     var amountTypeDatas = [[${@dict.getType('amountType')}]];
     var orderStatusDatas = [[${@dict.getType('orderStatusAmount')}]];
-    var prefix = ctx + "alipay/deduct";
+    var prefix = ctx + "dealpay/dealDeduct";
 
     $(function() {
         var options = {

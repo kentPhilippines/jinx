@@ -57,7 +57,7 @@ public class DealpayUserInfoController extends BaseController {
     /**
      * 查询卡商详情列表
      */
-    @RequiresPermissions("dealpay:userInfo:list")
+    @RequiresPermissions("dealpay:cardInfo:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayUserInfoEntity dealpayUserInfoEntity) {
@@ -78,14 +78,14 @@ public class DealpayUserInfoController extends BaseController {
     /**
      * 新增保存卡商详情
      */
-    @RequiresPermissions("dealpay:userInfo:add")
+    @RequiresPermissions("dealpay:cardInfo:add")
     @Log(title = "用户详情", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(DealpayUserInfoEntity dealpayUserInfoEntity) {
         //获取alipay处理接口URL
-        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_IP_URL_KEY, StaticConstants.DealPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_SERVICE_API_KEY, StaticConstants.DealPAY_SERVICE_API_VALUE_1);
         //获取数据库内请求路径
 //        String url1 = "http://10.14.180.64:5055/api-alipay/account-api/add-account";
         Map<String, Object> mapParam = Maps.newHashMap();
@@ -123,22 +123,22 @@ public class DealpayUserInfoController extends BaseController {
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-        DealpayUserInfoEntity alipayUserInfo = dealpayUserInfoService.selectDealpayUserInfoById(id);
-        mmap.put("info", alipayUserInfo);
+        DealpayUserInfoEntity dealpayUserInfo = dealpayUserInfoService.selectDealpayUserInfoById(id);
+        mmap.put("dealpayUserInfo", dealpayUserInfo);
         return prefix + "/edit";
     }
 
     /**
      * 修改保存卡商详情
      */
-    @RequiresPermissions("dealpay:userInfo:edit")
+    @RequiresPermissions("dealpay:cardInfo:edit")
     @Log(title = "用户详情", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(DealpayUserInfoEntity dealpayUserInfoEntity) {
         //获取alipay处理接口URL
-        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_IP_URL_KEY, StaticConstants.DealPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_SERVICE_API_KEY, StaticConstants.DealPAY_SERVICE_API_VALUE_1);
         //获取数据库内请求路径
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("userName", dealpayUserInfoEntity.getUserName());
@@ -165,7 +165,7 @@ public class DealpayUserInfoController extends BaseController {
     /**
      * 删除卡商详情(调用api)
      */
-    @RequiresPermissions("dealpay:userInfo:remove")
+    @RequiresPermissions("dealpay:cardInfo:remove")
     @Log(title = "用户详情", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -192,7 +192,7 @@ public class DealpayUserInfoController extends BaseController {
      * 卡商状态修改（调用api）
      */
     @Log(title = "码商查询", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("dealpay:userInfo:switch")
+    @RequiresPermissions("dealpay:cardInfo:switch")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(DealpayUserInfoEntity user) {
@@ -232,7 +232,7 @@ public class DealpayUserInfoController extends BaseController {
      * 重置用戶的登陸密碼
      */
     @Log(title = "码商查询", businessType = BusinessType.RESET)
-    @RequiresPermissions("dealpay:userInfo:reset:login")
+    @RequiresPermissions("dealpay:cardInfo:reset:login")
     @PostMapping("resetLoginPwd")
     @ResponseBody
     public AjaxResult resetLoginPwd(Long id) {
@@ -243,12 +243,11 @@ public class DealpayUserInfoController extends BaseController {
         return success("重置成功，新的登陆密码：" + resetPwd);
 
     }
-
     /**
      * 重置用戶的提現密碼
      */
     @Log(title = "码商查询", businessType = BusinessType.RESET)
-    @RequiresPermissions("dealpay:userInfo:reset:withdrawal")
+    @RequiresPermissions("dealpay:cardInfo:reset:withdrawal")
     @PostMapping("resetWithdrawalPwd")
     @ResponseBody
     public AjaxResult resetWithdrawalPwd(Long id) {
