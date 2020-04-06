@@ -28,7 +28,7 @@ public class DictionaryUtils {
             throw new BusinessException("参数不能为空");
         }
         List<String> dictVlaue = sysDictDataServiceImpl.selectDictValueByKye(dictType, dictLabel);
-        if (dictVlaue == null) {
+        if (dictVlaue.size() == 0) {
             throw new BusinessException("未配置数据库字典API请求地址");
         }
         if (dictVlaue.size() > 1) {
