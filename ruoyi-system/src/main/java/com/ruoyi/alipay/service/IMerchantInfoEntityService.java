@@ -91,4 +91,11 @@ public interface IMerchantInfoEntityService
      * @return
      */
     int updateMerchantByBackAdmin(AlipayUserInfo alipayUserInfo);
+
+    /**
+     * 更新码商的交易地址
+     * @param alipayUserInfo
+     * @return
+     */
+    int updateAlipayUserInfoDealUrlByObj(AlipayUserInfo alipayUserInfo);
 }

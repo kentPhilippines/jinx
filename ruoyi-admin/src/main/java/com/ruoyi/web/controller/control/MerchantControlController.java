@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayDealOrderApp;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
@@ -32,39 +33,43 @@ import java.util.Map;
  * @date 2020-03-23
  */
 @Controller
-@RequestMapping("/control/merchant")
+@RequestMapping("/control/account")
 public class MerchantControlController extends BaseController {
 
-    private String prefix = "control/merchant";
+    private String prefix = "control/account";
 
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
 
-    @RequiresPermissions("control:merchant:view")
+    @Autowired
+    private IAlipayUserInfoService alipayUserInfoService;
+
+    @RequiresPermissions("control:account:merchant:view")
     @GetMapping()
-    public String control() {
-        return prefix + "/list";
+    public String merchant() {
+        return prefix + "/merchant";
     }
 
     /**
      * 查询商户风控信息列表
      */
-    @RequiresPermissions("control:merchant:list")
-    @PostMapping("/list")
+    @RequiresPermissions("control:account:merchant:list")
+    @PostMapping("/merchant/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserInfo merchantInfoEntity) {
         startPage();
         List<AlipayUserInfo> list = merchantInfoEntityService.selectMerchantControlList(merchantInfoEntity);
         return getDataTable(list);
     }
+
     /**
      * 显示商户风控信息
      */
-    @GetMapping("/edit/{id}")
+    @GetMapping("/merchant/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayUserInfo userInfo = merchantInfoEntityService.selectMerchantInfoEntityById(id);
         mmap.put("alipayUserInfo", userInfo);
-        return prefix + "/edit";
+        return prefix + "/merchant_edit";
     }
 
     //如果请求alipay接口走下面的方法
@@ -112,12 +117,57 @@ public class MerchantControlController extends BaseController {
     /**
      * 修改保存商户风控信息
      */
-    @RequiresPermissions("control:merchant:edit")
+    @RequiresPermissions("control:account:merchant:edit")
     @Log(title = "商户风控", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
+    @PostMapping("/merchant/save")
     @ResponseBody
     public AjaxResult editSave(AlipayUserInfo alipayUserInfo) {
         return toAjax(merchantInfoEntityService.updateMerchantInfoEntity(alipayUserInfo));
+    }
+
+    /**
+     * 显示码商列表
+     *
+     * @return
+     */
+    @RequiresPermissions("control:account:qrOwner:view")
+    @GetMapping("/qr/show")
+    public String qr() {
+        return prefix + "/qr";
+    }
+
+    /**
+     * 查询码商信息列表
+     */
+    @RequiresPermissions("control:account:qrOwner:list")
+    @PostMapping("/qr/list")
+    @ResponseBody
+    public TableDataInfo qrList(AlipayUserInfo alipayUserInfo) {
+        startPage();
+        alipayUserInfo.setUserType(2);
+        List<AlipayUserInfo> list = alipayUserInfoService.selectAlipayUserInfoByControl(alipayUserInfo);
+        return getDataTable(list);
+    }
+
+    /**
+     * 显示码商风控信息
+     */
+    @GetMapping("/qr/edit/{id}")
+    public String qrEdit(@PathVariable("id") Long id, ModelMap mmap) {
+        AlipayUserInfo userInfo = merchantInfoEntityService.selectMerchantInfoEntityById(id);
+        mmap.put("alipayUserInfo", userInfo);
+        return prefix + "/qr_edit";
+    }
+
+    /**
+     * 修改保存商户风控信息
+     */
+    @RequiresPermissions("control:account:qrOwner:edit")
+    @Log(title = "商户风控", businessType = BusinessType.UPDATE)
+    @PostMapping("/qr/save")
+    @ResponseBody
+    public AjaxResult qrSave(AlipayUserInfo alipayUserInfo) {
+        return toAjax(merchantInfoEntityService.updateAlipayUserInfoDealUrlByObj(alipayUserInfo));
     }
 
 }

@@ -162,4 +162,12 @@ public interface MerchantInfoEntityMapper {
             "dealUrl = #{dealUrl} " +
             " where userId = #{userId} ")
     int updateMerchantByBackAdmin(AlipayUserInfo alipayUserInfo);
+
+    /**
+     * 更新码商的dealUrl交易地址白明白
+     * @param alipayUserInfo
+     * @return
+     */
+    @Update("update alipay_user_info set dealUrl = #{dealUrl} where id = #{id}")
+    int updateAlipayUserInfoDealUrlByObj(AlipayUserInfo alipayUserInfo);
 }

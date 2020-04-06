@@ -189,4 +189,11 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         alipayUserInfo.setSubmitTime(DateUtils.getNowDate());
         return merchantInfoEntityMapper.updateMerchantByBackAdmin(alipayUserInfo);
     }
+
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public int updateAlipayUserInfoDealUrlByObj(AlipayUserInfo alipayUserInfo) {
+        alipayUserInfo.setSubmitTime(DateUtils.getNowDate());
+        return merchantInfoEntityMapper.updateAlipayUserInfoDealUrlByObj(alipayUserInfo);
+    }
 }

@@ -110,7 +110,7 @@ public interface AlipayUserInfoMapper {
 
 
     @Select("<script>" +
-            "select id, userId, userName, switchs, qrRechargeList,queueList,submitTime from alipay_user_info where agent is null and status = 1 " +
+            "select id, userId, userName, switchs, qrRechargeList,queueList,submitTime, dealUrl from alipay_user_info where agent is null and status = 1 " +
             "<if test=\"userType == 1 or userType == 2\">" +
             " and userType = #{userType}" +
             "</if>" +
