@@ -170,13 +170,22 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int toSaveQrChargeList(AlipayUserInfo alipayUserInfo) {
         String[] str = alipayUserInfo.getParamStr();
-        if (StringUtils.isNotEmpty(str)) {
+        String[] str1 = alipayUserInfo.getParamStr2();
+      /*  if (StringUtils.isNotEmpty(str)) {*/
             String qrCharge = StringUtils.join(str,",");
+            String queueList = StringUtils.join(str1,",");
             alipayUserInfo.setQrRechargeList(qrCharge);
+            alipayUserInfo.setQueueList(queueList);
             alipayUserInfo.setSubmitTime(new Date());
-        }else{
+      /*  }else{
             return alipayUserInfoMapper.clearAlipayQrChargeListById(alipayUserInfo.getId());
-        }
+        }*/
         return alipayUserInfoMapper.updateAlipayUserInfo(alipayUserInfo);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserInfo> selectdealpayUserInfoByAgent() {
+        return alipayUserInfoMapper.selectdealpayUserInfoByAgent();
     }
 }

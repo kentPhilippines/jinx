@@ -23,8 +23,16 @@
             <label class="col-xs-3 control-label">卡商代理：</label>
             <div class="col-xs-8">
                 <label th:each="card:${cardInfo}" class="check-box">
-                    <input name="userIds" type="checkbox" th:value="${card.userId}" th:text="${card.userId}" th:checked="${card.checkFlag}"
+                    <input name="cardUserIds" type="checkbox" th:value="${card.userId}" th:text="${card.userId}" th:checked="${card.checkFlag}"
                            th:disabled="${card.switchs == 0}">
+                </label>
+            </div>
+        </div><div class="form-group">
+            <label class="col-xs-3 control-label">码商代理：</label>
+            <div class="col-xs-8">
+                <label th:each="qr:${qrInfo}" class="check-box">
+                    <input name="qrUserIds" type="checkbox" th:value="${qr.userId}" th:text="${qr.userId}" th:checked="${qr.checkFlag}"
+                           th:disabled="${qr.switchs == 0}">
                 </label>
             </div>
         </div>
@@ -41,13 +49,14 @@
         if ($.validate.form()) {
             let data = $("#form-control-merchant-save").serializeArray();
             let id = $("#id").val();
-            let userIds = $.form.selectCheckeds("userIds");
+            let cardUserIds = $.form.selectCheckeds("cardUserIds");
+            let qrUserIds = $.form.selectCheckeds("qrUserIds");
             data.push({"name": "id", "value": id});
-            data.push({"name": "paramStr", "value": userIds});
+            data.push({"name": "paramStr", "value": cardUserIds});
+            data.push({"name": "paramStr2", "value": qrUserIds});
             $.operate.save(prefix + "/merchant/save", data);
         }
     }
-
 </script>
 </body>
 </html>

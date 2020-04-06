@@ -25,7 +25,7 @@ public interface AlipayUserInfoMapper {
             "SELECT " +
             " id,userId, userName, `password`, payPasword, salt, userType, switchs," +
             " userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState," +
-            " QQ, telegram, skype, createTime, submitTime, `status`, privateKey, publicKey  " +
+            " QQ, telegram, skype, createTime, submitTime, `status`, privateKey, publicKey   " +
             " FROM " +
             " alipay_user_info" +
             " where userType = 2 " +
@@ -110,7 +110,7 @@ public interface AlipayUserInfoMapper {
 
 
     @Select("<script>" +
-            "select id, userId, userName, switchs, qrRechargeList,submitTime from alipay_user_info where agent is null and status = 1 " +
+            "select id, userId, userName, switchs, qrRechargeList,queueList,submitTime from alipay_user_info where agent is null and status = 1 " +
             "<if test=\"userType == 1 or userType == 2\">" +
             " and userType = #{userType}" +
             "</if>" +
@@ -142,4 +142,7 @@ public interface AlipayUserInfoMapper {
      */
     @Update("update alipay_user_info set qrRechargeList = null and submitTime = sysdate() where id = #{id}")
     int clearAlipayQrChargeListById(@Param("id") Long id);
+
+    @Select("select * from alipay_user_info  where agent is null")
+    List<AlipayUserInfo> selectdealpayUserInfoByAgent();
 }

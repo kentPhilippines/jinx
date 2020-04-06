@@ -181,6 +181,14 @@ public class AlipayUserInfo extends BaseEntity {
 
     private String qrRechargeList;
 
+    private String queueList;
+
+    public String getQueueList() {
+        return queueList;
+    }
+    public void setQueueList(String queueList){
+        this.queueList = queueList;
+    }
     public void setId(Long id) {
         this.id = id;
     }

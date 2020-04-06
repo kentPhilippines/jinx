@@ -119,11 +119,13 @@ public class ServiceControlController extends BaseController {
         AlipayUserInfo userInfo = alipayUserInfoService.selectAlipayUserInfoById(id);
         DealpayUserInfoEntity dealpayUserInfoEntity = new DealpayUserInfoEntity();
         List<DealpayUserInfoEntity> list = dealpayUserInfoService.selectdealpayUserInfoByAgent(dealpayUserInfoEntity);
+        List<AlipayUserInfo> arlist = alipayUserInfoService.selectdealpayUserInfoByAgent();
         if (userInfo == null) {
             throw new BusinessException("此用户不存在");
         }
         if (StringUtils.isEmpty(userInfo.getQrRechargeList())) {
             mmap.put("cardInfo", list);
+
         } else {
             String[] str = userInfo.getQrRechargeList().split(",");
             List<String> cardList = Arrays.asList(str);
@@ -133,6 +135,20 @@ public class ServiceControlController extends BaseController {
                 }
             }
             mmap.put("cardInfo",list);
+        }
+
+
+        if(StringUtils.isEmpty(userInfo.getQueueList())){
+            mmap.put("qrInfo",arlist);
+        } else {
+            String[] str = userInfo.getQueueList().split(",");
+            List<String> qrlist = Arrays.asList(str);
+            for (AlipayUserInfo item : arlist) {
+                if (qrlist.contains(item.getUserId())) {
+                    item.setCheckFlag(true);
+                }
+            }
+            mmap.put("qrInfo",arlist);
         }
         mmap.put("alipayInfo", userInfo);
         return prefix + "/merchant_edit";

@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.dealpay.domain.DealpayUserInfoEntity;
 
 import java.util.List;
 
@@ -104,4 +105,11 @@ public interface IAlipayUserInfoService {
      * @param alipayUserInfo
      */
     int toSaveQrChargeList(AlipayUserInfo alipayUserInfo);
+
+
+    /**
+     * <p>查询所有的订单码商</p>
+     * @return
+     */
+    List<AlipayUserInfo> selectdealpayUserInfoByAgent( );
 }
