@@ -26,7 +26,7 @@
                         </li>
                         <li class="select-selectpicker">
                             <label>费率类型：</label>
-                            <select name="feeType" th:with="type=${@dict.getType('feeType')}" class="selectpicker"
+                            <select name="feeType" th:with="type=${@dict.getType('card_fee_type')}" class="selectpicker"
                                     data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -67,8 +67,7 @@
     var editFlag = [[${@permission.hasPermi('dealpay:dealRate:edit')}]];
     var changeFlag = [[${@permission.hasPermi('deal:dealRate:status')}]];
 
-    let userType = [[${@dict.getType('userType')}]];
-    let feeType = [[${@dict.getType('feeType')}]];
+    let feeType = [[${@dict.getType('card_fee_type')}]];
     var prefix = ctx + "dealpay/dealRate";
 
     $(function () {
@@ -83,13 +82,6 @@
                 {
                     field: 'userId',
                     title: '用户id'
-                },
-                {
-                    field: 'userType',
-                    title: '用户类型',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(userType, value);
-                    }
                 },
                 {
                     field: 'feeType',
