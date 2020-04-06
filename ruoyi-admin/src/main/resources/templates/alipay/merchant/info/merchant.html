@@ -66,7 +66,7 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('alipay:merchant:edit')}]];
     var removeFlag = [[${@permission.hasPermi('alipay:merchant:remove')}]];
-    var openAccount = [[${@permission.hasPermi('alipay:merchant:opend')}]];
+    var openAccount = [[${@permission.hasPermi('alipay:merchant:opened')}]];
     var prefix = ctx + "alipay/merchant";
 
     $(function () {
