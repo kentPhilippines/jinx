@@ -178,6 +178,29 @@
         };
         $.table.init(options);
     });
+
+    /* 银行卡状态显示 */
+    function statusTools(row) {
+        if (row.status === 0) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\')"></i> ';
+        }
+    }
+
+    /* 银行卡-停用 */
+    function disable(id) {
+        $.modal.confirm("确认要【停用】此银行卡吗", function () {
+            $.operate.post(prefix + "/changeStatus", {"id": id, "status": 0});
+        })
+    }
+
+    /* 银行卡-启用 */
+    function enable(id) {
+        $.modal.confirm("确认要【启用】此银行卡吗", function () {
+            $.operate.post(prefix + "/changeStatus", {"id": id, "status": 1});
+        })
+    }
 </script>
 </body>
 </html>

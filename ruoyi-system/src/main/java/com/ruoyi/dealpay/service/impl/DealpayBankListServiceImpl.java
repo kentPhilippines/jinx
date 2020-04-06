@@ -95,4 +95,11 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
     public int deleteDealpayBankListById(Long id) {
         return dealpayBankListMapper.deleteDealpayBankListById(id);
     }
+
+    @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public int updateDealpayBankCardStatusById(DealpayBankListEntity dealpayBankListEntity) {
+        return dealpayBankListMapper.updateDealpayBankCardStatusById(dealpayBankListEntity);
+
+    }
 }

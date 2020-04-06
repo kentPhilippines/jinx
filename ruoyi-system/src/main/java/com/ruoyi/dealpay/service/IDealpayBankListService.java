@@ -58,4 +58,11 @@ public interface IDealpayBankListService {
      * @return 结果
      */
     public int deleteDealpayBankListById(Long id);
+
+    /**
+     * 修改银行卡状态
+     * @param dealpayBankListEntity
+     * @return
+     */
+    int updateDealpayBankCardStatusById(DealpayBankListEntity dealpayBankListEntity);
 }

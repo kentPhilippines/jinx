@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.dealpay;
 
 import java.util.List;
 
+import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -114,5 +115,16 @@ public class DealpayBankListController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(dealpayBankListService.deleteDealpayBankListByIds(ids));
+    }
+
+    /**
+     * 码商状态修改（调用api）
+     */
+    @Log(title = "码商查询", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("dealpay:bankCard:status")
+    @PostMapping("/changeStatus")
+    @ResponseBody
+    public AjaxResult changeStatus(DealpayBankListEntity dealpayBankListEntity) {
+        return toAjax(dealpayBankListService.updateDealpayBankCardStatusById(dealpayBankListEntity));
     }
 }

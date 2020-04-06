@@ -1,6 +1,7 @@
 package com.ruoyi.dealpay.mapper;
 
 import com.ruoyi.dealpay.domain.DealpayBankListEntity;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -58,4 +59,12 @@ public interface DealpayBankListMapper {
      * @return 结果
      */
     public int deleteDealpayBankListByIds(String[] ids);
+
+    /**
+     * 更新银行卡状态
+     * @param dealpayBankListEntity
+     * @return
+     */
+    @Update("update dealpay_bank_list set status = #{status} where id = #{id} " )
+    int updateDealpayBankCardStatusById(DealpayBankListEntity dealpayBankListEntity);
 }
