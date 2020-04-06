@@ -42,6 +42,16 @@ public class BaseEntity implements Serializable
     private boolean checkFlag = false;
 
     private String[] paramStr;
+    private String[] paramStr2;
+
+
+    public String[] getParamStr2() {
+        return paramStr2;
+    }
+
+    public void setParamStr2(String[] paramStr2) {
+        this.paramStr2 = paramStr2;
+    }
 
     public String getSearchValue()
     {

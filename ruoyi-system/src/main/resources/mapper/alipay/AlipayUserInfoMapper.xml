@@ -35,12 +35,13 @@
         <result property="endTime" column="endTime"/>
         <result property="witip" column="witip"/>
         <result property="dealUrl" column="dealUrl"/>
+        <result property="queueList" column="queueList"/>
         <result property="qrRechargeList" column="qrRechargeList"/>
     </resultMap>
 
     <sql id="selectAlipayUserInfoVo">
         select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent,
-        isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status,
+        isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status,queueList,
         privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip, dealUrl, qrRechargeList from alipay_user_info
     </sql>
 
@@ -171,6 +172,7 @@
             <if test="witip != null  and witip != ''">witip = #{witip},</if>
             <if test="dealUrl != null  and dealUrl != ''">dealUrl = #{dealUrl},</if>
             <if test="qrRechargeList != null  and qrRechargeList != ''">qrRechargeList = #{qrRechargeList},</if>
+            <if test="queueList != null  and queueList != ''">queueList = #{queueList},</if>
         </trim>
         where id = #{id}
     </update>
