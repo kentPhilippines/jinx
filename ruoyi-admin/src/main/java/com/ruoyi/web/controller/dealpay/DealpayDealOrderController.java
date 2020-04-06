@@ -1,8 +1,16 @@
 package com.ruoyi.web.controller.dealpay;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import cn.hutool.core.util.StrUtil;
+import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
+import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +29,8 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.validation.constraints.Size;
+
 /**
  * 交易订单Controller
  *
@@ -31,9 +41,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/dealpay/dealOrder")
 public class DealpayDealOrderController extends BaseController {
     private String prefix = "dealpay/dealOrder";
+    private String finance_prefix = "dealpay/finance";
 
     @Autowired
     private IDealpayDealOrderService dealpayDealOrderService;
+
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
 
     @RequiresPermissions("dealpay:dealOrder:view")
     @GetMapping()
@@ -110,11 +124,62 @@ public class DealpayDealOrderController extends BaseController {
     @RequiresPermissions("dealpay:orderDeal:updataOrder")
     @PostMapping("/updataOrder")
     @ResponseBody
-    public  AjaxResult updataOrder(String id){
+    public AjaxResult updataOrder(String id) {
         DealpayDealOrderEntity order = dealpayDealOrderService.selectDealpayDealOrderById(Long.valueOf(id));
         order.setOrderStatus("7");//人工处理
         int i = dealpayDealOrderService.updateDealpayDealOrder(order);
         return toAjax(i);
     }
 
+
+    /*财务手动处理订单操作逻辑*/
+
+    @RequiresPermissions("dealpay:finance:check")
+    @GetMapping("/finance/check")
+    public String orderDeal() {
+        return finance_prefix + "/manual";
+    }
+
+    /**
+     * 查询交易订单列表
+     */
+    @RequiresPermissions("dealpay:finance:showList")
+    @PostMapping("/finance/show")
+    @ResponseBody
+    public TableDataInfo financeCheck(DealpayDealOrderEntity dealpayDealOrderEntity) {
+        startPage();
+        List<DealpayDealOrderEntity> list = dealpayDealOrderService.selectDealpayDealOrderList(dealpayDealOrderEntity);
+        return getDataTable(list);
+    }
+
+    /**
+     * <p>码商交易订单状态确认</p>
+     */
+    @RequiresPermissions("dealpay:finance:additional")
+    @PostMapping("/finance/updataOrder")
+    @ResponseBody
+    @Log(title = "人工补单", businessType = BusinessType.UPDATE)
+    public AjaxResult enterOrder(Long id, String orderStatus) {
+        DealpayDealOrderEntity order = dealpayDealOrderService.selectDealpayDealOrderById(id);
+        if (StrUtil.isBlank(orderStatus))
+            return AjaxResult.error("订单状态出错");
+        String status = order.getOrderStatus();
+        SysUser currentUser = ShiroUtils.getSysUser();
+        Long userId = currentUser.getUserId();
+        @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符") String userName = currentUser.getUserName();
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        if ("2".equals(status) || "4".equals(status))
+            return AjaxResult.error("当前订单状态不允许修改");
+        mapParam.put("orderId", order.getOrderId());
+        mapParam.put("userName", userName);
+        if ("SU".equals(orderStatus)) {
+            mapParam.put("orderStatus", "2");
+        } else if ("ER".equals(orderStatus)) {
+            mapParam.put("orderStatus", "4");
+        }
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_IP_URL_KEY, StaticConstants.DealPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_IP_URL_VALUE, StaticConstants.DealPAY_SERVICE_API_VALUE_2);
+        AjaxResult post = post(ipPort + urlPath, mapParam);
+        return post;
+    }
 }

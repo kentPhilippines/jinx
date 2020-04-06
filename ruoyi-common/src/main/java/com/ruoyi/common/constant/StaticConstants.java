@@ -47,6 +47,7 @@ public interface StaticConstants {
     public static final String DealPAY_IP_URL_VALUE = "ip:port";
     public static final String DealPAY_SERVICE_API_KEY = "dealpay-api";
     public static final String DealPAY_SERVICE_API_VALUE_1 = "dealpay-api-add-account"; //卡商开户
+    public static final String DealPAY_SERVICE_API_VALUE_2 = "/api-dealpay/order-api/enter-orderQr"; //财务人工补单，确认卡商订单状态
 
 
 

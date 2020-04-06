@@ -33,13 +33,17 @@ import java.util.Map;
 @RequestMapping("/alipay/order")
 public class AlipayOrderContorller extends BaseController {
     private String prefix = "alipay/order";
-    @Autowired private DictionaryUtils dictionaryUtils;
-    @Autowired private IAlipayDealOrderEntityService alipayDealOrderEntityService;
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
+    @Autowired
+    private IAlipayDealOrderEntityService alipayDealOrderEntityService;
+
     @RequiresPermissions("alipay:order:view")
     @GetMapping()
     public String orderDeal() {
         return prefix + "/order";
     }
+
     /**
      * 查询交易订单列表
      */
@@ -52,6 +56,7 @@ public class AlipayOrderContorller extends BaseController {
                 .selectAlipayOrderList(alipayDealOrderEntity);
         return getDataTable(list);
     }
+
     /**
      * 导出交易订单列表
      */
@@ -65,6 +70,7 @@ public class AlipayOrderContorller extends BaseController {
         ExcelUtil<AlipayDealOrderEntity> util = new ExcelUtil<AlipayDealOrderEntity>(AlipayDealOrderEntity.class);
         return util.exportExcel(list, "order");
     }
+
     /**
      * <p>码商交易订单状态确认</p>
      */
@@ -72,30 +78,30 @@ public class AlipayOrderContorller extends BaseController {
     @PostMapping("/updataOrder")
     @ResponseBody
     @Log(title = "交易订单", businessType = BusinessType.UPDATE)
-    public  AjaxResult enterOrder(Long id , String orderStatus){
+    public AjaxResult enterOrder(Long id, String orderStatus) {
         AlipayDealOrderEntity order = alipayDealOrderEntityService.selectAlipayDealOrderEntityById(id);
         /**
          * <p>当前订单为成功或者失败的时候禁止修改状态</p>
          */
-        if(StrUtil.isBlank(orderStatus))
+        if (StrUtil.isBlank(orderStatus))
             return AjaxResult.error("订单状态出错");
         String status = order.getOrderStatus();
         SysUser currentUser = ShiroUtils.getSysUser();
         Long userId = currentUser.getUserId();
         @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符") String userName = currentUser.getUserName();
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
-        if("2".equals(status) || "4".equals(status))
+        if ("2".equals(status) || "4".equals(status))
             return AjaxResult.error("当前订单状态不允许修改");
-        mapParam.put("orderId",order.getOrderId());
-        mapParam.put("userName",userName);
-        if("SU".equals(orderStatus)){
-            mapParam.put("orderStatus","2");
-        }else if("ER".equals(orderStatus)){
-            mapParam.put("orderStatus","4");
+        mapParam.put("orderId", order.getOrderId());
+        mapParam.put("userName", userName);
+        if ("SU".equals(orderStatus)) {
+            mapParam.put("orderStatus", "2");
+        } else if ("ER".equals(orderStatus)) {
+            mapParam.put("orderStatus", "4");
         }
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_4);
         AjaxResult post = post(ipPort + urlPath, mapParam);
-        return  post;
+        return post;
     }
 }
