@@ -112,8 +112,9 @@ public class DealpayUserInfoServiceImpl implements IDealpayUserInfoService {
     @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public String checkDealpayUserIdUnique(DealpayUserInfoEntity dealpayUserInfoEntity) {
         DealpayUserInfoEntity isExist=dealpayUserInfoMapper.checkDealpayUserIdUnique(dealpayUserInfoEntity.getUserId());
-        if (StringUtils.isNotNull(isExist))
+        if (StringUtils.isNotNull(isExist)) {
             return UserConstants.QRUSER_NAME_NOT_UNIQUE;
+        }
         return UserConstants.QRUSER_NAME_UNIQUE;
     }
     /**

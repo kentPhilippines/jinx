@@ -67,7 +67,7 @@ public interface DealpayUserInfoMapper {
      * @param userId
      * @return 结果
      */
-    @Select("select id, userId, userName, password, userType, switchs, userNode,isAgent, credit, remitOrderState from alipay_user_info where userId = #{userId}")
+    @Select("select id, userId, userName, password, userType, switchs, userNode,isAgent, credit, remitOrderState from dealpay_user_info where userId = #{userId}")
     DealpayUserInfoEntity checkDealpayUserIdUnique(String userId);
     /**
      * 查询用户详情
