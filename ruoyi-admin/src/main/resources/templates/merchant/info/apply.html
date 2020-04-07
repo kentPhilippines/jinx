@@ -26,7 +26,7 @@
                 <div class="col-sm-8" th:if="${bankList.size()} ne 0">
                     <select id="bankNo" name="bankNo" class="form-control" required>
                         <option value="">请选择银行卡</option>
-                        <option th:each="bank:${bankList}" th:value="${bank.bankcardAccount}" th:text="${bank.bankcardAccount}"></option>
+                        <option th:each="bank:${bankList}" th:value="${bank.bankcardAccount}" th:text="'卡号：'+${bank.bankcardAccount}+' 开户人：' + ${bank.accountHolder}"></option>
                     </select>
                 </div>
                 <div class="col-sm-8" th:if="${bankList.size()} eq 0">
