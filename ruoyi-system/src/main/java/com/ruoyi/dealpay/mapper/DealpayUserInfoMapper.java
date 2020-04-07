@@ -75,21 +75,21 @@ public interface DealpayUserInfoMapper {
      * @param id 用户详情ID
      * @return 用户详情
      */
-    @Select("select * from alipay_user_info where id = #{id}")
+    @Select("select * from dealpay_user_info where id = #{id}")
     DealpayUserInfoEntity selectAliasUserInfoById(Long id);
     /**
      * 重置登陆密码
      * @param dealpayUserInfoEntity
      * @return
      */
-    @Update("update alipay_user_info set password = #{password} where id = #{id}")
+    @Update("update dealpay_user_info set password = #{password} where id = #{id}")
     int updateUserLoginPwd(DealpayUserInfoEntity dealpayUserInfoEntity);
     /**
      * 重置提现密码
      * @param dealpayUserInfoEntity
      * @return
      */
-    @Update("update alipay_user_info set payPasword = #{payPasword} where id = #{id}")
+    @Update("update dealpay_user_info set payPasword = #{payPasword} where id = #{id}")
     int updateWithdrawalPwd(DealpayUserInfoEntity dealpayUserInfoEntity);
 
     /**
