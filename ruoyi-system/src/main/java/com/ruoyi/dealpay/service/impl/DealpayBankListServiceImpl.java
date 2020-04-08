@@ -2,9 +2,11 @@ package com.ruoyi.dealpay.service.impl;
 
 import java.util.List;
 
+import cn.hutool.core.util.IdUtil;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
+import com.sun.org.apache.xpath.internal.operations.Number;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.dealpay.mapper.DealpayBankListMapper;
@@ -57,6 +59,8 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
     @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public int insertDealpayBankList(DealpayBankListEntity dealpayBankList) {
         dealpayBankList.setCreateTime(DateUtils.getNowDate());
+        String objectId = IdUtil.objectId().toUpperCase();
+        dealpayBankList.setBankcardId("SYS-C"+objectId);
         return dealpayBankListMapper.insertDealpayBankList(dealpayBankList);
     }
 
