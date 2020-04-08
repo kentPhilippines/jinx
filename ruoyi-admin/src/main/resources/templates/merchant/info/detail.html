@@ -12,6 +12,7 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-merchant-detail" th:object="${userInfo}">
         <input type="hidden" id="publicKey" name="publicKey" th:field="*{publicKey}"/>
+        <input type="hidden" id="payPassword" name="payPassword" th:field="*{payPasword}"/>
         <div class="form-group">
             <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">商户ID：</label>
             <div class="col-sm-8">
@@ -44,19 +45,18 @@
         <div class="form-group">
             <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">商户公钥：</label>
             <div class="col-sm-8">
-                <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;" shiro:hasPermission="back:merchant:download"
+                <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;" shiro:hasPermission="back:merchant:downloadPublicKey"
                    title="点击下载公钥" aria-hidden="true"
-                   onclick="typePassword()"></a>
+                   onclick="typePassword('public')"></a>
             </div>
         </div>
-        <hr/>
         <hr/>
         <div class="form-group">
             <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">交易秘钥：</label>
             <div class="col-sm-8">
-                <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;" shiro:hasPermission="back:merchant:download"
+                <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;" shiro:hasPermission="back:merchant:downloadPayKey"
                    title="点击下载秘钥" aria-hidden="true"
-                   onclick="typePassword()"></a>
+                   onclick="typePassword('pay')"></a>
             </div>
         </div>
         <hr/>
@@ -131,9 +131,17 @@
 
 
     /*输入密码下载*/
-    function typePassword() {
-        let publicKey = $("#publicKey").val();
+    function typePassword(type) {
         let username = $("#userName").val();
+        let key = null;
+        let file = null;
+        if (type === 'public'){
+            key = $("#publicKey").val();
+            file = "公钥";
+        }else if(type === 'pay'){
+            key = $("#payPassword").val();
+            file = "交易密钥";
+        }
         layer.prompt({title: '请输入密码下载商户密钥', formType: 1}, function (pass, index) {
             layer.close(index);
             jQuery.ajax({
@@ -145,8 +153,7 @@
                 dataType: "json",
                 success: function (data) {
                     if (0 == data.code) {
-                        console.log("typePassword===>"+publicKey +"\t"+username);
-                        txtDownload(publicKey, username);
+                        txtDownload(key, username + file);
                     } else {
                         layer.msg(data.msg, {icon: 2, time: 1000}, function () {
                             typePassword();
@@ -162,7 +169,7 @@
         var eleLink = document.createElement('a');
         var blob = new Blob([content]);
         eleLink.href = URL.createObjectURL(blob);
-        eleLink.download = filename + '公钥.txt';
+        eleLink.download = filename + '.txt';
         eleLink.click();
     }
 

@@ -141,13 +141,12 @@ public interface MerchantInfoEntityMapper {
     List<AlipayUserInfo> selectMerchantControlList(AlipayUserInfo merchantInfoEntity);
 
     @Select("<script>" +
-            "select u.id, u.userId, u.userName, u.userType, u.switchs, u.email, u.agent, u.isAgent, u.credit, u.QQ, u.telegram, u.skype, " +
+            "select u.id, u.userId, u.userName, u.userType, u.payPasword,  u.switchs, u.email, u.agent, u.isAgent, u.credit, u.QQ, u.telegram, u.skype, " +
             "u.createTime, u.submitTime, u.status, u.privateKey, u.publicKey, " +
             "u.minAmount, u.maxAmount, u.timesTotal, u.startTime, u.endTime, u.witip, u.dealUrl " +
             " from alipay_user_info u " +
             " where u.userId = #{userId} " +
             "</script>")
-    @ResultType(AlipayUserInfo.class)
     AlipayUserInfo findBackUserByUserId(@Param("userId") String userId);
 
 
