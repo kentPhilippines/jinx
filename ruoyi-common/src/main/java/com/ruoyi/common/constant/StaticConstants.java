@@ -52,6 +52,10 @@ public interface StaticConstants {
 
 
 
+
+    //二维码服务器地址
+    public static final String ALIPAY_QR_CODE_SERVER_ADDR_KEY = "code_server_address";
+    public static final String ALIPAY_QR_CODE_SERVER_ADDR_VALUE = "server_addr";
     //dealpay网关地址ip
     public static final String DEALPAY_IP_PORT = "dealpay_ip_port";
     //pay网关地址ip

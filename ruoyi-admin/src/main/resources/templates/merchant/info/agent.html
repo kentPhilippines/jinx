@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('商户详情列表')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <span>商户账号：</span>
+                            <input type="text" id="userId" name="userId"/>
+                        </li>
+                        <li>
+                            <span>商户名称：</span>
+                            <input type="text" id="userName" name="userName"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>状态： </label>
+                            <select id="switchs" name="switchs" th:with="type=${@dict.getType('userSwitchs')}"
+                                    class="selectpicker" data-none-selected-text="请选择" >
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js" />
+<script th:inline="javascript">
+    var prefix = ctx + "back/merchant/admin";
+
+    $(function () {
+        var options = {
+            url: prefix + "/data/list",
+            modalName: "下线商户代理信息",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'userId',
+                    title: '商户账号'
+                },
+                {
+                    field: 'userName',
+                    title: '商户名称'
+                },
+                {
+                    field: 'agent',
+                    title: '上级代理'
+                },
+                {
+                    title: '商户状态',
+                    align: 'center'
+                },
+                {
+                    field: 'userNode',
+                    title: '备注'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                }
+                ]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

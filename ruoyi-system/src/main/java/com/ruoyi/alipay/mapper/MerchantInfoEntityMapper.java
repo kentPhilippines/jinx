@@ -1,5 +1,6 @@
 package com.ruoyi.alipay.mapper;
 
+import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.domain.MerchantInfoEntity;
 import org.apache.ibatis.annotations.*;
@@ -170,4 +171,15 @@ public interface MerchantInfoEntityMapper {
      */
     @Update("update alipay_user_info set dealUrl = #{dealUrl} where id = #{id}")
     int updateAlipayUserInfoDealUrlByObj(AlipayUserInfo alipayUserInfo);
+
+    @Select("select queryChildAgents(#{userId})")
+    List<String> selectNextAgentByParentId(@Param("userId") String userId);
+
+    @Select("<script>" +
+            "select * from alipay_user_info where status = 1 and userType = 1 and userId in " +
+            "<foreach item='item' index='index' collection='userIds' separator=',' open='(' close=')'>" +
+            "#{item}" +
+            "</foreach>" +
+            "</script>")
+    List<AlipayBankListEntity> selectSubAgentMembersByList(@Param("userIds") List<String> userIds);
 }

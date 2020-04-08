@@ -276,4 +276,48 @@ public class BackManageController extends BaseController {
     }
 
 
+
+    //下线数据
+    @RequiresPermissions("back:data:view")
+    @GetMapping("/data/view")
+    public String agent() {
+        return prefix + "/agent";
+    }
+
+    /**
+     * 查询下线代理商户
+     */
+    @RequiresPermissions("back:data:list")
+    @PostMapping("/data/list")
+    @ResponseBody
+    public TableDataInfo agentList(AlipayUserInfo alipayUserInfo) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        alipayUserInfo.setUserId(sysUser.getMerchantId());
+        alipayUserInfo.setStatus(1);
+        startPage();
+        List<AlipayBankListEntity> list = merchantInfoEntityService.selectAgentByMerchantId(alipayUserInfo);
+        return getDataTable(list);
+    }
+
+    //下线订单
+    @RequiresPermissions("agent:order:view")
+    @GetMapping("/agent/order/view")
+    public String agentOrder() {
+        return prefix + "/agent_order";
+    }
+
+
+    /**
+     * 查询商户订单
+     */
+    @RequiresPermissions("agent:order:list")
+    @PostMapping("/agent/order/list")
+    @ResponseBody
+    public TableDataInfo agentOrder(AlipayDealOrderApp alipayDealOrderApp) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        alipayDealOrderApp.setOrderAccount(sysUser.getMerchantId());
+        startPage();
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
+        return getDataTable(list);
+    }
 }

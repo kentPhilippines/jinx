@@ -1,5 +1,6 @@
 package com.ruoyi.alipay.service;
 
+import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.domain.MerchantInfoEntity;
 import java.util.List;
@@ -98,4 +99,11 @@ public interface IMerchantInfoEntityService
      * @return
      */
     int updateAlipayUserInfoDealUrlByObj(AlipayUserInfo alipayUserInfo);
+
+    /**
+     * 根据UserId查询下线代理
+     * @param alipayUserInfo
+     * @return
+     */
+    List<AlipayBankListEntity> selectAgentByMerchantId(AlipayUserInfo alipayUserInfo);
 }

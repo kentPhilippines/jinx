@@ -1,9 +1,14 @@
 package com.ruoyi.alipay.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import cn.hutool.core.collection.CollUtil;
+import com.google.common.collect.Lists;
+import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
 import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
@@ -154,7 +159,6 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
     /*下面是风控模块处理逻辑*/
 
     /**
-     *
      * @param merchantInfoEntity
      * @return
      */
@@ -164,10 +168,12 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         return merchantInfoEntityMapper.selectMerchantControlList(merchantInfoEntity);
     }
 
-     /*商户后台管理员登陆的逻辑处理*/
+    /*商户后台管理员登陆的逻辑处理*/
+
     /**
-     *  查询实体对象
-     * @param userId    商户ID
+     * 查询实体对象
+     *
+     * @param userId 商户ID
      * @return
      */
     @Override
@@ -176,9 +182,9 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         try {
             AlipayUserInfo alipayUserInfo = merchantInfoEntityMapper.findBackUserByUserId(userId);
             Map<String, Object> map = merchantInfoEntityMapper.findFundUserBalanceByUserId(userId);
-            alipayUserInfo.getParams().put("rechargeNumber",map.get("rechargeNumber"));
+            alipayUserInfo.getParams().put("rechargeNumber", map.get("rechargeNumber"));
             return alipayUserInfo;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new BusinessException("查询结果不唯一,请核实");
         }
     }
@@ -196,4 +202,20 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         alipayUserInfo.setSubmitTime(DateUtils.getNowDate());
         return merchantInfoEntityMapper.updateAlipayUserInfoDealUrlByObj(alipayUserInfo);
     }
+
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayBankListEntity> selectAgentByMerchantId(AlipayUserInfo alipayUserInfo) {
+        //查询商户所有的下级用户
+        List<String> agentList = merchantInfoEntityMapper.selectNextAgentByParentId(alipayUserInfo.getUserId());
+        String str = CollUtil.getFirst(agentList);
+        if(str.split(",").length > 2){
+            //查询子集
+            List<AlipayBankListEntity> list = merchantInfoEntityMapper.selectSubAgentMembersByList(Arrays.asList(str.split(",")));
+            return list;
+        }else{
+            return Lists.newArrayList();
+        }
+    }
+
 }

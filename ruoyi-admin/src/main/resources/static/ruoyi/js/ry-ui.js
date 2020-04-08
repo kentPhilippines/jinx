@@ -753,19 +753,19 @@ var table = {
                     url = "/404.html";
                 }
                 if ($.common.isEmpty(width)) {
-                    width = 200;
+                    width = 201 + 'px';
                 }
                 if ($.common.isEmpty(height)) {
-                    height = ($(window).height() - 50);
+                    height = 201 + 'px';
                 }
                 layer.open({
                     type: 2,
-                    area: ['201px', '201px'],
+                    area: [width, height],
                     fix: false,
                     title: title,
                     shade: 0.3,
                     closeBtn: 0,
-                    content: url,
+                    content: [url,'yes'],
                     // 弹层外区域关闭
                     shadeClose: true,
                     skin: 'layui-layer-nobg'
@@ -1103,6 +1103,21 @@ var table = {
                     $.modal.open("修改" + table.options.modalName, url);
                 } else {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
+                }
+            },
+            // 修改信息
+            showDetail: function (id) {
+                table.set();
+                if ($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
+                    var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+                    if ($.common.isEmpty(row)) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    var url = table.options.updateUrl.replace("{id}", row[table.options.uniqueId]);
+                    $.modal.open("显示" + table.options.modalName + "详情", url);
+                } else {
+                    $.modal.open("显示" + table.options.modalName + "详情", $.operate.editUrl(id));
                 }
             },
             // 修改信息
