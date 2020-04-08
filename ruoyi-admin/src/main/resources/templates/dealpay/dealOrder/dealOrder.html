@@ -86,7 +86,7 @@
     let orderStatus = [[${@dict.getType('orderStatus')}]];
     let orderType = [[${@dict.getType('card_dealOrder_type')}]];
     let prefix = ctx + "dealpay/dealOrder";
-
+    var updataOrder = [[${@permission.hasPermi('alipay:orderDeal:updataOrder')}]];
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -110,10 +110,6 @@
                     title: '关联订单'
                 },
                 {
-                    field: 'externalOrderId',
-                    title: '外部订单'
-                },
-                {
                     field: 'orderAccount',
                     title: '商户账号'
                 },
@@ -133,23 +129,11 @@
                     title: '交易金额'
                 },
                 {
-                    field: 'dealFee',
-                    title: '手续费'
-                },
-                {
                     field: 'orderType',
                     title: '订单类型',
                     formatter: function (value, row, index) {
                         return $.table.selectDictLabel(orderStatus, value);
                     }
-                },
-                {
-                    field: 'feeId',
-                    title: '费率'
-                },
-                {
-                    field: 'dealDescribe',
-                    title: '交易备注'
                 },
                 {
                     field: 'isNotify',
