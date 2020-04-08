@@ -1,9 +1,6 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollUtil;
@@ -205,14 +202,17 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
 
     @Override
     @DataSource(DataSourceType.ALIPAY_SLAVE)
-    public List<AlipayBankListEntity> selectAgentByMerchantId(AlipayUserInfo alipayUserInfo) {
+    public List<AlipayUserInfo> selectAgentByMerchantId(AlipayUserInfo alipayUserInfo) {
         //查询商户所有的下级用户
         List<String> agentList = merchantInfoEntityMapper.selectNextAgentByParentId(alipayUserInfo.getUserId());
         String str = CollUtil.getFirst(agentList);
         if(str.split(",").length > 2){
+            List list = new ArrayList(Arrays.asList(str.split(",")));
+            list.remove(0);
+            list.remove(0);
             //查询子集
-            List<AlipayBankListEntity> list = merchantInfoEntityMapper.selectSubAgentMembersByList(Arrays.asList(str.split(",")));
-            return list;
+            List<AlipayUserInfo> sub = merchantInfoEntityMapper.selectSubAgentMembersByList(list);
+            return sub;
         }else{
             return Lists.newArrayList();
         }

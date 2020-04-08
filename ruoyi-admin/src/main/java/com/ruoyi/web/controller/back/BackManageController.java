@@ -293,9 +293,8 @@ public class BackManageController extends BaseController {
     public TableDataInfo agentList(AlipayUserInfo alipayUserInfo) {
         SysUser sysUser = ShiroUtils.getSysUser();
         alipayUserInfo.setUserId(sysUser.getMerchantId());
-        alipayUserInfo.setStatus(1);
         startPage();
-        List<AlipayBankListEntity> list = merchantInfoEntityService.selectAgentByMerchantId(alipayUserInfo);
+        List<AlipayUserInfo> list = merchantInfoEntityService.selectAgentByMerchantId(alipayUserInfo);
         return getDataTable(list);
     }
 

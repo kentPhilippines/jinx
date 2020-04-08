@@ -105,5 +105,5 @@ public interface IMerchantInfoEntityService
      * @param alipayUserInfo
      * @return
      */
-    List<AlipayBankListEntity> selectAgentByMerchantId(AlipayUserInfo alipayUserInfo);
+    List<AlipayUserInfo> selectAgentByMerchantId(AlipayUserInfo alipayUserInfo);
 }
