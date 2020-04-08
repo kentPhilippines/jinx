@@ -133,7 +133,8 @@ public class AlipayDealOrderEntityController extends BaseController {
     public String showCode(@PathVariable("imgId") String imgId, ModelMap mmap) {
         //获取二维码服务器地址
         String qrServerAddr = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_QR_CODE_SERVER_ADDR_KEY, StaticConstants.ALIPAY_QR_CODE_SERVER_ADDR_VALUE);
-        mmap.put("imgUrl", qrServerAddr.replace("{imgId}", imgId));
+        String qrServerPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_QR_CODE_SERVER_ADDR_KEY, StaticConstants.ALIPAY_QR_CODE_SERVER_ADDR_PATH);
+        mmap.put("imgUrl", qrServerAddr + qrServerPath + imgId);
         return code_prefix + "/view_code";
     }
 

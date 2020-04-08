@@ -1,6 +1,9 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
+
+import com.ruoyi.alipay.domain.AlipayFileListEntity;
+import com.ruoyi.alipay.service.IAlipayFileListEntityService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,9 +32,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/alipay/medium")
 public class AlipayMediumEntityController extends BaseController {
 	private String prefix = "alipay/medium";
+	private String code_prefix = "alipay/file";
 
 	@Autowired
 	private IAlipayMediumEntityService alipayMediumEntityService;
+
+	@Autowired
+	private IAlipayFileListEntityService alipayFileListEntityService;
 
 	@RequiresPermissions("alipay:medium:view")
 	@GetMapping()
@@ -113,4 +120,20 @@ public class AlipayMediumEntityController extends BaseController {
 	public AjaxResult remove(String ids) {
 		return toAjax(alipayMediumEntityService.deleteAlipayMediumEntityByIds(ids));
 	}
+
+
+	/**
+	 * 查看所属二维码列表
+	 */
+	@GetMapping("/show/{userId}")
+	public String showCodeList(@PathVariable("userId") String mediumId, ModelMap mmap) {
+		AlipayFileListEntity alipayFileListEntity = new AlipayFileListEntity();
+		alipayFileListEntity.setConcealId(mediumId);
+		alipayFileListEntity.setIsDeal("2");
+		List<AlipayFileListEntity> list = alipayFileListEntityService.selectAlipayFileListEntityList(alipayFileListEntity);
+		mmap.put("codeList", list);
+		return code_prefix + "/group_code_list";
+	}
+
+
 }

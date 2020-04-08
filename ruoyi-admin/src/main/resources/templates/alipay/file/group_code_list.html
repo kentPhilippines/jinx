@@ -1,0 +1,8 @@
+﻿<table xmlns:th="http://www.thymeleaf.org">
+    <tr th:each="code:${codeList}">
+        <div class="center" xmlns:th="http://www.thymeleaf.org" style="width: 100%;height: 100%;text-align: center;margin: 0 auto 45px auto">
+            <img style="width: 100%;height: 100%;" th:src="'http://localhost:8080/fetch/'+ ${code.fileId}">
+        </div>
+        <hr/>
+    </tr>
+</table>

@@ -739,6 +739,42 @@ var table = {
                     }
                 });
             },
+            // 弹出二维码详情
+            openDetail: function (title, url, width, height, callback) {
+                //如果是移动端，就使用自适应大小弹窗
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                    width = 'auto';
+                    height = 'auto';
+                }
+                if ($.common.isEmpty(title)) {
+                    title = false;
+                }
+                if ($.common.isEmpty(url)) {
+                    url = "/404.html";
+                }
+                if ($.common.isEmpty(width)) {
+                    width = 600;
+                }
+                if ($.common.isEmpty(height)) {
+                    height = ($(window).height() - 50);
+                }
+                layer.open({
+                    type: 2,
+                    area: [width + 'px', height + 'px'],
+                    fix: false,
+                    //不固定
+                    maxmin: true,
+                    shade: 0.3,
+                    title: title,
+                    content: url,
+                    btn: ['关闭'],
+                    // 弹层外区域关闭
+                    shadeClose: true,
+                    yes: function (index, layero) {
+                        layer.close(index);
+                    }
+                });
+            },
             // 弹出图片层
             openCode: function (title, url, width, height, callback) {
                 //如果是移动端，就使用自适应大小弹窗
@@ -1060,6 +1096,11 @@ var table = {
                 table.set();
                 $.modal.open("添加下级商户代理商", $.operate.openUrl(id));
             },
+            // 二维码详细列表
+            codeList: function (id) {
+                table.set();
+                $.modal.openDetail("二维码列表", $.operate.openUrl(id));
+            },
             // 添加信息，以tab页展现
             addTab: function (id) {
                 table.set();
@@ -1105,7 +1146,7 @@ var table = {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
             },
-            // 修改信息
+            // 显示详情
             showDetail: function (id) {
                 table.set();
                 if ($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
