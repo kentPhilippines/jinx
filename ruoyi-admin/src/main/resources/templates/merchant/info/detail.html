@@ -14,7 +14,7 @@
         <input type="hidden" id="publicKey" name="publicKey" th:field="*{publicKey}"/>
         <input type="hidden" id="payPassword" name="payPassword" th:field="*{payPasword}"/>
         <div class="form-group">
-            <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">商户ID：</label>
+            <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">商户账户：</label>
             <div class="col-sm-8">
                 <input class="form-control" name="userId" type="text" style="border-width: 0;background-color:white;"
                        th:field="*{userId}"
@@ -46,16 +46,16 @@
             <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">商户公钥：</label>
             <div class="col-sm-8">
                 <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;" shiro:hasPermission="back:merchant:downloadPublicKey"
-                   title="点击下载公钥" aria-hidden="true"
+                   title="点击下载参数加密公钥" aria-hidden="true"
                    onclick="typePassword('public')"></a>
             </div>
         </div>
         <hr/>
         <div class="form-group">
-            <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">交易秘钥：</label>
+            <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">交易密钥：</label>
             <div class="col-sm-8">
                 <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;" shiro:hasPermission="back:merchant:downloadPayKey"
-                   title="点击下载秘钥" aria-hidden="true"
+                   title="点击下载交易请求密钥" aria-hidden="true"
                    onclick="typePassword('pay')"></a>
             </div>
         </div>
@@ -135,14 +135,17 @@
         let username = $("#userName").val();
         let key = null;
         let file = null;
+        let title = null;
         if (type === 'public'){
             key = $("#publicKey").val();
-            file = "公钥";
+            file = "参数加密公钥";
+            title = "输入密码下载参数加密公钥";
         }else if(type === 'pay'){
             key = $("#payPassword").val();
-            file = "交易密钥";
+            file = "交易请求密钥";
+            title = "输入密码下载交易请求密钥";
         }
-        layer.prompt({title: '请输入密码下载商户密钥', formType: 1}, function (pass, index) {
+        layer.prompt({title: title, formType: 1}, function (pass, index) {
             layer.close(index);
             jQuery.ajax({
                 type: "post",
