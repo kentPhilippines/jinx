@@ -50,6 +50,16 @@
             </div>
         </div>
         <hr/>
+        <hr/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label " style="font-weight: bold;font-size:15px;font-family: sans-serif;">交易秘钥：</label>
+            <div class="col-sm-8">
+                <a class="glyphicon glyphicon-download-alt form-control" style="cursor:pointer; border-width: 0;" shiro:hasPermission="back:merchant:download"
+                   title="点击下载秘钥" aria-hidden="true"
+                   onclick="typePassword()"></a>
+            </div>
+        </div>
+        <hr/>
         <div class="form-group">
             <label class="col-sm-2 control-label" style="font-weight: bold;font-size:15px;font-family: sans-serif;">创建时间：</label>
             <div class="col-sm-8">
@@ -124,7 +134,7 @@
     function typePassword() {
         let publicKey = $("#publicKey").val();
         let username = $("#userName").val();
-        layer.prompt({title: '请输入密码下载密钥', formType: 1}, function (pass, index) {
+        layer.prompt({title: '请输入密码下载商户密钥', formType: 1}, function (pass, index) {
             layer.close(index);
             jQuery.ajax({
                 type: "post",
@@ -135,6 +145,7 @@
                 dataType: "json",
                 success: function (data) {
                     if (0 == data.code) {
+                        console.log("typePassword===>"+publicKey +"\t"+username);
                         txtDownload(publicKey, username);
                     } else {
                         layer.msg(data.msg, {icon: 2, time: 1000}, function () {
