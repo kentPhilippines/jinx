@@ -1,15 +1,20 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.List;
+import cn.hutool.core.collection.CollUtil;
+import com.google.common.collect.Lists;
+import com.ruoyi.alipay.domain.AlipayDealOrderApp;
+import com.ruoyi.alipay.mapper.AlipayDealOrderAppMapper;
+import com.ruoyi.alipay.mapper.MerchantInfoEntityMapper;
+import com.ruoyi.alipay.service.IAlipayDealOrderAppService;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayDealOrderAppMapper;
-import com.ruoyi.alipay.domain.AlipayDealOrderApp;
-import com.ruoyi.alipay.service.IAlipayDealOrderAppService;
-import com.ruoyi.common.annotation.DataSource;
-import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.enums.DataSourceType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 商户订单登记Service业务层处理
@@ -21,6 +26,9 @@ import com.ruoyi.common.enums.DataSourceType;
 public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService {
 	@Autowired
 	private AlipayDealOrderAppMapper alipayDealOrderAppMapper;
+
+	@Autowired
+	private MerchantInfoEntityMapper merchantInfoEntityMapper;
 
 	/**
 	 * 查询商户订单登记
@@ -67,6 +75,24 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
 	@Override
 	public int updateAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp) {
 		return alipayDealOrderAppMapper.updateAlipayDealOrderApp(alipayDealOrderApp);
+	}
+
+	@Override
+	@DataSource(DataSourceType.ALIPAY_SLAVE)
+	public List<AlipayDealOrderApp> selectSubMembersOrderList(AlipayDealOrderApp alipayDealOrderApp) {
+		//查询商户所有的下级用户
+		List<String> agentList = merchantInfoEntityMapper.selectNextAgentByParentId(alipayDealOrderApp.getOrderAccount());
+		String str = CollUtil.getFirst(agentList);
+		if(str.split(",").length > 2){
+			List list = new ArrayList(Arrays.asList(str.split(",")));
+			list.remove(0);
+			list.remove(0);
+			//查询子集
+			List<AlipayDealOrderApp> orderList = alipayDealOrderAppMapper.selectSubAgentMembersOrderList(list);
+			return orderList;
+		}else{
+			return Lists.newArrayList();
+		}
 	}
 
 }

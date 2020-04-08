@@ -317,7 +317,7 @@ public class BackManageController extends BaseController {
         SysUser sysUser = ShiroUtils.getSysUser();
         alipayDealOrderApp.setOrderAccount(sysUser.getMerchantId());
         startPage();
-        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(alipayDealOrderApp);
         return getDataTable(list);
     }
 }
