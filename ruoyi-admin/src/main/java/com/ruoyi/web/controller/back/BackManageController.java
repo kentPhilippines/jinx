@@ -196,14 +196,15 @@ public class BackManageController extends BaseController {
         if (!currentUser.getPassword().equals(verify)) {
             return AjaxResult.error("密码验证失败");
         }
-        //验证谷歌验证码
-        String googleCode = alipayWithdrawEntity.getParams().get("googleCode").toString();
-        int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
-        if (is == 0) {
-            return AjaxResult.error("未绑定谷歌验证器");
-        } else if (is - 1 > 0) {
-            return AjaxResult.error("谷歌验证码验证失败");
-        }
+        //正式环境解注
+//        //验证谷歌验证码
+//        String googleCode = alipayWithdrawEntity.getParams().get("googleCode").toString();
+//        int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
+//        if (is == 0) {
+//            return AjaxResult.error("未绑定谷歌验证器");
+//        } else if (is - 1 > 0) {
+//            return AjaxResult.error("谷歌验证码验证失败");
+//        }
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_6);
