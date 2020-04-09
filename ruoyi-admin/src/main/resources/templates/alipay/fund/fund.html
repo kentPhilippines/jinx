@@ -1,128 +1,135 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('用户资金账户列表')" />
+    <th:block th:include="include :: header('用户资金账户列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <span>账户id：</span>
-                                <input type="text" name="userId"/>
-                            </li>
-                            <li>
-                                <span>账户昵称：</span>
-                                <input type="text" name="userName"/>
-                            </li>
-                            <li>
-                                <span>账户类型：</span>
-                                <select name="userType" th:with="type=${@dict.getType('userType')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <span>上级代理商：</span>
-                                <input type="text" name="agent"/>
-                            </li>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <span>用户账户：</span>
+                            <input type="text" name="userId"/>
+                        </li>
+                        <li>
+                            <span>账户名称：</span>
+                            <input type="text" name="userName"/>
+                        </li>
+                        <li>
+                            <span>上级代理：</span>
+                            <input type="text" name="agent"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>账户类型： </label>
+                            <select id="userType" name="userType" th:with="type=${@dict.getType('userType')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <span>创建时间：</span>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginCreateTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endCreateTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-                            <li class="select-time">
-                                <span>创建时间：</span>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
-
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:fund:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:fund:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var refundFlag = [[${@permission.hasPermi('alipay:fund:refund')}]];
-        var deductFlag = [[${@permission.hasPermi('alipay:fund:deduct')}]];
-        var userType = [[${@dict.getType('userType')}]];
-        var prefix = ctx + "alipay/fund";
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    var refundFlag = [[${@permission.hasPermi('alipay:fund:refund')}]];
+    var deductFlag = [[${@permission.hasPermi('alipay:fund:deduct')}]];
+    var userType = [[${@dict.getType('userType')}]];
+    var prefix = ctx + "alipay/fund";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                updateUrl: prefix + "/deduct/{id}",
-                openUrl: prefix + "/refund/{userId}",
-                exportUrl: prefix + "/export",
-                modalName: "用户资金账户",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            updateUrl: prefix + "/deduct/{id}",
+            openUrl: prefix + "/refund/{userId}",
+            exportUrl: prefix + "/export",
+            modalName: "用户资金账户",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'id', 
-                    title : '数据id',
+                    field: 'id',
+                    title: '数据ID',
                     visible: false
                 },
                 {
-                    field : 'userId', 
-                    title : '账户id '
+                    field: 'userId',
+                    title: '用户账户 '
                 },
                 {
-                    field : 'userName', 
-                    title : '账户昵称 '
+                    field: 'userName',
+                    title: '账户名称 '
                 },
                 {
-                    field : 'cashBalance', 
-                    title : '现金账户 '
+                    field: 'cashBalance',
+                    title: '现金账户 '
                 },
                 {
-                    field : 'rechargeNumber', 
-                    title : '充值点数'
+                    field: 'rechargeNumber',
+                    title: '充值点数'
                 },
                 {
-                    field : 'freezeBalance', 
-                    title : '冻结账户'
+                    field: 'freezeBalance',
+                    title: '冻结账户'
                 },
                 {
-                    field : 'accountBalance', 
-                    title : '可取现账户金额 '
+                    field: 'accountBalance',
+                    title: '可取现金额 '
                 },
                 {
-                    field : 'sumDealAmount', 
-                    title : '累计交易额'
+                    field: 'sumDealAmount',
+                    title: '累计交易'
                 },
                 {
-                    field : 'sumRechargeAmount', 
-                    title : '累计充值金额 '
+                    field: 'sumRechargeAmount',
+                    title: '累计充值 '
                 },
                 {
-                    field : 'todayDealAmount', 
-                    title : '当日接单金额'
+                    field: 'todayDealAmount',
+                    title: '当日接单金额'
                 },
                 {
-                    field : 'userType', 
-                    title : '用户类型',
-                    formatter: function(value, row, index) {
+                    field: 'userType',
+                    title: '用户类型',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(userType, value);
                     }
                 },
                 {
-                    field : 'isAgent', 
-                    title : '账号性质',
+                    field: 'isAgent',
+                    title: '账号性质',
                     formatter: function (value, item, index) {
                         if (item.isAgent == '1') {
                             return '<span>代理商</span>';
@@ -132,22 +139,22 @@
                     }
                 },
                 {
-                    field : 'createTime', 
-                    title : '创建时间'
+                    field: 'createTime',
+                    title: '创建时间'
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-primary btn-xs ' + refundFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\')"><i class="fa fa-plus"></i>加款</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + deductFlag + '" onclick="$.operate.edit(\'' + row.userId + '\')"><i class="fa fa-minus"></i>减款</a> ');
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
-        });
-    </script>
+        };
+        $.table.init(options);
+    });
+</script>
 </body>
 </html>
