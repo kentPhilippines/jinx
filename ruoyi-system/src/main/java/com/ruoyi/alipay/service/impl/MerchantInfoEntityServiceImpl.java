@@ -218,4 +218,10 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         }
     }
 
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public int updateMerchantInfoById(AlipayUserInfo merchantInfoEntity) {
+        return merchantInfoEntityMapper.updateMerchantInfoById(merchantInfoEntity);
+    }
+
 }

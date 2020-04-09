@@ -22,7 +22,7 @@ public interface MerchantInfoEntityMapper {
      * @return 商户信息
      */
     @Select("select * from alipay_user_info where id = #{id}")
-    public AlipayUserInfo selectMerchantInfoEntityById(@Param("id") Long id);
+    AlipayUserInfo selectMerchantInfoEntityById(@Param("id") Long id);
 
     /**
      * 查询商户信息列表
@@ -183,4 +183,14 @@ public interface MerchantInfoEntityMapper {
             "</foreach>" +
             "</script>")
     List<AlipayUserInfo> selectSubAgentMembersByList(@Param("userIds") List<String> userIds);
+
+    @Update("update alipay_user_info" +
+            " set userName = #{userName}," +
+            " email = #{email}," +
+            " QQ = #{QQ}," +
+            " telegram = #{telegram}," +
+            " skype = #{skype}," +
+            " userNode = #{userNode} " +
+            " where id = #{id} ")
+    int updateMerchantInfoById(AlipayUserInfo merchantInfoEntity);
 }

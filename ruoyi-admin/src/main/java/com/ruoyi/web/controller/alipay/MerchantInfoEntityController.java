@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.alipay;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.Log;
@@ -77,7 +78,7 @@ public class MerchantInfoEntityController extends BaseController {
      * 新增下级开户页面显示
      */
     @GetMapping("/open/account/{userId}")
-    public String open(@PathVariable("userId") String userId,ModelMap mmap) {
+    public String open(@PathVariable("userId") String userId, ModelMap mmap) {
         AlipayUserInfo userInfo = new AlipayUserInfo();
         userInfo.setAgent(userId);
         mmap.put("userInfo", userInfo);
@@ -113,37 +114,38 @@ public class MerchantInfoEntityController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(AlipayUserInfo merchantInfoEntity) {
-        //获取alipay处理接口URL
-        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
-        //获取数据库内请求路径
-        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
-        mapParam.put("id", merchantInfoEntity.getId());
-        mapParam.put("userId", merchantInfoEntity.getUserId());
-        mapParam.put("userName", merchantInfoEntity.getUserName());
-        mapParam.put("email", merchantInfoEntity.getEmail());
-        mapParam.put("QQ", merchantInfoEntity.getQQ());
-        mapParam.put("telegram", merchantInfoEntity.getTelegram());
-        mapParam.put("userNode", merchantInfoEntity.getUserNode());
-        AlipayUserInfo alipayUserInfo = merchantInfoEntityService.selectMerchantInfoEntityById(merchantInfoEntity.getId());
-        //对参数进行RSA加密处理
-        String cipherText = RSAUtils.getEncryptPublicKey(mapParam, alipayUserInfo.getPublicKey());
-        String pathParam = "userId=" + merchantInfoEntity.getUserId() + "&cipherText=" + cipherText;
-        //post调用alipay方法
-        String flag = HttpUtils.sendPost(ipPort + urlPath, pathParam);
-        if ("ConnectException".equals(flag)) {
-            throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
-        }
-        JSONObject json = JSONObject.parseObject(flag);
-        String result = json.getString("success");
-        switch (result) {
-            case "true":
-                return toAjax(1);
-            case "false":
-                String message = json.getString("message");
-                return error(message);
-        }
-        return null;
+            return toAjax(merchantInfoEntityService.updateMerchantInfoById(merchantInfoEntity));
+//        //获取alipay处理接口URL
+//        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+//        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
+//        //获取数据库内请求路径
+//        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+//        mapParam.put("id", merchantInfoEntity.getId());
+//        mapParam.put("userId", merchantInfoEntity.getUserId());
+//        mapParam.put("userName", merchantInfoEntity.getUserName());
+//        mapParam.put("email", merchantInfoEntity.getEmail());
+//        mapParam.put("QQ", merchantInfoEntity.getQQ());
+//        mapParam.put("telegram", merchantInfoEntity.getTelegram());
+//        mapParam.put("userNode", merchantInfoEntity.getUserNode());
+//        AlipayUserInfo alipayUserInfo = merchantInfoEntityService.selectMerchantInfoEntityById(merchantInfoEntity.getId());
+//        //对参数进行RSA加密处理
+//        String cipherText = RSAUtils.getEncryptPublicKey(mapParam, alipayUserInfo.getPublicKey());
+//        String pathParam = "userId=" + merchantInfoEntity.getUserId() + "&cipherText=" + cipherText;
+//        //post调用alipay方法
+//        String flag = HttpUtils.sendPost(ipPort + urlPath, pathParam);
+//        if ("ConnectException".equals(flag)) {
+//            throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
+//        }
+//        JSONObject json = JSONObject.parseObject(flag);
+//        String result = json.getString("success");
+//        switch (result) {
+//            case "true":
+//                return toAjax(1);
+//            case "false":
+//                String message = json.getString("message");
+//                return error(message);
+//        }
+//        return null;
     }
 
     /**
@@ -158,14 +160,14 @@ public class MerchantInfoEntityController extends BaseController {
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_2);
         Map<String, Object> mapParam = Maps.newHashMap();
-        mapParam.put("paramKey",user.getParams().get("paramKey").toString());
-        mapParam.put("paramValue",user.getParams().get("paramValue").toString());
+        mapParam.put("paramKey", user.getParams().get("paramKey").toString());
+        mapParam.put("paramValue", user.getParams().get("paramValue").toString());
         mapParam.put("userId", user.getUserId());
         String flag = HttpUtils.sendPost(ipPort + urlPath, MapDataUtil.createParam(mapParam));
         if ("ConnectException".equals(flag)) {
             throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + ipPort + urlPath);
         }
-        if(StringUtils.isEmpty(flag)){
+        if (StringUtils.isEmpty(flag)) {
             throw new BusinessException("操作失败，请刷新重试");
         }
         JSONObject json = JSONObject.parseObject(flag);
@@ -178,17 +180,6 @@ public class MerchantInfoEntityController extends BaseController {
                 return error(message);
         }
         return null;
-    }
-
-    /**
-     * 删除商户信息
-     */
-    @RequiresPermissions("alipay:merchant:remove")
-    @Log(title = "商户信息", businessType = BusinessType.DELETE)
-    @PostMapping("/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids) {
-        return toAjax(merchantInfoEntityService.deleteMerchantInfoEntityByIds(ids));
     }
 
     /**
@@ -228,9 +219,9 @@ public class MerchantInfoEntityController extends BaseController {
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
         String verify = passwordService.encryptPassword(currentUser.getLoginName(), password, currentUser.getSalt());
-        if(currentUser.getPassword().equals(verify)){
+        if (currentUser.getPassword().equals(verify)) {
             return AjaxResult.success("验证通过");
-        }else{
+        } else {
             return AjaxResult.error("密码验证失败");
         }
 
@@ -239,7 +230,7 @@ public class MerchantInfoEntityController extends BaseController {
     /**
      * 新增下级开户保存信息
      */
-        @RequiresPermissions("alipay:merchant:save:children")
+    @RequiresPermissions("alipay:merchant:save:children")
     @Log(title = "商户信息", businessType = BusinessType.INSERT)
     @PostMapping("/save/children")
     @ResponseBody

@@ -106,4 +106,11 @@ public interface IMerchantInfoEntityService
      * @return
      */
     List<AlipayUserInfo> selectAgentByMerchantId(AlipayUserInfo alipayUserInfo);
+
+    /**
+     * 更新商户信息
+     * @param merchantInfoEntity
+     * @return
+     */
+    int updateMerchantInfoById(AlipayUserInfo merchantInfoEntity);
 }

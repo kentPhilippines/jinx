@@ -12,11 +12,11 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <span>商户ID：</span>
+                            <span>商户账户：</span>
                             <input type="text" id="userId" name="userId"/>
                         </li>
                         <li>
-                            <span>上级代理ID：</span>
+                            <span>上级代理账户：</span>
                             <input type="text" id="agent" name="agent"/>
                         </li>
                         <li>
@@ -65,7 +65,6 @@
 <th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('alipay:merchant:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('alipay:merchant:remove')}]];
     var openAccount = [[${@permission.hasPermi('alipay:merchant:opened')}]];
     var prefix = ctx + "alipay/merchant";
 
@@ -74,7 +73,6 @@
             url: prefix + "/list",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
             openUrl: prefix + "/open/account/{userId}",
             modalName: "商户信息",
             columns: [{
@@ -87,7 +85,7 @@
                 },
                 {
                     field: 'userId',
-                    title: '商户ID'
+                    title: '商户账户'
                 },
                 {
                     field: 'userName',
@@ -145,7 +143,7 @@
                 {
                     field: 'createTime',
                     title: '创建时间',
-                    sortable: true
+                    align: 'center',
                 },
                 {
                     title: '操作',
@@ -153,8 +151,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        /*actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');*/
-                        actions.push('<a class="btn btn-success btn-xs ' + openAccount + '" onclick="$.operate.openAccount(\'' + row.userId + '\')"><i class="fa fa-plus"></i>下级开户</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs ' + openAccount + '" onclick="$.operate.openAccount(\'' + row.userId + '\')"><i class="fa fa-plus"></i>下级开户</a> ');
                         return actions.join('');
                     }
                 }]
