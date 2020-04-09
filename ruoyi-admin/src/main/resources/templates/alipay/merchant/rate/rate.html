@@ -12,7 +12,7 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>用户id：</p>
+                            <p>商户账户：</p>
                             <input type="text" id="userId" name="userId"/>
                         </li>
                         <li class="select-selectpicker">
@@ -34,7 +34,7 @@
                             </select>
                         </li>
                         <li class="select-selectpicker">
-                            <label>产品类型： </label>
+                            <label>费率类型： </label>
                             <select id="feeType" name="feeType" th:with="type=${@dict.getType('feeType')}"
                                     class="selectpicker" data-none-selected-text="请选择" >
                                 <option value="">所有</option>
@@ -60,9 +60,6 @@
             <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
                shiro:hasPermission="alipay:rate:edit">
                 <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:rate:export">
-                <i class="fa fa-download"></i> 导出
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -91,7 +88,7 @@
             },
                 {
                     field: 'userId',
-                    title: '商户ID'
+                    title: '商户账户'
                 },
                 {
                     field: 'userType',

@@ -6,6 +6,7 @@ import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.alipay.mapper.AlipayUserRateEntityMapper;
@@ -74,7 +75,16 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         if (result.getSwitchs() == 2) {
             throw new BusinessException("此商户已被停用");
         }
-
+        if (StringUtils.isNotEmpty(result.getAgent())) {
+            //查询上级同类型费率
+            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(), alipayUserRateEntity.getPayTypr());
+            if (agentRate == null) { //是否为空
+                throw new BusinessException("此商户的上级代理未设置同类型的费率或此费率通道已关闭");
+            }
+            if (agentRate.getFee().compareTo(alipayUserRateEntity.getFee()) < 0) {
+                throw new BusinessException("下级通道费率不能大于上级的通道费率：" + agentRate.getFee());
+            }
+        }
         return alipayUserRateEntityMapper.insertAlipayUserRateEntity(alipayUserRateEntity);
     }
 
@@ -85,6 +95,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
      * @return 结果
      */
     @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
     public int updateAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity) {
         return alipayUserRateEntityMapper.updateAlipayUserRateEntity(alipayUserRateEntity);
     }
@@ -147,15 +158,25 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         if (result.getSwitchs() == 2) {
             throw new BusinessException("此码商已被停用");
         }
+        if (StringUtils.isNotEmpty(result.getAgent())) {
+            //查询上级同类型费率
+            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(), alipayUserRateEntity.getPayTypr());
+            if (agentRate == null) { //是否为空
+                throw new BusinessException("此码商的上级代理未设置同类型的费率或此费率通道已关闭");
+            }
+            if (agentRate.getFee().compareTo(alipayUserRateEntity.getFee()) < 0) {
+                throw new BusinessException("下级通道费率不能大于上级的通道费率：" + agentRate.getFee());
+            }
+        }
         return alipayUserRateEntityMapper.insertAlipayUserRateEntity_qr(alipayUserRateEntity);
     }
 
     @Override
-	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int changeStatus(String id, String userId, String feeType, String switchs) {
         if ("2".equals(feeType) && "1".equals(switchs)) {
-            List<AlipayUserRateEntity> list = alipayUserRateEntityMapper.selectListObjectEntityByUserId(userId,feeType);
-            if (list.size() > 0){
+            List<AlipayUserRateEntity> list = alipayUserRateEntityMapper.selectListObjectEntityByUserId(userId, feeType);
+            if (list.size() > 0) {
                 throw new BusinessException("操作失败，用户不能同时开启两种代付费率");
             }
         }

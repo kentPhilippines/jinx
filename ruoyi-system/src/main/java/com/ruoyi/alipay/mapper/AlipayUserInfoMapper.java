@@ -86,7 +86,7 @@ public interface AlipayUserInfoMapper {
      * @param userId
      * @return 结果
      */
-    @Select("select id, userId, userName, password, userType, switchs, userNode,isAgent, credit, remitOrderState from alipay_user_info where userId = #{userId}")
+    @Select("select id, userId, userName, password, userType, switchs, userNode,agent, isAgent, credit, remitOrderState from alipay_user_info where userId = #{userId}")
     AlipayUserInfo checkAlipayUserIdUnique(@Param("userId") String userId);
 
     /**

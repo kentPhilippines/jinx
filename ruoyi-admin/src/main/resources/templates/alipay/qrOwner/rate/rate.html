@@ -12,7 +12,7 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>码商ID：</p>
+                            <p>码商账户：</p>
                             <input type="text" name="userId"/>
                         </li>
                         <li class="select-selectpicker">
@@ -73,11 +73,13 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('alipay:qr:rate:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('alipay:qr:rate:remove')}]];
-    var changeFlag = [[${@permission.hasPermi('alipay:qr:rate:status')}]];
+    let editFlag = [[${@permission.hasPermi('alipay:qr:rate:edit')}]];
+    let removeFlag = [[${@permission.hasPermi('alipay:qr:rate:remove')}]];
+    let changeFlag = [[${@permission.hasPermi('alipay:qr:rate:status')}]];
 
-    var prefix = ctx + "alipay/qr/rate";
+    let payTypr = [[${@dict.getType('payTypr')}]];
+
+    let prefix = ctx + "alipay/qr/rate";
 
     $(function () {
         var options = {
@@ -86,7 +88,7 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
-            modalName: "码商产品费率",
+            modalName: "码商费率列表",
             columns: [{
                 checkbox: true
             },
@@ -108,12 +110,8 @@
                 {
                     field: 'payTypr',
                     title: '产品类型',
-                    formatter: function (value, item, index) {
-                        if (item.payTypr == 'ALIPAY_SCAN') {
-                            return '<span>支付宝扫码</span>';
-                        } else if (item.payTypr == 'ALIPAY_H5') {
-                            return '<span>支付宝H5</span>';
-                        }
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(payTypr, row.payTypr);
                     }
                 },
                 {
@@ -168,14 +166,14 @@
 
     /* 用户费率-停用 */
     function disable(id, userId, feeType) {
-        $.modal.confirm("确认要停用该通道费率吗？", function () {
+        $.modal.confirm("确认要【停用】该通道费率吗？", function () {
             $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType" : feeType, "switchs": 0});
         })
     }
 
     /* 用户费率-开启 */
     function enable(id, userId, feeType) {
-        $.modal.confirm("确认要启用该通道费率吗？", function () {
+        $.modal.confirm("确认要【启用】该通道费率吗？", function () {
             $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType" : feeType, "switchs": 1});
         })
     }

@@ -117,4 +117,14 @@ public interface AlipayUserRateEntityMapper {
      */
     @Select("select * from alipay_user_rate where userId = #{userId}  and feeType = #{feeType} and switchs = 1")
 	List<AlipayUserRateEntity> selectListObjectEntityByUserId(@Param("userId") String userId,@Param("feeType") String feeType);
+
+    @Select("<script>" +
+            "select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where userId = #{agent} and feeType = #{feeType}" +
+            "<if test=\"payTypr != null and payTypr != ''\">" +
+            " and payTypr = #{payTypr}" +
+            "</if>" +
+            " and status = 1" +
+            " and switchs = 1 " +
+            "</script> ")
+    AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType, @Param("payTypr") String payTypr);
 }

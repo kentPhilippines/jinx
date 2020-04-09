@@ -52,7 +52,7 @@ public class QrOwnerRateController extends BaseController {
      * 导出用户产品费率列表
      */
     @RequiresPermissions("alipay:qr:rate:export")
-    @Log(title = "用户产品费率", businessType = BusinessType.EXPORT)
+    @Log(title = "码商费率", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(AlipayUserRateEntity alipayUserRateEntity) {
@@ -74,7 +74,7 @@ public class QrOwnerRateController extends BaseController {
      * 新增保存用户产品费率
      */
     @RequiresPermissions("alipay:qr:rate:add")
-    @Log(title = "用户产品费率", businessType = BusinessType.INSERT)
+    @Log(title = "码商费率", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(AlipayUserRateEntity alipayUserRateEntity) {
@@ -95,7 +95,7 @@ public class QrOwnerRateController extends BaseController {
      * 修改保存用户产品费率
      */
     @RequiresPermissions("alipay:qr:rate:edit")
-    @Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
+    @Log(title = "码商费率", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(AlipayUserRateEntity alipayUserRateEntity) {
@@ -106,7 +106,7 @@ public class QrOwnerRateController extends BaseController {
      * 删除用户产品费率
      */
     @RequiresPermissions("alipay:qr:rate:remove")
-    @Log(title = "用户产品费率", businessType = BusinessType.DELETE)
+    @Log(title = "码商费率", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
@@ -117,7 +117,7 @@ public class QrOwnerRateController extends BaseController {
      * 码商费率状态更新
      */
     @RequiresPermissions("alipay:qr:rate:status")
-    @Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
+    @Log(title = "码商费率", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult updateStatus(String id, String userId, String feeType, String switchs) {
