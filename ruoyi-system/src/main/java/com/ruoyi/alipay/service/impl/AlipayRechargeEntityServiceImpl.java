@@ -63,6 +63,7 @@ public class AlipayRechargeEntityServiceImpl implements IAlipayRechargeEntitySer
 	 * @return 结果
 	 */
 	@Override
+	@DataSource(DataSourceType.ALIPAY_SLAVE)
 	public int updateAlipayRechargeEntity(AlipayRechargeEntity alipayRechargeEntity) {
 		return alipayRechargeEntityMapper.updateAlipayRechargeEntity(alipayRechargeEntity);
 	}

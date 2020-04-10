@@ -1,7 +1,9 @@
 package com.ruoyi.web.controller.alipay;
 
+import java.util.Date;
 import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -115,5 +117,18 @@ public class AlipayRechargeEntityController extends BaseController {
 	@ResponseBody
 	public AjaxResult remove(String ids) {
 		return toAjax(alipayRechargeEntityService.deleteAlipayRechargeEntityByIds(ids));
+	}
+
+	/**
+	 * 转发财务
+	 */
+	@RequiresPermissions("alipay:deposit:toFinance")
+	@Log(title = "充值记录", businessType = BusinessType.DELETE)
+	@PostMapping("/updateOrder")
+	@ResponseBody
+	public AjaxResult transfer(AlipayRechargeEntity alipayRechargeEntity){
+		alipayRechargeEntity.setOrderStatus("4");
+		alipayRechargeEntity.setSubmitTime(new Date());
+		return toAjax(alipayRechargeEntityService.updateAlipayRechargeEntity(alipayRechargeEntity));
 	}
 }

@@ -1,142 +1,149 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('充值记录列表')" />
+    <th:block th:include="include :: header('充值记录列表')"/>
     <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <span>订单号：</span>
-                                <input type="text" name="orderId"/>
-                            </li>
-                            <li>
-                                <span>码商ID：</span>
-                                <input type="text" name="userId"/>
-                            </li>
-                            <li class="select-selectpicker">
-                                <label>订单状态： </label>
-                                <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('qr_deposit_status')}"
-                                        class="selectpicker" data-none-selected-text="请选择">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                            th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <span>充值手机号：</span>
-                                <input type="text" name="phone"/>
-                            </li>
-                            <li class="select-time">
-                                <span>创建时间：</span>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <span>平台订单：</span>
+                            <input type="text" name="orderId"/>
+                        </li>
+                        <li>
+                            <span>码商账户：</span>
+                            <input type="text" name="userId"/>
+                        </li>
+                        <li>
+                            <span>充值手机号：</span>
+                            <input type="text" name="phone"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>订单状态： </label>
+                            <select id="orderStatus" name="orderStatus"
+                                    th:with="type=${@dict.getType('qr_deposit_status')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <span>创建时间：</span>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginCreateTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endCreateTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deposit:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deposit:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-     <th:block th:include="include :: bootstrap-select-js"/>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('alipay:deposit:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('alipay:deposit:remove')}]];
-        var prefix = ctx + "alipay/deposit";
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('alipay:deposit:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('alipay:deposit:remove')}]];
+    let updataOrder = [[${@permission.hasPermi('alipay:deposit:toFinance')}]];
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "码商充值记录",
-                columns: [{
-                    checkbox: true
-                },
+    let depositType = [[${@dict.getType('deposit_deal_type')}]];
+    let orderStatus = [[${@dict.getType('qr_deposit_status')}]];
+    var prefix = ctx + "alipay/deposit";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            exportUrl: prefix + "/export",
+            modalName: "码商充值记录",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'id', 
-                    title : '数据ID',
+                    field: 'id',
+                    title: '数据ID',
                     visible: false
                 },
                 {
-                    field : 'orderId', 
-                    title : '订单号'
+                    field: 'orderId',
+                    title: '平台订单'
                 },
                 {
-                    field : 'userId', 
-                    title : '码商ID'
+                    field: 'userId',
+                    title: '码商账户'
                 },
                 {
-                    field : 'rechargeType', 
-                    title : '充值类型'
+                    field: 'rechargeType',
+                    title: '充值类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(depositType, row.rechargeType);
+                    }
                 },
                 {
-                    field : 'orderStatus',
-                    title : '订单状态'
+                    field: 'orderStatus',
+                    title: '订单状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(orderStatus, row.orderStatus);
+                    }
                 },
                 {
-                    field : 'amount', 
-                    title : '充值金额'
+                    field: 'amount',
+                    title: '充值金额'
                 },
                 {
-                    field : 'fee', 
-                    title : '手续费'
+                    field: 'fee',
+                    title: '手续费'
                 },
                 {
-                    field : 'chargeBankcard', 
-                    title : '出款银行卡'
+                    field: 'createTime',
+                    title: '创建时间'
                 },
                 {
-                    field : 'chargeCard', 
-                    title : '收款银行卡'
-                },
-                {
-                    field : 'chargePerson', 
-                    title : '收款人'
-                },
-                {
-                    field : 'createTime', 
-                    title : '创建时间'
-                },
-                {
-                    field : 'chargeReason',
-                    title : '备注'
+                    field: 'chargeReason',
+                    title: '备注'
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
-                        // actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        // actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        if (row.orderStatus != '4') {
+                            actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
+                        }
                         return actions.join('');
                     }
                 }]
-            };
-            $.table.init(options);
+        };
+        $.table.init(options);
+    });
+
+    function onUpdataOrder(id) {
+        $.modal.confirm("确认将此笔订单转发财务处理？", function () {
+            $.operate.post(prefix + "/updateOrder", {"id": id});
         });
-    </script>
+    }
+</script>
 </body>
 </html>
