@@ -32,15 +32,6 @@
                             <input type="text" name="orderQrUser"/>
                         </li>
                         <li class="select-selectpicker">
-                            <label>订单类型：</label>
-                            <select id="orderType" name="orderType" th:with="type=${@dict.getType('card_dealOrder_type')}"
-                                    class="selectpicker" data-none-selected-text="请选择">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
-                            </select>
-                        </li>
-                        <li class="select-selectpicker">
                             <label>订单状态： </label>
                             <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"
                                     class="selectpicker" data-none-selected-text="请选择">
@@ -89,7 +80,7 @@
     var updataOrder = [[${@permission.hasPermi('alipay:orderDeal:updataOrder')}]];
     $(function () {
         var options = {
-            url: prefix + "/list",
+            url: prefix + "/finance/manage/deposit",
             updateUrl: prefix + "/edit/{id}",
             exportUrl: prefix + "/export",
             modalName: "交易订单",
@@ -149,21 +140,12 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.showDetail(\'' + row.id + '\')"><i class="fa fa-edit"></i>详情</a> ');
-                        if(row.orderStatus != 7){
-                            actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
-                        }
                         return actions.join('');
                     }
                 }]
         };
         $.table.init(options);
     });
-
-    function onUpdataOrder (id) {
-        $.modal.confirm("该笔订单确认转为人工处理", function () {
-            $.operate.post(prefix + "/updataOrder", {"id": id});
-        })
-    }
 </script>
 </body>
 </html>
