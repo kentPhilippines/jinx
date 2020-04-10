@@ -91,6 +91,7 @@ public interface AlipayUserInfoMapper {
 
     /**
      * 重置登陆密码
+     *
      * @param alipayUserInfo
      * @return
      */
@@ -99,6 +100,7 @@ public interface AlipayUserInfoMapper {
 
     /**
      * 重置提现密码
+     *
      * @param alipayUserInfo
      * @return
      */
@@ -135,14 +137,9 @@ public interface AlipayUserInfoMapper {
 
     AlipayUserInfo selectAlipayUserInfoById(Long id);
 
-    /**
-     * 清空服务对象
-     * @param id
-     * @return
-     */
-    @Update("update alipay_user_info set qrRechargeList = null and submitTime = sysdate() where id = #{id}")
-    int clearAlipayQrChargeListById(@Param("id") Long id);
-
     @Select("select * from alipay_user_info  where agent is null")
     List<AlipayUserInfo> selectdealpayUserInfoByAgent();
+
+    @Update("update alipay_user_info set qrRechargeList = #{qrRechargeList}, queueList = #{queueList}, submitTime = sysdate() where id = #{id}")
+    int updateAlipayUserInfo2Control(AlipayUserInfo alipayUserInfo);
 }

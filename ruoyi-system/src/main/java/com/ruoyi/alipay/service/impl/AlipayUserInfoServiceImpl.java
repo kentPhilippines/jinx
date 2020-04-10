@@ -171,16 +171,20 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     public int toSaveQrChargeList(AlipayUserInfo alipayUserInfo) {
         String[] str = alipayUserInfo.getParamStr();
         String[] str1 = alipayUserInfo.getParamStr2();
-      /*  if (StringUtils.isNotEmpty(str)) {*/
-            String qrCharge = StringUtils.join(str,",");
-            String queueList = StringUtils.join(str1,",");
+        String qrCharge = StringUtils.join(str, ",");
+        String queueList = StringUtils.join(str1, ",");
+        if (StringUtils.isNotEmpty(str)) {
             alipayUserInfo.setQrRechargeList(qrCharge);
+        } else {
+            alipayUserInfo.setQrRechargeList(null);
+        }
+        if (StringUtils.isNotEmpty(str1)) {
             alipayUserInfo.setQueueList(queueList);
-            alipayUserInfo.setSubmitTime(new Date());
-      /*  }else{
-            return alipayUserInfoMapper.clearAlipayQrChargeListById(alipayUserInfo.getId());
-        }*/
-        return alipayUserInfoMapper.updateAlipayUserInfo(alipayUserInfo);
+        } else {
+            alipayUserInfo.setQueueList(null);
+        }
+        alipayUserInfo.setSubmitTime(new Date());
+        return alipayUserInfoMapper.updateAlipayUserInfo2Control(alipayUserInfo);
     }
 
     @Override

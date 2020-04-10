@@ -112,7 +112,7 @@ public class ServiceControlController extends BaseController {
     }
 
     /**
-     * 显示码商风控卡商服务群信息
+     * 显示商户风控卡商服务群信息
      */
     @GetMapping("/merchant/edit/{id}")
     public String merchantEdit(@PathVariable("id") Long id, ModelMap mmap) {
@@ -123,10 +123,9 @@ public class ServiceControlController extends BaseController {
         if (userInfo == null) {
             throw new BusinessException("此用户不存在");
         }
-        if (StringUtils.isEmpty(userInfo.getQrRechargeList())) {
+        if (StringUtils.isEmpty(userInfo.getQrRechargeList())) {//为空直接返回全部列表
             mmap.put("cardInfo", list);
-
-        } else {
+        } else {//不为空判断选中状态
             String[] str = userInfo.getQrRechargeList().split(",");
             List<String> cardList = Arrays.asList(str);
             for (DealpayUserInfoEntity item : list) {
@@ -136,7 +135,6 @@ public class ServiceControlController extends BaseController {
             }
             mmap.put("cardInfo",list);
         }
-
 
         if(StringUtils.isEmpty(userInfo.getQueueList())){
             mmap.put("qrInfo",arlist);
@@ -155,7 +153,7 @@ public class ServiceControlController extends BaseController {
     }
 
     /**
-     * 保存码商风控卡商服务群信息
+     * 保存商户风控卡商服务群信息
      */
 
     @RequiresPermissions("merchant:service:save")
