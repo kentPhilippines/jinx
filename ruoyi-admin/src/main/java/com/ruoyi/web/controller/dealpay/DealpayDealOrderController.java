@@ -183,46 +183,4 @@ public class DealpayDealOrderController extends BaseController {
         return post;
     }
 
-
-
-    @RequiresPermissions("finance:dealOrder:view")
-    @GetMapping("/payfor/view")
-    public String payforView() {
-        return finance_prefix + "/payfor";
-    }
-
-
-    /**
-     * <p>代付管理</p>
-     */
-    @RequiresPermissions("finance:payfor:manage")
-    @PostMapping("/finance/manage/payfor")
-    @Log(title = "代付管理", businessType = BusinessType.UPDATE)
-    @ResponseBody
-    public TableDataInfo payfor(DealpayDealOrderEntity dealpayDealOrder) {
-        startPage();
-        dealpayDealOrder.setOrderType("1");
-        List<DealpayDealOrderEntity> list = dealpayDealOrderService.selectDealpayDealOrderList(dealpayDealOrder);
-        return getDataTable(list);
-    }
-
-    @RequiresPermissions("finance:dealOrder:view")
-    @GetMapping("/deposit/view")
-    public String depositView() {
-        return finance_prefix + "/deposit";
-    }
-
-    /**
-     * <p>充值管理</p>
-     */
-    @RequiresPermissions("finance:deposit:manage")
-    @PostMapping("/finance/manage/deposit")
-    @Log(title = "代付管理", businessType = BusinessType.UPDATE)
-    @ResponseBody
-    public TableDataInfo deposit(DealpayDealOrderEntity dealpayDealOrder) {
-        startPage();
-        dealpayDealOrder.setOrderType("2");
-        List<DealpayDealOrderEntity> list = dealpayDealOrderService.selectDealpayDealOrderList(dealpayDealOrder);
-        return getDataTable(list);
-    }
 }

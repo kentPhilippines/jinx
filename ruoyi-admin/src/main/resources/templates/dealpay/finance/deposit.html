@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('交易订单列表')"/>
+    <th:block th:include="include :: header('充值记录列表')"/>
     <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
@@ -12,28 +12,20 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <label>平台订单：</label>
+                            <p>平台订单：</p>
                             <input type="text" name="orderId"/>
                         </li>
                         <li>
-                            <label>关联订单：</label>
-                            <input type="text" name="associatedId"/>
+                            <p>卡商账户：</p>
+                            <input type="text" name="userId"/>
                         </li>
                         <li>
-                            <label>外部订单：</label>
-                            <input type="text" name="externalOrderId"/>
-                        </li>
-                        <li>
-                            <label>商户账号：</label>
-                            <input type="text" name="orderAccount"/>
-                        </li>
-                        <li>
-                            <label>卡商账户：</label>
-                            <input type="text" name="orderQrUser"/>
+                            <p>银行卡号：</p>
+                            <input type="text" name="chargeCard"/>
                         </li>
                         <li class="select-selectpicker">
                             <label>订单状态： </label>
-                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"
+                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('dealpay_deposit_status')}"
                                     class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -60,7 +52,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dealpay:dealOrder:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="dealpay:recharge:export">
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
@@ -72,18 +64,17 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    let editFlag = [[${@permission.hasPermi('dealpay:dealOrder:edit')}]];
-    let removeFlag = [[${@permission.hasPermi('dealpay:dealOrder:remove')}]];
-    let orderStatus = [[${@dict.getType('orderStatus')}]];
-    let orderType = [[${@dict.getType('card_dealOrder_type')}]];
-    let prefix = ctx + "dealpay/dealOrder";
-    var updataOrder = [[${@permission.hasPermi('alipay:orderDeal:updataOrder')}]];
+    var editFlag = [[${@permission.hasPermi('dealpay:recharge:edit')}]];
+    let orderStatus = [[${@dict.getType('dealpay_deposit_status')}]];
+
+    var prefix = ctx + "dealpay/recharge";
+
     $(function () {
         var options = {
             url: prefix + "/finance/manage/deposit",
-            updateUrl: prefix + "/edit/{id}",
+            updateUrl: prefix + "/finance/detail/{id}",
             exportUrl: prefix + "/export",
-            modalName: "交易订单",
+            modalName: "充值记录",
             columns: [{
                 checkbox: true
             },
@@ -97,38 +88,35 @@
                     title: '平台订单'
                 },
                 {
-                    field: 'associatedId',
-                    title: '关联订单'
-                },
-                {
-                    field: 'orderAccount',
-                    title: '商户账号'
-                },
-                {
-                    field: 'orderQrUser',
+                    field: 'userId',
                     title: '卡商账户'
                 },
                 {
                     field: 'orderStatus',
                     title: '订单状态',
                     formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(orderStatus, value);
+                        return $.table.selectDictLabel(orderStatus, row.orderStatus);
                     }
                 },
                 {
-                    field: 'dealAmount',
-                    title: '交易金额'
+                    field: 'depositor',
+                    title: '付款人'
                 },
                 {
-                    field: 'orderType',
-                    title: '订单类型',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(orderType, value);
-                    }
+                    field: 'phone',
+                    title: '手机号'
                 },
                 {
-                    field: 'isNotify',
-                    title: '是否通知'
+                    field: 'amount',
+                    title: '充值金额'
+                },
+                {
+                    field: 'fee',
+                    title: '手续费'
+                },
+                {
+                    field: 'actualAmount',
+                    title: '实际到账'
                 },
                 {
                     field: 'createTime',

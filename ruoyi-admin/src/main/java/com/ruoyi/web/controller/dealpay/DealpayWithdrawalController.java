@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.dealpay;
 
 import java.util.List;
 
+import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/dealpay/cardWithdrawal")
 public class DealpayWithdrawalController extends BaseController {
     private String prefix = "dealpay/cardWithdrawal";
+    private String finance_prefix = "dealpay/finance";
 
     @Autowired
     private IDealpayWithdrawalEntityService dealpayWithdrawalEntityService;
@@ -115,4 +117,39 @@ public class DealpayWithdrawalController extends BaseController {
     public AjaxResult remove(String ids) {
         return toAjax(dealpayWithdrawalEntityService.deleteDealpayWithdrawalEntityByIds(ids));
     }
+
+
+    /*财务处理逻辑*/
+
+    @RequiresPermissions("finance:withdrawal:view")
+    @GetMapping("/payfor/view")
+    public String payforView() {
+        return finance_prefix + "/payfor";
+    }
+
+    /**
+     * <p>代付管理</p>
+     */
+    @RequiresPermissions("finance:payfor:manage")
+    @PostMapping("/finance/manage/payfor")
+    @Log(title = "代付管理", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    public TableDataInfo payfor(DealpayWithdrawalEntity dealpayWithdrawalEntity) {
+        startPage();
+        dealpayWithdrawalEntity.setWithdrawType(2);
+        List<DealpayWithdrawalEntity> list = dealpayWithdrawalEntityService.selectDealpayWithdrawalEntityList(dealpayWithdrawalEntity);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查看详情
+     */
+    @GetMapping("/finance/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap) {
+        DealpayWithdrawalEntity dealpayWithdrawalEntity = dealpayWithdrawalEntityService.selectDealpayWithdrawalEntityById(id);
+        mmap.put("dealpayWithdrawalEntity", dealpayWithdrawalEntity);
+        return finance_prefix + "/wDetail";
+    }
+
+
 }

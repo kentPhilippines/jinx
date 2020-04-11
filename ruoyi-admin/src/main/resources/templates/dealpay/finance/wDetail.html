@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('详情')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-cardWithdrawal-edit" th:object="${dealpayWithdrawalEntity}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">平台订单：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.orderId}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">卡商账户：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.userId}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">订单状态：</label>
+            <div class="col-sm-8">
+                 <span class="form-control" style="border: 0;" th:if="${dealpayWithdrawalEntity.orderStatus eq '0'}"
+                       th:text="预下单"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayWithdrawalEntity.orderStatus eq '1'}"
+                      th:text="处理中"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayWithdrawalEntity.orderStatus eq '2'}"
+                      th:text="成功"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayWithdrawalEntity.orderStatus eq '3'}"
+                      th:text="失败"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">代付类型：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:if="${dealpayWithdrawalEntity.withdrawType eq 1}" th:text="商户提现"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayWithdrawalEntity.withdrawType eq 2}" th:text="卡商提现"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">银行卡号：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.bankNo}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">提现人：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.accname}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">手机号：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.mobile}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开户银行：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.bankName}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">提现金额：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.amount}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">手续费：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.userId}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">到账到账：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.actualAmount}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">成功回调地址：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.notify}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">创建时间：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;"
+                      th:text="${#dates.format(dealpayWithdrawalEntity.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">代付来源：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:if="${dealpayWithdrawalEntity.retain1 eq '1'}"
+                      th:text="API"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayWithdrawalEntity.retain1 eq '2'}"
+                      th:text="后台"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayWithdrawalEntity.retain1 eq '3'}"
+                      th:text="卡商客户端"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">代付IP：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayWithdrawalEntity.retain2}"></span>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+</body>
+</html>

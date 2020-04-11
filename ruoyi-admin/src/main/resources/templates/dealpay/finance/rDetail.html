@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改充值记录')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-recharge-edit" th:object="${dealpayRecharge}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">平台订单：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayRecharge.orderId}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">用户账户：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayRecharge.userId}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">订单类型：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:if="${dealpayRecharge.rechargeType eq 1}"
+                      th:text="商户充值"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayRecharge.rechargeType eq 2}"
+                      th:text="卡商充值"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">订单状态：</label>
+            <div class="col-sm-8">
+                 <span class="form-control" style="border: 0;" th:if="${dealpayRecharge.orderStatus eq '0'}"
+                       th:text="预下单"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayRecharge.orderStatus eq '1'}"
+                      th:text="处理中"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayRecharge.orderStatus eq '2'}"
+                      th:text="成功"></span>
+                <span class="form-control" style="border: 0;" th:if="${dealpayRecharge.orderStatus eq '3'}"
+                      th:text="失败"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">充值人姓名：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayRecharge.depositor}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">充值金额：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayRecharge.amount}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">实际到账：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayRecharge.actualAmount}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">充值银行卡：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayRecharge.chargeBankcard}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">充值手机号：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayRecharge.phone}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">回调地址：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayRecharge.notfiy}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">充值理由：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${dealpayRecharge.chargeReason}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">创建时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="form-control" style="border: 0;"
+                          th:text="${#dates.format(dealpayRecharge.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+</body>
+</html>

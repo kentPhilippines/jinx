@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.dealpay;
 
 import java.util.List;
 
+import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/dealpay/recharge")
 public class DealpayRechargeController extends BaseController {
     private String prefix = "dealpay/recharge";
+    private String finance_prefix = "dealpay/finance";
 
     @Autowired
     private IDealpayRechargeService dealpayRechargeService;
@@ -114,5 +116,38 @@ public class DealpayRechargeController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(dealpayRechargeService.deleteDealpayRechargeByIds(ids));
+    }
+
+
+    /*财务管理-充值管理逻辑处理*/
+
+    @RequiresPermissions("finance:deposit:view")
+    @GetMapping("/deposit/view")
+    public String depositView() {
+        return finance_prefix + "/deposit";
+    }
+
+    /**
+     * <p>充值管理</p>
+     */
+    @RequiresPermissions("finance:deposit:manage")
+    @PostMapping("/finance/manage/deposit")
+    @Log(title = "代付管理", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    public TableDataInfo deposit(DealpayRechargeEntity dealpayRechargeEntity) {
+        startPage();
+        dealpayRechargeEntity.setRechargeType(2);
+        List<DealpayRechargeEntity> list = dealpayRechargeService.selectDealpayRechargeList(dealpayRechargeEntity);
+        return getDataTable(list);
+    }
+
+    /**
+     * 修改充值记录
+     */
+    @GetMapping("/finance/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap) {
+        DealpayRechargeEntity dealpayRecharge = dealpayRechargeService.selectDealpayRechargeById(id);
+        mmap.put("dealpayRecharge", dealpayRecharge);
+        return finance_prefix + "/rDetail";
     }
 }
