@@ -18,7 +18,9 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.exception.BusinessException;
@@ -44,6 +46,31 @@ public class HttpUtils {
         if (StringUtils.isEmpty(flag)) {
             throw new BusinessException("操作失败，请刷新重试");
         }
+        JSONObject json = JSONObject.parseObject(flag);
+        String result = json.getString("success");
+        switch (result) {
+            case "true":
+                return AjaxResult.success();
+            case "false":
+                String message = json.getString("message");
+                return AjaxResult.error(message);
+        }
+        return AjaxResult.warn("请求出错，请联系技术人员");
+    }
+
+    /**
+     * map传参数Post请求
+     * @param mapParam
+     * @param url
+     * @param extraParam
+     * @return
+     */
+    public static AjaxResult adminMap2Gateway(Map<String, Object> mapParam, String url, Map<String, String> extraParam) {
+        Map<String, Object> postMap = Maps.newHashMap();
+        String cipherText = RSAUtils.getEncryptPublicKey(mapParam, StaticConstants.INNER_PLATFORM_PUBLIC_KEY);
+        postMap.put("cipherText",cipherText);
+        postMap.put("userId",extraParam.get("userId"));
+        String flag = HttpUtil.post(url, postMap);
         JSONObject json = JSONObject.parseObject(flag);
         String result = json.getString("success");
         switch (result) {
@@ -204,6 +231,7 @@ public class HttpUtils {
         }
         return result.toString();
     }
+
 
     private static class TrustAnyTrustManager implements X509TrustManager {
         @Override

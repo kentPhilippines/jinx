@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.back;
 
+import cn.hutool.http.HttpUtil;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.service.*;
@@ -184,7 +185,7 @@ public class BackManageController extends BaseController {
      * 保存提现提案
      */
     @RequiresPermissions("back:withdrawal:save")
-    @Log(title = "加减款记录", businessType = BusinessType.INSERT)
+    @Log(title = "提现申请", businessType = BusinessType.INSERT)
     @PostMapping("/withdrawal/save")
     @ResponseBody
     @RepeatSubmit
@@ -220,7 +221,9 @@ public class BackManageController extends BaseController {
         mapParam.put("orderStatus", WithdrawalStatusEnum.WITHDRAWAL_STATUS_PROCESS.getCode());
         mapParam.put("orderId", GenerateOrderNo.getInstance().Generate(StaticConstants.MERCHANT_WITHDRAWAL));
         mapParam.put("rsasign", HashKit.md5(MapDataUtil.createParam(mapParam)));
-        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
+        Map<String, String> extraParam = Maps.newHashMap();
+        extraParam.put("userId",currentUser.getMerchantId());
+        return HttpUtils.adminMap2Gateway(mapParam, ipPort + urlPath, extraParam);
     }
 
     //商户查询银行卡
@@ -275,7 +278,6 @@ public class BackManageController extends BaseController {
     public AjaxResult remove(String ids) {
         return toAjax(alipayBankListEntityService.deleteAlipayBankListEntityByIds(ids));
     }
-
 
 
     //下线数据
