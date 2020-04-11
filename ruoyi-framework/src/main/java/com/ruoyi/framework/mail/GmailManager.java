@@ -69,8 +69,8 @@ public class GmailManager {
         try {
             msg.setFrom(new InternetAddress(username));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
-            msg.setSubject("测试邮件2");
-            msg.setText("这是一个测试邮件，请不要回复");
+            msg.setSubject(subject);
+            msg.setText(text);
             msg.setSentDate(new Date());
             Transport.send(msg);
         } catch (AddressException e) {
