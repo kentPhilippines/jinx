@@ -47,6 +47,11 @@
 			</exclusions>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 		<!-- Shiro使用Spring框架 -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
@@ -106,7 +111,6 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.14</version>
 		</dependency>
-
 
 	</dependencies>
     
