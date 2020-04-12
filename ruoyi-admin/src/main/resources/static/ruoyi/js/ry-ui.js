@@ -739,6 +739,54 @@ var table = {
                     }
                 });
             },
+            // 弹出层指定宽度
+            openWithoutBtn: function (title, url, width, height, callback) {
+                //如果是移动端，就使用自适应大小弹窗
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                    width = 'auto';
+                    height = 'auto';
+                }
+                if ($.common.isEmpty(title)) {
+                    title = false;
+                }
+                if ($.common.isEmpty(url)) {
+                    url = "/404.html";
+                }
+                if ($.common.isEmpty(width)) {
+                    width = 800;
+                }
+                if ($.common.isEmpty(height)) {
+                    height = ($(window).height() - 50);
+                }
+                debugger;
+                layer.open({
+                    skin: 'define-myclass',
+                    type: 2,
+                    area: [width + 'px', height + 'px'],
+                    fix: false,
+                    //不固定
+                    maxmin: true,
+                    shade: 0.3,
+                    title: title,
+                    content: url,
+                    btn: ['成功', '失败','关闭'],
+                    // 弹层外区域关闭
+                    shadeClose: true,
+                    btn1: function (index, layero) {
+                        var iframeWin = layero.find('iframe')[0];
+                        iframeWin.contentWindow.confirmSuccess(index, layero);
+                        return false;
+                    },
+                    btn2: function (index, layero) {
+                        var iframeWin = layero.find('iframe')[0];
+                        iframeWin.contentWindow.confirmFail(index, layero);
+                        return false;
+                    },
+                    cancel: function (index) {
+                        return true;
+                    }
+                });
+            },
             // 弹出二维码详情
             openDetail: function (title, url, width, height, callback) {
                 //如果是移动端，就使用自适应大小弹窗
@@ -1161,6 +1209,21 @@ var table = {
                     $.modal.open("显示" + table.options.modalName + "详情", $.operate.editUrl(id));
                 }
             },
+            // 显示详情
+            detailWithoutBtn: function (id) {
+                table.set();
+                if ($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
+                    var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+                    if ($.common.isEmpty(row)) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    var url = table.options.updateUrl.replace("{id}", row[table.options.uniqueId]);
+                    $.modal.openWithoutBtn("显示" + table.options.modalName + "详情", url);
+                } else {
+                    $.modal.openWithoutBtn("显示" + table.options.modalName + "详情", $.operate.editUrl(id));
+                }
+            },
             // 修改信息
             approval: function (id) {
                 table.set();
@@ -1211,6 +1274,28 @@ var table = {
             // 保存信息 刷新表格
             save: function (url, data, callback) {
                 $.modal.confirm("确定要保存此编辑信息吗？", function () {
+                    var config = {
+                        url: url,
+                        type: "post",
+                        dataType: "json",
+                        data: data,
+                        beforeSend: function () {
+                            $.modal.loading("正在处理中，请稍后...");
+                            $.modal.disable();
+                        },
+                        success: function (result) {
+                            if (typeof callback == "function") {
+                                callback(result);
+                            }
+                            $.operate.successCallback(result);
+                        }
+                    };
+                    $.ajax(config)
+                });
+            },
+            // 保存信息 刷新表格
+            msgSave: function (url, data, msg, callback) {
+                $.modal.confirm(msg,function () {
                     var config = {
                         url: url,
                         type: "post",

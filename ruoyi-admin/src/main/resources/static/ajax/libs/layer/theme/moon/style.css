@@ -132,6 +132,24 @@ body .layer-ext-moon .layui-layer-btn .layui-layer-btn3 {
 	border: 1px solid #f00;
 	border-radius: 3px;
 }
+body .define-myclass .layui-layer-btn .layui-layer-btn0 {
+	background: #00a65a;
+	color: #fff;
+	border: 1px solid #00B83F;
+	border-radius: 3px;
+}
+body .define-myclass .layui-layer-btn .layui-layer-btn1 {
+	background: #ff0000;
+	color: #fff;
+	border: 1px solid #ff0000;
+	border-radius: 3px;
+}
+body .define-myclass .layui-layer-btn .layui-layer-btn2 {
+	background: #fff;
+	color: #404a58;
+	border: 1px solid #c0c4cd;
+	border-radius: 3px;
+}
 
 body .layer-ext-moon .layui-layer-title span.layui-layer-tabnow{
 	height:47px;

@@ -1,8 +1,15 @@
 package com.ruoyi.web.controller.dealpay;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
+import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
+import com.ruoyi.framework.util.DictionaryUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +42,8 @@ public class DealpayRechargeController extends BaseController {
 
     @Autowired
     private IDealpayRechargeService dealpayRechargeService;
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
 
     @RequiresPermissions("dealpay:recharge:view")
     @GetMapping()
@@ -128,7 +137,7 @@ public class DealpayRechargeController extends BaseController {
     }
 
     /**
-     * <p>充值管理</p>
+     * <p>充值管理 查询 </p>
      */
     @RequiresPermissions("finance:deposit:manage")
     @PostMapping("/finance/manage/deposit")
@@ -149,5 +158,24 @@ public class DealpayRechargeController extends BaseController {
         DealpayRechargeEntity dealpayRecharge = dealpayRechargeService.selectDealpayRechargeById(id);
         mmap.put("dealpayRecharge", dealpayRecharge);
         return finance_prefix + "/rDetail";
+    }
+
+    /**
+     * <p>充值管理 修改订单状态</p>
+     */
+    @RequiresPermissions("finance:deposit:updateStatus")
+    @PostMapping("/finance/confirmDeposit")
+    @Log(title = "代付管理", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    public AjaxResult confirmDeposit(DealpayRechargeEntity dealpayRechargeEntity) {
+        //获取dealpay处理接口URL
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_IP_URL_KEY, StaticConstants.DealPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_SERVICE_API_KEY, StaticConstants.DealPAY_SERVICE_API_VALUE_4);
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        String orderStatus = dealpayRechargeEntity.getOrderStatus();
+        Long id = dealpayRechargeEntity.getId();
+        mapParam.put("id", id);
+        mapParam.put("orderStatus", orderStatus);
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
 }

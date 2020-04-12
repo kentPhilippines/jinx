@@ -1,8 +1,16 @@
 package com.ruoyi.web.controller.dealpay;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
+import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
+import com.ruoyi.dealpay.domain.DealpayRechargeEntity;
+import com.ruoyi.framework.util.DictionaryUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +43,9 @@ public class DealpayWithdrawalController extends BaseController {
 
     @Autowired
     private IDealpayWithdrawalEntityService dealpayWithdrawalEntityService;
+
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
 
     @RequiresPermissions("dealpay:cardWithdrawal:view")
     @GetMapping()
@@ -149,6 +160,25 @@ public class DealpayWithdrawalController extends BaseController {
         DealpayWithdrawalEntity dealpayWithdrawalEntity = dealpayWithdrawalEntityService.selectDealpayWithdrawalEntityById(id);
         mmap.put("dealpayWithdrawalEntity", dealpayWithdrawalEntity);
         return finance_prefix + "/wDetail";
+    }
+
+    /**
+     * <p>代付管理</p>
+     */
+    @RequiresPermissions("finance:withdrawal:updateStatus")
+    @PostMapping("/finance/confirmStatus")
+    @Log(title = "代付管理", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    public AjaxResult confirmDeposit(DealpayWithdrawalEntity dealpayWithdrawalEntity) {
+        //获取dealpay处理接口URL
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_IP_URL_KEY, StaticConstants.DealPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_SERVICE_API_KEY, StaticConstants.DealPAY_SERVICE_API_VALUE_3);
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        String orderStatus = dealpayWithdrawalEntity.getOrderStatus();
+        Long id = dealpayWithdrawalEntity.getId();
+        mapParam.put("id", id);
+        mapParam.put("orderStatus", orderStatus);
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
 
 

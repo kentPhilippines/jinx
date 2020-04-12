@@ -6,8 +6,9 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-cardWithdrawal-edit" th:object="${dealpayWithdrawalEntity}">
+    <form class="form-horizontal m" id="form-payfor-detail" th:object="${dealpayWithdrawalEntity}">
         <input name="id" th:field="*{id}" type="hidden">
+        <input id="orderStatus" name="orderStatus" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">平台订单：</label>
             <div class="col-sm-8">
@@ -116,5 +117,21 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "dealpay/cardWithdrawal";
+    $("#form-payfor-detail").validate({
+        focusCleanup: true
+    });
+
+    function confirmSuccess() {
+        $("#orderStatus").val("2");
+        $.operate.msgSave(prefix + "/finance/confirmStatus", $('#form-payfor-detail').serialize(), "确认要将此订单置为【成功】？");
+    }
+
+    function confirmFail() {
+        $("#orderStatus").val("3");
+        $.operate.msgSave(prefix + "/finance/confirmStatus", $('#form-payfor-detail').serialize(), "确认要将此订单置为【失败】？");
+    }
+</script>
 </body>
 </html>
