@@ -2,8 +2,10 @@ package com.ruoyi.web.controller.control;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayDealOrderApp;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.service.IAlipayBankListEntityService;
 import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.Log;
@@ -15,6 +17,9 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.RSAUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.dealpay.domain.DealpayBankListEntity;
+import com.ruoyi.dealpay.service.IDealpayBankListService;
+import com.ruoyi.web.controller.dealpay.DealpayBankListController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,12 +42,19 @@ import java.util.Map;
 public class MerchantControlController extends BaseController {
 
     private String prefix = "control/account";
+    private String bankcardControl_prefix = "control/bankCard";
 
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
 
     @Autowired
     private IAlipayUserInfoService alipayUserInfoService;
+
+    @Autowired
+    private IAlipayBankListEntityService alipayBankListEntityService;
+
+    @Autowired
+    private IDealpayBankListService dealpayBankListService;
 
     @RequiresPermissions("control:account:merchant:view")
     @GetMapping()
@@ -169,5 +181,146 @@ public class MerchantControlController extends BaseController {
     public AjaxResult qrSave(AlipayUserInfo alipayUserInfo) {
         return toAjax(merchantInfoEntityService.updateAlipayUserInfoDealUrlByObj(alipayUserInfo));
     }
+
+
+    /*码商银行卡黑名单处理逻辑*/
+
+    @RequiresPermissions("qr:bankCard:black")
+    @GetMapping("/bankCard/qr/view")
+    public String bank() {
+        return bankcardControl_prefix + "/qrBankCard";
+    }
+
+    /**
+     *
+     * 查询码商银行卡黑名单
+     */
+    @RequiresPermissions("qr:bankCard:blackList")
+    @PostMapping("/bankCard/qr/list")
+    @ResponseBody
+    public TableDataInfo list(AlipayBankListEntity alipayBankListEntity) {
+        startPage();
+        alipayBankListEntity.setSysTYpe(1);//黑卡
+        alipayBankListEntity.setCardType(2);//码商银行卡
+        List<AlipayBankListEntity> list = alipayBankListEntityService.selectAlipayBankListEntityList(alipayBankListEntity);
+        return getDataTable(list);
+    }
+
+    /**
+     * 新增银行卡黑名单
+     */
+    @GetMapping("/add/show/bankCard/page/{id}")
+    public String add(@PathVariable("id") String id, ModelMap mmap) {
+        mmap.put("flag",id);
+        return bankcardControl_prefix + "/add";
+    }
+    /**
+     * 保存银行卡黑名单
+     */
+    @RequiresPermissions("qr:bankCard:saveBlackList")
+    @Log(title = "码商银行卡", businessType = BusinessType.INSERT)
+    @PostMapping("/add/qr/black")
+    @ResponseBody
+    public AjaxResult editSave(AlipayBankListEntity alipayBankListEntity) {
+        return toAjax(alipayBankListEntityService.updateAlipayBankCardBlackList(alipayBankListEntity));
+    }
+
+    /**
+     * 删除银行卡黑名单
+     */
+    @RequiresPermissions("qr:bankCard:removeBlackList")
+    @Log(title = "码商银行卡", businessType = BusinessType.DELETE)
+    @PostMapping("/remove/bankCard/qr")
+    @ResponseBody
+    public AjaxResult removeBnakQr(String ids) {
+        return toAjax(alipayBankListEntityService.deleteAlipayBankBlackListById(ids));
+    }
+
+    /*商户银行卡黑名单处理逻辑*/
+    @RequiresPermissions("merchant:bankCard:black")
+    @GetMapping("/bankCard/merchant/view")
+    public String merchantBankCard() {
+        return bankcardControl_prefix + "/merchantBankCard";
+    }
+
+    /**
+     *
+     * 查询码商银行卡黑名单
+     */
+    @RequiresPermissions("merchant:bankCard:blackList")
+    @PostMapping("/bankCard/merchant/list")
+    @ResponseBody
+    public TableDataInfo merchantBanklist(AlipayBankListEntity alipayBankListEntity) {
+        startPage();
+        alipayBankListEntity.setSysTYpe(1);//黑卡
+        alipayBankListEntity.setCardType(3);//商户银行卡
+        List<AlipayBankListEntity> list = alipayBankListEntityService.selectAlipayBankListEntityList(alipayBankListEntity);
+        return getDataTable(list);
+    }
+
+    /**
+     * 保存商户银行卡黑名单
+     */
+    @RequiresPermissions("merchant:bankCard:saveBlackList")
+    @Log(title = "商户银行卡", businessType = BusinessType.INSERT)
+    @PostMapping("/add/merchant/black")
+    @ResponseBody
+    public AjaxResult editMerchantSave(AlipayBankListEntity alipayBankListEntity) {
+        return toAjax(alipayBankListEntityService.updateAlipayBankCardBlackList(alipayBankListEntity));
+    }
+
+    /**
+     * 删除银行卡黑名单
+     */
+    @RequiresPermissions("merchant:bankCard:removeBlackList")
+    @Log(title = "商户银行卡", businessType = BusinessType.DELETE)
+    @PostMapping("/remove/bankCard/merchant")
+    @ResponseBody
+    public AjaxResult removeBankMerchant(String ids) {
+        return toAjax(alipayBankListEntityService.deleteAlipayBankBlackListById(ids));
+    }
+
+    /*卡商银行卡黑名单处理逻辑*/
+    @RequiresPermissions("payfor:bankCard:black")
+    @GetMapping("/bankCard/card/view")
+    public String cardBankCard() {
+        return bankcardControl_prefix + "/payforCard";
+    }
+
+    /**
+     *
+     * 查询卡商银行卡黑名单
+     */
+    @RequiresPermissions("payfor:bankCard:blackList")
+    @PostMapping("/bankCard/payfor/list")
+    @ResponseBody
+    public TableDataInfo payforBanklist(DealpayBankListEntity dealpayBankListEntity) {
+        startPage();
+        dealpayBankListEntity.setSysTYpe(1);//黑卡
+        List<DealpayBankListEntity> list = dealpayBankListService.selectDealpayBankListList(dealpayBankListEntity);
+        return getDataTable(list);
+    }
+    /**
+     * 保存商户银行卡黑名单
+     */
+    @RequiresPermissions("merchant:bankCard:saveBlackList")
+    @Log(title = "商户银行卡", businessType = BusinessType.INSERT)
+    @PostMapping("/add/payfor/black")
+    @ResponseBody
+    public AjaxResult editPayforSave(DealpayBankListEntity dealpayBankListEntity) {
+        return toAjax(dealpayBankListService.updateDealpayBankCardBlackList(dealpayBankListEntity));
+    }
+
+    /**
+     * 删除卡商银行卡黑名单
+     */
+    @RequiresPermissions("merchant:bankCard:removeBlackList")
+    @Log(title = "卡商银行卡", businessType = BusinessType.DELETE)
+    @PostMapping("/remove/bankCard/payfor")
+    @ResponseBody
+    public AjaxResult removeBankpayfor(String ids) {
+        return toAjax(dealpayBankListService.deleteDealpayBankBlackListById(ids));
+    }
+
 
 }

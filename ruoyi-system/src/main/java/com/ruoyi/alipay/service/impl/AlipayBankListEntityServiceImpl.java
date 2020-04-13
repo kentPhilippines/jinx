@@ -7,6 +7,7 @@ import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.constant.SystemConstants;
 import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.GenerateOrderNo;
 import org.omg.CORBA.DATA_CONVERSION;
@@ -98,6 +99,22 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
     @DataSource(DataSourceType.ALIPAY_SLAVE)
     public int updateBankCardStatusById(AlipayBankListEntity alipayBankListEntity) {
         return alipayBankListEntityMapper.updateBankCardStatusById(alipayBankListEntity);
+    }
+
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public int updateAlipayBankCardBlackList(AlipayBankListEntity alipayBankListEntity) {
+        AlipayBankListEntity check = alipayBankListEntityMapper.selectBankCardByAccount(alipayBankListEntity);
+        if (check == null) {
+            throw new BusinessException("银行卡信息不正确或已被删除");
+        }
+        return alipayBankListEntityMapper.updateBankCardSysTypeByAccount(check);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int deleteAlipayBankBlackListById(String ids) {
+        return alipayBankListEntityMapper.deleteAlipayBankListSysTypeById(ids);
     }
 
 }

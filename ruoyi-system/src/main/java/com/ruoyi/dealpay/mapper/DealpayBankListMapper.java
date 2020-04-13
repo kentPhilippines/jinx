@@ -1,7 +1,10 @@
 package com.ruoyi.dealpay.mapper;
 
 import com.ruoyi.dealpay.domain.DealpayBankListEntity;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -67,4 +70,14 @@ public interface DealpayBankListMapper {
      */
     @Update("update dealpay_bank_list set status = #{status} where id = #{id} " )
     int updateDealpayBankCardStatusById(DealpayBankListEntity dealpayBankListEntity);
+
+    @Select("select id, account, bankcardAccount from dealpay_bank_list where bankcardAccount = #{bankcardAccount} and account = #{account} and isDeal = 2 ")
+    DealpayBankListEntity selectPayforCardInfoByAccount(DealpayBankListEntity dealpayBankListEntity);
+
+
+    @Update("update dealpay_bank_list set sysTYpe = 1 where id = #{id}")
+    int updatePayforSysTypeByAccount(DealpayBankListEntity check);
+
+    @Update("update dealpay_bank_list set sysTYpe = 2 where id = #{ids}")
+    int updateDealpayBankCardBlackListById(@Param("ids") String ids);
 }

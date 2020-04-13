@@ -57,4 +57,18 @@ public interface IAlipayBankListEntityService
      * @return
      */
     int updateBankCardStatusById(AlipayBankListEntity alipayBankListEntity);
+
+    /**
+     * 根据账号和银行卡生成银行卡黑名单
+     * @param alipayBankListEntity
+     * @return
+     */
+    int updateAlipayBankCardBlackList(AlipayBankListEntity alipayBankListEntity);
+
+    /**
+     * 删除银行卡黑名单
+     * @param ids
+     * @return
+     */
+    int deleteAlipayBankBlackListById(String ids);
 }

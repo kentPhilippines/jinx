@@ -34,7 +34,7 @@
                         </li>
                         <li class="select-selectpicker">
                             <label>银行卡类型：</label>
-                            <select name="cardType" th:with="type=${@dict.getType('object_bankcard_type')}" class="selectpicker"
+                            <select name="cardType" th:with="type=${@dict.getType('dealpay_bankcard_type')}" class="selectpicker"
                                     data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -82,7 +82,7 @@
     let editFlag = [[${@permission.hasPermi('dealpay:bankCard:edit')}]];
     let removeFlag = [[${@permission.hasPermi('dealpay:bankCard:remove')}]];
 
-    let objectCard = [[${@dict.getType('object_bankcard_type')}]];
+    let objectCard = [[${@dict.getType('dealpay_bankcard_type')}]];
     let bankCode = [[${@dict.getType('R_W_type')}]];
     let prefix = ctx + "dealpay/bankCard";
 
@@ -145,10 +145,6 @@
                     title: '交易限额/日'
                 },
                 {
-                    field: 'qrcodeNote',
-                    title: '备注'
-                },
-                {
                     field: 'status',
                     title: '状态',
                     align: 'center',
@@ -157,13 +153,24 @@
                     }
                 },
                 {
-                    field: 'createTime',
-                    title: '创建时间'
+                    field: 'sysTYpe',
+                    title: '黑名单',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (row.sysTYpe === 1){
+                            return "<span style='color:#cc0000;'>是</span>"
+                        }else if (row.sysTYpe === 2){
+                            return "<span>否</span>"
+                        }
+                    }
                 },
                 {
-                    field: 'submitTime',
-                    title: '更新时间',
-                    visible: false
+                    field: 'qrcodeNote',
+                    title: '备注'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
                 },
                 {
                     title: '操作',

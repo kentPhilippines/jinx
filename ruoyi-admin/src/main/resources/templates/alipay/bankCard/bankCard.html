@@ -155,10 +155,6 @@
                     title: '余额'
                 },
                 {
-                    field: 'qrcodeNote',
-                    title: '备注'
-                },
-                {
                     field: 'status',
                     title: '状态',
                     align: 'center',
@@ -167,13 +163,24 @@
                     }
                 },
                 {
+                    field: 'sysTYpe',
+                    title: '黑名单',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (row.sysTYpe === 1){
+                            return "<span style='color: #cc0000'>是</span>"
+                        }else if (row.sysTYpe === 2){
+                            return "<span>否</span>"
+                        }
+                    }
+                },
+                {
                     field: 'createTime',
                     title: '创建时间'
                 },
                 {
-                    field: 'submitTime',
-                    title: '更新时间',
-                    visible: false
+                    field: 'qrcodeNote',
+                    title: '备注'
                 },
                 {
                     title: '操作',

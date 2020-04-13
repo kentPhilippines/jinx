@@ -40,7 +40,7 @@ import java.util.Map;
 @RequestMapping("/back/merchant/admin")
 @Controller
 public class BackManageController extends BaseController {
-    private String prefix = "/merchant/info";
+    private String prefix = "merchant/info";
 
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
@@ -242,7 +242,7 @@ public class BackManageController extends BaseController {
     public TableDataInfo list(AlipayBankListEntity alipayBankListEntity) {
         SysUser sysUser = ShiroUtils.getSysUser();
         alipayBankListEntity.setAccount(sysUser.getMerchantId());
-        alipayBankListEntity.setStatus(1);
+        alipayBankListEntity.setCardType(3);
         startPage();
         List<AlipayBankListEntity> list = alipayBankListEntityService.selectAlipayBankListEntityList(alipayBankListEntity);
         return getDataTable(list);

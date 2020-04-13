@@ -3,8 +3,10 @@ package com.ruoyi.dealpay.service.impl;
 import java.util.List;
 
 import cn.hutool.core.util.IdUtil;
+import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.sun.org.apache.xpath.internal.operations.Number;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
     @Override
     @DataSource(value = DataSourceType.DEALPAY_SLAVE)
     public List<DealpayBankListEntity> selectDealpayBankListList(DealpayBankListEntity dealpayBankList) {
+        dealpayBankList.setIsDeal(2);
         return dealpayBankListMapper.selectDealpayBankListList(dealpayBankList);
     }
 
@@ -105,5 +108,21 @@ public class DealpayBankListServiceImpl implements IDealpayBankListService {
     public int updateDealpayBankCardStatusById(DealpayBankListEntity dealpayBankListEntity) {
         return dealpayBankListMapper.updateDealpayBankCardStatusById(dealpayBankListEntity);
 
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public int updateDealpayBankCardBlackList(DealpayBankListEntity dealpayBankListEntity) {
+        DealpayBankListEntity check = dealpayBankListMapper.selectPayforCardInfoByAccount(dealpayBankListEntity);
+        if (check == null) {
+            throw new BusinessException("银行卡信息不正确或已被删除");
+        }
+        return dealpayBankListMapper.updatePayforSysTypeByAccount(check);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public int deleteDealpayBankBlackListById(String ids) {
+        return dealpayBankListMapper.updateDealpayBankCardBlackListById(ids);
     }
 }

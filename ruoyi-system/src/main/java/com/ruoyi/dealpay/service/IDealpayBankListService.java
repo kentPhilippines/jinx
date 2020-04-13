@@ -65,4 +65,13 @@ public interface IDealpayBankListService {
      * @return
      */
     int updateDealpayBankCardStatusById(DealpayBankListEntity dealpayBankListEntity);
+
+    /**
+     *  新增卡商的黑卡
+     * @param dealpayBankListEntity
+     * @return
+     */
+    int updateDealpayBankCardBlackList(DealpayBankListEntity dealpayBankListEntity);
+
+    int deleteDealpayBankBlackListById(String ids);
 }

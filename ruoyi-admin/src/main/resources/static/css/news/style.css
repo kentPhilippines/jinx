@@ -1,0 +1,199 @@
+/* 公共样式表css */
+html,body {
+    color: #333;
+    margin: 0;
+    height: 100%;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+img {
+    border: 0;
+}
+
+body {
+    background: #f5f5f5;
+    color: #666;
+    font-family: 'Microsoft Yahei', 'PingFangSC', sans-serif;
+}
+
+html, body, div, dl, dt, dd, ol, ul, li, h1, h2, h3, h4, h5, h6, p, blockquote, pre, button, fieldset, form, input, legend, textarea, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #08acee;
+}
+
+button {
+    outline: 0;
+}
+
+img {
+    border: 0;
+}
+
+button,input,optgroup,select,textarea {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    outline: none;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    color: #4c4c4c;
+}
+
+a:hover {
+    color: #333;
+}
+
+.clearfix::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+.clearfix {
+}
+
+/* 必要布局样式css */
+.rolling {
+    width: 450px;
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #fff;
+}
+
+.rolling .roll-title {
+    overflow: hidden;
+    height: 42px;
+    background: #fff;
+    padding: 0 10px;
+    line-height: 42px;
+    border-bottom: 1px solid #ddd;
+}
+
+.rolling .roll-title .prev,.rolling .roll-title .next {
+    display: block;
+    width: 24px;
+    height: 70px;
+    float: right;
+    overflow: hidden;
+    cursor: pointer;
+    position: absolute;
+    top: 67px;
+    right: 0;
+    left: 0;
+    display: none;
+    z-index: 100;
+}
+
+.rolling .roll-title .prev img {
+    width: 22px;
+    height: 48px;
+}
+
+.rolling .roll-title .next img {
+    width: 22px;
+    height: 48px;
+}
+
+.rolling .roll-title .next {
+    right: -2px;
+    display: none;
+    left: inherit;
+}
+
+.rolling .roll-title ul {
+    float: right;
+    overflow: hidden;
+    zoom:1; margin-top: 10px;
+}
+
+.rolling .content {
+    width: 450px;
+    height: 100px;
+    overflow: hidden;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.rolling .content ul {
+    overflow: hidden;
+    zoom:1; }
+
+.rolling .content ul li {
+    float: left;
+    height: 60px;
+    line-height: 24px;
+    text-align: left;
+    _display: inline;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+.rolling .content ul li span {
+    color: #b7b7b7;
+    position: relative;
+    right: -10px;
+}
+
+.roll-title h2 {
+    font-weight: normal;
+    font-size: 14px;
+    float: left;
+    line-height: 42px;
+}
+
+.rolling-more {
+    float: right;
+    color: #666;
+    font-size: 12px;
+}
+
+.rolling .rolling-more:after {
+    content: "";
+    display: inline-block;
+    margin-bottom: 1px;
+    -webkit-transform: rotate(135deg);
+    -moz-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+    transform: rotate(135deg);
+    width: 7px;
+    height: 7px;
+    border: 1px solid #666;
+    border-right: none;
+    border-bottom: none;
+}
+
+.rolling .content ul li a:hover {
+    color: #08acee;
+    text-decoration: underline;
+}
+
+.rolling:hover .next{
+    display:block;
+}
+
+.rolling:hover .prev{
+    display:block;
+}
