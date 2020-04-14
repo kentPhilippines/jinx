@@ -128,4 +128,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		)
 	</insert>
 	
+	<select id="selectRoleIdsByNotice" parameterType="List" resultMap="SysRoleResult">
+		<include refid="selectRoleVo"/>
+		where role_id in
+		<foreach collection="roleId" item="role" open="(" separator="," close=")">
+			#{role}
+		</foreach>
+	</select>
+	
 </mapper> 

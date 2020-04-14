@@ -1,10 +1,6 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -340,5 +336,18 @@ public class SysRoleServiceImpl implements ISysRoleService {
             list.add(ur);
         }
         return userRoleMapper.batchUserRole(list);
+    }
+
+    @Override
+    public List selectRoleByNoticeId(String roldeIds) {
+        List<SysRole> roles = selectRoleAll();
+        String[] ids = roldeIds.split(",");
+        List<String> roleId = Arrays.asList(ids);
+        for (SysRole role : roles) {
+            if (roleId.contains(role.getRoleId().toString())) {
+                role.setFlag(true);
+            }
+        }
+        return roles;
     }
 }

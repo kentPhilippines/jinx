@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
+import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,8 +31,12 @@ import com.ruoyi.system.service.ISysNoticeService;
 public class SysNoticeController extends BaseController {
     private String prefix = "system/notice";
 
+
     @Autowired
     private ISysNoticeService noticeService;
+
+    @Autowired
+    private ISysRoleService roleService;
 
     @RequiresPermissions("system:notice:view")
     @GetMapping()
@@ -55,7 +60,8 @@ public class SysNoticeController extends BaseController {
      * 新增公告
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        mmap.put("roles", roleService.selectRoleAll());
         return prefix + "/add";
     }
 
@@ -76,7 +82,9 @@ public class SysNoticeController extends BaseController {
      */
     @GetMapping("/edit/{noticeId}")
     public String edit(@PathVariable("noticeId") Long noticeId, ModelMap mmap) {
-        mmap.put("notice", noticeService.selectNoticeById(noticeId));
+        SysNotice sysNotice = noticeService.selectNoticeById(noticeId);
+        mmap.put("notice", sysNotice);
+        mmap.put("roles", roleService.selectRoleByNoticeId(sysNotice.getRemark()));
         return prefix + "/edit";
     }
 

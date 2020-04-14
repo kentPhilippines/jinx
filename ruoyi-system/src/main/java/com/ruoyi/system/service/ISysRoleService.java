@@ -156,4 +156,12 @@ public interface ISysRoleService
      * @return 结果
      */
     public int insertAuthUsers(Long roleId, String userIds);
+
+    /**
+     * 根据通知公告ID查询角色
+     *
+     * @param roldeIds 通知公告ID
+     * @return 结果
+     */
+    List selectRoleByNoticeId(String roldeIds);
 }

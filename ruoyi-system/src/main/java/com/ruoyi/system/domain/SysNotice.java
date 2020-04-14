@@ -29,6 +29,11 @@ public class SysNotice extends BaseEntity
     /** 公告状态（0正常 1关闭） */
     private String status;
 
+    /**
+     * 角色组
+     */
+    private Long[] roleIds;
+
     public Long getNoticeId()
     {
         return noticeId;
@@ -79,6 +84,14 @@ public class SysNotice extends BaseEntity
     public String getStatus()
     {
         return status;
+    }
+
+    public Long[] getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(Long[] roleIds) {
+        this.roleIds = roleIds;
     }
 
     @Override

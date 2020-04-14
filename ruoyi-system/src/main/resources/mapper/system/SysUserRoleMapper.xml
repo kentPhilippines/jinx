@@ -37,8 +37,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<delete id="deleteUserRoleInfos">
 	    delete from sys_user_role where role_id=#{roleId} and user_id in
- 	    <foreach collection="userIds" item="userId" open="(" separator="," close=")">
- 	        #{userId}
-            </foreach> 
+		<foreach collection="userIds" item="userId" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
 	</delete>
-</mapper> 
+</mapper>

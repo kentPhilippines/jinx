@@ -37,6 +37,18 @@
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="form-group">
+						<label class="col-xs-2 control-label">角色：</label>
+						<div class="col-xs-10">
+							<label th:each="role:${roles}" class="check-box">
+								<input name="roleIds" type="checkbox" th:value="${role.roleId}" th:text="${role.roleName}" th:disabled="${role.status == '1'}">
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 	</div>
     <th:block th:include="include :: footer" />
