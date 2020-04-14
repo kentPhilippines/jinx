@@ -153,7 +153,7 @@ public class DealpayDealOrderController extends BaseController {
     }
 
     /**
-     * <p>码商交易订单状态确认</p>
+     * <p>卡商交易订单状态确认</p>
      */
     @RequiresPermissions("dealpay:finance:additional")
     @PostMapping("/finance/updataOrder")

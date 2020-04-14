@@ -49,7 +49,7 @@ public interface StaticConstants {
 
     public static final String DealPAY_SERVICE_API_KEY = "dealpay-api";//请求路径的key（公共）
     public static final String DealPAY_SERVICE_API_VALUE_1 = "dealpay-api-add-account"; //卡商开户
-    public static final String DealPAY_SERVICE_API_VALUE_2 = "/api-dealpay/order-api/enter-orderQr"; //财务人工补单，确认卡商订单状态
+    public static final String DealPAY_SERVICE_API_VALUE_2 = "order-api-enter-order-card"; //财务人工补单，确认卡商订单状态
 
     //财务处理 代付管理的订单状态
     public static final String DealPAY_SERVICE_API_VALUE_3 = "";

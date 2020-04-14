@@ -100,7 +100,7 @@
     });
     function onEnterOrder (id,orderStatus) {
         $.modal.confirm("确认修改订单？", function () {
-            $.operate.post(prefix + "/updataOrder", {"id": id,"orderStatus":orderStatus});
+            $.operate.post(prefix + "/finance/updataOrder", {"id": id,"orderStatus":orderStatus});
         })
     }
 </script>
