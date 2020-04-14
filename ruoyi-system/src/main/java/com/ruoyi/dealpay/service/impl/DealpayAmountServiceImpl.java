@@ -3,8 +3,10 @@ package com.ruoyi.dealpay.service.impl;
 import java.util.List;
 
 import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.GenerateOrderNo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.dealpay.mapper.DealpayAmountMapper;
@@ -57,6 +59,10 @@ public class DealpayAmountServiceImpl implements IDealpayAmountService {
     @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int insertDealpayAmount(DealpayAmountEntity dealpayAmount) {
         dealpayAmount.setCreateTime(DateUtils.getNowDate());
+        dealpayAmount.setOrderId(GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_REFUND));
+        dealpayAmount.setAmountType("1");
+        dealpayAmount.setOrderStatus("2");
+        dealpayAmount.setActualAmount(dealpayAmount.getAmount());
         return dealpayAmountMapper.insertDealpayAmount(dealpayAmount);
     }
 
