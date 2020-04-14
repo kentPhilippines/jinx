@@ -238,9 +238,9 @@
     /* 用户状态显示 */
     function statusTools(row) {
         if (row.status == 1) {
-            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.userId + '\')"></i> ';
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="变更状态" onclick="enable(\'' + row.userId + '\')"></i> ';
         } else {
-            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="变更状态" onclick="disable(\'' + row.userId + '\')"></i> ';
         }
     }
 

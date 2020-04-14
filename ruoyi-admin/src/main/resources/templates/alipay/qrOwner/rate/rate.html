@@ -158,9 +158,9 @@
     /* 码商费率状态显示 */
     function statusTools(row) {
         if (row.switchs == 0) {
-            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\',\'' + row.userId + '\',\'' + row.feeType + '\')"></i> ';
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.id + '\',\'' + row.userId + '\',\'' + row.feeType + '\')"></i> ';
         } else {
-            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\',\'' + row.userId + '\',\'' + row.feeType + '\')"></i> ';
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.id + '\',\'' + row.userId + '\',\'' + row.feeType + '\')"></i> ';
         }
     }
 
