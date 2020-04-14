@@ -147,8 +147,8 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-primary btn-xs ' + refundFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\')"><i class="fa fa-plus"></i>加款</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + deductFlag + '" onclick="$.operate.edit(\'' + row.userId + '\')"><i class="fa fa-minus"></i>减款</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs ' + refundFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户加款\',\'openUrl\')"><i class="fa fa-plus"></i>加款</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + deductFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户减款\',\'updateUrl\')"><i class="fa fa-minus"></i>减款</a> ');
                         return actions.join('');
                     }
                 }]

@@ -1140,9 +1140,13 @@ var table = {
                 $.modal.open("添加" + table.options.modalName, $.operate.addUrl(id));
             },
             // 商户下级开户
-            openAccount: function (id) {
+            openAccount: function (id,title,flag) {
                 table.set();
-                $.modal.open("添加下级商户代理商", $.operate.openUrl(id));
+                if (flag == 'openUrl'){
+                    $.modal.open(title, $.operate.openUrl(id));
+                }else if(flag == 'updateUrl'){
+                    $.modal.open(title,$.operate.editUrl(id))
+                }
             },
             // 二维码详细列表
             codeList: function (id) {
