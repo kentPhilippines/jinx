@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('审核加款申请')"/>
-    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: header('修改手动加扣款记录')"/>
+    <th:block th:include="include :: select2-css"/>
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-deduct-edit" th:object="${alipayAmountEntity}">
+    <form class="form-horizontal m" id="form-dealDeduct-edit" th:object="${dealpayAmount}">
         <input name="id" th:field="*{id}" type="hidden">
-        <input id="orderStatus" name="orderStatus"  type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">平台记录号：</label>
             <div class="col-sm-8">
@@ -22,12 +21,13 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"> 申请类型：</label>
+            <label class="col-sm-3 control-label">申请类型：</label>
             <div class="col-sm-8">
-                <select name="amountType" class="form-control m-b" th:with="type=${@dict.getType('amountType')}"
-                        disabled>
+                <select name="amountType" class="form-control m-b" th:with="type=${@dict.getType('amountType')}" disabled>
+                    <option value="">所有</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
-                            th:field="*{amountType}"></option>
+                            th:field="*{amountType}">
+                    </option>
                 </select>
             </div>
         </div>
@@ -38,13 +38,13 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label ">金额：</label>
+            <label class="col-sm-3 control-label">申请金额：</label>
             <div class="col-sm-8">
                 <input name="amount" th:field="*{amount}" class="form-control" type="text" readonly>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">实际到账：</label>
+            <label class="col-sm-3 control-label">实际金额：</label>
             <div class="col-sm-8">
                 <input name="actualAmount" th:field="*{actualAmount}" class="form-control" type="text" readonly>
             </div>
@@ -72,25 +72,25 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
-<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: select2-js"/>
 <script type="text/javascript">
-    var prefix = ctx + "alipay/deduct";
-    $("#form-deduct-edit").validate({
+    var prefix = ctx + "dealpay/dealDeduct";
+    $("#form-dealDeduct-edit").validate({
         focusCleanup: true
     });
 
-    /*财务通过加减款记录*/
+    /*财务通过加减款记录-代付系统*/
     function approval(status) {
         $("#orderStatus").val(status);
         if ($.validate.form()) {
-            $.operate.save(prefix + "/alipay/approval", $('#form-deduct-edit').serialize());
+            $.operate.save(prefix + "/dealpay/approval", $('#form-dealDeduct-edit').serialize());
         }
     }
-    /*财务拒绝加减款记录*/
+    /*财务拒绝加减款记录-代付系统*/
     function reject(status) {
         $("#orderStatus").val(status);
         if ($.validate.form()) {
-            $.operate.save(prefix + "/alipay/reject", $('#form-deduct-edit').serialize());
+            $.operate.save(prefix + "/dealpay/reject", $('#form-dealDeduct-edit').serialize());
         }
     }
 </script>

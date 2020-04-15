@@ -69,32 +69,13 @@ public class DealpayAmountController extends BaseController {
      * 导出手动加扣款记录列表
      */
     @RequiresPermissions("dealpay:dealDeduct:export")
-    @Log(title = "手动加扣款记录", businessType = BusinessType.EXPORT)
+    @Log(title = "加减款记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(DealpayAmountEntity dealpayAmountEntity) {
         List<DealpayAmountEntity> list = dealpayAmountService.selectDealpayAmountList(dealpayAmountEntity);
         ExcelUtil<DealpayAmountEntity> util = new ExcelUtil<DealpayAmountEntity>(DealpayAmountEntity.class);
         return util.exportExcel(list, "deduct");
-    }
-
-    /**
-     * 新增手动加扣款记录
-     */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
-    }
-
-    /**
-     * 新增保存手动加扣款记录
-     */
-    @RequiresPermissions("dealpay:dealDeduct:add")
-    @Log(title = "手动加扣款记录", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(DealpayAmountEntity dealpayAmountEntity) {
-        return toAjax(dealpayAmountService.insertDealpayAmount(dealpayAmountEntity));
     }
 
     /**
@@ -137,6 +118,9 @@ public class DealpayAmountController extends BaseController {
         return finance_prefix + "/deduct";
     }
 
+
+
+    /*财务处理逻辑*/
     /**
      * 财务查询卡商加减款记录
      */
@@ -149,28 +133,63 @@ public class DealpayAmountController extends BaseController {
         return getDataTable(list);
     }
 
+    /**
+     * 显示加减款记录详情
+     */
+    @GetMapping("/show/detail/{id}")
+    public String showDetail(@PathVariable("id") Long id, ModelMap mmap) {
+        DealpayAmountEntity dealpayAmount = dealpayAmountService.selectDealpayAmountById(id);
+        mmap.put("dealpayAmount", dealpayAmount);
+        return finance_prefix + "/edit";
+    }
+
+
 
     /**
      * 财务审核加减款记录
      */
     @RequiresPermissions("dealpay:finance:approval")
     @Log(title = "财务管理", businessType = BusinessType.UPDATE)
-    @PostMapping("/approval")
+    @PostMapping("/dealpay/approval")
     @ResponseBody
     public AjaxResult apporval(DealpayAmountEntity dealpayAmountEntity) {
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
         //获取alipay处理接口URL
-        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_3);
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_IP_URL_KEY, StaticConstants.DealPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_SERVICE_API_KEY, StaticConstants.DealPAY_SERVICE_API_VALUE_5);
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("id", dealpayAmountEntity.getId());
         mapParam.put("userId", dealpayAmountEntity.getUserId());
         mapParam.put("amount", dealpayAmountEntity.getAmount());
-        mapParam.put("orderStatus", dealpayAmountEntity.getOrderStatus());//审核通过
+        mapParam.put("orderStatus", dealpayAmountEntity.getOrderStatus());//通过
         mapParam.put("orderId", dealpayAmountEntity.getOrderId());//订单号
         mapParam.put("approval", currentUser.getLoginName());//审核人
         mapParam.put("comment", dealpayAmountEntity.getComment());//审核人
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
+    }
+
+    /**
+     * 财务审核加减款记录
+     */
+    @RequiresPermissions("dealpay:finance:reject")
+    @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
+    @PostMapping("/dealpay/reject")
+    @ResponseBody
+    public AjaxResult reject(DealpayAmountEntity dealpayAmountEntity) {
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        //获取alipay处理接口URL
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_IP_URL_KEY, StaticConstants.DealPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.DealPAY_SERVICE_API_KEY, StaticConstants.DealPAY_SERVICE_API_VALUE_5);
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        mapParam.put("id", dealpayAmountEntity.getId());
+        mapParam.put("userId", dealpayAmountEntity.getUserId());
+        mapParam.put("amount", dealpayAmountEntity.getAmount());
+        mapParam.put("orderStatus", dealpayAmountEntity.getOrderStatus());//拒绝
+        mapParam.put("orderId", dealpayAmountEntity.getOrderId());//订单号
+        mapParam.put("approval", currentUser.getLoginName());//审核人
+        mapParam.put("comment", dealpayAmountEntity.getComment());
         return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
 

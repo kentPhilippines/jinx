@@ -35,7 +35,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 手动加扣款记录Controller
+ * 加减款记录表Controller
  *
  * @author kiwi
  * @date 2020-03-24
@@ -69,10 +69,10 @@ public class AlipayAmountEntityController extends BaseController {
     }
 
     /**
-     * 导出手动加扣款记录列表
+     * 导出加减款记录列表
      */
     @RequiresPermissions("alipay:deduct:export")
-    @Log(title = "手动加扣款记录", businessType = BusinessType.EXPORT)
+    @Log(title = "加减款记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(AlipayAmountEntity alipayAmountEntity) {
@@ -82,27 +82,7 @@ public class AlipayAmountEntityController extends BaseController {
     }
 
     /**
-     * 新增手动加扣款记录
-     */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
-    }
-
-    /**
-     * 新增保存手动加扣款记录
-     */
-    @RequiresPermissions("alipay:deduct:add")
-    @Log(title = "手动加扣款记录", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayAmountEntity alipayAmountEntity) {
-
-        return toAjax(alipayAmountEntityService.insertAlipayAmountEntity(alipayAmountEntity));
-    }
-
-    /**
-     * 修改手动加扣款记录
+     * 显示加减款详情
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
@@ -111,36 +91,14 @@ public class AlipayAmountEntityController extends BaseController {
         return prefix + "/edit";
     }
 
-    /**
-     * 修改保存手动加扣款记录
-     */
-    @RequiresPermissions("alipay:deduct:edit")
-    @Log(title = "手动加扣款记录", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayAmountEntity alipayAmountEntity) {
-        return toAjax(alipayAmountEntityService.updateAlipayAmountEntity(alipayAmountEntity));
-    }
-
-    /**
-     * 删除手动加扣款记录
-     */
-    @RequiresPermissions("alipay:deduct:remove")
-    @Log(title = "手动加扣款记录", businessType = BusinessType.DELETE)
-    @PostMapping("/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids) {
-        return toAjax(alipayAmountEntityService.deleteAlipayAmountEntityByIds(ids));
-    }
-
     /*处理加减款的controller逻辑处理*/
 
     /**
      * 财务审核加减款记录
      */
-    @RequiresPermissions("alipay:deduct:edit:approval")
+    @RequiresPermissions("alipay:finance:approval")
     @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
-    @PostMapping("/approval")
+    @PostMapping("/alipay/approval")
     @ResponseBody
     public AjaxResult apporval(AlipayAmountEntity alipayAmountEntity) {
         // 获取当前的用户
@@ -152,7 +110,7 @@ public class AlipayAmountEntityController extends BaseController {
         mapParam.put("id", alipayAmountEntity.getId());
         mapParam.put("userId", alipayAmountEntity.getUserId());
         mapParam.put("amount", alipayAmountEntity.getAmount());
-        mapParam.put("orderStatus", alipayAmountEntity.getOrderStatus());//审核通过
+        mapParam.put("orderStatus", alipayAmountEntity.getOrderStatus());//通过
         mapParam.put("orderId", alipayAmountEntity.getOrderId());//订单号
         mapParam.put("approval", currentUser.getLoginName());//审核人
         mapParam.put("comment", alipayAmountEntity.getComment());//审核人
@@ -162,11 +120,11 @@ public class AlipayAmountEntityController extends BaseController {
     /**
      * 财务审核加减款记录
      */
-    @RequiresPermissions("alipay:deduct:edit:approval")
+    @RequiresPermissions("alipay:finance:reject")
     @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
-    @PostMapping("/deduct")
+    @PostMapping("/alipay/reject")
     @ResponseBody
-    public AjaxResult deduct(AlipayAmountEntity alipayAmountEntity) {
+    public AjaxResult reject(AlipayAmountEntity alipayAmountEntity) {
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
         //获取alipay处理接口URL
@@ -176,7 +134,7 @@ public class AlipayAmountEntityController extends BaseController {
         mapParam.put("id", alipayAmountEntity.getId());
         mapParam.put("userId", alipayAmountEntity.getUserId());
         mapParam.put("amount", alipayAmountEntity.getAmount());
-        mapParam.put("orderStatus", alipayAmountEntity.getOrderStatus());//审核通过
+        mapParam.put("orderStatus", alipayAmountEntity.getOrderStatus());//拒绝
         mapParam.put("orderId", alipayAmountEntity.getOrderId());//订单号
         mapParam.put("approval", currentUser.getLoginName());//审核人
         mapParam.put("comment", alipayAmountEntity.getComment());

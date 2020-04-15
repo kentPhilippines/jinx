@@ -1,166 +1,168 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('手动加扣款记录列表')" />
+    <th:block th:include="include :: header('手动加扣款记录列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <span>订单号：</span>
-                                <input type="text" name="orderId"/>
-                            </li>
-                            <li>
-                                <span>账号ID：</span>
-                                <input type="text" name="userId"/>
-                            </li>
-                            <li>
-                                <span>申请人：</span>
-                                <input type="text" name="accname"/>
-                            </li>
-                            <li>
-                                <p>操作类型：</p>
-                                <select name="amountType" th:with="type=${@dict.getType('amountType')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <span>状态：</span>
-                                <select name="orderStatus" th:with="type=${@dict.getType('orderStatusAmount')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <span>平台记录号：</span>
+                            <input type="text" name="orderId"/>
+                        </li>
+                        <li>
+                            <span>用户账户：</span>
+                            <input type="text" name="userId"/>
+                        </li>
+                        <li>
+                            <span>申请人(后台)：</span>
+                            <input type="text" name="accname"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>操作类型：</label>
+                            <select name="amountType" th:with="type=${@dict.getType('amountType')}" class="selectpicker"
+                                    data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>状态：</label>
+                            <select name="orderStatus" th:with="type=${@dict.getType('orderStatusAmount')}" class="selectpicker"
+                                    data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <p>创建时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginCreateTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endCreateTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-                            <li class="select-time">
-                                <p>创建时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
-
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deduct:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deduct:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        //权限标识
-        var editFlag = [[${@permission.hasPermi('alipay:deduct:edit')}]];
-        var approvalFlag = [[${@permission.hasPermi('alipay:deduct:approval')}]];
-        //列表
-        var amountTypeDatas = [[${@dict.getType('amountType')}]];
-        var orderStatusDatas = [[${@dict.getType('orderStatusAmount')}]];
-        var prefix = ctx + "alipay/deduct";
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    //权限标识
+    var approvalFlag = [[${@permission.hasPermi('alipay:deduct:approval')}]];
+    //列表
+    var amountTypeDatas = [[${@dict.getType('amountType')}]];
+    var orderStatusDatas = [[${@dict.getType('orderStatusAmount')}]];
+    var prefix = ctx + "alipay/deduct";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/approval",
-                exportUrl: prefix + "/export",
-                modalName: "加减款记录",
-                columns: [{
-                    checkbox: true
-                },
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            updateUrl: prefix + "/edit/{id}",
+            exportUrl: prefix + "/export",
+            modalName: "加减款记录",
+            columns: [{
+                checkbox: true
+            },
                 {
-                    field : 'id', 
-                    title : '数据id',
+                    field: 'id',
+                    title: '数据ID',
                     visible: false
                 },
                 {
-                    field : 'orderId', 
-                    title : '订单号'
+                    field: 'orderId',
+                    title: '平台记录号'
                 },
                 {
-                    field : 'userId', 
-                    title : '账号ID'
+                    field: 'userId',
+                    title: '用户账户'
                 },
                 {
-                    field : 'accname',
-                    title : '申请人'
+                    field: 'accname',
+                    title: '申请人'
                 },
                 {
-                    field : 'amountType', 
-                    title : '申请类型',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(amountTypeDatas, value);
+                    field: 'amountType',
+                    title: '申请类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(amountTypeDatas, value);
                     }
                 },
                 {
-                    field : 'orderStatus', 
-                    title : '状态',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(orderStatusDatas, value);
+                    field: 'orderStatus',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(orderStatusDatas, value);
                     }
                 },
                 {
-                    field : 'amount', 
-                    title : '金额'
+                    field: 'amount',
+                    title: '金额'
                 },
                 {
-                    field : 'actualAmount',
-                    title : '实际金额'
+                    field: 'actualAmount',
+                    title: '实际金额'
                 },
                 {
-                    field : 'createTime', 
-                    title : '创建时间'
+                    field: 'createTime',
+                    title: '创建时间'
                 },
                 {
-                    field : 'dealDescribe',
-                    title : '描述'
+                    field: 'dealDescribe',
+                    title: '描述'
                 },
                 {
-                    field : 'approval',
-                    title : '审核人'
+                    field: 'approval',
+                    title: '审核人'
                 },
                 {
-                    field : 'comment',
-                    title : '审核意见'
+                    field: 'comment',
+                    title: '审核意见'
                 },
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
-                       return check(row);
+                    formatter: function (value, row, index) {
+                        return check(row);
                     }
                 }]
-            };
-            $.table.init(options);
-        });
+        };
+        $.table.init(options);
+    });
 
-        /* 用户状态显示 */
-        function check(row) {
-            if (row.orderStatus === '2') {
-                // var actions = [];
-                // actions.push('<a class="btn btn-primary btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\',\'' + row.userId + '\',\'' + row.amount + '\')"><i class="fa fa-shield"></i> 通过</a> ');
-                // actions.push('<a class="btn btn-danger btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\',\'' + row.userId + '\',\'' + row.amount + '\')"><i class="fa fa-shield"></i> 拒绝</a>');
-                // return actions.join('');
-                return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>';
-            } else {
-                return '';
-            }
+    /* 用户状态显示 */
+    function check(row) {
+        if (row.orderStatus === '2') {
+            return '<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>';
+        } else {
+            return '';
         }
-    </script>
+    }
+</script>
 </body>
 </html>

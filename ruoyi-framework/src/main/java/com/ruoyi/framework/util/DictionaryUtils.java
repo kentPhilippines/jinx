@@ -22,10 +22,10 @@ public class DictionaryUtils {
 
     public String getApiUrlPath(String dictType, String dictLabel) {
         if (StringUtils.isEmpty(dictType)) {
-            throw new BusinessException("参数不能为空");
+            throw new BusinessException("未配置StaticConstants中的KEY值");
         }
         if (StringUtils.isEmpty(dictLabel)) {
-            throw new BusinessException("参数不能为空");
+            throw new BusinessException("未配置StaticConstants中的VALUE值");
         }
         List<String> dictVlaue = sysDictDataServiceImpl.selectDictValueByKye(dictType, dictLabel);
         if (dictVlaue.size() == 0) {

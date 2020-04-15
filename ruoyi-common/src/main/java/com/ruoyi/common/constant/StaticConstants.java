@@ -27,7 +27,7 @@ public interface StaticConstants {
     public static final String MERCHANT_WITHDRAWAL = "W";
 
     /**
-     *  银行卡系统ID前缀
+     * 银行卡系统ID前缀
      */
     public static final String BANK_CARD_ID = "B";
 
@@ -38,14 +38,13 @@ public interface StaticConstants {
     public static final String ALIPAY_SERVICE_API_KEY = "alipay-api";
     public static final String ALIPAY_SERVICE_API_VALUE_1 = "account-api-add-account"; //开户
     public static final String ALIPAY_SERVICE_API_VALUE_2 = "account-api-audit-merchant-status";//修改商户状态
-    public static final String ALIPAY_SERVICE_API_VALUE_3 = "account-api-amount"; //资金账户加减款
+    public static final String ALIPAY_SERVICE_API_VALUE_3 = "account-api-amount"; //码商资金账户加减款
     public static final String ALIPAY_SERVICE_API_VALUE_4 = "order-api-enter-order-qr"; //码商订单确认
     public static final String ALIPAY_SERVICE_API_VALUE_5 = "account-api-amount-order"; //后台请求生成扣款订单
     public static final String ALIPAY_SERVICE_API_VALUE_6 = "merchant-withdrawal-order";//商户后台发起提现申请生成订单接口
     //dealpay查询
     public static final String DealPAY_IP_URL_KEY = "dealpay_ip_port";//查询dealpay的服务器地址（公共）
     public static final String DealPAY_IP_URL_VALUE = "ip:port";//查询dealpay的服务器地址（公共）
-
 
     public static final String DealPAY_SERVICE_API_KEY = "dealpay-api";//请求路径的key（公共）
     public static final String DealPAY_SERVICE_API_VALUE_1 = "dealpay-api-add-account"; //卡商开户
@@ -55,10 +54,8 @@ public interface StaticConstants {
     public static final String DealPAY_SERVICE_API_VALUE_3 = "";
     //财务处理卡商充值订单的状态
     public static final String DealPAY_SERVICE_API_VALUE_4 = "";
-
-
-
-
+    //财务审核 代付系统加减款
+    public static final String DealPAY_SERVICE_API_VALUE_5 = "";
 
 
     //二维码服务器地址
