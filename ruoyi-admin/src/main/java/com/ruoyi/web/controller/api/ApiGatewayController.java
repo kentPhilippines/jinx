@@ -60,5 +60,4 @@ public class ApiGatewayController extends BaseController {
         AdminDealpayDealOrder adminDealpayDealOrder = MapDataUtil.mapToBean(map, AdminDealpayDealOrder.class);
         return toAjax(adminDealpayDealOrderService.insertAdminDealpayDealOrder(adminDealpayDealOrder));
     }
-
 }

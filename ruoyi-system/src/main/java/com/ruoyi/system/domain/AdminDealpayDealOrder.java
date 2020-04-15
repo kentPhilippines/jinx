@@ -59,6 +59,8 @@ public class AdminDealpayDealOrder extends BaseEntity
     @Excel(name = "银行卡系统编号")
     private String orderQr;
 
+    private Date createTime;
+
     /** 修改时间 */
     @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date submitTime;
@@ -196,6 +198,16 @@ public class AdminDealpayDealOrder extends BaseEntity
     public Integer getStatus() 
     {
         return status;
+    }
+
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     @Override
