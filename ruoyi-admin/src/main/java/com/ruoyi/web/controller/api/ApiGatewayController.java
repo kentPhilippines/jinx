@@ -61,27 +61,4 @@ public class ApiGatewayController extends BaseController {
         return toAjax(adminDealpayDealOrderService.insertAdminDealpayDealOrder(adminDealpayDealOrder));
     }
 
-
-    public static void main(String[] args) {
-        AdminAplipayDealOrder adminAplipayDealOrder = new AdminAplipayDealOrder();
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("orderId",""); //平台订单
-        map.put("associatedId","");//关联订单
-        map.put("orderAccount","");//订单关联商户账号
-        map.put("orderStatus","");//订单状态
-        map.put("dealAmount","");//交易金额
-        map.put("dealFee","");//手续费
-        map.put("actualAmount","");//到账金额
-        map.put("orderType","");//订单类型
-        map.put("orderQrUser","");//关联码商账户
-        map.put("orderQr","");//关联二维码
-        map.put("fee","");//费率
-        map.put("productType","");//产品类型
-        map.put("createTime","");//创建时间
-
-
-
-    }
-
 }
