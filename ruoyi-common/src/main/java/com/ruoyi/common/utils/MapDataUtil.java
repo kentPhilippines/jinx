@@ -2,6 +2,10 @@ package com.ruoyi.common.utils;
 
 import com.google.common.collect.Maps;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -86,5 +90,31 @@ public class MapDataUtil {
             }
         }
         return resMap;
+    }
+
+    /**
+     * <p>使用Introspector，map集合成javabean</p>
+     * @param map       map
+     * @param beanClass bean的Class类
+     * @return bean对象
+     */
+    public static <T> T mapToBean(Map<String, Object> map, Class<T> beanClass) {
+        if (cn.hutool.core.map.MapUtil.isEmpty(map))
+            return null;
+        try {
+            T t = beanClass.newInstance();
+            BeanInfo beanInfo = Introspector.getBeanInfo(t.getClass());
+            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+            for (PropertyDescriptor property : propertyDescriptors) {
+                Method setter = property.getWriteMethod();
+                if (setter != null) {
+                    setter.invoke(t, map.get(property.getName()));
+                }
+            }
+            return t;
+        } catch (Exception ex) {
+            throw new RuntimeException();
+        }
+
     }
 }

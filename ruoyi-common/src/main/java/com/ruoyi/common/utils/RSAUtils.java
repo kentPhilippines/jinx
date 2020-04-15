@@ -257,7 +257,7 @@ public class RSAUtils {
      * @param privateKey    私钥
      * @return              返回map
      */
-    public Map<String, Object> retMapDecode(String data, String privateKey){
+    public static Map<String, Object> retMapDecode(String data, String privateKey){
         //私钥解密密文得到字符串参数
         String urlParam = privateDecrypt(data,privateKey);
         //调用方法转成map

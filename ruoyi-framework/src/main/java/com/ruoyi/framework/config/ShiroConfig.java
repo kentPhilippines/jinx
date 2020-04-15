@@ -239,6 +239,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login", "anon,captchaValidate");
         filterChainDefinitionMap.put("/common/public/encrypt", "anon");
         filterChainDefinitionMap.put("/bind", "anon");
+        filterChainDefinitionMap.put("/admin/order/record/alipay", "anon");
+        filterChainDefinitionMap.put("/admin/order/record/dealpay", "anon");
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
 
