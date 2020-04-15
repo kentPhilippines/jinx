@@ -55,7 +55,7 @@ public interface StaticConstants {
     //财务处理卡商充值订单的状态
     public static final String DealPAY_SERVICE_API_VALUE_4 = "";
     //财务审核 代付系统加减款
-    public static final String DealPAY_SERVICE_API_VALUE_5 = "";
+    public static final String DealPAY_SERVICE_API_VALUE_5 = "dealpay-account-api-amount";
 
 
     //二维码服务器地址
