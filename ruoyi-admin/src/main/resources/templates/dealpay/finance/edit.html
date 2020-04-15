@@ -8,6 +8,7 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-dealDeduct-edit" th:object="${dealpayAmount}">
         <input name="id" th:field="*{id}" type="hidden">
+        <input id="orderStatus" name="orderStatus"  type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">平台记录号：</label>
             <div class="col-sm-8">
