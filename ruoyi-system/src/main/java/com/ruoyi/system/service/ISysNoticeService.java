@@ -49,4 +49,11 @@ public interface ISysNoticeService
      * @return 结果
      */
     public int deleteNoticeByIds(String ids);
+
+    /**
+     * 根据角色查询通知公告
+     * @param roleId
+     * @return
+     */
+    List<SysNotice> selectNoticeListByRoleId(Long roleId);
 }

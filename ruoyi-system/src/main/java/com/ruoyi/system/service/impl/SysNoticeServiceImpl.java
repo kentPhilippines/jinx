@@ -85,4 +85,9 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
     public int deleteNoticeByIds(String ids) {
         return noticeMapper.deleteNoticeByIds(Convert.toStrArray(ids));
     }
+
+    @Override
+    public List<SysNotice> selectNoticeListByRoleId(Long roleId) {
+        return noticeMapper.selectNoticeListByRoleIdMapper(roleId);
+    }
 }

@@ -76,7 +76,6 @@ a:hover {
 
 /* 必要布局样式css */
 .rolling {
-    width: 450px;
     position: relative;
     margin: 0 auto;
     overflow: hidden;
@@ -130,8 +129,6 @@ a:hover {
 }
 
 .rolling .content {
-    width: 450px;
-    height: 100px;
     overflow: hidden;
     padding-left: 40px;
     padding-right: 40px;
@@ -143,12 +140,10 @@ a:hover {
 
 .rolling .content ul li {
     float: left;
-    height: 60px;
     line-height: 24px;
     text-align: left;
     _display: inline;
     font-size: 13px;
-    margin-top: 20px;
 }
 
 .rolling .content ul li span {
@@ -161,7 +156,7 @@ a:hover {
     font-weight: normal;
     font-size: 14px;
     float: left;
-    line-height: 42px;
+    line-height: 30px;
 }
 
 .rolling-more {

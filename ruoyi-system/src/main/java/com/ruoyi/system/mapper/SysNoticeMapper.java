@@ -3,6 +3,9 @@ package com.ruoyi.system.mapper;
 import java.util.List;
 
 import com.ruoyi.system.domain.SysNotice;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * 公告 数据层
@@ -49,4 +52,13 @@ public interface SysNoticeMapper {
      * @return 结果
      */
     public int deleteNoticeByIds(String[] noticeIds);
+
+    /**
+     * 查询通知公告
+     * @param roleId 角色ID
+     * @return 结果
+     */
+    @Select("select notice_id, notice_title, notice_type, notice_content, status, create_by, create_time, update_by, update_time, remark " +
+            "from sys_notice where find_in_set(#{roleId},remark)")
+    List<SysNotice> selectNoticeListByRoleIdMapper(@Param("roleId") Long roleId);
 }

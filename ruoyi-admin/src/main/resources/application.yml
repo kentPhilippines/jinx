@@ -1,5 +1,5 @@
 # 项目相关配置
-ruoyi:
+otc:
   # 名称
   name: OTC-Admin
   # 版本
