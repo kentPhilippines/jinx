@@ -10,6 +10,7 @@ ruoyi:
   demoEnabled: false
   # 文件路径 示例（ Windows配置D:/otc/admin/uploadPath，Linux配置 /home/otc/admin/uploadPath）
   profile: D:/otc/admin/uploadPath
+  #profile: /home/otc/admin/uploadPath
   # 获取ip地址开关
   addressEnabled: true
 
@@ -98,9 +99,7 @@ shiro:
     # 验证码开关
     captchaEnabled: true
     # 验证码类型 math 数组计算 char 字符 google 谷歌动态口令
-  # captchaType: google
-  #  captchaType: math
-    captchaType: char
+    captchaType: math
   cookie:
     # 设置Cookie的域名 默认空，即当前访问的域名
     domain:
