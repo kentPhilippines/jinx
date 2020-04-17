@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改通知公告')"/>
+    <style>
+        hr {
+            margin-top: -12px;
+            margin-bottom: 20px;
+            border: 1px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-notice-edit" th:object="${sysNotice}">
+        <div class="form-group">
+            <div class="col-sm-12" style="text-align: center;">
+                <span style="font-weight: bold;font-size: 24px; color: black;" th:text="*{noticeTitle}"></span>
+            </div>
+            <div class="col-sm-12" style="text-align: right;color: #a0a0a0; font-weight: bold; font-size: 14px;margin-top: 10px;">
+                <span>发布时间：</span><span th:text="${#dates.format(sysNotice.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <span style="color: #1a2226;font-size: 18px;" th:utext="*{noticeContent}"></span>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+</body>
+</html>

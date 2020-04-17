@@ -341,11 +341,13 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public List selectRoleByNoticeId(String roldeIds) {
         List<SysRole> roles = selectRoleAll();
-        String[] ids = roldeIds.split(",");
-        List<String> roleId = Arrays.asList(ids);
-        for (SysRole role : roles) {
-            if (roleId.contains(role.getRoleId().toString())) {
-                role.setFlag(true);
+        if (StringUtils.isNotEmpty(roldeIds)) {
+            String[] ids = roldeIds.split(",");
+            List<String> roleId = Arrays.asList(ids);
+            for (SysRole role : roles) {
+                if (roleId.contains(role.getRoleId().toString())) {
+                    role.setFlag(true);
+                }
             }
         }
         return roles;

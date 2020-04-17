@@ -68,7 +68,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
         Long[] roles = notice.getRoleIds();
         String roleIds = StringUtils.join(roles, ",");
         if (StringUtils.isEmpty(roleIds)) {
-            notice.setRemark("0");
+            notice.setRemark("1");
         } else {
             notice.setRemark(roleIds);
         }
@@ -89,5 +89,10 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
     @Override
     public List<SysNotice> selectNoticeListByRoleId(Long roleId) {
         return noticeMapper.selectNoticeListByRoleIdMapper(roleId);
+    }
+
+    @Override
+    public List<SysNotice> selectNoticeListMoreByRoleId(SysNotice sysNotice) {
+        return noticeMapper.selectNoticeMoreMapper(sysNotice);
     }
 }

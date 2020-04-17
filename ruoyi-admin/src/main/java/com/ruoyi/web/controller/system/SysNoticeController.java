@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
+import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,9 @@ public class SysNoticeController extends BaseController {
 
     @RequiresPermissions("system:notice:view")
     @GetMapping()
-    public String notice() {
+    public String notice(ModelMap mmap) {
+        List<SysRole> list = roleService.selectRoleAll();
+        mmap.put("roles", list);
         return prefix + "/notice";
     }
 

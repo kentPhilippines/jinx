@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>统计</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
     <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
@@ -19,7 +18,7 @@
             <div class="ibox float-e-margins rolling">
                 <div class="ibox-title roll-title roll-title clearfix">
                     <h2>最新公告</h2>
-                    <a href="#" class="rolling-more">更多</a>
+                    <a href="javascript:void(0)"  onclick="$.operate.showTab('通知公告','/home/page/more')" class="rolling-more">更多</a>
                     <a class="next">
                         <img src="/img/arrow-fr.png" alt="">
                     </a>
@@ -28,33 +27,14 @@
                     </a>
                 </div>
                 <div class="content ibox-content">
-                    <ul class="roll-list">
-                        <li>
-                            <p href="#" target="_blank">新闻号头条平台持续打击违规帐号的公告新闻号头条平台持续打击违规帐号的公告</p>
-                            <span>2018年6月12日</span>
-                        </li>
-                        <li>
-                            <p href="#" target="_blank">关系我们每个人！700字读懂新闻号头条平台3·15资讯打假报告自媒体账号公告</p>
-                            <span>2018年3月01日</span>
-                        </li>
-                        <li>
-                            <p href="#" target="_blank">资讯消费如何打假才能保护合法权利？新闻号头条平台首次披露反谣言技术路线图</p>
-                            <span>2018年2月22日</span>
-                        </li>
-                        <li>
-                            <p href="#" target="_blank">国医·新闻号头条平台！“天堂学堂”网站发布的“北中医自主招生夏令营”资讯是假的！</p>
-                            <span>2018年2月02日</span>
-                        </li>
-                        <li>
-                            <p href="#" target="_blank">工信部下架“新闻号头条平台”等 46 款不良手机应用，，第一时间更新相关内容资料</p>
-                            <span>2018年1月12日</span>
-                        </li>
-                        <li>
-                            <p href="#" target="_blank">今闻号头条平台与内蒙古网信办战略合作伙伴 将用新闻号向世界推介亮丽内蒙古大草原</p>
-                            <span>2017年12月21日</span>
+                    <ul class="roll-list" >
+                        <li th:each="notice:${noticeList}">
+                            <p href="#" target="_blank" th:text="${notice.noticeTitle}"></p>
+                            <span th:text="${#dates.format(notice.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
                         </li>
                     </ul>
                 </div>
+                <div th:if="${noticeList.size() == 0}">暂无通知公告内容</div>
             </div>
 
         </div>
@@ -268,7 +248,10 @@
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/ajax/libs/flot/jquery.flot.js}"></script>
 <script th:src="@{/js/jquery.SuperSlide.2.1.1.js}"></script>
-
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script th:src="@{/ajax/libs/layui/layui.js}"></script>
+<script th:src="@{/ruoyi/js/common.js?v=4.1.0}"></script>
+<script th:src="@{/ruoyi/js/ry-ui.js?v=4.1.0}"></script>
 <th:block th:include="include :: sparkline-js"/>
 <script type="text/javascript">
     $(".rolling").slide({titCell:".roll-title ul",mainCell:".content ul",autoPage:true,effect:"leftLoop",autoPlay:true,scroll:1,vis:1,delayTime:1000,trigger:"click"});

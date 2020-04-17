@@ -56,4 +56,11 @@ public interface ISysNoticeService
      * @return
      */
     List<SysNotice> selectNoticeListByRoleId(Long roleId);
+
+    /**
+     * 查看更多通知公告
+     * @param sysNotice
+     * @return
+     */
+    List<SysNotice> selectNoticeListMoreByRoleId(SysNotice sysNotice);
 }

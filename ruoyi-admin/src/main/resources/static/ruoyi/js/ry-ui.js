@@ -699,7 +699,7 @@ var table = {
             // 弹出层指定宽度
             open: function (title, url, width, height, callback) {
                 //如果是移动端，就使用自适应大小弹窗
-                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|ipad)/i)) {
                     width = 'auto';
                     height = 'auto';
                 }
@@ -742,7 +742,7 @@ var table = {
             // 弹出层指定宽度
             openWithoutBtn: function (title, url, width, height, callback) {
                 //如果是移动端，就使用自适应大小弹窗
-                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|ipad)/i)) {
                     width = 'auto';
                     height = 'auto';
                 }
@@ -790,7 +790,7 @@ var table = {
             // 弹出二维码详情
             openDetail: function (title, url, width, height, callback) {
                 //如果是移动端，就使用自适应大小弹窗
-                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|ipad)/i)) {
                     width = 'auto';
                     height = 'auto';
                 }
@@ -826,7 +826,7 @@ var table = {
             // 弹出图片层
             openCode: function (title, url, width, height, callback) {
                 //如果是移动端，就使用自适应大小弹窗
-                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|ipad)/i)) {
                     width = 'auto';
                     height = 'auto';
                 }
@@ -858,7 +858,7 @@ var table = {
             // 弹出层指定宽度
             approvalOpen: function (title, url, width, height, callback) {
                 //如果是移动端，就使用自适应大小弹窗
-                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|ipad)/i)) {
                     width = 'auto';
                     height = 'auto';
                 }
@@ -929,7 +929,7 @@ var table = {
             // 弹出层全屏
             openFull: function (title, url, width, height) {
                 //如果是移动端，就使用自适应大小弹窗
-                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|ipad)/i)) {
                     width = 'auto';
                     height = 'auto';
                 }
@@ -1066,7 +1066,7 @@ var table = {
                 var _width = $.common.isEmpty(width) ? "800" : width;
                 var _height = $.common.isEmpty(height) ? ($(window).height() - 50) : height;
                 //如果是移动端，就使用自适应大小弹窗
-                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|ipad)/i)) {
                     _width = 'auto';
                     _height = 'auto';
                 }
@@ -1157,6 +1157,11 @@ var table = {
             addTab: function (id) {
                 table.set();
                 $.modal.openTab("添加" + table.options.modalName, $.operate.addUrl(id));
+            },
+            // 添加信息，以tab页展现
+            showTab: function (title, url) {
+                table.set();
+                $.modal.openTab(title, url);
             },
             // 添加信息 全屏
             addFull: function (id) {
