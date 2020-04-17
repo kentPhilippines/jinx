@@ -10,6 +10,7 @@ import com.ruoyi.system.domain.SysUserRole;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.service.ISysNoticeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jetbrains.annotations.Async;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,6 +32,7 @@ public class HomePageController extends BaseController {
      * 显示通知公告
      * @return
      */
+
     @GetMapping("/rolling")
     public String menu(ModelMap mmap) {
         SysUser sysUser = ShiroUtils.getSysUser();
