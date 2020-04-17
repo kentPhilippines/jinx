@@ -47,8 +47,7 @@ public class AlipayRunOrderEntityController extends BaseController {
 	@ResponseBody
 	public TableDataInfo list(AlipayRunOrderEntity alipayRunOrderEntity) {
 		startPage();
-		List<AlipayRunOrderEntity> list = alipayRunOrderEntityService
-				.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
+		List<AlipayRunOrderEntity> list = alipayRunOrderEntityService.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
 		return getDataTable(list);
 	}
 
@@ -66,54 +65,4 @@ public class AlipayRunOrderEntityController extends BaseController {
 		return util.exportExcel(list, "running");
 	}
 
-	/**
-	 * 新增流水订单记录
-	 */
-	@GetMapping("/add")
-	public String add() {
-		return prefix + "/add";
-	}
-
-	/**
-	 * 新增保存流水订单记录
-	 */
-	@RequiresPermissions("alipay:running:add")
-	@Log(title = "流水订单记录", businessType = BusinessType.INSERT)
-	@PostMapping("/add")
-	@ResponseBody
-	public AjaxResult addSave(AlipayRunOrderEntity alipayRunOrderEntity) {
-		return toAjax(alipayRunOrderEntityService.insertAlipayRunOrderEntity(alipayRunOrderEntity));
-	}
-
-	/**
-	 * 修改流水订单记录
-	 */
-	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-		AlipayRunOrderEntity alipayRunOrderEntity = alipayRunOrderEntityService.selectAlipayRunOrderEntityById(id);
-		mmap.put("alipayRunOrderEntity", alipayRunOrderEntity);
-		return prefix + "/edit";
-	}
-
-	/**
-	 * 修改保存流水订单记录
-	 */
-	@RequiresPermissions("alipay:running:edit")
-	@Log(title = "流水订单记录", businessType = BusinessType.UPDATE)
-	@PostMapping("/edit")
-	@ResponseBody
-	public AjaxResult editSave(AlipayRunOrderEntity alipayRunOrderEntity) {
-		return toAjax(alipayRunOrderEntityService.updateAlipayRunOrderEntity(alipayRunOrderEntity));
-	}
-
-	/**
-	 * 删除流水订单记录
-	 */
-	@RequiresPermissions("alipay:running:remove")
-	@Log(title = "流水订单记录", businessType = BusinessType.DELETE)
-	@PostMapping("/remove")
-	@ResponseBody
-	public AjaxResult remove(String ids) {
-		return toAjax(alipayRunOrderEntityService.deleteAlipayRunOrderEntityByIds(ids));
-	}
 }

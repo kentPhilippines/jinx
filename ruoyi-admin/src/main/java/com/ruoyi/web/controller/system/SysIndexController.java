@@ -46,7 +46,6 @@ public class SysIndexController extends BaseController {
     // 系统介绍
     @GetMapping("/system/home")
     public String main(ModelMap mmap) {
-        mmap.put("version", Global.getVersion());
-        return "home";
+        return "main";
     }
 }

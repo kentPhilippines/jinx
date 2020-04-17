@@ -34,7 +34,7 @@
                             </select>
                         </li>
                         <li class="select-selectpicker">
-                            <label>状态：</label>
+                            <label>操作类型：</label>
                             <select id="runType" name="runType" th:with="type=${@dict.getType('runType')}"
                                     class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
@@ -74,7 +74,6 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('alipay:running:edit')}]];
     var prefix = ctx + "alipay/running";
     var orderRunType = [[${@dict.getType('runOrderType')}]];
     var runType = [[${@dict.getType('runType')}]];
@@ -88,12 +87,12 @@
             },
                 {
                     field: 'id',
-                    title: '数据id',
+                    title: '数据ID',
                     visible: false
                 },
                 {
                     field: 'orderId',
-                    title: '流水单号'
+                    title: '平台单号'
                 },
                 {
                     field: 'associatedId',
@@ -112,18 +111,18 @@
                 },
                 {
                     field: 'amount',
-                    title: '流水金额'
+                    title: '金额'
                 },
                 {
                     field: 'runType',
-                    title: '流水状态',
+                    title: '操作类型',
                     formatter: function (value, row, index) {
                         return $.table.selectDictLabel(runType, value);
                     }
                 },
                 {
                     field: 'amountType',
-                    title: '经济状态',
+                    title: '收支类型',
                     formatter: function (value, item, index) {
                         if (item.amountType == '1') {
                             return '<span>支出</span>';
