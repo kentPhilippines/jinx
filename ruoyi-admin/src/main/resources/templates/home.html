@@ -29,7 +29,7 @@
                 <div class="content ibox-content">
                     <ul class="roll-list" >
                         <li th:each="notice:${noticeList}">
-                            <p href="#" target="_blank" th:text="${notice.noticeTitle}"></p>
+                            <img style="float: left;" th:if="${notice.checkFlag} eq true" src="/img/new.gif"/><p href="#" target="_blank" style="float: left; margin-left: 5px;" th:text="${notice.noticeTitle}"></p><br/>
                             <span th:text="${#dates.format(notice.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
                         </li>
                     </ul>

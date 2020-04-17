@@ -25,7 +25,10 @@
             columns: [
                 {
                     field: 'noticeTitle',
-                    title: '公告标题'
+                    title: '公告标题',
+                    formatter: function (value, row, index) {
+                        return checkStatus(row);
+                    }
                 },
                 {
                     field: 'noticeType',
@@ -52,6 +55,14 @@
         };
         $.table.init(options);
     });
+
+    function checkStatus(row) {
+        if (row.checkFlag == true) {
+            return '<span>' + row.noticeTitle + '    <img src="/img/new.gif"/></span>';
+        } else {
+            return '<span>' + row.noticeTitle + '</span>';
+        }
+    }
 </script>
 </body>
 </html>

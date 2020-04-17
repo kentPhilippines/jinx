@@ -58,11 +58,16 @@ public interface SysNoticeMapper {
      * @param roleId 角色ID
      * @return 结果
      */
-    @Select("select notice_id noticeId, notice_title noticeTitle, notice_type noticeType, notice_content noticeContent, status, create_by createBy, create_time createTime, update_by, update_time, remark " +
+    @Select("select notice_id noticeId, notice_title noticeTitle, notice_type noticeType, " +
+            "notice_content noticeContent, status, create_by createBy, create_time createTime, " +
+            "update_by, update_time, remark," +
+            "case when DATE_ADD(create_time,INTERVAL 2 DAY) > SYSDATE() then true else false end checkFlag " +
             "from sys_notice where find_in_set(#{roleId},remark) order by create_time desc limit 10 ")
     List<SysNotice> selectNoticeListByRoleIdMapper(@Param("roleId") Long roleId);
 
-    @Select("select notice_id noticeId, notice_title noticeTitle, notice_type noticeType, notice_content noticeContent, status, create_by createBy, create_time createTime, update_by, update_time, remark " +
+    @Select("select notice_id noticeId, notice_title noticeTitle, notice_type noticeType, " +
+            "notice_content noticeContent, status, create_by createBy, create_time createTime, update_by, update_time, remark," +
+            "case when DATE_ADD(create_time,INTERVAL 2 DAY) > SYSDATE() then true else false end checkFlag " +
             "from sys_notice where find_in_set(#{remark},remark) and status = 0 order by create_time desc")
     List<SysNotice> selectNoticeMoreMapper(SysNotice sysNotice);
 }
