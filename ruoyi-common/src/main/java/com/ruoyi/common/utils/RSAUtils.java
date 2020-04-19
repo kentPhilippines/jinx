@@ -1,11 +1,13 @@
 package com.ruoyi.common.utils;
 
+import com.google.common.collect.ImmutableList;
+import com.ruoyi.common.exception.BusinessException;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+
+import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
+import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -13,14 +15,6 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
 import java.util.Map;
-import javax.crypto.Cipher;
-import javax.servlet.http.HttpServletRequest;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
-import com.ruoyi.common.exception.BusinessException;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
 
 
 public class RSAUtils {

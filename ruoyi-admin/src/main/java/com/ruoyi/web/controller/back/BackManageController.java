@@ -210,7 +210,6 @@ public class BackManageController extends BaseController {
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_6);
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
-        mapParam.put("manage", "manage");
         mapParam.put("appid", currentUser.getMerchantId());
         mapParam.put("ordertime", new Date());
         mapParam.put("amount", alipayWithdrawEntity.getAmount());
@@ -219,10 +218,11 @@ public class BackManageController extends BaseController {
         mapParam.put("mobile", alipayWithdrawEntity.getMobile());
         mapParam.put("bankcode", "R");//入款
         mapParam.put("orderStatus", WithdrawalStatusEnum.WITHDRAWAL_STATUS_PROCESS.getCode());
-        mapParam.put("orderId", GenerateOrderNo.getInstance().Generate(StaticConstants.MERCHANT_WITHDRAWAL));
+        mapParam.put("apporderid", GenerateOrderNo.getInstance().Generate(StaticConstants.MERCHANT_WITHDRAWAL));
         mapParam.put("rsasign", HashKit.md5(MapDataUtil.createParam(mapParam)));
         Map<String, String> extraParam = Maps.newHashMap();
         extraParam.put("userId",currentUser.getMerchantId());
+        extraParam.put("manage", "manage");
         return HttpUtils.adminMap2Gateway(mapParam, ipPort + urlPath, extraParam);
     }
 

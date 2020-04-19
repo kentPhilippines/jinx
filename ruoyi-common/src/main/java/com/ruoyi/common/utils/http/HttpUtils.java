@@ -68,10 +68,11 @@ public class HttpUtils {
     public static AjaxResult adminMap2Gateway(Map<String, Object> mapParam, String url, Map<String, String> extraParam) {
         Map<String, Object> postMap = Maps.newHashMap();
         String cipherText = RSAUtils.getEncryptPublicKey(mapParam, StaticConstants.INNER_PLATFORM_PUBLIC_KEY);
-        String eeeee = RSAUtils.privateDecrypt(cipherText,StaticConstants.INNER_PLATFORM_PRIVATE_KEY);
-        postMap.put("cipherText",cipherText);
-        postMap.put("userId",extraParam.get("userId"));
+        postMap.put("cipherText", cipherText);
+        postMap.put("userId", extraParam.get("userId"));
+        postMap.put("manage",extraParam.get("manage"));
         String flag = HttpUtil.post(url, postMap);
+        log.info(">>>>>>>>>>>>>>>>>gateway返回的结果：{}", flag);
         JSONObject json = JSONObject.parseObject(flag);
         String result = json.getString("success");
         switch (result) {
