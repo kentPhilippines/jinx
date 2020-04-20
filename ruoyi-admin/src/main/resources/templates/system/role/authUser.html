@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('角色用户分配')" />
+	<th:block th:include="include :: header('角色用户管理')" />
 </head>
 <body class="gray-bg">
 	<div class="container-div">
@@ -27,9 +27,9 @@
 			</div>
 	        
 	        <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="selectUser()" shiro:hasPermission="system:role:add">
-	                <i class="fa fa-plus"></i> 添加用户
-	            </a>
+<!--				<a class="btn btn-success" onclick="selectUser()" shiro:hasPermission="system:role:add">-->
+<!--	                <i class="fa fa-plus"></i> 添加用户-->
+<!--	            </a>-->
 				<a class="btn btn-danger multiple disabled" onclick="cancelAuthUserAll()" shiro:hasPermission="system:role:remove">
 		            <i class="fa fa-remove"></i> 批量取消授权
 		        </a>

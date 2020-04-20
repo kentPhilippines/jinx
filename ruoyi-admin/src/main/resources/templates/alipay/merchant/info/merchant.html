@@ -47,10 +47,6 @@
             <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:merchant:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="alipay:merchant:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
             <!-- <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:merchant:remove">
                  <i class="fa fa-remove"></i> 删除
              </a>-->
@@ -64,9 +60,9 @@
 <script type="text/javascript" th:src="@{/static/js/download.js}"></script>
 <th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('alipay:merchant:edit')}]];
-    var openAccount = [[${@permission.hasPermi('alipay:merchant:opened')}]];
-    var prefix = ctx + "alipay/merchant";
+    const editFlag = [[${@permission.hasPermi('alipay:merchant:edit')}]];
+    const openAccount = [[${@permission.hasPermi('alipay:merchant:opened')}]];
+    const prefix = ctx + "alipay/merchant";
 
     $(function () {
         var options = {
@@ -104,11 +100,11 @@
                     }
                 },
                 {
-                    field: 'privateKey',
+                    field: 'payPasword',
                     title: '交易密钥',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        return download_private(row);
+                        return download_payPassword(row);
                     }
                 },
                 {
@@ -162,7 +158,7 @@
     /* 商户状态显示 */
     function statusTools(row, param) {
         if (param === 'switchs') {
-            if (row.switchs == 0) {
+            if (row.switchs === 0) {
                 let msg = "确认要【启用】此商户的【用户状态】吗？";
                 let val = 1;
                 return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
@@ -172,7 +168,7 @@
                 return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
             }
         } else if (param === 'receiveOrderState') {
-            if (row.receiveOrderState == 2) {
+            if (row.receiveOrderState === 2) {
                 let msg = "确认要【开启】此商户的【交易状态】吗？";
                 let val = 1;
                 return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
@@ -182,7 +178,7 @@
                 return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
             }
         } else if (param === 'remitOrderState') {
-            if (row.remitOrderState == 2) {
+            if (row.remitOrderState === 2) {
                 let msg = "确认要【开启】此商户的【代付状态】吗？";
                 let val = 1;
                 return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
@@ -210,12 +206,12 @@
 
     /*下载公钥*/
     function download_public(row) {
-        return '<i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载公钥" aria-hidden="true"  onclick="typePassword(\'' + row.publicKey + '\',\'' + row.userName + '公钥\')"></i> ';
+        return '<i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载加密公钥" aria-hidden="true"  onclick="typePassword(\'' + row.publicKey + '\',\'' + row.userName + '公钥\')"></i> ';
     }
 
-    /*下载私钥*/
-    function download_private(row) {
-        return '<i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载交易密钥" aria-hidden="true"  onclick="typePassword(\'' + row.privateKey + '\',\'' + row.userName + '交易密钥\')"></i> ';
+    /*下载交易密钥*/
+    function download_payPassword(row) {
+        return '<i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载交易密钥" aria-hidden="true"  onclick="typePassword(\'' + row.payPasword + '\',\'' + row.userName + '交易密钥\')"></i> ';
     }
 
     /*输入密码下载*/
