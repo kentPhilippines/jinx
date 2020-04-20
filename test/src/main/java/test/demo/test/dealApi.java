@@ -24,7 +24,6 @@ public class dealApi {
 				}
 			});
 		}
-		
 	}
 	static SimpleDateFormat d = new SimpleDateFormat("yyyyMMddHHmmss");
 	 static void test() throws Exception {

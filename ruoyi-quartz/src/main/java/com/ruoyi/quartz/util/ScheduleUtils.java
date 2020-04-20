@@ -1,5 +1,7 @@
 package com.ruoyi.quartz.util;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
@@ -42,6 +44,8 @@ public class ScheduleUtils {
     /**
      * 构建任务键对象
      */
+    @NotNull
+    @Contract(pure = true)
     public static JobKey getJobKey(Long jobId, String jobGroup) {
         return JobKey.jobKey(ScheduleConstants.TASK_CLASS_NAME + jobId, jobGroup);
     }
