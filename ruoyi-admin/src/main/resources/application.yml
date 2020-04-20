@@ -12,7 +12,7 @@ otc:
   profile: D:/otc/admin/uploadPath
   #profile: /home/otc/admin/uploadPath
   # 获取ip地址开关
-  addressEnabled: true
+  addressEnabled: false
 
 # 开发环境配置
 server:

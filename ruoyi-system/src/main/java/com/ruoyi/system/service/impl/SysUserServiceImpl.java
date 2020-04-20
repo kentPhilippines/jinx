@@ -173,12 +173,16 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     @Transactional
     public int insertUser(SysUser user) {
+        List<SysRole> roles = user.getRoles();
+        if (StringUtils.isNull(roles)){
+            throw new BusinessException("请选择用户角色");
+        }
         if (user.getParams().isEmpty()) {
             throw new BusinessException("请选择用户类型");
         }
         if ("1".equals(user.getParams().get("BackUserType").toString())) {
             if (StringUtils.isEmpty(user.getMerchantId())) {
-                throw new BusinessException("商户ID不能为空");
+                throw new BusinessException("商户账户不能为空");
             }
         }
         // 新增用户信息
@@ -199,6 +203,10 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     @Transactional
     public int updateUser(SysUser user) {
+        List<SysRole> roles = user.getRoles();
+        if (StringUtils.isNull(roles)){
+            throw new BusinessException("请选择用户角色");
+        }
         Long userId = user.getUserId();
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(userId);
@@ -240,14 +248,14 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param user 用户对象
      */
     public void insertUserRole(SysUser user) {
-        Long[] roles = user.getRoleIds();
+        List<SysRole> roles = user.getRoles();
         if (StringUtils.isNotNull(roles)) {
             // 新增用户与角色管理
             List<SysUserRole> list = new ArrayList<SysUserRole>();
-            for (Long roleId : roles) {
+            for (SysRole role : roles) {
                 SysUserRole ur = new SysUserRole();
                 ur.setUserId(user.getUserId());
-                ur.setRoleId(roleId);
+                ur.setRoleId(role.getRoleId());
                 list.add(ur);
             }
             if (list.size() > 0) {

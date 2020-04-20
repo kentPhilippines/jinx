@@ -1,6 +1,6 @@
 /**
  * 通用js方法封装处理
- * Copyright (c) 2019 ruoyi
+ * Copyright (c) 2020 otc
  */
 
 // 当前table相关信息
@@ -44,7 +44,7 @@ var table = {
                     sortOrder: "asc",
                     pagination: true,
                     pageSize: 10,
-                    pageList: [10, 25, 50, 100],
+                    pageList: [10, 25, 50, 100, 200],
                     toolbar: "toolbar",
                     striped: false,
                     escape: false,

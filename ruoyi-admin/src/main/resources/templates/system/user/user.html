@@ -39,7 +39,7 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                登录名称：<input type="text" name="loginName"/>
+                                登录账号：<input type="text" name="loginName"/>
                             </li>
                             <li>
                                 手机号码：<input type="text" name="phonenumber"/>
@@ -101,14 +101,14 @@
 <th:block th:include="include :: layout-latest-js"/>
 <th:block th:include="include :: ztree-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('system:user:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('system:user:remove')}]];
-    var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
-    var bindGoogleFlag = [[${@permission.hasPermi('system:user:bind')}]];
-    var prefix = ctx + "system/user";
+    const editFlag = [[${@permission.hasPermi('system:user:edit')}]];
+    const removeFlag = [[${@permission.hasPermi('system:user:remove')}]];
+    const resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
+    const bindGoogleFlag = [[${@permission.hasPermi('system:user:bind')}]];
+    const prefix = ctx + "system/user";
 
     $(function () {
-        var panehHidden = false;
+        let panehHidden = false;
         if ($(this).width() < 769) {
             panehHidden = true;
         }
@@ -118,7 +118,7 @@
     });
 
     function queryUserList() {
-        var options = {
+        const options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
@@ -192,7 +192,7 @@
     }
 
     function queryDeptTree() {
-        var url = ctx + "system/dept/treeData";
+        const url = ctx + "system/dept/treeData";
         var options = {
             url: url,
             expandLevel: 2,
@@ -225,7 +225,7 @@
 
     /* 用户管理-部门 */
     function dept() {
-        var url = ctx + "system/dept";
+        const url = ctx + "system/dept";
         $.modal.openTab("部门管理", url);
     }
 
