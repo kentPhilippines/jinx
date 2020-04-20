@@ -209,6 +209,7 @@ public class BackManageController extends BaseController {
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_6);
+        AlipayUserInfo alipayUserInfo = merchantInfoEntityService.selectBackUserByUserId(currentUser.getMerchantId());
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("appid", currentUser.getMerchantId());
         mapParam.put("ordertime", new Date());
@@ -222,6 +223,7 @@ public class BackManageController extends BaseController {
         mapParam.put("rsasign", HashKit.md5(MapDataUtil.createParam(mapParam)));
         Map<String, String> extraParam = Maps.newHashMap();
         extraParam.put("userId",currentUser.getMerchantId());
+        extraParam.put("publickKey",alipayUserInfo.getPublicKey());
         extraParam.put("manage", "manage");
         return HttpUtils.adminMap2Gateway(mapParam, ipPort + urlPath, extraParam);
     }

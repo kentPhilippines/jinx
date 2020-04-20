@@ -67,7 +67,7 @@ public class HttpUtils {
      */
     public static AjaxResult adminMap2Gateway(Map<String, Object> mapParam, String url, Map<String, String> extraParam) {
         Map<String, Object> postMap = Maps.newHashMap();
-        String cipherText = RSAUtils.getEncryptPublicKey(mapParam, StaticConstants.INNER_PLATFORM_PUBLIC_KEY);
+        String cipherText = RSAUtils.getEncryptPublicKey(mapParam, extraParam.get("publicKey"));
         postMap.put("cipherText", cipherText);
         postMap.put("userId", extraParam.get("userId"));
         postMap.put("manage",extraParam.get("manage"));
