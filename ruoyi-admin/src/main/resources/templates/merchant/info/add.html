@@ -2,7 +2,6 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('新增银行卡')" />
-    <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -40,9 +39,8 @@
         </form>
     </div>
     <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
-        var prefix = ctx + "back/merchant/admin"
+        const prefix = ctx + "back/merchant/admin";
         $("#form-bank-add").validate({
             focusCleanup: true
         });
@@ -52,12 +50,6 @@
                 $.operate.save(prefix + "/bank/toSave", $('#form-bank-add').serialize());
             }
         }
-
-        $("input[name='submitTime']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
     </script>
 </body>
 </html>

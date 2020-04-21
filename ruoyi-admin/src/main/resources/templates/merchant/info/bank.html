@@ -37,7 +37,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:bankCard:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="back:bank:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
             </div>
@@ -48,7 +48,6 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var addFlag = [[${@permission.hasPermi('back:bank:add')}]];
         var removeFlag = [[${@permission.hasPermi('back:bank:remove')}]];
         var prefix = ctx + "back/merchant/admin";
 

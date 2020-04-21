@@ -124,5 +124,4 @@ public class HashKit {
         }
         return hexValue.toString();
     }
-
 }
