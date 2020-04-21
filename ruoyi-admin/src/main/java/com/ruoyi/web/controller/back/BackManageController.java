@@ -215,21 +215,22 @@ public class BackManageController extends BaseController {
         mapParam.put("ordertime", new Date());
         mapParam.put("amount", alipayWithdrawEntity.getAmount());
         mapParam.put("acctno", alipayWithdrawEntity.getBankNo());
-        mapParam.put("accname", currentUser.getLoginName());
+        mapParam.put("acctname", currentUser.getLoginName());
         mapParam.put("mobile", alipayWithdrawEntity.getMobile());
         mapParam.put("bankcode", "R");//入款
         mapParam.put("orderStatus", WithdrawalStatusEnum.WITHDRAWAL_STATUS_PROCESS.getCode());
+        mapParam.put("notifyurl", "http://localhost/iiiii");
         mapParam.put("apporderid", GenerateOrderNo.getInstance().Generate(StaticConstants.MERCHANT_WITHDRAWAL));
-        mapParam.put("rsasign", HashKit.md5(MapDataUtil.createParam(mapParam)));
+        mapParam.put("sign", HashKit.md5(MapDataUtil.createParam(mapParam) + alipayUserInfo.getPayPasword()));
         Map<String, String> extraParam = Maps.newHashMap();
         extraParam.put("userId",currentUser.getMerchantId());
-        extraParam.put("publickKey",alipayUserInfo.getPublicKey());
+        extraParam.put("publicKey",alipayUserInfo.getPublicKey());
         extraParam.put("manage", "manage");
         return HttpUtils.adminMap2Gateway(mapParam, ipPort + urlPath, extraParam);
     }
 
     //商户查询银行卡
-    @RequiresPermissions("bank:bank:view")
+    @RequiresPermissions("back:bank:view")
     @GetMapping("/bank/view")
     public String bankCard() {
         return prefix + "/bank";
@@ -244,7 +245,7 @@ public class BackManageController extends BaseController {
     public TableDataInfo list(AlipayBankListEntity alipayBankListEntity) {
         SysUser sysUser = ShiroUtils.getSysUser();
         alipayBankListEntity.setAccount(sysUser.getMerchantId());
-        alipayBankListEntity.setCardType(3);
+        alipayBankListEntity.setCardType(2);
         startPage();
         List<AlipayBankListEntity> list = alipayBankListEntityService.selectAlipayBankListEntityList(alipayBankListEntity);
         return getDataTable(list);
@@ -261,7 +262,7 @@ public class BackManageController extends BaseController {
     /**
      * 新增保存银行卡列表
      */
-    @RequiresPermissions("backew:bank:add")
+    @RequiresPermissions("back:bank:add")
     @Log(title = "银行卡列表", businessType = BusinessType.INSERT)
     @PostMapping("/bank/toSave")
     @ResponseBody

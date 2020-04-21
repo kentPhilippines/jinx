@@ -12,7 +12,7 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <span>订单号：</span>
+                            <span>平台订单：</span>
                             <input type="text" name="orderId"/>
                         </li>
                         <li>
@@ -20,7 +20,7 @@
                             <input type="text" name="accname"/>
                         </li>
                         <li class="select-selectpicker">
-                            <label>状态： </label>
+                            <label>订单状态： </label>
                             <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('withdrawal_status')}"
                                     class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
@@ -72,22 +72,26 @@
             createUrl: prefix + "/withdrawal/apply",
             openUrl: prefix + "/open/account/{userId}",
             exportUrl: prefix + "/withdrawal/export",
-            modalName: "商户提现记录",
+            modalName: "商户提现",
             columns: [{
                 checkbox: true
             },
                 {
                     field: 'orderId',
-                    title: '订单号'
+                    title: '平台订单'
                 },
                 {
                     field: 'userId',
-                    title: '商户ID'
+                    title: '商户账户'
                 },
                 {
 
                     field: 'bankNo',
                     title: '银行卡号'
+                },
+                {
+                    field: 'bankName',
+                    title: '开户行'
                 },
                 {
                     field: 'accname',
@@ -101,16 +105,12 @@
                     }
                 },
                 {
-                    field: 'bankName',
-                    title: '开户行姓名'
-                },
-                {
                     field: 'amount',
                     title: '提现金额'
                 },
                 {
                     field: 'fee',
-                    title: '手续费'
+                    title: '费率'
                 },
                 {
                     field: 'actualAmount',

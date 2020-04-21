@@ -1,5 +1,6 @@
 package com.ruoyi.common.utils;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Maps;
 
 import java.beans.BeanInfo;
@@ -58,9 +59,9 @@ public class MapDataUtil {
             Object[] key = map.keySet().toArray();
             Arrays.sort(key);
             StringBuffer res = new StringBuffer(128);
-            for (int i = 0; i < key.length; i++) {
-                res.append(key[i] + "=" + map.get(key[i]) + "&");
-            }
+            for (int i = 0; i < key.length; i++)
+                if(ObjectUtil.isNotNull(map.get(key[i])))
+                    res.append(key[i] + "=" + map.get(key[i]) + "&");
             String rStr = res.substring(0, res.length() - 1);
             return rStr;
         } catch (Exception e) {
