@@ -27,7 +27,8 @@
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">费率类型：</label>
             <div class="col-sm-8">
-                <select id="feeType" name="feeType" class="form-control m-b" th:with="type=${@dict.getType('feeType')}" required>
+                <select id="feeType" name="feeType" class="form-control m-b" th:with="type=${@dict.getType('feeType')}"
+                        required>
                     <option value="">请选择费率类型</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
                             th:field="*{feeType}"></option>
@@ -45,7 +46,7 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: select2-js"/>
 <script type="text/javascript">
-    var prefix = ctx + "alipay/rate";
+    const prefix = ctx + "alipay/rate";
     $("#form-rate-edit").validate({
         focusCleanup: true
     });
@@ -56,13 +57,22 @@
         }
     }
 
+    $(function () {
+        const feeType = $('#feeType').val();
+        alert(feeType);
+        if (feeType === '2') {
+            $("#payTypr").val("");
+            $('#payTypr').attr('disabled', true);
+        }
+    });
+
     /*监听事件*/
     $('#feeType').on('select2:select', function (e) {
         const feeType = $('#feeType').select2('val');
-        if (feeType == 2) {
+        if (feeType === '2') {
             $("#payTypr").select2("val", [""]);
             $('#payTypr').prop('disabled', true);
-        }else if(feeType == 1){
+        } else if (feeType === '1') {
             $('#payTypr').prop('disabled', false);
         }
     });
