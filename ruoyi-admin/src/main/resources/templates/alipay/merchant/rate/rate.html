@@ -133,7 +133,8 @@
                 },
                 {
                     field: 'createTime',
-                    title: '创建时间'
+                    title: '创建时间',
+                    align: 'center'
                 },
                 {
                     title: '操作',
@@ -160,14 +161,14 @@
 
     /* 商户费率-停用 */
     function disable(id, userId, feeType) {
-        $.modal.confirm("确认要停用该通道费率吗？", function () {
+        $.modal.confirm("确认要【停用】该通道费率吗？", function () {
             $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType" : feeType, "switchs": 0});
         })
     }
 
     /* 商户费率-开启 */
     function enable(id, userId, feeType) {
-        $.modal.confirm("确认要启用该通道费率吗？", function () {
+        $.modal.confirm("确认要【启用】该通道费率吗？", function () {
             $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType" : feeType, "switchs": 1});
         })
     }

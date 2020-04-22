@@ -81,12 +81,12 @@ public interface ISysUserService {
      * @return 结果
      * @throws Exception 异常
      */
-    int deleteUserByIds(String ids) throws Exception;
+    int deleteUserByIds(String ids, String check) throws Exception;
 
     /**
      * 保存用户信息
      *
-     * @param user 用户信息
+     * @param user 用户信息d
      * @return 结果
      */
     public int insertUser(SysUser user);

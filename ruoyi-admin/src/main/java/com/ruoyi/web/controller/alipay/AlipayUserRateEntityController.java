@@ -32,7 +32,7 @@ public class AlipayUserRateEntityController extends BaseController {
 
 	@Autowired
 	private IAlipayUserRateEntityService alipayUserRateEntityService;
-	@RequiresPermissions("alipay:rate:view")
+	@RequiresPermissions("merchant:rate:view")
 	@GetMapping()
 	public String rate() {
 		return prefix + "/rate";

@@ -135,13 +135,14 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     /**
-     * 通过用户ID删除用户
+     * 通过用户ID删除用户 物理删除
      *
      * @param userId 用户ID
      * @return 结果
      */
     @Override
     public int deleteUserById(Long userId) {
+        checkUserAllowed(new SysUser(userId));
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(userId);
         // 删除用户与岗位表
@@ -152,14 +153,20 @@ public class SysUserServiceImpl implements ISysUserService {
     /**
      * 批量删除用户信息
      *
-     * @param ids 需要删除的数据ID
+     * @param userId 需要删除的数据ID
      * @return 结果
      */
     @Override
-    public int deleteUserByIds(String ids) throws BusinessException {
-        Long[] userIds = Convert.toLongArray(ids);
-        for (Long userId : userIds) {
-            checkUserAllowed(new SysUser(userId));
+    @Transactional
+    public int deleteUserByIds(String userId, String check) throws BusinessException {
+        Long[] userIds = Convert.toLongArray(userId);
+        checkUserAllowed(new SysUser(Long.parseLong(userId)));
+        // 删除用户与角色关联
+        userRoleMapper.deleteUserRoleByUserId(Long.parseLong(userId));
+        // 删除用户与岗位表
+        userPostMapper.deleteUserPostByUserId(Long.parseLong(userId));
+        if("on".equals(check)){
+            return userMapper.deleteUserById(Long.parseLong(userId));
         }
         return userMapper.deleteUserByIds(userIds);
     }

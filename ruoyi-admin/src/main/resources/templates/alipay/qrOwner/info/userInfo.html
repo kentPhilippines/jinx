@@ -12,11 +12,11 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <span>登陆账号：</span>
+                            <span>码商账户：</span>
                             <input type="text" name="userId" id="userId"/>
                         </li>
                         <li>
-                            <span>上级代理：</span>
+                            <span>上级码商账户：</span>
                             <input type="text" name="agent" id="agent"/>
                         </li>
                         <li class="select-selectpicker">
@@ -50,11 +50,7 @@
 
         <div class="btn-group-sm" id="toolbar" role="group">
             <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:userInfo:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="alipay:userInfo:edit">
-                <i class="fa fa-edit"></i> 修改
+                <i class="fa fa-plus"></i> 新增
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -66,10 +62,10 @@
 <th:block th:include="include :: layout-latest-js"/>
 <th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
-    var resetLoginFlag = [[${@permission.hasPermi('alipay:userInfo:reset:login')}]];
-    var resetWithdrawalFlag = [[${@permission.hasPermi('alipay:userInfo:reset:withdrawal')}]];
-    var editFlag = [[${@permission.hasPermi('alipay:userInfo:edit')}]];
-    var prefix = ctx + "alipay/userInfo";
+    const resetLoginFlag = [[${@permission.hasPermi('alipay:userInfo:reset:login')}]];
+    const resetWithdrawalFlag = [[${@permission.hasPermi('alipay:userInfo:reset:withdrawal')}]];
+    const editFlag = [[${@permission.hasPermi('alipay:userInfo:edit')}]];
+    const prefix = ctx + "alipay/userInfo";
 
     $(function () {
         var options = {

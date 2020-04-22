@@ -188,13 +188,18 @@ public class SysUserController extends BaseController {
         return error();
     }
 
+    /**
+     * 删除用户
+     * @param ids 用户ID
+     * @return 结果
+     */
     @RequiresPermissions("system:user:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids) {
+    public AjaxResult remove(String ids, String check) {
         try {
-            return toAjax(userService.deleteUserByIds(ids));
+            return toAjax(userService.deleteUserByIds(ids,check));
         } catch (Exception e) {
             return error(e.getMessage());
         }
