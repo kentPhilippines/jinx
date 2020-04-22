@@ -1101,6 +1101,20 @@ var table = {
             // 删除信息
             remove: function (id) {
                 table.set();
+                $.modal.confirm("确定删除该条" + table.options.modalName + "信息吗？", function () {
+                    var url = $.common.isEmpty(id) ? table.options.removeUrl : table.options.removeUrl.replace("{id}", id);
+                    if (table.options.type == table_type.bootstrapTreeTable) {
+                        $.operate.get(url);
+                    } else {
+                        var data = {"ids": id};
+                        $.operate.submit(url, "post", "json", data);
+                    }
+                });
+
+            },
+            // 删除信息
+            physicalRemove: function (id) {
+                table.set();
                 $.modal.confirm("确定删除该条" + table.options.modalName + "信息吗？<br/>" +
                     "<input type='checkbox' name='details' id='checkcheck'><span>物理删除</span>", function () {
                     var url = $.common.isEmpty(id) ? table.options.removeUrl : table.options.removeUrl.replace("{id}", id);
@@ -1114,6 +1128,7 @@ var table = {
                 });
 
             },
+
             // 批量删除信息
             removeAll: function () {
                 table.set();

@@ -84,7 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	</delete>
  	
  	<delete id="deleteRoleByIds" parameterType="Long">
- 	    delete sys_role set del_flag = '2' where role_id in
+ 	    delete from sys_role where role_id in
  		<foreach collection="array" item="roleId" open="(" separator="," close=")">
  			#{roleId}
         </foreach> 
