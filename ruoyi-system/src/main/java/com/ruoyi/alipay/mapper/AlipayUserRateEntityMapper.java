@@ -23,7 +23,7 @@ public interface AlipayUserRateEntityMapper {
      * @param id 用户产品费率ID
      * @return 用户产品费率
      */
-    public AlipayUserRateEntity selectAlipayUserRateEntityById(Long id);
+    AlipayUserRateEntity selectAlipayUserRateEntityById(Long id);
 
     /**
      * 查询用户产品费率列表
@@ -31,7 +31,7 @@ public interface AlipayUserRateEntityMapper {
      * @param alipayUserRateEntity 用户产品费率
      * @return 用户产品费率集合
      */
-    public List<AlipayUserRateEntity> selectAlipayUserRateEntityList(AlipayUserRateEntity alipayUserRateEntity);
+    List<AlipayUserRateEntity> selectAlipayUserRateEntityList(AlipayUserRateEntity alipayUserRateEntity);
 
     /**
      * 新增用户产品费率
@@ -39,7 +39,7 @@ public interface AlipayUserRateEntityMapper {
      * @param alipayUserRateEntity 用户产品费率
      * @return 结果
      */
-    public int insertAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity);
+    int insertAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity);
 
     /**
      * 修改用户产品费率
@@ -47,7 +47,7 @@ public interface AlipayUserRateEntityMapper {
      * @param alipayUserRateEntity 用户产品费率
      * @return 结果
      */
-    public int updateAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity);
+    int updateAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity);
 
     /**
      * 删除用户产品费率
@@ -55,7 +55,7 @@ public interface AlipayUserRateEntityMapper {
      * @param id 用户产品费率ID
      * @return 结果
      */
-    public int deleteAlipayUserRateEntityById(Long id);
+    int deleteAlipayUserRateEntityById(Long id);
 
     /**
      * 批量删除用户产品费率
@@ -63,7 +63,7 @@ public interface AlipayUserRateEntityMapper {
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteAlipayUserRateEntityByIds(String[] ids);
+    int deleteAlipayUserRateEntityByIds(String[] ids);
 
 
     //下面都是码商费率的逻辑处理

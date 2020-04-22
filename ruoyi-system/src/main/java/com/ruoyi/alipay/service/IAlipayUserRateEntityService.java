@@ -17,7 +17,7 @@ public interface IAlipayUserRateEntityService {
      * @param id 用户产品费率ID
      * @return 用户产品费率
      */
-    public AlipayUserRateEntity selectAlipayUserRateEntityById(Long id);
+    AlipayUserRateEntity selectAlipayUserRateEntityById(Long id);
 
     /**
      * 查询用户产品费率列表
@@ -25,7 +25,7 @@ public interface IAlipayUserRateEntityService {
      * @param alipayUserRateEntity 用户产品费率
      * @return 用户产品费率集合
      */
-    public List<AlipayUserRateEntity> selectAlipayUserRateEntityList(AlipayUserRateEntity alipayUserRateEntity);
+    List<AlipayUserRateEntity> selectAlipayUserRateEntityList(AlipayUserRateEntity alipayUserRateEntity);
 
     /**
      * 新增用户产品费率

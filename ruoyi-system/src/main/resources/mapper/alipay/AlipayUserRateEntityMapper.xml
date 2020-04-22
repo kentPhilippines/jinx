@@ -32,12 +32,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
             <if test="switchs != null "> and switchs = #{switchs}</if>
             <if test="payTypr != null  and payTypr != ''"> and payTypr = #{payTypr}</if>
-            <if test="fee != null "> and fee = #{fee}</if>
             <if test="feeType != null "> and feeType = #{feeType}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
             <if test="status != null "> and status = #{status}</if>
         </where>
+        order by createTime desc
     </select>
     
     <select id="selectAlipayUserRateEntityById" parameterType="Long" resultMap="AlipayUserRateEntityResult">
