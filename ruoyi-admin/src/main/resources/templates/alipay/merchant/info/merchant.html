@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('商户详情列表')"/>
-    <th:block th:include="include :: bootstrap-select-css" />
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -16,17 +16,17 @@
                             <input type="text" id="userId" name="userId"/>
                         </li>
                         <li>
-                            <span>上级代理账户：</span>
-                            <input type="text" id="agent" name="agent"/>
-                        </li>
-                        <li>
                             <span>商户名称：</span>
                             <input type="text" id="userName" name="userName"/>
                         </li>
+                        <li>
+                            <span>上级商户账户：</span>
+                            <input type="text" id="agent" name="agent"/>
+                        </li>
                         <li class="select-selectpicker">
-                            <label>状态： </label>
+                            <label>商户状态： </label>
                             <select id="switchs" name="switchs" th:with="type=${@dict.getType('userSwitchs')}"
-                                    class="selectpicker" data-none-selected-text="请选择" >
+                                    class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
@@ -42,14 +42,10 @@
                 </div>
             </form>
         </div>
-
         <div class="btn-group-sm" id="toolbar" role="group">
             <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:merchant:add">
-                <i class="fa fa-plus"></i> 添加
+                <i class="fa fa-plus"></i> 新增
             </a>
-            <!-- <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="alipay:merchant:remove">
-                 <i class="fa fa-remove"></i> 删除
-             </a>-->
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -58,7 +54,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <script type="text/javascript" th:src="@{/static/js/download.js}"></script>
-<th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     const editFlag = [[${@permission.hasPermi('alipay:merchant:edit')}]];
     const openAccount = [[${@permission.hasPermi('alipay:merchant:opened')}]];
@@ -193,14 +189,22 @@
     /* 商户管理-停用 */
     function disable(userId, param, msg, val) {
         $.modal.confirm(msg, function () {
-            $.operate.post(prefix + "/changeStatus", {"userId": userId, "params[paramKey]":param,"params[paramValue]": val});
+            $.operate.post(prefix + "/changeStatus", {
+                "userId": userId,
+                "params[paramKey]": param,
+                "params[paramValue]": val
+            });
         })
     }
 
     /* 商户管理-启用 */
     function enable(userId, param, msg, val) {
         $.modal.confirm(msg, function () {
-            $.operate.post(prefix + "/changeStatus", {"userId": userId, "params[paramKey]":param,"params[paramValue]": val});
+            $.operate.post(prefix + "/changeStatus", {
+                "userId": userId,
+                "params[paramKey]": param,
+                "params[paramValue]": val
+            });
         })
     }
 
