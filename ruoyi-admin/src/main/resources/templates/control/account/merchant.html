@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('商户风控详情列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -11,19 +12,20 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <p>商户ID：</p>
+                            <p>商户账户：</p>
                             <input type="text" id="userId" name="userId"/>
                         </li>
                         <li>
                             <p>商户名称：</p>
                             <input type="text" id="userName" name="userName"/>
                         </li>
-                        <li>
-                            <p>状态：</p>
-                            <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
+                        <li class="select-selectpicker">
+                            <label>账户状态：</label>
+                            <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}" class="selectpicker"
+                                    data-none-selected-text="请选择">
                                 <option value="">所有</option>
-                                <option th:value="0">开通</option>
-                                <option th:value="-1">关闭</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
@@ -45,9 +47,10 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('control:account:merchant:edit')}]];
-    var prefix = ctx + "control/account";
+    const editFlag = [[${@permission.hasPermi('control:account:merchant:edit')}]];
+    const prefix = ctx + "control/account";
 
     $(function () {
         var options = {

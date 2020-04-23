@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('收款媒介列列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -18,12 +19,14 @@
                             <span>手机号：</span>
                             <input type="text" name="mediumPhone"/>
                         </li>
-                        <li>
-                            <span>媒介类型：</span>
-                            <select id="code" name="code" th:with="type=${@dict.getType('medium_type')}">
-                            <option value="">所有</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                        </select>
+                        <li class="select-selectpicker">
+                            <label>媒介类型：</label>
+                            <select id="code" name="code" th:with="type=${@dict.getType('medium_type')}" class="selectpicker"
+                                    data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
                         </li>
                         <li class="select-time">
                             <span>创建时间：</span>
@@ -52,12 +55,13 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var codeFlag = [[${@permission.hasPermi('alipay:medium:showCode')}]];
-    var removeFlag = [[${@permission.hasPermi('alipay:medium:remove')}]];
+    const codeFlag = [[${@permission.hasPermi('alipay:medium:showCode')}]];
+    const removeFlag = [[${@permission.hasPermi('alipay:medium:remove')}]];
 
-    var mediumType = [[${@dict.getType('medium_type')}]];
-    var prefix = ctx + "alipay/medium";
+    const mediumType = [[${@dict.getType('medium_type')}]];
+    const prefix = ctx + "alipay/medium";
 
     $(function () {
         var options = {
@@ -90,11 +94,11 @@
                 },
                 {
                     field: 'mediumPhone',
-                    title: '绑定手机号'
+                    title: '手机号'
                 },
                 {
                     field: 'qrcodeId',
-                    title: '码商ID'
+                    title: '码商账户'
                 },
                 {
                     field: 'code',
@@ -117,7 +121,8 @@
                 },
                 {
                     field: 'createTime',
-                    title: '创建时间'
+                    title: '创建时间',
+                    align: 'center'
                 },
                 {
                     field: 'mediumNote',
