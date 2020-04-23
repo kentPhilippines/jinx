@@ -51,9 +51,9 @@ public interface StaticConstants {
     public static final String DealPAY_SERVICE_API_VALUE_2 = "order-api-enter-order-card"; //财务人工补单，确认卡商订单状态
 
     //财务处理 代付管理的订单状态
-    public static final String DealPAY_SERVICE_API_VALUE_3 = "";
+    public static final String DealPAY_SERVICE_API_VALUE_3 = "dealpay-api-payfor-card";
     //财务处理卡商充值订单的状态
-    public static final String DealPAY_SERVICE_API_VALUE_4 = "";
+    public static final String DealPAY_SERVICE_API_VALUE_4 = "dealpay-api-recharge-card";
     //财务审核 代付系统加减款
     public static final String DealPAY_SERVICE_API_VALUE_5 = "dealpay-account-api-amount";
 

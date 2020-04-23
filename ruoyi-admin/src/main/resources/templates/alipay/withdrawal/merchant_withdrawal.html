@@ -64,9 +64,8 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-
-    let orderStatus = [[${@dict.getType('withdrawal_status')}]];
-    var prefix = ctx + "alipay/withdrawal";
+    const orderStatus = [[${@dict.getType('withdrawal_status')}]];
+    const prefix = ctx + "alipay/withdrawal";
 
     $(function () {
         var options = {
@@ -97,11 +96,11 @@
                 },
                 {
                     field: 'accname',
-                    title: '提现人姓名'
+                    title: '提现人(后台)'
                 },
                 {
                     field: 'withdrawType',
-                    title: '提现账户类型',
+                    title: '提现类型',
                     formatter: function (value, row, index) {
                         if (row.withdrawType === '1') {
                             return '商户提现';
