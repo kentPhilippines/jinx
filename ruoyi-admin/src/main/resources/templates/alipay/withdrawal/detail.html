@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('商户提现记录详情')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-withdrawal-edit" th:object="${alipayWithdrawEntity}">
+        <input id="orderStatus" name="orderStatus"  type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">平台订单：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.orderId}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">商户账户：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.userId}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">申请人(后台)：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.apply}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">申请人(后台)：</label>
+            <div class="col-sm-8">
+                  <span class="form-control" style="border: 0;" th:if="${alipayWithdrawEntity.orderStatus eq '0'}"
+                        th:text="预下单"></span>
+                <span class="form-control" style="border: 0;" th:if="${alipayWithdrawEntity.orderStatus eq '1'}"
+                      th:text="审核中"></span>
+                <span class="form-control" style="border: 0;" th:if="${alipayWithdrawEntity.orderStatus eq '2'}"
+                      th:text="成功"></span>
+                <span class="form-control" style="border: 0;" th:if="${alipayWithdrawEntity.orderStatus eq '3'}"
+                      th:text="失败"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">银行卡号：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.bankNo}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开户人：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.accname}"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开户行：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.bankName}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">提现金额：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.amount}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">手续费：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.fee}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">实际到账：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.actualAmount}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">审核人：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.approval}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">审核时间：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${#dates.format(alipayWithdrawEntity.submitTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">审核意见：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;" th:text="${alipayWithdrawEntity.comment}"></span>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+</body>
+</html>

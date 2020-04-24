@@ -8,6 +8,7 @@ import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.utils.HashKit;
+import com.ruoyi.common.utils.IpUtils;
 import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
@@ -88,8 +89,9 @@ public class AlipayWithdrawEntityController extends BaseController {
                 .selectAlipayWithdrawEntityList(alipayWithdrawEntity);
         return getDataTable(list);
     }
+
     /**
-     * 手动审核会员提现记录
+     * 显示商户提现详情页
      */
     @GetMapping("/merchant/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
@@ -97,18 +99,6 @@ public class AlipayWithdrawEntityController extends BaseController {
         mmap.put("alipayWithdrawEntity", alipayWithdrawEntity);
         return prefix + "/edit";
     }
-
-    /**
-     * 修改保存手动核会员提现记录
-     */
-    @RequiresPermissions("merchant:withdrawal:edit")
-    @Log(title = "手动核会员提现记录", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayWithdrawEntity dealpayAmount) {
-        return toAjax(alipayWithdrawEntityService.updateAlipayWithdrawEntity(dealpayAmount));
-    }
-
 
     /**
      * 财务审核会员提现记录
@@ -123,38 +113,18 @@ public class AlipayWithdrawEntityController extends BaseController {
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_7);
-        AlipayUserInfo alipayUserInfo = merchantInfoEntityService.selectBackUserByUserId(currentUser.getMerchantId());
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("orderId", alipayWithdrawEntity.getOrderId());//订单号
-        mapParam.put("orderStatus", alipayWithdrawEntity.getStatus());
-        mapParam.put("sign", HashKit.md5(MapDataUtil.createParam(mapParam) + alipayUserInfo.getPayPasword()));
-
-        Map<String, String> extraParam = Maps.newHashMap();
-        extraParam.put("userId",alipayWithdrawEntity.getUserId());
-        extraParam.put("publicKey",alipayUserInfo.getPublicKey());
-        extraParam.put("manage", "check");
-        return HttpUtils.adminMap2Gateway(mapParam, ipPort + urlPath, extraParam);
-    }
-
-    /**
-     * 财务审核会员提现记录
-
-    @RequiresPermissions("merchant:withdrawal:reject")
-    @Log(title = "财务管理", businessType = BusinessType.UPDATE)
-    @PostMapping("/merchant/reject")
-    @ResponseBody
-    public AjaxResult reject(AlipayWithdrawEntity alipayWithdrawEntity) {
-        // 获取当前的用户
-        SysUser currentUser = ShiroUtils.getSysUser();
-        //获取alipay处理接口URL
-        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_3);
-        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
-        mapParam.put("ip", IpUtils.getHostIp() );
-        mapParam.put("orderId", alipayWithdrawEntity.getOrderId());//订单号
+        mapParam.put("userId", alipayWithdrawEntity.getUserId());
+        mapParam.put("orderStatus", alipayWithdrawEntity.getOrderStatus());
+        mapParam.put("approval", currentUser.getLoginName());
+        mapParam.put("comment",alipayWithdrawEntity.getComment());
+        if("3".equals(alipayWithdrawEntity.getOrderStatus())){
+            mapParam.put("ip", IpUtils.getHostIp());
+        }
         return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
-     */
+
 
     /**
      * 导出码商提现记录列表
@@ -184,6 +154,15 @@ public class AlipayWithdrawEntityController extends BaseController {
         return util.exportExcel(list, "withdrawal");
     }
 
-
+    /**
+     * 显示商户提现详情页
+     */
+    @RequiresPermissions("merchant:withdrawal:detail")
+    @GetMapping("/merchant/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap) {
+        AlipayWithdrawEntity alipayWithdrawEntity = alipayWithdrawEntityService.selectAlipayWithdrawEntityById(id);
+        mmap.put("alipayWithdrawEntity", alipayWithdrawEntity);
+        return prefix + "/detail";
+    }
 
 }
