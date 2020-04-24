@@ -210,12 +210,14 @@ public class BackManageController extends BaseController {
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_6);
         AlipayUserInfo alipayUserInfo = merchantInfoEntityService.selectBackUserByUserId(currentUser.getMerchantId());
+        String[] str = alipayWithdrawEntity.getBankNo().split(",");
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("appid", currentUser.getMerchantId());
         mapParam.put("ordertime", new Date());
         mapParam.put("amount", alipayWithdrawEntity.getAmount());
-        mapParam.put("acctno", alipayWithdrawEntity.getBankNo());
-        mapParam.put("acctname", currentUser.getLoginName());
+        mapParam.put("acctno", str[0]);
+        mapParam.put("acctname", str[1]);
+        mapParam.put("apply", currentUser.getLoginName());
         mapParam.put("mobile", alipayWithdrawEntity.getMobile());
         mapParam.put("bankcode", "R");//入款
         mapParam.put("orderStatus", WithdrawalStatusEnum.WITHDRAWAL_STATUS_PROCESS.getCode());
