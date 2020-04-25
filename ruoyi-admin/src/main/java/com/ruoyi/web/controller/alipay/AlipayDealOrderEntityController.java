@@ -1,8 +1,11 @@
 package com.ruoyi.web.controller.alipay;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,24 +86,6 @@ public class AlipayDealOrderEntityController extends BaseController {
         return util.exportExcel(list, "orderDeal");
     }
 
-    /**
-     * 新增交易订单
-     */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
-    }
-
-    /**
-     * 新增保存交易订单
-     */
-    @RequiresPermissions("alipay:orderDeal:add")
-    @Log(title = "交易订单", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayDealOrderEntity alipayDealOrderEntity) {
-        return toAjax(alipayDealOrderEntityService.insertAlipayDealOrderEntity(alipayDealOrderEntity));
-    }
 
     /**
      * 修改交易订单
@@ -125,6 +110,7 @@ public class AlipayDealOrderEntityController extends BaseController {
 
     /**
      * 显示二维码
+     *
      * @param imgId
      * @param mmap
      * @return
@@ -147,6 +133,21 @@ public class AlipayDealOrderEntityController extends BaseController {
         //调用通知方法
 
         return AjaxResult.error("未实现通知方法");
+    }
+
+    @RequiresPermissions("alipay:qr:statistics")
+    @GetMapping("/statistics/qr/order")
+    public String dayStat(ModelMap mmap) {
+        StatisticsEntity statisticsEntity = alipayDealOrderEntityService.selectStatisticsDataByDate(DateUtils.dayStart(), DateUtils.dayEnd());
+        if(statisticsEntity.getTotalCount() == 0){
+            statisticsEntity.setSuccessPercent(0.00);
+        }else{
+            BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
+            Double successPercent = percent.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+            statisticsEntity.setSuccessPercent(successPercent);
+        }
+        mmap.put("statisticsEntity",statisticsEntity);
+        return prefix + "/currentData";
     }
 
 

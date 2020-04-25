@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('当天统计数据')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="orderDayStat" th:object="${statisticsEntity}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" style="font-weight: bold; font-size: 15px;">提现订单总数：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;ont-weight: bold;font-size: 16px;"
+                      th:text="${statisticsEntity.totalCount}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" style="font-weight: bold; font-size: 15px;">成功提现订单数：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;ont-weight: bold;font-size: 16px;"
+                      th:text="${statisticsEntity.successCount}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" style="font-weight: bold; font-size: 15px;">提现总金额：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;ont-weight: bold;font-size: 16px;"
+                      th:text="${#numbers.formatDecimal(statisticsEntity.totalAmount,1,'COMMA',4,'POINT')}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" style="font-weight: bold; font-size: 15px;">成功提现金额：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;ont-weight: bold;font-size: 16px;"
+                      th:text="${#numbers.formatDecimal(statisticsEntity.successAmount,1,'COMMA',4,'POINT')}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" style="font-weight: bold; font-size: 15px;">提现成功率：</label>
+            <div class="col-sm-8">
+                <span class="form-control" style="border: 0;ont-weight: bold;font-size: 16px;"
+                      th:text="${#numbers.formatDecimal(statisticsEntity.successPercent*100,2,1)}+'%'"></span>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "alipay/orderDeal"
+    $("#form-orderDeal-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-orderDeal-add').serialize());
+        }
+    }
+
+    $("input[name='submitTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
+</body>
+</html>

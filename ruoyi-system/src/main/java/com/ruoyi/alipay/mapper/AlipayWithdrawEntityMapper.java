@@ -1,6 +1,9 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayWithdrawEntity;
+import com.ruoyi.common.core.domain.StatisticsEntity;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -27,4 +30,13 @@ public interface AlipayWithdrawEntityMapper {
      */
     List<AlipayWithdrawEntity> selectAlipayWithdrawEntityList(AlipayWithdrawEntity alipayWithdrawEntity);
 
+
+    @Select("select " +
+            "COALESCE(SUM(amount),0) totalAmount," +
+            "COALESCE(SUM(CASE orderStatus WHEN 2 THEN amount ELSE 0 END),0) successAmount," +
+            "COUNT(1) totalCount," +
+            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount " +
+            "from " +
+            "alipay_withdraw where createTime BETWEEN #{dayStart} AND #{dayEnd} and withdrawType = 1 and status = 1")
+    StatisticsEntity selectPayforStatDataByDay(@Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 }

@@ -51,6 +51,10 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:orderApp:export">
                 <i class="fa fa-download"></i> 导出
             </a>
+            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天交易订单数据（商户）')"
+               shiro:hasPermission="alipay:merchant:orderApp">
+                <i class="fa fa-bar-chart"></i> 当天数据统计
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -60,16 +64,16 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    let editFlag = [[${@permission.hasPermi('alipay:orderApp:edit')}]];
-    let updateOrder = [[${@permission.hasPermi('alipay:orderApp:updateOrder')}]];
+    const editFlag = [[${@permission.hasPermi('alipay:orderApp:edit')}]];
+    const updateOrder = [[${@permission.hasPermi('alipay:orderApp:updateOrder')}]];
+    const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
 
-    let orderstatusDatas = [[${@dict.getType('orderStatus')}]];
-
-    let prefix = ctx + "alipay/orderApp";
+    const prefix = ctx + "alipay/orderApp";
     $(function () {
         var options = {
             url: prefix + "/list",
             detailUrl: prefix + "/edit/{id}",
+            statisticsUrl: prefix + "/statistics/merchant/orderApp",
             exportUrl: prefix + "/export",
             modalName: "商户交易订单",
             columns: [{

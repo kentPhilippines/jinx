@@ -1,7 +1,10 @@
 package com.ruoyi.web.controller.alipay;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,25 +69,6 @@ public class AlipayDealOrderAppController extends BaseController {
     }
 
     /**
-     * 新增商户订单登记
-     */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
-    }
-
-    /**
-     * 新增保存商户订单登记
-     */
-    @RequiresPermissions("alipay:orderApp:add")
-    @Log(title = "商户订单登记", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayDealOrderApp alipayDealOrderApp) {
-        return toAjax(alipayDealOrderAppService.insertAlipayDealOrderApp(alipayDealOrderApp));
-    }
-
-    /**
      * 显示商户订单详情
      */
     @GetMapping("/edit/{id}")
@@ -104,6 +88,21 @@ public class AlipayDealOrderAppController extends BaseController {
         order.setOrderStatus("7");//人工处理
         int i = alipayDealOrderAppService.updateAlipayDealOrderApp(order);
         return toAjax(i);
+    }
+
+    @RequiresPermissions("alipay:merchant:orderApp")
+    @GetMapping("/statistics/merchant/orderApp")
+    public String dayStat(ModelMap mmap) {
+        StatisticsEntity statisticsEntity = alipayDealOrderAppService.selectMerchantStatisticsDataByDay(DateUtils.dayStart(), DateUtils.dayEnd());
+        if(statisticsEntity.getTotalCount() == 0){
+            statisticsEntity.setSuccessPercent(0.00);
+        }else{
+            BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
+            Double successPercent = percent.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+            statisticsEntity.setSuccessPercent(successPercent);
+        }
+        mmap.put("statisticsEntity",statisticsEntity);
+        return prefix + "/currentData";
     }
 
 

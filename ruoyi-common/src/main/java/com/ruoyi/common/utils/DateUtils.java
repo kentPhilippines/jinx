@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 /**
@@ -146,7 +147,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(startTime);
         cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - days);
-        List list = new ArrayList();
+        List list = Lists.newArrayList();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         list.add(sdf.format(cal.getTime()));
         for (int k = 1; k <= days; k++) {
@@ -154,5 +155,23 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             list.add(sdf.format(cal.getTime()));
         }
         return list;
+    }
+
+    /**
+     * 当天的开始时间
+     *
+     * @return
+     */
+    public static String dayStart() {
+        return getNowDate() + " 00:00:00";
+    }
+
+    /**
+     * 当天的结束时间
+     *
+     * @return
+     */
+    public static String dayEnd() {
+        return getNowDate() + " 23:59:59";
     }
 }

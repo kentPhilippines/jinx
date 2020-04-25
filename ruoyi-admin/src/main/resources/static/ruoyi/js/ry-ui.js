@@ -1083,6 +1083,30 @@ var table = {
                 };
                 $.modal.openOptions(options);
             },
+            // 当天数据统计
+            statistics: function (title, width, height) {
+                table.set();
+                var _url =  url = table.options.statisticsUrl;
+                var _width = $.common.isEmpty(width) ? "800" : width;
+                var _height = $.common.isEmpty(height) ? ($(window).height() - 50) : height;
+                //如果是移动端，就使用自适应大小弹窗
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|ipad)/i)) {
+                    _width = 'auto';
+                    _height = 'auto';
+                }
+                var options = {
+                    title: title,
+                    width: _width,
+                    height: _height,
+                    url: _url,
+                    skin: 'layui-layer-gray',
+                    btn: ['关闭'],
+                    yes: function (index, layero) {
+                        layer.close(index);
+                    }
+                };
+                $.modal.openOptions(options);
+            },
             // 详细访问地址
             detailUrl: function (id) {
                 var url = "/404.html";

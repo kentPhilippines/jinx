@@ -23,7 +23,7 @@
                             <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}">
                                 <option value="7">人工处理</option>
                                 <option value="2">成功</option>
-                             ${dict.dictValue}"></option>
+                                ${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
@@ -74,23 +74,24 @@
             columns: [{
                 checkbox: true
             },
-                {   field: 'id',            title: '数据id',          visible: false  },
-                {   field: 'orderId',       title: '订单号'    },
-                {   field: 'associatedId',  title: '关联订单号'  },
-                {   field: 'orderQrUser',   title: '码商账户'   },
-                {   field: 'orderStatus',   title: '订单状态',
-                    formatter: function(value, row, index) {
+                {field: 'id', title: '数据id', visible: false},
+                {field: 'orderId', title: '订单号'},
+                {field: 'associatedId', title: '关联订单号'},
+                {field: 'orderQrUser', title: '码商账户'},
+                {
+                    field: 'orderStatus', title: '订单状态',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(orderstatusDatas, value);
                     }
                 },
-                {   field: 'dealAmount',    title: '交易金额'   },
-                {   field: 'createTime',    title: '数据生成时间' },
+                {field: 'dealAmount', title: '交易金额'},
+                {field: 'createTime', title: '数据生成时间'},
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        if(row.orderStatus == 7 ){
+                        if (row.orderStatus == 7) {
                             actions.push('<a class="btn btn-danger btn-xs ' + enterOrder + '" href="javascript:void(0)" onclick="onEnterOrder(\'' + row.id + '\',\'' + "SU" + '\' )"><i class="fa fa-google-wallet"></i>置为成功</a> ');
                             actions.push('<a class="btn btn-danger btn-xs ' + enterOrder + '" href="javascript:void(0)" onclick="onEnterOrder(\'' + row.id + '\',\'' + "ER" + '\' )"><i class="fa fa-google-wallet"></i>置为失败</a> ');
                         }
@@ -100,9 +101,10 @@
         };
         $.table.init(options);
     });
-    function onEnterOrder (id,orderStatus) {
+
+    function onEnterOrder(id, orderStatus) {
         $.modal.confirm("确认修改订单？", function () {
-            $.operate.post(prefix + "/updataOrder", {"id": id,"orderStatus":orderStatus});
+            $.operate.post(prefix + "/updataOrder", {"id": id, "orderStatus": orderStatus});
         })
     }
 </script>

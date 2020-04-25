@@ -56,6 +56,10 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="merchant:withdrawal:export">
                 <i class="fa fa-download"></i> 导出
             </a>
+            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天代付数据(商户)')"
+               shiro:hasPermission="merchant:payfor:statistics">
+                <i class="fa fa-bar-chart"></i> 当天数据统计
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -75,6 +79,7 @@
             url: prefix + "/merchant/list",
             updateUrl: prefix + "/merchant/edit/{id}",
             detailUrl: prefix + "/merchant/detail/{id}",
+            statisticsUrl: prefix + "/statistics/merchant/payfor",
             exportUrl: prefix + "/merchant/export",
             modalName: "会员提现记录",
             columns: [{

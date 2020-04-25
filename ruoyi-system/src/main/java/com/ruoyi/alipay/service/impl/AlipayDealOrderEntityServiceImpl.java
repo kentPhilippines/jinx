@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,21 +46,11 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
 	public List<AlipayDealOrderEntity> selectAlipayDealOrderEntityList(AlipayDealOrderEntity alipayDealOrderEntity) {
 		return alipayDealOrderEntityMapper.selectAlipayDealOrderEntityList(alipayDealOrderEntity);
 	}
+
 	@Override
 	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
 	public List<AlipayDealOrderEntity> selectAlipayOrderList(AlipayDealOrderEntity alipayDealOrderEntity) {
 		return alipayDealOrderEntityMapper.selectAlipayOrderList(alipayDealOrderEntity);
-	}
-
-	/**
-	 * 新增交易订单
-	 * @param alipayDealOrderEntity 交易订单
-	 * @return 结果
-	 */
-	@Override
-	public int insertAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity) {
-		alipayDealOrderEntity.setCreateTime(DateUtils.getNowDate());
-		return alipayDealOrderEntityMapper.insertAlipayDealOrderEntity(alipayDealOrderEntity);
 	}
 
 	/**
@@ -71,5 +63,11 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
 	public int updateAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity) {
 		return alipayDealOrderEntityMapper.updateAlipayDealOrderEntity(alipayDealOrderEntity);
 	}
+
+    @Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public StatisticsEntity selectStatisticsDataByDate(String dayStart, String dayEnd) {
+        return alipayDealOrderEntityMapper.selectStatDateByDay(dayStart,dayEnd);
+    }
 
 }

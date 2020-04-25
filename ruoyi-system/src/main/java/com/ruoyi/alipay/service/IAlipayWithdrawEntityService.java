@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayWithdrawEntity;
+import com.ruoyi.common.core.domain.StatisticsEntity;
+
 import java.util.List;
 
 /**
@@ -27,4 +29,11 @@ public interface IAlipayWithdrawEntityService
      */
     List<AlipayWithdrawEntity> selectAlipayWithdrawEntityList(AlipayWithdrawEntity alipayWithdrawEntity);
 
+    /**
+     * 查询商户提现统计数据
+     * @param dayStart
+     * @param dayEnd
+     * @return
+     */
+    StatisticsEntity selectPayforStatisticsDataByDay(String dayStart, String dayEnd);
 }

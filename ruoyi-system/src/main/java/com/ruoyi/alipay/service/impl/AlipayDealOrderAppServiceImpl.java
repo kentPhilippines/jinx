@@ -7,6 +7,7 @@ import com.ruoyi.alipay.mapper.AlipayDealOrderAppMapper;
 import com.ruoyi.alipay.mapper.MerchantInfoEntityMapper;
 import com.ruoyi.alipay.service.IAlipayDealOrderAppService;
 import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,18 +56,6 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
 	}
 
 	/**
-	 * 新增商户订单登记
-	 * 
-	 * @param alipayDealOrderApp 商户订单登记
-	 * @return 结果
-	 */
-	@Override
-	public int insertAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp) {
-		alipayDealOrderApp.setCreateTime(DateUtils.getNowDate());
-		return alipayDealOrderAppMapper.insertAlipayDealOrderApp(alipayDealOrderApp);
-	}
-
-	/**
 	 * 修改商户订单登记
 	 * 
 	 * @param alipayDealOrderApp 商户订单登记
@@ -94,5 +83,11 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
 			return Lists.newArrayList();
 		}
 	}
+
+    @Override
+	@DataSource(DataSourceType.ALIPAY_SLAVE)
+    public StatisticsEntity selectMerchantStatisticsDataByDay(String dayStart, String dayEnd) {
+		return alipayDealOrderAppMapper.selectOrderAppStatDateByDay(dayStart,dayEnd);
+    }
 
 }

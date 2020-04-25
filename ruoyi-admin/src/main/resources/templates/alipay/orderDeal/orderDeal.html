@@ -67,6 +67,10 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:orderDeal:export">
                 <i class="fa fa-download"></i> 导出
             </a>
+            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天交易数据(码商)')"
+               shiro:hasPermission="alipay:qr:statistics">
+                <i class="fa fa-bar-chart"></i> 当天数据统计
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -76,37 +80,40 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('alipay:orderDeal:edit')}]];
-    var notifyFlag = [[${@permission.hasPermi('alipay:orderDeal:notify')}]];
-    var updataOrder = [[${@permission.hasPermi('alipay:orderDeal:updataOrder')}]];
-    var prefix = ctx + "alipay/orderDeal";
-    var orderstatusDatas = [[${@dict.getType('orderStatus')}]];
+    const editFlag = [[${@permission.hasPermi('alipay:orderDeal:edit')}]];
+    const notifyFlag = [[${@permission.hasPermi('alipay:orderDeal:notify')}]];
+    const updataOrder = [[${@permission.hasPermi('alipay:orderDeal:updataOrder')}]];
+    const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
+
+    const prefix = ctx + "alipay/orderDeal";
 
     $(function () {
         var options = {
             url: prefix + "/list",
             detailUrl: prefix + "/edit/{id}",
+            statisticsUrl: prefix + "/statistics/qr/order",
             exportUrl: prefix + "/export",
             modalName: "码商交易订单",
             columns: [{
                 checkbox: true
             },
-                {   field: 'id',            title: '数据id',          visible: false  },
-                {   field: 'orderId',       title: '平台订单'    },
-              {   field: 'associatedId',  title: '关联订单'  },
-                {   field: 'orderAccount',  title: '商户账号'   },
-                {   field: 'orderQrUser',   title: '码商账户'   },
-                {   field: 'orderStatus',   title: '订单状态',
-                    formatter: function(value, row, index) {
+                {field: 'id', title: '数据id', visible: false},
+                {field: 'orderId', title: '平台订单'},
+                {field: 'associatedId', title: '关联订单'},
+                {field: 'orderAccount', title: '商户账号'},
+                {field: 'orderQrUser', title: '码商账户'},
+                {
+                    field: 'orderStatus', title: '订单状态',
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(orderstatusDatas, value);
                     }
                 },
-                {   field: 'dealAmount',    title: '交易金额'   },
-              /*  {   field: 'dealFee',       title: '手续费'    },*/
-/*                {   field: 'orderQr',       title: '关联二维码'  },*/
-               /* {   field: 'externalOrderId',   title: '外部订单号'  },
-               {   field: 'isNotify',      title: '发送通知'   },*/
-                {   field: 'createTime',    title: '创建时间' },
+                {field: 'dealAmount', title: '交易金额'},
+                /*  {   field: 'dealFee',       title: '手续费'    },*/
+                /*                {   field: 'orderQr',       title: '关联二维码'  },*/
+                /* {   field: 'externalOrderId',   title: '外部订单号'  },
+                {   field: 'isNotify',      title: '发送通知'   },*/
+                {field: 'createTime', title: '创建时间'},
                 {
                     title: '操作',
                     align: 'left',
@@ -114,9 +121,9 @@
                         var actions = [];
                         actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
                         actions.push('<a class="btn btn-warning btn-xs ' + notifyFlag + '" href="javascript:void(0)" onclick="renotify(\'' + row.id + '\')"><i class="fa fa-bell-o"></i>重新通知</a> ');
-                        if(row.orderStatus != 7){
-                           actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>扔给财务</a> ');
-                       }
+                        if (row.orderStatus != 7) {
+                            actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>扔给财务</a> ');
+                        }
                         return actions.join('');
                     }
                 }]
@@ -124,7 +131,7 @@
         $.table.init(options);
     });
 
-    function onUpdataOrder (id) {
+    function onUpdataOrder(id) {
         $.modal.confirm("该笔订单确认转为人工处理", function () {
             $.operate.post(prefix + "/updataOrder", {"id": id});
         });

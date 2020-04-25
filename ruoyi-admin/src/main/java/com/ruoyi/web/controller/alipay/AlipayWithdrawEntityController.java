@@ -1,12 +1,16 @@
 package com.ruoyi.web.controller.alipay;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.common.utils.IpUtils;
 import com.ruoyi.common.utils.MapDataUtil;
@@ -118,8 +122,8 @@ public class AlipayWithdrawEntityController extends BaseController {
         mapParam.put("userId", alipayWithdrawEntity.getUserId());
         mapParam.put("orderStatus", alipayWithdrawEntity.getOrderStatus());
         mapParam.put("approval", currentUser.getLoginName());
-        mapParam.put("comment",alipayWithdrawEntity.getComment());
-        if("3".equals(alipayWithdrawEntity.getOrderStatus())){
+        mapParam.put("comment", alipayWithdrawEntity.getComment());
+        if ("3".equals(alipayWithdrawEntity.getOrderStatus())) {
             mapParam.put("ip", IpUtils.getHostIp());
         }
         return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
@@ -134,7 +138,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     @PostMapping("/qr/export")
     @ResponseBody
     public AjaxResult qr_export(AlipayWithdrawEntity alipayWithdrawEntity) {
-    	alipayWithdrawEntity.setWithdrawType("2");
+        alipayWithdrawEntity.setWithdrawType("2");
         List<AlipayWithdrawEntity> list = alipayWithdrawEntityService.selectAlipayWithdrawEntityList(alipayWithdrawEntity);
         ExcelUtil<AlipayWithdrawEntity> util = new ExcelUtil<AlipayWithdrawEntity>(AlipayWithdrawEntity.class);
         return util.exportExcel(list, "withdrawal");
@@ -148,7 +152,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     @PostMapping("/merchant/export")
     @ResponseBody
     public AjaxResult export(AlipayWithdrawEntity alipayWithdrawEntity) {
-    	alipayWithdrawEntity.setWithdrawType("1");
+        alipayWithdrawEntity.setWithdrawType("1");
         List<AlipayWithdrawEntity> list = alipayWithdrawEntityService.selectAlipayWithdrawEntityList(alipayWithdrawEntity);
         ExcelUtil<AlipayWithdrawEntity> util = new ExcelUtil<AlipayWithdrawEntity>(AlipayWithdrawEntity.class);
         return util.exportExcel(list, "withdrawal");
@@ -163,6 +167,26 @@ public class AlipayWithdrawEntityController extends BaseController {
         AlipayWithdrawEntity alipayWithdrawEntity = alipayWithdrawEntityService.selectAlipayWithdrawEntityById(id);
         mmap.put("alipayWithdrawEntity", alipayWithdrawEntity);
         return prefix + "/detail";
+    }
+
+    /**
+     * 商户提现统计当天数据
+     * @param mmap
+     * @return
+     */
+    @RequiresPermissions("merchant:payfor:statistics")
+    @GetMapping("/statistics/merchant/payfor")
+    public String dayStat(ModelMap mmap) {
+        StatisticsEntity statisticsEntity = alipayWithdrawEntityService.selectPayforStatisticsDataByDay(DateUtils.dayStart(), DateUtils.dayEnd());
+        if (statisticsEntity.getTotalCount() == 0) {
+            statisticsEntity.setSuccessPercent(0.00);
+        } else {
+            BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
+            Double successPercent = percent.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            statisticsEntity.setSuccessPercent(successPercent);
+        }
+        mmap.put("statisticsEntity", statisticsEntity);
+        return prefix + "/currentData";
     }
 
 }
