@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('产品列表列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="col-sm-12 search-collapse">
+        <form id="formId">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        <span>产品系统ID：</span>
+                        <input type="text" name="productId"/>
+                    </li>
+                    <li>
+                        <span>产品名称：</span>
+                        <input type="text" name="productName"/>
+                    </li>
+                    <li class="select-time">
+                        <span>创建时间：</span>
+                        <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                               name="params[beginCreateTime]"/>
+                        <span>-</span>
+                        <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                               name="params[endCreateTime]"/>
+                    </li>
+                    <li>
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+
+    <div class="btn-group-sm" id="toolbar" role="group">
+        <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:product:add">
+            <i class="fa fa-plus"></i> 添加
+        </a>
+        <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+           shiro:hasPermission="alipay:product:edit">
+            <i class="fa fa-edit"></i> 修改
+        </a>
+        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+           shiro:hasPermission="alipay:product:remove">
+            <i class="fa fa-remove"></i> 删除
+        </a>
+        <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:product:export">
+            <i class="fa fa-download"></i> 导出
+        </a>
+    </div>
+    <div class="col-sm-12 select-table table-striped">
+        <table id="bootstrap-table"></table>
+    </div>
+</div>
+</div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    let editFlag = [[${@permission.hasPermi('alipay:product:edit')}]];
+    let removeFlag = [[${@permission.hasPermi('alipay:product:remove')}]];
+
+    let prefix = ctx + "alipay/product";
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "【产品列表】",
+            columns: [{
+                checkbox: true
+            },{
+                field: 'id',
+                title: '数据ID',
+                visible: false
+            },{
+                field: 'productId',
+                title: '产品ID'
+            },{
+                field: 'productCode',
+                title: '产品code'
+            },{
+                field: 'productName',
+                title: '产品名称'
+            },{
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return statusTools(row);
+                }
+            },{
+                field: 'describe',
+                title: '备注'
+            },{
+                field: 'createTime',
+                title: '创建时间'
+            },{
+                field: 'submitTime',
+                title: '更新时间'
+            },{
+                title: '操作',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                    actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                    return actions.join('');
+                }
+            }]
+        };
+        $.table.init(options);
+    });
+    /* 产品状态显示 */
+    function statusTools(row) {
+        if (row.status === 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.id + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.id + '\')"></i> ';
+        }
+    }
+</script>
+</body>
+</html>

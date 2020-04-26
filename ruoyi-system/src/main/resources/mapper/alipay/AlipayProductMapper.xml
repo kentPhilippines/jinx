@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayProductMapper">
+
+      <resultMap type="com.ruoyi.alipay.domain.AlipayProductEntity" id="AlipayProductListEntity">
+      <result property="id"    column="id"    />
+      <result property="productId"    column="productId"    />
+      <result property="productCode"    column="productCode"    />
+      <result property="productName"    column="productName"    />
+      <result property="describe"    column="describe"    />
+      <result property="status"    column="status"    />
+      <result property="createTime"    column="createTime"    />
+      <result property="submitTime"    column="submitTime"    />
+      <result property="retain1"    column="retain1"    />
+      <result property="retain2"    column="retain2"    />
+      <result property="retain3"    column="retain3"    />
+      <result property="retain4"    column="retain4"    />
+    </resultMap>
+    <sql id="selectAlipayProductListEntityVo">
+         select id,productId,productCode,productName,`describe`,status,createTime,submitTime,retain1,retain2,retain3,retain4 from alipay_product
+    </sql>
+
+    <select id="selectAlipayProductListEntityList" parameterType="com.ruoyi.alipay.domain.AlipayProductEntity" resultMap="AlipayProductListEntity">
+        <include refid="selectAlipayProductListEntityVo"/>
+        <where>
+            <if test="productId != null  and productId != ''"> and productId = #{productId}</if>
+            <if test="productCode != null  and productCode != ''"> and productCode = #{productCode}</if>
+            <if test="productName != null  and productName != ''"> and productName = #{productName}</if>
+            <if test="describe != null  and describe != ''"> and `describe` = #{describe}</if>
+            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
+            <if test="retain2 != null  and retain1 != ''"> and retain2 = #{retain2}</if>
+            <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
+            <if test="retain4 != null  and retain4 != ''"> and retain4 = #{retain4}</if>
+            <if test="status != null"> and status = #{status}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+        </where>
+        order by createTime desc
+    </select>
+
+    <insert id="insertAlipayProductListEntity" parameterType="com.ruoyi.alipay.domain.AlipayProductEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null  and productId != ''">productId,</if>
+            <if test="productCode != null  and productCode != ''">productCode,</if>
+            <if test="productName != null  and productName != ''">productName,</if>
+            <if test="describe != null  and describe != ''">`describe`,</if>
+
+            <if test="retain1 != null  and retain1 != ''">retain1,</if>
+            <if test="retain2 != null  and retain2 != ''">retain2,</if>
+            <if test="retain3 != null  and retain3 != ''">retain3,</if>
+            <if test="retain4 != null  and retain4 != ''">retain4,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null  and productId != ''">#{productId},</if>
+            <if test="productCode != null  and productCode != ''">#{productCode},</if>
+            <if test="productName != null  and productName != ''">#{productName},</if>
+            <if test="describe != null  and describe != ''">#{describe},</if>
+            <if test="retain1 != null  and retain1 != ''">#{retain1},</if>
+            <if test="retain2 != null  and retain2 != ''">#{retain2},</if>
+            <if test="retain3 != null  and retain3 != ''">#{retain3},</if>
+            <if test="retain4 != null  and retain4 != ''">#{retain4},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+        </trim>
+    </insert>
+
+    <select id="selectAlipayProductListEntityById" parameterType="Long" resultMap="AlipayProductListEntity">
+        <include refid="selectAlipayProductListEntityVo"/>
+        where id = #{id}
+    </select>
+
+    <update id="updateAlipayProductListEntity" parameterType="com.ruoyi.alipay.domain.AlipayProductEntity">
+        update alipay_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productId != null  and productId != ''">productId = #{productId},</if>
+            <if test="productCode != null  and productCode != ''">productCode = #{productCode},</if>
+            <if test="productName != null  and productName != ''">productName = #{productName},</if>
+            <if test="describe != null  and describe != ''">`describe` = #{describe},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="deleteAlipayProductListEntityByIds" parameterType="String">
+        update alipay_product set status = 2 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>
