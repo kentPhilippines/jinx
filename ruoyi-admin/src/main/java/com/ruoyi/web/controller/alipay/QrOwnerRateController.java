@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.alipay;
 
+import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.domain.AlipayUserRateEntity;
+import com.ruoyi.alipay.service.IAlipayProductService;
 import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -30,9 +32,17 @@ public class QrOwnerRateController extends BaseController {
     @Autowired
     private IAlipayUserRateEntityService alipayUserRateEntityService;
 
+    @Autowired
+    IAlipayProductService iAlipayProductService;
+
     @RequiresPermissions("alipay:qr:rate:view")
     @GetMapping()
-    public String rate() {
+    public String rate(ModelMap modelMap) {
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        modelMap.put("productList", list);
         return prefix + "/rate";
     }
 
@@ -66,7 +76,12 @@ public class QrOwnerRateController extends BaseController {
      * 新增用户产品费率
      */
     @GetMapping("/add")
-    public String add() {
+    public String add(ModelMap modelMap) {
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        modelMap.put("productList", list);
         return prefix + "/add";
     }
 
@@ -87,7 +102,12 @@ public class QrOwnerRateController extends BaseController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityService.selectAlipayUserRateEntityById(id);
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         mmap.put("alipayUserRateEntity", alipayUserRateEntity);
+        mmap.put("productList", list);
         return prefix + "/edit";
     }
 

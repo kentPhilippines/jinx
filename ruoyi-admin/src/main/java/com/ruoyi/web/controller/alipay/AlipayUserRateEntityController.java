@@ -1,6 +1,9 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
+
+import com.ruoyi.alipay.domain.AlipayProductEntity;
+import com.ruoyi.alipay.service.IAlipayProductService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,9 +35,18 @@ public class AlipayUserRateEntityController extends BaseController {
 
 	@Autowired
 	private IAlipayUserRateEntityService alipayUserRateEntityService;
+
+	@Autowired
+	IAlipayProductService iAlipayProductService;
+
 	@RequiresPermissions("merchant:rate:view")
 	@GetMapping()
-	public String rate() {
+	public String rate(ModelMap modelMap) {
+		AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+		alipayProductEntity.setStatus(1);
+		//查询产品类型下拉菜单
+		List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+		modelMap.put("productList", list);
 		return prefix + "/rate";
 	}
 
@@ -68,7 +80,12 @@ public class AlipayUserRateEntityController extends BaseController {
 	 * 新增用户产品费率
 	 */
 	@GetMapping("/add")
-	public String add() {
+	public String add(ModelMap modelMap) {
+		AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+		alipayProductEntity.setStatus(1);
+		//查询产品类型下拉菜单
+		List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+		modelMap.put("productList", list);
 		return prefix + "/add";
 	}
 
@@ -89,6 +106,11 @@ public class AlipayUserRateEntityController extends BaseController {
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
 		AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityService.selectAlipayUserRateEntityById(id);
+		AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+		alipayProductEntity.setStatus(1);
+		//查询产品类型下拉菜单
+		List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+		mmap.put("productList", list);
 		mmap.put("alipayUserRateEntity", alipayUserRateEntity);
 		return prefix + "/edit";
 	}

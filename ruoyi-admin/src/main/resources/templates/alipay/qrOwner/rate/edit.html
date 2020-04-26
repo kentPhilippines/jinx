@@ -2,7 +2,6 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('修改用户产品费率')"/>
-    <th:block th:include="include :: datetimepicker-css"/>
     <th:block th:include="include :: select2-css"/>
 </head>
 <body class="white-bg">
@@ -18,9 +17,9 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">产品类型：</label>
             <div class="col-sm-8">
-                <select name="payTypr" class="form-control m-b" th:with="type=${@dict.getType('payTypr')}">
+                <select id="payTypr" name="payTypr" class="form-control m-b">
                     <option value="">请选择产品类型</option>
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                    <option th:each="product : ${productList}" th:text="${product.productName}" th:value="${product.productId}"
                             th:field="*{payTypr}"></option>
                 </select>
             </div>
@@ -34,7 +33,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">费率类型：</label>
             <div class="col-sm-8">
-                <select name="feeType" class="form-control m-b" th:with="type=${@dict.getType('feeType')}" required>
+                <select id="feeType" name="feeType" class="form-control m-b" th:with="type=${@dict.getType('feeType')}" required>
                     <option value="">请选择费率类型</option>
                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
                             th:field="*{feeType}"></option>
@@ -44,7 +43,6 @@
     </form>
 </div>
 <th:block th:include="include :: footer"/>
-<th:block th:include="include :: datetimepicker-js"/>
 <th:block th:include="include :: select2-js"/>
 <script type="text/javascript">
     var prefix = ctx + "alipay/qr/rate";
@@ -53,15 +51,37 @@
     });
 
     function submitHandler() {
+        let feeType = $('#feeType').select2('val');
+        let payTypr = $("#payTypr").select2('val');
+        if(feeType == 1){
+            if(payTypr == null || payTypr == ''){
+                $.modal.msgError("请选择产品类型", modal_status.FAIL);
+                return;
+            }
+        }
         if ($.validate.form()) {
             $.operate.save(prefix + "/edit", $('#form-rate-edit').serialize());
         }
     }
 
-    $("input[name='submitTime']").datetimepicker({
-        format: "yyyy-mm-dd",
-        minView: "month",
-        autoclose: true
+
+    $(function () {
+        const feeType = $('#feeType').val();
+        if (feeType === '2') {
+            $("#payTypr").val("");
+            $('#payTypr').attr('disabled', true);
+        }
+    });
+
+    /*监听事件*/
+    $('#feeType').on('select2:select', function (e) {
+        let feeType = $('#feeType').select2('val');
+        if (feeType == 2) {
+            $("#payTypr").select2("val", [""]);
+            $('#payTypr').prop('disabled', true);
+        }else if(feeType == 1){
+            $('#payTypr').prop('disabled', false);
+        }
     });
 </script>
 </body>

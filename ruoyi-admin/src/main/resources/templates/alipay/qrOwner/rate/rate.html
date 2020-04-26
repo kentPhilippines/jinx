@@ -26,11 +26,9 @@
                         </li>
                         <li class="select-selectpicker">
                             <label>产品类型：</label>
-                            <select name="payTypr" th:with="type=${@dict.getType('payTypr')}" class="selectpicker"
-                                    data-none-selected-text="请选择">
+                            <select id="payTypr" name="payTypr" class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictValue}"></option>
+                                <option th:each="product : ${productList}" th:text="${product.productName}" th:value="${product.productId}"></option>
                             </select>
                         </li>
                         <li class="select-selectpicker">

@@ -17,9 +17,9 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">产品类型：</label>
             <div class="col-sm-8">
-                <select id="payTypr" name="payTypr" class="form-control m-b" th:with="type=${@dict.getType('payTypr')}">
+                <select id="payTypr" name="payTypr" class="form-control m-b">
                     <option value="">请选择产品类型</option>
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                    <option th:each="product : ${productList}" th:text="${product.productName}" th:value="${product.productId}"
                             th:field="*{payTypr}"></option>
                 </select>
             </div>
@@ -52,6 +52,14 @@
     });
 
     function submitHandler() {
+        let feeType = $('#feeType').select2('val');
+        let payTypr = $("#payTypr").select2('val');
+        if(feeType == 1){
+            if(payTypr == null || payTypr == ''){
+                $.modal.msgError("请选择产品类型", modal_status.FAIL);
+                return;
+            }
+        }
         if ($.validate.form()) {
             $.operate.save(prefix + "/edit", $('#form-rate-edit').serialize());
         }

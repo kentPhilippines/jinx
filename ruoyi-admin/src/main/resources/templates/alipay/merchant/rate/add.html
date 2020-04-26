@@ -15,11 +15,14 @@
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">产品类型：</label>
-            <div class="col-sm-8">
-                <select class="form-control" id="payTypr" name="payTypr" th:with="type=${@dict.getType('payTypr')}">
+            <div class="col-sm-8" th:if="${productList.size()} ne 0">
+                <select class="form-control" name="payTypr" id="payTypr">
                     <option value="">请选择产品类型</option>
-                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    <option th:each="product : ${productList}" th:text="${product.productName}" th:value="${product.productId}"></option>
                 </select>
+            </div>
+            <div class="col-sm-8" th:if="${productList.size()} eq 0">
+                <input class="form-control" type="text" name="flag" id="flag" style="border-width: 0;background-color:white; color: red;" value="未找到任何产品类型" required readonly>
             </div>
         </div>
         <div class="form-group">
