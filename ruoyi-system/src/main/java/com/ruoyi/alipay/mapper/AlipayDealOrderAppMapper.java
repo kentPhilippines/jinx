@@ -54,12 +54,25 @@ public interface AlipayDealOrderAppMapper {
             "</script>")
     List<AlipayDealOrderApp> selectSubAgentMembersOrderList(@Param("userIds") List<String> userIds);
 
-    @Select("select " +
-            "COALESCE(SUM(orderAmount),0) totalAmount," +
-            "COALESCE(SUM(CASE orderStatus WHEN 2 THEN orderAmount ELSE 0 END),0) successAmount," +
-            "COUNT(1) totalCount," +
-            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount " +
-            "from " +
-            "alipay_deal_order_app where createTime BETWEEN #{dayStart} AND #{dayEnd} and orderType = 1")
-    StatisticsEntity selectOrderAppStatDateByDay(@Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
+    @Select("<script>" +
+            "select '所有' userId, " +
+            "coalesce(sum(orderAmount),0) totalAmount," +
+            "coalesce(sum(case orderStatus when 2 then orderAmount else 0 end),0) successAmount," +
+            "count(*) totalCount," +
+            "count(case orderStatus when 2 then id else null end) successCount " +
+            "from alipay_deal_order_app where createTime between #{dayStart} and #{dayEnd} and orderType = 1 " +
+            " union all " +
+            "select orderAccount userId, " +
+            "coalesce(sum(orderAmount),0.00) totalAmount," +
+            "coalesce(sum(case orderStatus when 2 then orderAmount else 0 end),0) successAmount," +
+            "count(*) totalCount," +
+            "count(case orderStatus when 2 then id else null end) successCount " +
+            "from alipay_deal_order_app " +
+            "where createTime between #{dayStart} and #{dayEnd} and orderType = 1 " +
+            "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
+            "and orderAccount = #{statisticsEntity.userId} " +
+            "</if>" +
+            "group by orderAccount " +
+            "</script>")
+    List<StatisticsEntity> selectOrderAppStatDateByDay(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 }

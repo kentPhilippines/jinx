@@ -1,6 +1,10 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayRechargeEntity;
+import com.ruoyi.common.core.domain.StatisticsEntity;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
 import java.util.List;
 
 /**
@@ -17,7 +21,7 @@ public interface AlipayRechargeEntityMapper
      * @param id 充值记录ID
      * @return 充值记录
      */
-    public AlipayRechargeEntity selectAlipayRechargeEntityById(Long id);
+    AlipayRechargeEntity selectAlipayRechargeEntityById(Long id);
 
     /**
      * 查询充值记录列表
@@ -25,37 +29,22 @@ public interface AlipayRechargeEntityMapper
      * @param alipayRechargeEntity 充值记录
      * @return 充值记录集合
      */
-    public List<AlipayRechargeEntity> selectAlipayRechargeEntityList(AlipayRechargeEntity alipayRechargeEntity);
+    List<AlipayRechargeEntity> selectAlipayRechargeEntityList(AlipayRechargeEntity alipayRechargeEntity);
 
-    /**
-     * 新增充值记录
+     /**
+     * 修改状态
      * 
      * @param alipayRechargeEntity 充值记录
      * @return 结果
      */
-    public int insertAlipayRechargeEntity(AlipayRechargeEntity alipayRechargeEntity);
+    int updateAlipayRechargeEntity(AlipayRechargeEntity alipayRechargeEntity);
 
-    /**
-     * 修改充值记录
-     * 
-     * @param alipayRechargeEntity 充值记录
-     * @return 结果
-     */
-    public int updateAlipayRechargeEntity(AlipayRechargeEntity alipayRechargeEntity);
-
-    /**
-     * 删除充值记录
-     * 
-     * @param id 充值记录ID
-     * @return 结果
-     */
-    public int deleteAlipayRechargeEntityById(Long id);
-
-    /**
-     * 批量删除充值记录
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteAlipayRechargeEntityByIds(String[] ids);
+    @Select("select " +
+            "COALESCE(SUM(amount),0) totalAmount," +
+            "COALESCE(SUM(CASE orderStatus WHEN 2 THEN amount ELSE 0 END),0) successAmount," +
+            "COUNT(1) totalCount," +
+            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount " +
+            "from " +
+            "alipay_recharge where createTime BETWEEN #{dayStart} AND #{dayEnd} and orderType = 1 and status = 1")
+    StatisticsEntity selectQrDepositData(@Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 }

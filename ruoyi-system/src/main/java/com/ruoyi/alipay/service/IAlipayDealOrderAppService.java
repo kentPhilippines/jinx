@@ -41,9 +41,10 @@ public interface IAlipayDealOrderAppService {
 
     /**
      * 查询当天商户订单交易统计数据
+     *
      * @param dayStart
      * @param dayEnd
      * @return
      */
-    StatisticsEntity selectMerchantStatisticsDataByDay(String dayStart, String dayEnd);
+    List<StatisticsEntity> selectMerchantStatisticsDataByDay(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
 }

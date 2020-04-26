@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('当天统计数据')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId">
+				<div class="select-list">
+					<ul>
+						<li>
+							<span>商户账户：</span>
+							<input type="text" id="userId" name="userId"/>
+						</li>
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+									class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+									class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    const prefix = ctx + "alipay/orderApp";
+
+    $(function () {
+        var options = {
+            url: prefix + "/statistics/merchant/orderApp",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'userId',
+                    title: '用户账户'
+                },
+                {
+                    field: 'totalCount',
+                    title: '交易订单总数'
+                },
+                {
+                    field: 'successCount',
+                    title: '成功订单总数'
+                },
+                {
+                    field: 'totalAmount',
+                    title: '交易订单金额'
+                },
+                {
+                    field: 'successAmount',
+                    title: '成功订单金额'
+                },
+                {
+                    field: 'successPercent',
+                    title: '成功率',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return calSuccessPercent(row);
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function calSuccessPercent(row) {
+        let molecule = row.successCount;
+        let denominator = row.totalCount;
+        if (molecule == 0 || denominator == 0) {
+            return '<span>0.00%</span>';
+        } else {
+            let result = Math.round(molecule / denominator * 10000) / 100.00;
+            return '<span>' + result + '%</span>';
+        }
+    }
+</script>
+</body>
+</html>

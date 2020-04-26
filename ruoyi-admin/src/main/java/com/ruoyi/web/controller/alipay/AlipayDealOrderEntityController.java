@@ -1,11 +1,15 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,23 +135,37 @@ public class AlipayDealOrderEntityController extends BaseController {
     @ResponseBody
     public AjaxResult renotify(AlipayDealOrderEntity alipayDealOrderEntity) {
         //调用通知方法
+        //获取alipay处理接口URL
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_8);
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        mapParam.put("orderId", alipayDealOrderEntity.getOrderId());
+        return HttpUtils.adminGet2Gateway(mapParam, ipPort + urlPath);
+    }
 
-        return AjaxResult.error("未实现通知方法");
+    /**
+     * 显示统计table
+     */
+    @GetMapping("/statistics/qr/table")
+    public String showTable() {
+        return prefix + "/currentTable";
     }
 
     @RequiresPermissions("alipay:qr:statistics")
-    @GetMapping("/statistics/qr/order")
-    public String dayStat(ModelMap mmap) {
-        StatisticsEntity statisticsEntity = alipayDealOrderEntityService.selectStatisticsDataByDate(DateUtils.dayStart(), DateUtils.dayEnd());
-        if(statisticsEntity.getTotalCount() == 0){
-            statisticsEntity.setSuccessPercent(0.00);
-        }else{
-            BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
-            Double successPercent = percent.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
-            statisticsEntity.setSuccessPercent(successPercent);
-        }
-        mmap.put("statisticsEntity",statisticsEntity);
-        return prefix + "/currentData";
+    @PostMapping("/statistics/qr/order")
+    @ResponseBody
+    public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {
+        startPage();
+        List<StatisticsEntity> list = alipayDealOrderEntityService.selectStatisticsDataByDate(statisticsEntity, DateUtils.dayStart(), DateUtils.dayEnd());
+//        if(statisticsEntity.getTotalCount() == 0){
+//            statisticsEntity.setSuccessPercent(0.00);
+//        }else{
+//            BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
+//            Double successPercent = percent.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+//            statisticsEntity.setSuccessPercent(successPercent);
+//        }
+//        mmap.put("statisticsEntity",statisticsEntity);
+        return getDataTable(list);
     }
 
 

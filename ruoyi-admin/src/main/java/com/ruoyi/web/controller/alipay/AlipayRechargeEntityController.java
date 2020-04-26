@@ -1,7 +1,11 @@
 package com.ruoyi.web.controller.alipay;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.utils.DateUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,24 +72,6 @@ public class AlipayRechargeEntityController extends BaseController {
 		return util.exportExcel(list, "deposit");
 	}
 
-	/**
-	 * 新增充值记录
-	 */
-	@GetMapping("/add")
-	public String add() {
-		return prefix + "/add";
-	}
-
-	/**
-	 * 新增保存充值记录
-	 */
-	@RequiresPermissions("alipay:deposit:add")
-	@Log(title = "充值记录", businessType = BusinessType.INSERT)
-	@PostMapping("/add")
-	@ResponseBody
-	public AjaxResult addSave(AlipayRechargeEntity alipayRechargeEntity) {
-		return toAjax(alipayRechargeEntityService.insertAlipayRechargeEntity(alipayRechargeEntity));
-	}
 
 	/**
 	 * 修改充值记录
@@ -95,28 +81,6 @@ public class AlipayRechargeEntityController extends BaseController {
 		AlipayRechargeEntity alipayRechargeEntity = alipayRechargeEntityService.selectAlipayRechargeEntityById(id);
 		mmap.put("alipayRechargeEntity", alipayRechargeEntity);
 		return prefix + "/edit";
-	}
-
-	/**
-	 * 修改保存充值记录
-	 */
-	@RequiresPermissions("alipay:deposit:edit")
-	@Log(title = "充值记录", businessType = BusinessType.UPDATE)
-	@PostMapping("/edit")
-	@ResponseBody
-	public AjaxResult editSave(AlipayRechargeEntity alipayRechargeEntity) {
-		return toAjax(alipayRechargeEntityService.updateAlipayRechargeEntity(alipayRechargeEntity));
-	}
-
-	/**
-	 * 删除充值记录
-	 */
-	@RequiresPermissions("alipay:deposit:remove")
-	@Log(title = "充值记录", businessType = BusinessType.DELETE)
-	@PostMapping("/remove")
-	@ResponseBody
-	public AjaxResult remove(String ids) {
-		return toAjax(alipayRechargeEntityService.deleteAlipayRechargeEntityByIds(ids));
 	}
 
 	/**
@@ -131,4 +95,25 @@ public class AlipayRechargeEntityController extends BaseController {
 		alipayRechargeEntity.setSubmitTime(new Date());
 		return toAjax(alipayRechargeEntityService.updateAlipayRechargeEntity(alipayRechargeEntity));
 	}
+
+	/**
+	 * 商户提现统计当天数据
+	 * @param mmap
+	 * @return
+	 */
+	@RequiresPermissions("qr:deposit:statistics")
+	@GetMapping("/statistics/qr/deposit")
+	public String dayStat(ModelMap mmap) {
+		StatisticsEntity statisticsEntity = alipayRechargeEntityService.selectQrDpositStatisticsDataByDay(DateUtils.dayStart(), DateUtils.dayEnd());
+		if (statisticsEntity.getTotalCount() == 0) {
+			statisticsEntity.setSuccessPercent(0.00);
+		} else {
+			BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
+			Double successPercent = percent.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			statisticsEntity.setSuccessPercent(successPercent);
+		}
+		mmap.put("statisticsEntity", statisticsEntity);
+		return prefix + "/currentData";
+	}
+
 }

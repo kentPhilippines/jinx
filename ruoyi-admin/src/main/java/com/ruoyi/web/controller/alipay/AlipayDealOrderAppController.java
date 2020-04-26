@@ -90,19 +90,32 @@ public class AlipayDealOrderAppController extends BaseController {
         return toAjax(i);
     }
 
+    /**
+     * 显示统计table
+     */
+    @GetMapping("/statistics/merchant/table")
+    public String showTable() {
+        return prefix + "/currentTable";
+    }
+
+    /**
+     * 商户交易订单统计（仅当天数据）
+     */
     @RequiresPermissions("alipay:merchant:orderApp")
-    @GetMapping("/statistics/merchant/orderApp")
-    public String dayStat(ModelMap mmap) {
-        StatisticsEntity statisticsEntity = alipayDealOrderAppService.selectMerchantStatisticsDataByDay(DateUtils.dayStart(), DateUtils.dayEnd());
-        if(statisticsEntity.getTotalCount() == 0){
-            statisticsEntity.setSuccessPercent(0.00);
-        }else{
-            BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
-            Double successPercent = percent.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
-            statisticsEntity.setSuccessPercent(successPercent);
-        }
-        mmap.put("statisticsEntity",statisticsEntity);
-        return prefix + "/currentData";
+    @PostMapping("/statistics/merchant/orderApp")
+    @ResponseBody
+    public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {
+        startPage();
+        List<StatisticsEntity> list = alipayDealOrderAppService.selectMerchantStatisticsDataByDay(statisticsEntity, DateUtils.dayStart(), DateUtils.dayEnd());
+//        if(statisticsEntity.getTotalCount() == 0){
+//            statisticsEntity.setSuccessPercent(0.00);
+//        }else{
+//            BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
+//            Double successPercent = percent.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+//            statisticsEntity.setSuccessPercent(successPercent);
+//        }
+//        mmap.put("statisticsEntity",statisticsEntity);
+        return getDataTable(list);
     }
 
 

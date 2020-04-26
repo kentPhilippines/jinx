@@ -9,13 +9,12 @@ import com.ruoyi.common.annotation.RepeatSubmit;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.enums.WithdrawalStatusEnum;
 import com.ruoyi.common.exception.BusinessException;
-import com.ruoyi.common.utils.GenerateOrderNo;
-import com.ruoyi.common.utils.HashKit;
-import com.ruoyi.common.utils.MapDataUtil;
+import com.ruoyi.common.utils.*;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
@@ -327,4 +326,30 @@ public class BackManageController extends BaseController {
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(alipayDealOrderApp);
         return getDataTable(list);
     }
+
+    /**
+     * 显示统计table
+     */
+    @GetMapping("/statistics/merchant/admin/table")
+    public String showTable() {
+        return prefix + "/currentTable";
+    }
+
+    /**
+     * 后台管理员商户交易订单统计（仅当天数据）
+     */
+    @RequiresPermissions("back:merchant:statistics")
+    @PostMapping("/statistics/merchant/admin/order")
+    @ResponseBody
+    public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        if(StringUtils.isEmpty(sysUser.getMerchantId())){
+            throw new BusinessException("获取商户账户异常，请联系管理员");
+        }
+        statisticsEntity.setUserId(sysUser.getMerchantId());
+        startPage();
+        List<StatisticsEntity> list = alipayDealOrderAppService.selectMerchantStatisticsDataByDay(statisticsEntity, DateUtils.dayStart(), DateUtils.dayEnd());
+        return getDataTable(list);
+    }
+
 }

@@ -51,5 +51,5 @@ public interface IAlipayDealOrderEntityService {
      * @param dayEnd   结束时间
      * @return 返回结果
      */
-    StatisticsEntity selectStatisticsDataByDate(String dayStart, String dayEnd);
+    List<StatisticsEntity> selectStatisticsDataByDate(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
 }

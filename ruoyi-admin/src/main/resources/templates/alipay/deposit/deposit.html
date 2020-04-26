@@ -56,6 +56,10 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deposit:export">
                 <i class="fa fa-download"></i> 导出
             </a>
+            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天充值订单数据（码商）')"
+               shiro:hasPermission="qr:deposit:statistics">
+                <i class="fa fa-bar-chart"></i> 当天数据统计
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -65,8 +69,6 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('alipay:deposit:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('alipay:deposit:remove')}]];
     let updataOrder = [[${@permission.hasPermi('alipay:deposit:toFinance')}]];
 
     let depositType = [[${@dict.getType('deposit_deal_type')}]];
@@ -76,6 +78,7 @@
     $(function () {
         var options = {
             url: prefix + "/list",
+            statisticsUrl: prefix + "/statistics/qr/deposit",
             exportUrl: prefix + "/export",
             modalName: "码商充值记录",
             columns: [{

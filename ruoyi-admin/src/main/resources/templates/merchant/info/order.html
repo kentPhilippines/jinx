@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('商户订单登记列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -14,9 +15,10 @@
                             <span>订单号：</span>
                             <input type="text" name="appOrderId"/>
                         </li>
-                        <li>
-                            <span>订单状态：</span>
-                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}">
+                        <li class="select-selectpicker">
+                            <label>订单状态： </label>
+                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"
+                                    class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
@@ -42,8 +44,9 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:orderApp:export">
-                <i class="fa fa-download"></i> 导出
+            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天交易订单数据（商户）')"
+               shiro:hasPermission="back:merchant:statistics">
+                <i class="fa fa-bar-chart"></i> 当天数据统计
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -52,15 +55,17 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('alipay:orderApp:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('alipay:orderApp:remove')}]];
-    var prefix = ctx + "back/merchant/admin";
-    var orderstatusDatas = [[${@dict.getType('orderStatus')}]];
+    const editFlag = [[${@permission.hasPermi('alipay:orderApp:edit')}]];
+    const removeFlag = [[${@permission.hasPermi('alipay:orderApp:remove')}]];
+    const prefix = ctx + "back/merchant/admin";
+    const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
     $(function () {
         var options = {
             url: prefix + "/order/list",
             exportUrl: prefix + "/order/export",
+            statisticsUrl: prefix + "/statistics/merchant/admin/table",
             modalName: "商户订单记录",
             columns: [{
                 checkbox: true

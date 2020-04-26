@@ -40,12 +40,25 @@ public interface AlipayDealOrderEntityMapper {
      */
     int updateAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity);
 
-    @Select("select " +
-            "COALESCE(SUM(dealAmount),0) totalAmount," +
-            "COALESCE(SUM(CASE orderStatus WHEN 2 THEN dealAmount ELSE 0 END),0) successAmount," +
-            "COUNT(1) totalCount," +
-            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount " +
-            "from " +
-            "alipay_deal_order where createTime BETWEEN #{dayStart} AND #{dayEnd} and orderType = 1")
-    StatisticsEntity selectStatDateByDay(@Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
+    @Select("<script>" +
+            "select '所有' userId, '所有' productName, " +
+            "coalesce(sum(dealAmount),0) totalAmount," +
+            "coalesce(sum(case orderStatus when 2 then dealAmount else 0 end),0) successAmount," +
+            "count(*) totalCount," +
+            "count(case orderStatus when 2 then id else null end) successCount " +
+            "from alipay_deal_order where createTime between #{dayStart} and #{dayEnd} and orderType = 1 " +
+            " union all " +
+            "select o.orderQrUser userId, p.productName ," +
+            "coalesce(sum(dealAmount),0.00) totalAmount," +
+            "coalesce(sum(case orderStatus when 2 then dealAmount else 0 end),0) successAmount," +
+            "count(*) totalCount," +
+            "count(case orderStatus when 2 then o.id else null end) successCount " +
+            "from alipay_deal_order o left join alipay_product p on o.retain1 = p.productId " +
+            "where o.createTime between #{dayStart} and #{dayEnd} and orderType = 1 " +
+            "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
+            "and o.orderQrUser = #{statisticsEntity.userId} " +
+            "</if>" +
+            "group by o.orderQrUser, o.retain1 " +
+            "</script>")
+    List<StatisticsEntity> selectStatDateByDay(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 }

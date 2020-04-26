@@ -1,15 +1,28 @@
 package com.ruoyi.common.core.domain;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class StatisticsEntity implements Serializable {
+public class StatisticsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 5547968516186055805L;
 
     /**
      * 用户账户
      */
     private String userId;
+
+    /**
+     * 产品类型
+     */
+    private String productType;
+
+    /**
+     * 产品名称
+     */
+    private String productName;
 
     /**
      * 交易订单总金额
@@ -82,5 +95,35 @@ public class StatisticsEntity implements Serializable {
 
     public void setSuccessPercent(Double successPercent) {
         this.successPercent = successPercent;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("userId", getUserId())
+                .append("productType", getProductType())
+                .append("productName", getProductName())
+                .append("totalAmount", getTotalAmount())
+                .append("successAmount", getSuccessAmount())
+                .append("totalCount", getTotalCount())
+                .append("successCount", getSuccessCount())
+                .append("successPercent", getSuccessPercent())
+                .toString();
     }
 }

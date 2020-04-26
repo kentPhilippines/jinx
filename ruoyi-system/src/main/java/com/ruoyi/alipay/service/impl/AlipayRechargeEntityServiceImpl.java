@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,19 +48,8 @@ public class AlipayRechargeEntityServiceImpl implements IAlipayRechargeEntitySer
 	}
 
 	/**
-	 * 新增充值记录
-	 * @param alipayRechargeEntity 充值记录
-	 * @return 结果
-	 */
-	@Override
-	public int insertAlipayRechargeEntity(AlipayRechargeEntity alipayRechargeEntity) {
-		alipayRechargeEntity.setCreateTime(DateUtils.getNowDate());
-		return alipayRechargeEntityMapper.insertAlipayRechargeEntity(alipayRechargeEntity);
-	}
-
-	/**
-	 * 修改充值记录
-	 * 
+	 * 财务修改订单状态
+	 *
 	 * @param alipayRechargeEntity 充值记录
 	 * @return 结果
 	 */
@@ -68,25 +59,10 @@ public class AlipayRechargeEntityServiceImpl implements IAlipayRechargeEntitySer
 		return alipayRechargeEntityMapper.updateAlipayRechargeEntity(alipayRechargeEntity);
 	}
 
-	/**
-	 * 删除充值记录对象
-	 * 
-	 * @param ids 需要删除的数据ID
-	 * @return 结果
-	 */
-	@Override
-	public int deleteAlipayRechargeEntityByIds(String ids) {
-		return alipayRechargeEntityMapper.deleteAlipayRechargeEntityByIds(Convert.toStrArray(ids));
-	}
+    @Override
+	@DataSource(DataSourceType.ALIPAY_SLAVE)
+    public StatisticsEntity selectQrDpositStatisticsDataByDay(String dayStart, String dayEnd) {
+		return alipayRechargeEntityMapper.selectQrDepositData(dayStart,dayEnd);
+    }
 
-	/**
-	 * 删除充值记录信息
-	 * 
-	 * @param id 充值记录ID
-	 * @return 结果
-	 */
-	@Override
-	public int deleteAlipayRechargeEntityById(Long id) {
-		return alipayRechargeEntityMapper.deleteAlipayRechargeEntityById(id);
-	}
 }

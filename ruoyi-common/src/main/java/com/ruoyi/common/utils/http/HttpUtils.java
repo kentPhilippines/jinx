@@ -24,6 +24,7 @@ import com.google.common.collect.Maps;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.RSAUtils;
 import com.ruoyi.common.utils.StringUtils;
 import org.slf4j.Logger;
@@ -84,6 +85,28 @@ public class HttpUtils {
         }
         return AjaxResult.warn("请求出错，请联系技术人员");
     }
+
+    public static AjaxResult adminGet2Gateway(Map<String, Object> map, String url) {
+        String paramStr =  MapDataUtil.createParam(map);
+        String flag = sendGet(url , paramStr);
+        if ("ConnectException".equals(flag)) {
+            throw new BusinessException("操作失败，请求alipay接口地址超时,URL=" + url);
+        }
+        if (StringUtils.isEmpty(flag)) {
+            throw new BusinessException("操作失败，请刷新重试");
+        }
+        JSONObject json = JSONObject.parseObject(flag);
+        String result = json.getString("success");
+        switch (result) {
+            case "true":
+                return AjaxResult.success();
+            case "false":
+                String message = json.getString("message");
+                return AjaxResult.error(message);
+        }
+        return AjaxResult.warn("请求出错，请联系技术人员");
+    }
+
 
     /**
      * 向指定 URL 发送GET方法的请求
