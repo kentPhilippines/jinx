@@ -63,4 +63,10 @@ public class IAlipayProductServiceImpl implements IAlipayProductService {
         return alipayProductMapper.deleteAlipayProductListEntityByIds(Convert.toStrArray(ids));
     }
 
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public int updateProductStatusById(AlipayProductEntity alipayProductEntity) {
+        return alipayProductMapper.updateAlipayProductById(alipayProductEntity);
+    }
+
 }

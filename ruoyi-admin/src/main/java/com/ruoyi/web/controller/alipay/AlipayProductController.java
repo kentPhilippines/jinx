@@ -109,4 +109,15 @@ public class AlipayProductController extends BaseController {
     }
 
 
+
+    /**
+     * 产品状态修改（调用api）
+     */
+    @Log(title = "产品查询", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("alipay:product:status")
+    @PostMapping("/changeStatus")
+    @ResponseBody
+    public AjaxResult changeStatus(AlipayProductEntity alipayProductEntity) {
+        return toAjax(iAlipayProductService.updateProductStatusById(alipayProductEntity));
+    }
 }

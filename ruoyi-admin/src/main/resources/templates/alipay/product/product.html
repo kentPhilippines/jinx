@@ -127,6 +127,19 @@
             return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.id + '\')"></i> ';
         }
     }
+    /* 产品-停用 */
+    function disable(id) {
+        $.modal.confirm("确认要【启用】此产品吗", function () {
+            $.operate.post(prefix + "/changeStatus", {"id": id, "status": 1});
+        })
+    }
+
+    /* 产品-启用 */
+    function enable(id) {
+        $.modal.confirm("确认要【停用】此产品吗", function () {
+            $.operate.post(prefix + "/changeStatus", {"id": id, "status": 2});
+        })
+    }
 </script>
 </body>
 </html>

@@ -40,4 +40,10 @@ public interface IAlipayProductService {
      */
     int deleteAlipayProductListEntityByIds(String ids);
 
+    /**
+     *
+     * @param alipayProductEntity
+     * @return
+     */
+    int updateProductStatusById(AlipayProductEntity alipayProductEntity);
 }

@@ -2,6 +2,7 @@ package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayProductEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -45,4 +46,11 @@ public interface AlipayProductMapper {
      */
     int deleteAlipayProductListEntityByIds(String[] toStrArray);
 
+    /**
+     * <p>根据Id更新产品状态</p>
+     * @param alipayProductEntity
+     * @return
+     */
+    @Update("update alipay_product set status = #{status} where id = #{id} ")
+    int updateAlipayProductById(AlipayProductEntity alipayProductEntity);
 }
