@@ -64,11 +64,11 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:orderDeal:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="orderDeal:qr:export">
                 <i class="fa fa-download"></i> 导出
             </a>
             <a class="btn btn-primary" onclick="$.operate.statistics('统计当天交易数据(码商)')"
-               shiro:hasPermission="alipay:qr:statistics">
+               shiro:hasPermission="orderDeal:qr:statistics">
                 <i class="fa fa-bar-chart"></i> 当天数据统计
             </a>
         </div>
@@ -80,10 +80,13 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    const editFlag = [[${@permission.hasPermi('alipay:orderDeal:edit')}]];
-    const notifyFlag = [[${@permission.hasPermi('alipay:orderDeal:notify')}]];
-    const updataOrder = [[${@permission.hasPermi('alipay:orderDeal:updataOrder')}]];
+    //权限
+    const detailFlag = [[${@permission.hasPermi('orderDeal:qr:detail')}]];
+    const notifyFlag = [[${@permission.hasPermi('orderDeal:qr:renotify')}]];
+    const updataOrder = [[${@permission.hasPermi('orderDeal:qr:status')}]];
+    //数据
     const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
+    //请求路径
     const prefix = ctx + "alipay/orderDeal";
 
     $(function () {
@@ -96,7 +99,7 @@
             columns: [{
                 checkbox: true
             },
-                {field: 'id', title: '数据id', visible: false},
+                {field: 'id', title: '数据ID', visible: false},
                 {field: 'orderId', title: '平台订单'},
                 {field: 'associatedId', title: '关联订单'},
                 {field: 'orderAccount', title: '商户账号'},
@@ -118,12 +121,12 @@
                     align: 'left',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
                         if (row.orderStatus === '1') {
                             actions.push('<a class="btn btn-warning btn-xs ' + notifyFlag + '" href="javascript:void(0)" onclick="renotify(\'' + row.orderId + '\')"><i class="fa fa-bell-o"></i>重新通知</a> ');
                         }
                         if (row.orderStatus != 7) {
-                            actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>扔给财务</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
                         }
                         return actions.join('');
                     }

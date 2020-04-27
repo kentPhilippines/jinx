@@ -37,14 +37,4 @@ public interface IAlipayRechargeEntityService
      */
     int updateAlipayRechargeEntity(AlipayRechargeEntity alipayRechargeEntity);
 
-    /**
-     * 统计当天订单数据
-     *
-     * @param dayStart
-     * @param dayEnd
-     * @return
-     */
-    default StatisticsEntity selectQrDpositStatisticsDataByDay(String dayStart, String dayEnd) {
-        return null;
-    }
 }

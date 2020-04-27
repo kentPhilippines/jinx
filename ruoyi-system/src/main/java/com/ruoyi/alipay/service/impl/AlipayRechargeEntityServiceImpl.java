@@ -59,10 +59,4 @@ public class AlipayRechargeEntityServiceImpl implements IAlipayRechargeEntitySer
 		return alipayRechargeEntityMapper.updateAlipayRechargeEntity(alipayRechargeEntity);
 	}
 
-    @Override
-	@DataSource(DataSourceType.ALIPAY_SLAVE)
-    public StatisticsEntity selectQrDpositStatisticsDataByDay(String dayStart, String dayEnd) {
-		return alipayRechargeEntityMapper.selectQrDepositData(dayStart,dayEnd);
-    }
-
 }

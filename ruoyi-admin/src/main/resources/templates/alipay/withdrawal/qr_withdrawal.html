@@ -52,7 +52,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="qr:withdrawal:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="payfor:withdrawal:qr:export">
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
@@ -73,6 +73,7 @@
             updateUrl: prefix + "/qr/edit/{id}",
             exportUrl: prefix + "/qr/export",
             modalName: "会员提现记录",
+            showFooter: true,
             columns: [{
                 checkbox: true
             },
@@ -83,31 +84,11 @@
                 },
                 {
                     field: 'orderId',
-                    title: '订单号'
+                    title: '平台订单'
                 },
                 {
                     field: 'userId',
                     title: '用户账户'
-                },
-                {
-
-                    field: 'bankNo',
-                    title: '银行卡号'
-                },
-                {
-                    field: 'accname',
-                    title: '提现人姓名'
-                },
-                {
-                    field: 'withdrawType',
-                    title: '提现账户类型',
-                    formatter: function (value, row, index) {
-                        if (row.withdrawType === '1') {
-                            return '商户提现';
-                        } else if (row.withdrawType === '2') {
-                            return '码商提现';
-                        }
-                    }
                 },
                 {
                     field: 'orderStatus',
@@ -117,12 +98,43 @@
                     }
                 },
                 {
+
+                    field: 'bankNo',
+                    title: '银行卡号'
+                },
+                {
                     field: 'bankName',
-                    title: '开户行姓名'
+                    title: '开户行'
+                },
+                {
+                    field: 'accname',
+                    title: '开户人'
+                },
+                {
+                    field: 'mobile',
+                    title: '手机号'
+                },
+                {
+                    field: 'withdrawType',
+                    title: '提现类型',
+                    formatter: function (value, row, index) {
+                        if (row.withdrawType === '1') {
+                            return '商户提现';
+                        } else if (row.withdrawType === '2') {
+                            return '码商提现';
+                        }
+                    }
                 },
                 {
                     field: 'amount',
-                    title: '提现金额'
+                    title: '提现金额',
+                    footerFormatter:function (rows) {
+                        var sumBalance = 0;
+                        for (var i in rows) {
+                            sumBalance += parseFloat(rows[i].amount);
+                        }
+                        return "合计：" + sumBalance;
+                    }
                 },
                 {
                     field: 'fee',
@@ -131,10 +143,6 @@
                 {
                     field: 'actualAmount',
                     title: '实际到账'
-                },
-                {
-                    field: 'mobile',
-                    title: '手机号'
                 },
                 {
                     field: 'createTime',

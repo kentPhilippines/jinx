@@ -39,12 +39,4 @@ public interface AlipayRechargeEntityMapper
      */
     int updateAlipayRechargeEntity(AlipayRechargeEntity alipayRechargeEntity);
 
-    @Select("select " +
-            "COALESCE(SUM(amount),0) totalAmount," +
-            "COALESCE(SUM(CASE orderStatus WHEN 2 THEN amount ELSE 0 END),0) successAmount," +
-            "COUNT(1) totalCount," +
-            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount " +
-            "from " +
-            "alipay_recharge where createTime BETWEEN #{dayStart} AND #{dayEnd} and orderType = 1 and status = 1")
-    StatisticsEntity selectQrDepositData(@Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 }

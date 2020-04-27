@@ -53,12 +53,8 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="merchant:withdrawal:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="payfor:withdrawal:merchant:export">
                 <i class="fa fa-download"></i> 导出
-            </a>
-            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天代付数据(商户)')"
-               shiro:hasPermission="merchant:payfor:statistics">
-                <i class="fa fa-bar-chart"></i> 当天数据统计
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -103,6 +99,13 @@
                     title: '商户账户'
                 },
                 {
+                    field: 'orderStatus',
+                    title: '订单状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(orderStatus, value);
+                    }
+                },
+                {
 
                     field: 'bankNo',
                     title: '银行卡号'
@@ -124,13 +127,6 @@
                         } else if (row.withdrawType === '2') {
                             return '码商提现';
                         }
-                    }
-                },
-                {
-                    field: 'orderStatus',
-                    title: '订单状态',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(orderStatus, value);
                     }
                 },
                 {

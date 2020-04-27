@@ -39,7 +39,7 @@ public class AlipayRechargeEntityController extends BaseController {
 	@Autowired
 	private IAlipayRechargeEntityService alipayRechargeEntityService;
 
-	@RequiresPermissions("alipay:deposit:view")
+	@RequiresPermissions("deposit:qr:view")
 	@GetMapping()
 	public String deposit() {
 		return prefix + "/deposit";
@@ -48,7 +48,7 @@ public class AlipayRechargeEntityController extends BaseController {
 	/**
 	 * 查询充值记录列表
 	 */
-	@RequiresPermissions("alipay:deposit:list")
+	@RequiresPermissions("deposit:qr:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayRechargeEntity alipayRechargeEntity) {
@@ -61,8 +61,8 @@ public class AlipayRechargeEntityController extends BaseController {
 	/**
 	 * 导出充值记录列表
 	 */
-	@RequiresPermissions("alipay:deposit:export")
-	@Log(title = "充值记录", businessType = BusinessType.EXPORT)
+	@RequiresPermissions("deposit:qr:export")
+	@Log(title = "码商充值订单", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody
 	public AjaxResult export(AlipayRechargeEntity alipayRechargeEntity) {
@@ -72,9 +72,8 @@ public class AlipayRechargeEntityController extends BaseController {
 		return util.exportExcel(list, "deposit");
 	}
 
-
 	/**
-	 * 修改充值记录
+	 * 显示订单详情
 	 */
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
@@ -86,34 +85,14 @@ public class AlipayRechargeEntityController extends BaseController {
 	/**
 	 * 转发财务
 	 */
-	@RequiresPermissions("alipay:deposit:toFinance")
-	@Log(title = "充值记录", businessType = BusinessType.DELETE)
+	@RequiresPermissions("deposit:qr:toFinance")
+	@Log(title = "码商充值订单", businessType = BusinessType.DELETE)
 	@PostMapping("/updateOrder")
 	@ResponseBody
 	public AjaxResult transfer(AlipayRechargeEntity alipayRechargeEntity){
 		alipayRechargeEntity.setOrderStatus("4");
 		alipayRechargeEntity.setSubmitTime(new Date());
 		return toAjax(alipayRechargeEntityService.updateAlipayRechargeEntity(alipayRechargeEntity));
-	}
-
-	/**
-	 * 商户提现统计当天数据
-	 * @param mmap
-	 * @return
-	 */
-	@RequiresPermissions("qr:deposit:statistics")
-	@GetMapping("/statistics/qr/deposit")
-	public String dayStat(ModelMap mmap) {
-		StatisticsEntity statisticsEntity = alipayRechargeEntityService.selectQrDpositStatisticsDataByDay(DateUtils.dayStart(), DateUtils.dayEnd());
-		if (statisticsEntity.getTotalCount() == 0) {
-			statisticsEntity.setSuccessPercent(0.00);
-		} else {
-			BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
-			Double successPercent = percent.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-			statisticsEntity.setSuccessPercent(successPercent);
-		}
-		mmap.put("statisticsEntity", statisticsEntity);
-		return prefix + "/currentData";
 	}
 
 }

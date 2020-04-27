@@ -54,7 +54,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
 
-    @RequiresPermissions("qr:withdrawal:view")
+    @RequiresPermissions("payfor:withdrawal:qr:view")
     @GetMapping("/qr")
     public String qr_withdrawal() {
         return prefix + "/qr_withdrawal";
@@ -63,7 +63,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 查询码商提现记录列表
      */
-    @RequiresPermissions("qr:withdrawal:list")
+    @RequiresPermissions("payfor:withdrawal:qr:list")
     @PostMapping("/qr/list")
     @ResponseBody
     public TableDataInfo qr_list(AlipayWithdrawEntity alipayWithdrawEntity) {
@@ -74,7 +74,7 @@ public class AlipayWithdrawEntityController extends BaseController {
         return getDataTable(list);
     }
 
-    @RequiresPermissions("merchant:withdrawal:view")
+    @RequiresPermissions("payfor:withdrawal:merchant:view")
     @GetMapping("/merchant")
     public String merchant_withdrawal() {
         return prefix + "/merchant_withdrawal";
@@ -83,7 +83,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 查询商户提现记录列表
      */
-    @RequiresPermissions("merchant:withdrawal:list")
+    @RequiresPermissions("payfor:withdrawal:merchant:list")
     @PostMapping("/merchant/list")
     @ResponseBody
     public TableDataInfo merchant_list(AlipayWithdrawEntity alipayWithdrawEntity) {
@@ -133,7 +133,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 导出码商提现记录列表
      */
-    @RequiresPermissions("qr:withdrawal:export")
+    @RequiresPermissions("payfor:withdrawal:qr:export")
     @Log(title = "码商代付订单", businessType = BusinessType.EXPORT)
     @PostMapping("/qr/export")
     @ResponseBody
@@ -147,7 +147,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 导出商户提现记录列表
      */
-    @RequiresPermissions("merchant:withdrawal:export")
+    @RequiresPermissions("payfor:withdrawal:merchant:export")
     @Log(title = "商户代付订单", businessType = BusinessType.EXPORT)
     @PostMapping("/merchant/export")
     @ResponseBody

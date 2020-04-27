@@ -45,7 +45,7 @@ public class AlipayDealOrderEntityController extends BaseController {
     @Autowired
     private IAlipayDealOrderEntityService alipayDealOrderEntityService;
 
-    @RequiresPermissions("alipay:orderDeal:view")
+    @RequiresPermissions("orderDeal:qr:view")
     @GetMapping()
     public String orderDeal() {
         return prefix + "/orderDeal";
@@ -54,7 +54,7 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 查询交易订单列表
      */
-    @RequiresPermissions("alipay:orderDeal:list")
+    @RequiresPermissions("orderDeal:qr:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayDealOrderEntity alipayDealOrderEntity) {
@@ -64,8 +64,10 @@ public class AlipayDealOrderEntityController extends BaseController {
         return getDataTable(list);
     }
 
-
-    @RequiresPermissions("alipay:orderDeal:updataOrder")
+    /**
+     * 交由财务处理
+     */
+    @RequiresPermissions("orderDeal:qr:status")
     @PostMapping("/updataOrder")
     @ResponseBody
     public AjaxResult updataOrder(String id) {
@@ -79,8 +81,8 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 导出交易订单列表
      */
-    @RequiresPermissions("alipay:orderDeal:export")
-    @Log(title = "交易订单", businessType = BusinessType.EXPORT)
+    @RequiresPermissions("orderDeal:qr:export")
+    @Log(title = "码商交易订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(AlipayDealOrderEntity alipayDealOrderEntity) {
@@ -92,24 +94,14 @@ public class AlipayDealOrderEntityController extends BaseController {
 
 
     /**
-     * 修改交易订单
+     * 显示交易订单详情
      */
+    @RequiresPermissions("orderDeal:qr:detail")
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayDealOrderEntity alipayDealOrderEntity = alipayDealOrderEntityService.selectAlipayDealOrderEntityById(id);
         mmap.put("alipayDealOrderEntity", alipayDealOrderEntity);
         return prefix + "/edit";
-    }
-
-    /**
-     * 修改保存交易订单
-     */
-    @RequiresPermissions("alipay:orderDeal:edit")
-    @Log(title = "交易订单", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayDealOrderEntity alipayDealOrderEntity) {
-        return toAjax(alipayDealOrderEntityService.updateAlipayDealOrderEntity(alipayDealOrderEntity));
     }
 
     /**
@@ -119,6 +111,7 @@ public class AlipayDealOrderEntityController extends BaseController {
      * @param mmap
      * @return
      */
+    @RequiresPermissions("orderDeal:qr:codeDetail")
     @GetMapping("/showCode/{imgId}")
     public String showCode(@PathVariable("imgId") String imgId, ModelMap mmap) {
         //获取二维码服务器地址
@@ -129,7 +122,7 @@ public class AlipayDealOrderEntityController extends BaseController {
     }
 
 
-    @RequiresPermissions("alipay:orderDeal:renotify")
+    @RequiresPermissions("orderDeal:qr:renotify")
     @Log(title = "交易订单", businessType = BusinessType.UPDATE)
     @PostMapping("/renotify")
     @ResponseBody
@@ -151,7 +144,10 @@ public class AlipayDealOrderEntityController extends BaseController {
         return prefix + "/currentTable";
     }
 
-    @RequiresPermissions("alipay:qr:statistics")
+    /**
+     * 显示具体统计内容
+     */
+    @RequiresPermissions("orderDeal:qr:statistics")
     @PostMapping("/statistics/qr/order")
     @ResponseBody
     public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {

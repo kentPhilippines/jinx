@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('充值记录列表')"/>
+    <th:block th:include="include :: header('码商充值订单')"/>
     <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
@@ -53,12 +53,8 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:deposit:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="deposit:qr:export">
                 <i class="fa fa-download"></i> 导出
-            </a>
-            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天充值订单数据（码商）')"
-               shiro:hasPermission="qr:deposit:statistics">
-                <i class="fa fa-bar-chart"></i> 当天数据统计
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -69,7 +65,7 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    let updataOrder = [[${@permission.hasPermi('alipay:deposit:toFinance')}]];
+    let updataOrder = [[${@permission.hasPermi('deposit:qr:toFinance')}]];
 
     let depositType = [[${@dict.getType('deposit_deal_type')}]];
     let orderStatus = [[${@dict.getType('qr_deposit_status')}]];
@@ -78,9 +74,9 @@
     $(function () {
         var options = {
             url: prefix + "/list",
-            statisticsUrl: prefix + "/statistics/qr/deposit",
             exportUrl: prefix + "/export",
             modalName: "码商充值记录",
+            showFooter: true,
             columns: [{
                 checkbox: true
             },
@@ -101,7 +97,7 @@
                     field: 'rechargeType',
                     title: '充值类型',
                     formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(depositType, row.rechargeType);
+                        return $.table.selectDictLabel(depositType, value);
                     }
                 },
                 {
@@ -113,7 +109,14 @@
                 },
                 {
                     field: 'amount',
-                    title: '充值金额'
+                    title: '充值金额',
+                    footerFormatter:function (rows) {
+                        var sumBalance = 0;
+                        for (var i in rows) {
+                            sumBalance += parseFloat(rows[i].amount);
+                        }
+                        return "合计：" + sumBalance;
+                    }
                 },
                 {
                     field: 'fee',
