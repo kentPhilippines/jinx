@@ -163,7 +163,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return
      */
     public static String dayStart() {
-        return getNowDate() + " 00:00:00";
+        return getDate() + " 00:00:00";
     }
 
     /**
@@ -172,6 +172,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return
      */
     public static String dayEnd() {
-        return getNowDate() + " 23:59:59";
+        return getDate() + " 23:59:59";
     }
 }
