@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.utils.DateUtils;
 
 /**
  * Entity基类
@@ -44,6 +45,13 @@ public class BaseEntity implements Serializable
     private String[] paramStr;
     private String[] paramStr2;
 
+    private String dayStart= DateUtils.dayStart();
+    private String dayEnd=DateUtils.dayEnd();
+
+    public String getDayStart() { return dayStart;   }
+    public void setDayStart(String dayStart) {this.dayStart = dayStart;   }
+    public String getDayEnd() { return dayEnd; }
+    public void setDayEnd(String dayEnd) {this.dayEnd = dayEnd;  }
 
     public String[] getParamStr2() {
         return paramStr2;
