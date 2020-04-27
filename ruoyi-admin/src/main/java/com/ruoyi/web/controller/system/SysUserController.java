@@ -153,7 +153,7 @@ public class SysUserController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(@Validated SysUser user) {
-        userService.checkUserAllowed(user);
+//        userService.checkUserAllowed(user);
         if (UserConstants.USER_PHONE_NOT_UNIQUE.equals(userService.checkPhoneUnique(user))) {
             return error("修改用户'" + user.getLoginName() + "'失败，手机号码已存在");
         } else if (UserConstants.USER_EMAIL_NOT_UNIQUE.equals(userService.checkEmailUnique(user))) {

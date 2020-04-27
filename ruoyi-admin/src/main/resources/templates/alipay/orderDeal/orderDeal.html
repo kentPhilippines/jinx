@@ -84,7 +84,6 @@
     const notifyFlag = [[${@permission.hasPermi('alipay:orderDeal:notify')}]];
     const updataOrder = [[${@permission.hasPermi('alipay:orderDeal:updataOrder')}]];
     const orderstatusDatas = [[${@dict.getType('orderStatus')}]];
-
     const prefix = ctx + "alipay/orderDeal";
 
     $(function () {
@@ -120,7 +119,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
-                        if(row.orderStatus === '1' ){
+                        if (row.orderStatus === '1') {
                             actions.push('<a class="btn btn-warning btn-xs ' + notifyFlag + '" href="javascript:void(0)" onclick="renotify(\'' + row.orderId + '\')"><i class="fa fa-bell-o"></i>重新通知</a> ');
                         }
                         if (row.orderStatus != 7) {

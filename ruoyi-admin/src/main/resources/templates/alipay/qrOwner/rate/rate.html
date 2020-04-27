@@ -28,7 +28,8 @@
                             <label>产品类型：</label>
                             <select id="payTypr" name="payTypr" class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
-                                <option th:each="product : ${productList}" th:text="${product.productName}" th:value="${product.productId}"></option>
+                                <option th:each="product : ${productList}" th:text="${product.productName}"
+                                        th:value="${product.productId}"></option>
                             </select>
                         </li>
                         <li class="select-selectpicker">
@@ -52,15 +53,8 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:qr:rate:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="alipay:qr:rate:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:qr:rate:export">
-                <i class="fa fa-download"></i> 导出
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="qr:rate:add">
+                <i class="fa fa-plus"></i> 新增
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -71,11 +65,9 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    let editFlag = [[${@permission.hasPermi('alipay:qr:rate:edit')}]];
-    let removeFlag = [[${@permission.hasPermi('alipay:qr:rate:remove')}]];
-    let changeFlag = [[${@permission.hasPermi('alipay:qr:rate:status')}]];
-
-    let payTypr = [[${@dict.getType('payTypr')}]];
+    let editFlag = [[${@permission.hasPermi('qr:rate:edit')}]];
+    let removeFlag = [[${@permission.hasPermi('qr:rate:remove')}]];
+    const productType = [[${@dict.getProductType()}]];
 
     let prefix = ctx + "alipay/qr/rate";
 
@@ -109,7 +101,7 @@
                     field: 'payTypr',
                     title: '产品类型',
                     formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(payTypr, row.payTypr);
+                        return $.table.showProductLabel(productType,'该产品已停用或不存在', value);
                     }
                 },
                 {
@@ -128,7 +120,6 @@
                     title: '费率'
                 },
                 {
-                    visible: changeFlag == 'hidden' ? false : true,
                     title: '通道状态',
                     align: 'center',
                     formatter: function (value, row, index) {
@@ -165,14 +156,14 @@
     /* 用户费率-停用 */
     function disable(id, userId, feeType) {
         $.modal.confirm("确认要【停用】该通道费率吗？", function () {
-            $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType" : feeType, "switchs": 0});
+            $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType": feeType, "switchs": 0});
         })
     }
 
     /* 用户费率-开启 */
     function enable(id, userId, feeType) {
         $.modal.confirm("确认要【启用】该通道费率吗？", function () {
-            $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType" : feeType, "switchs": 1});
+            $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType": feeType, "switchs": 1});
         })
     }
 </script>

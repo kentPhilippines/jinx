@@ -52,7 +52,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="alipay:rate:add">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="merchant:rate:add">
                 <i class="fa fa-plus"></i> 新增
             </a>
         </div>
@@ -64,10 +64,12 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('alipay:rate:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('alipay:rate:remove')}]];
-    var changeFlag = [[${@permission.hasPermi('alipay:rate:status')}]];
-    var prefix = ctx + "alipay/rate";
+    const editFlag = [[${@permission.hasPermi('merchant:rate:edit')}]];
+    const removeFlag = [[${@permission.hasPermi('merchant:rate:remove')}]];
+
+    const productType = [[${@dict.getProductType()}]];
+
+    const prefix = ctx + "alipay/rate";
 
     $(function () {
         var options = {
@@ -98,12 +100,8 @@
                 {
                     field: 'payTypr',
                     title: '产品类型',
-                    formatter: function (value, item, index) {
-                        if (item.payTypr == 'ALIPAY_SCAN') {
-                            return '<span>支付宝扫码</span>';
-                        } else if (item.payTypr == 'ALIPAY_H5') {
-                            return '<span>支付宝H5</span>';
-                        }
+                    formatter: function (value, row, index) {
+                        return $.table.showProductLabel(productType,'该产品已停用或不存在', value);
                     }
                 },
                 {
@@ -122,7 +120,6 @@
                     title: '费率'
                 },
                 {
-                    visible: changeFlag == 'hidden' ? false : true,
                     title: '通道状态',
                     align: 'center',
                     formatter: function (value, row, index) {

@@ -41,6 +41,11 @@ public interface IAlipayProductService {
     int deleteAlipayProductListEntityByIds(String ids);
 
     /**
+     * 前台查询产品类型
+     * @return
+     */
+    List<AlipayProductEntity> selectProductTypeListToWeb();
+    /**
      *
      * @param alipayProductEntity
      * @return

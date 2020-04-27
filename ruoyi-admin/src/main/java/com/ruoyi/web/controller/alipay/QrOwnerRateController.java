@@ -35,7 +35,7 @@ public class QrOwnerRateController extends BaseController {
     @Autowired
     IAlipayProductService iAlipayProductService;
 
-    @RequiresPermissions("alipay:qr:rate:view")
+    @RequiresPermissions("qr:rate:view")
     @GetMapping()
     public String rate(ModelMap modelMap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
@@ -49,27 +49,13 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 查询用户产品费率列表
      */
-    @RequiresPermissions("alipay:qr:rate:list")
+    @RequiresPermissions("qr:rate:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserRateEntity alipayUserRateEntity) {
         startPage();
         List<AlipayUserRateEntity> list = alipayUserRateEntityService.selectUserRateEntityList_qr(alipayUserRateEntity);
         return getDataTable(list);
-    }
-
-    /**
-     * 导出用户产品费率列表
-     */
-    @RequiresPermissions("alipay:qr:rate:export")
-    @Log(title = "码商费率", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(AlipayUserRateEntity alipayUserRateEntity) {
-        List<AlipayUserRateEntity> list = alipayUserRateEntityService
-                .selectUserRateEntityList_qr(alipayUserRateEntity);
-        ExcelUtil<AlipayUserRateEntity> util = new ExcelUtil<AlipayUserRateEntity>(AlipayUserRateEntity.class);
-        return util.exportExcel(list, "rate");
     }
 
     /**
@@ -88,7 +74,7 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 新增保存用户产品费率
      */
-    @RequiresPermissions("alipay:qr:rate:add")
+    @RequiresPermissions("qr:rate:add")
     @Log(title = "码商费率", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -114,7 +100,7 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 修改保存用户产品费率
      */
-    @RequiresPermissions("alipay:qr:rate:edit")
+    @RequiresPermissions("qr:rate:edit")
     @Log(title = "码商费率", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -125,7 +111,7 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 删除用户产品费率
      */
-    @RequiresPermissions("alipay:qr:rate:remove")
+    @RequiresPermissions("qr:rate:remove")
     @Log(title = "码商费率", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -136,7 +122,7 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 码商费率状态更新
      */
-    @RequiresPermissions("alipay:qr:rate:status")
+    @RequiresPermissions("qr:rate:status")
     @Log(title = "码商费率", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody

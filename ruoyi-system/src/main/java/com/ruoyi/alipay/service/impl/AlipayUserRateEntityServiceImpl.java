@@ -116,20 +116,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         return alipayUserRateEntityMapper.deleteAlipayUserRateEntityByIds(Convert.toStrArray(ids));
     }
 
-    /**
-     * 删除用户产品费率信息
-     *
-     * @param id 用户产品费率ID
-     * @return 结果
-     */
-    @Override
-    public int deleteAlipayUserRateEntityById(Long id) {
-        return alipayUserRateEntityMapper.deleteAlipayUserRateEntityById(id);
-    }
-
-
     //下面是码商的费率的逻辑处理
-
     /**
      * 码商的费率
      *

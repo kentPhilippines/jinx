@@ -453,13 +453,4 @@ public class SysUserServiceImpl implements ISysUserService {
         return userMapper.updateUser(user);
     }
 
-    @Override
-    public int updateGoogleBind(SysUser user) {
-        //绑定
-        if ("1".equals(user.getIsBind())) {
-            //插入记录
-        }
-        //解绑
-        return 0;
-    }
 }

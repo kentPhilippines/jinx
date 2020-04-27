@@ -69,4 +69,10 @@ public class IAlipayProductServiceImpl implements IAlipayProductService {
         return alipayProductMapper.updateAlipayProductById(alipayProductEntity);
     }
 
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayProductEntity> selectProductTypeListToWeb() {
+       return alipayProductMapper.selectAlipayProductTypeListToWeb();
+    }
+
 }

@@ -33,7 +33,7 @@ public interface IAlipayUserRateEntityService {
      * @param alipayUserRateEntity 用户产品费率
      * @return 结果
      */
-    public int insertAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity);
+    int insertAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity);
 
     /**
      * 修改用户产品费率
@@ -41,7 +41,7 @@ public interface IAlipayUserRateEntityService {
      * @param alipayUserRateEntity 用户产品费率
      * @return 结果
      */
-    public int updateAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity);
+    int updateAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity);
 
     /**
      * 批量删除用户产品费率
@@ -49,15 +49,7 @@ public interface IAlipayUserRateEntityService {
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteAlipayUserRateEntityByIds(String ids);
-
-    /**
-     * 删除用户产品费率信息
-     *
-     * @param id 用户产品费率ID
-     * @return 结果
-     */
-    public int deleteAlipayUserRateEntityById(Long id);
+    int deleteAlipayUserRateEntityByIds(String ids);
 
     /**
      * 查询码商的费率

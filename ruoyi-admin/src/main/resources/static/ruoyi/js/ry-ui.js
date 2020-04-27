@@ -486,6 +486,22 @@ var table = {
                 });
                 return actions.join('');
             },
+            // 回显数据库值
+            showProductLabel: function (datas, tilte, value) {
+                var actions = [];
+                $.each(datas, function (index, dict) {
+                    if (dict.productId == ('' + value)) {
+                        actions.push("<span>"+dict.productName+"</span>");
+                        return false;
+                    }else if(value == null || value == ''){
+                        actions.push("<span>-</span>");
+                        return false;
+                    }else{
+                        actions.push("<span title=\'"+ tilte +"\'>"+ value +"</span>");
+                    }
+                });
+                return actions.join('');
+            },
             // 显示表格指定列
             showColumn: function (column, tableId) {
                 var currentId = $.common.isEmpty(tableId) ? table.options.id : tableId;
