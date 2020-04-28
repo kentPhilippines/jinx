@@ -31,7 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAlipayRunOrderEntityList" parameterType="AlipayRunOrderEntity" resultMap="AlipayRunOrderEntityResult">
         <include refid="selectAlipayRunOrderEntityVo"/>
-        <where>  
+        <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
             <if test="associatedId != null  and associatedId != ''"> and associatedId = #{associatedId}</if>
             <if test="orderAccount != null  and orderAccount != ''"> and orderAccount = #{orderAccount}</if>
@@ -41,8 +42,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealDescribe != null  and dealDescribe != ''"> and dealDescribe = #{dealDescribe}</if>
             <if test="acountR != null  and acountR != ''"> and acountR = #{acountR}</if>
             <if test="accountW != null  and accountW != ''"> and accountW = #{accountW}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+         <!--   <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if> -->
             <if test="status != null "> and status = #{status}</if>
             <if test="runType != null  and runType != ''"> and runType = #{runType}</if>
             <if test="amountType != null  and amountType != ''"> and amountType = #{amountType}</if>
