@@ -52,4 +52,11 @@ public interface IDealpayUserRateService {
      * @return
      */
     int changeStatus(String id, String userId, String feeType, String switchs);
+
+    /**
+     * <p>确认卡商账户唯一</p>
+     * @param userId
+     * @return
+     */
+    DealpayUserRateEntity checkDealpayUserIdUnique(String userId);
 }

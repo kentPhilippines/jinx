@@ -81,7 +81,11 @@ public class DealpayUserRateController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(DealpayUserRateEntity dealpayUserRateEntity) {
-        return toAjax(dealpayUserRateEntityService.insertDealpayUserRateEntity(dealpayUserRateEntity));
+        DealpayUserRateEntity result=dealpayUserRateEntityService.checkDealpayUserIdUnique(dealpayUserRateEntity.getUserId());
+        if (result!=null){
+            return toAjax(dealpayUserRateEntityService.insertDealpayUserRateEntity(dealpayUserRateEntity));
+        }
+        return error("该卡商账户不存在！！");
     }
 
     /**

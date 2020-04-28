@@ -95,4 +95,10 @@ public class DealpayUserRateServiceImpl implements IDealpayUserRateService {
         return dealpayUserRateMapper.updateStatus(id, switchs);
     }
 
+    @Override
+    @DataSource(value = DataSourceType.DEALPAY_SLAVE)
+    public DealpayUserRateEntity checkDealpayUserIdUnique(String userId) {
+        return dealpayUserRateMapper.checkDealpayUserIdUnique(userId);
+    }
+
 }
