@@ -45,6 +45,7 @@
     <select id="selectDealpayUserInfoList" parameterType="DealpayUserInfoEntity" resultMap="DealpayUserInfoResult">
         <include refid="selectDealpayUserInfoVo"/>
         <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="userId != null  and userId != ''">and userId = #{userId}</if>
             <if test="userName != null  and userName != ''">and userName like concat('%', #{userName}, '%')</if>
             <if test="password != null  and password != ''">and password = #{password}</if>
@@ -62,8 +63,8 @@
             <if test="QQ != null  and QQ != ''">and QQ = #{QQ}</if>
             <if test="telegram != null  and telegram != ''">and telegram = #{telegram}</if>
             <if test="skype != null  and skype != ''">and skype = #{skype}</if>
-            <if test="createTime != null ">and createTime = #{createTime}</if>
-            <if test="submitTime != null ">and submitTime = #{submitTime}</if>
+<!--        <if test="createTime != null ">and createTime = #{createTime}</if>
+            <if test="submitTime != null ">and submitTime = #{submitTime}</if>-->
             <if test="status != null ">and status = #{status}</if>
             <if test="privateKey != null  and privateKey != ''">and privateKey = #{privateKey}</if>
             <if test="publicKey != null  and publicKey != ''">and publicKey = #{publicKey}</if>
