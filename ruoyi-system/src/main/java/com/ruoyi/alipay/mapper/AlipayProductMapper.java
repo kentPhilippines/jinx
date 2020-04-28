@@ -60,4 +60,12 @@ public interface AlipayProductMapper {
      */
     @Update("update alipay_product set status = #{status} where id = #{id} ")
     int updateAlipayProductById(AlipayProductEntity alipayProductEntity);
+
+    /**
+     * <p>查询添加产品是否存在</p>
+     * @param productId
+     * @return
+     */
+    @Select("select * from alipay_product where productId = #{productId}")
+    AlipayProductEntity checkAlipayProductIdUnique(String productId);
 }

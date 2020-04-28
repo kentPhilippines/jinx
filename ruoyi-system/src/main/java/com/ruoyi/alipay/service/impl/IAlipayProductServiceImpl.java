@@ -69,6 +69,18 @@ public class IAlipayProductServiceImpl implements IAlipayProductService {
         return alipayProductMapper.updateAlipayProductById(alipayProductEntity);
     }
 
+    /**
+     *
+     * <p>查询添加产品是否存在</p>
+     * @param productId
+     * @return
+     */
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public AlipayProductEntity checkAlipayProductIdUnique(String productId) {
+        return alipayProductMapper.checkAlipayProductIdUnique(productId);
+    }
+
     @Override
     @DataSource(DataSourceType.ALIPAY_SLAVE)
     public List<AlipayProductEntity> selectProductTypeListToWeb() {

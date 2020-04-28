@@ -51,4 +51,12 @@ public interface IAlipayProductService {
      * @return
      */
     int updateProductStatusById(AlipayProductEntity alipayProductEntity);
+
+    /**
+     *
+     * <p>查询重复的产品</p>
+     * @param productId
+     * @return
+     */
+    AlipayProductEntity checkAlipayProductIdUnique(String productId);
 }
