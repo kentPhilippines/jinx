@@ -31,7 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAlipayDealOrderAppList" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">
         <include refid="selectAlipayDealOrderAppVo"/>
-        <where>  
+        <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="orderType != null "> and orderType = #{orderType}</if>
             <if test="orderAccount != null  and orderAccount != ''"> and orderAccount = #{orderAccount}</if>
             <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
@@ -42,8 +43,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="feeId != null "> and feeId = #{feeId}</if>
             <if test="notify != null  and notify != ''"> and notify = #{notify}</if>
             <if test="back != null  and back != ''"> and back = #{back}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
+      <!--      <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>-->
             <if test="status != null "> and status = #{status}</if>
             <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
             <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
