@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectAlipayDealOrderEntityList" parameterType="AlipayDealOrderEntity" resultMap="AlipayDealOrderEntityResult">
         <include refid="selectAlipayDealOrderEntityVo"/>
         <where>
-            createTime <![CDATA[ >= ]]> #{dayStart} and  createTime <![CDATA[ <= ]]> #{dayEnd}
+            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
             <if test="associatedId != null  and associatedId != ''"> and associatedId = #{associatedId}</if>
             <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
@@ -52,12 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="externalOrderId != null  and externalOrderId != ''"> and externalOrderId = #{externalOrderId}</if>
             <if test="generationIp != null  and generationIp != ''"> and generationIp = #{generationIp}</if>
             <if test="dealDescribe != null  and dealDescribe != ''"> and dealDescribe = #{dealDescribe}</if>
-            <if test="notify != null  and notify != ''"> and notify = #{notify}</if>
-            <if test="back != null  and back != ''"> and back = #{back}</if>
             <if test="isNotify != null  and isNotify != ''"> and isNotify = #{isNotify}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
-            <if test="feeId != null "> and feeId = #{feeId}</if>
             <if test="status != null "> and status = #{status}</if>
         </where>
         order by orderStatus=1 desc,createTime asc

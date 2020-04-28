@@ -40,6 +40,7 @@ $(function() {
 		        elem: '#startTime',
 		        max: $('#endTime').val(),
 		        theme: 'molv',
+				type:'datetime',
 		        trigger: 'click',
 		        done: function(value, date) {
 		            // 结束时间大于开始时间
@@ -57,6 +58,7 @@ $(function() {
 		    var endDate = laydate.render({
 		        elem: '#endTime',
 		        min: $('#startTime').val(),
+				type:'datetime',
 		        theme: 'molv',
 		        trigger: 'click',
 		        done: function(value, date) {
@@ -81,9 +83,9 @@ $(function() {
 			$(".time-input").each(function (index, item) {
 				var time = $(item);
 				// 控制控件外观
-				var type = time.attr("data-type") || 'date';
+				var type = time.attr("data-type") || 'datetime';
 				// 控制回显格式
-				var format = time.attr("data-format") || 'yyyy-MM-dd';
+				var format = time.attr("data-format") || 'yyyy-MM-dd HH:mm:ss';
 				// 控制日期控件按钮
 				var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];
 				// 日期控件选择完成后回调处理
