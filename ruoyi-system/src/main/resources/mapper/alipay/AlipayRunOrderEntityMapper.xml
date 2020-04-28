@@ -42,14 +42,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealDescribe != null  and dealDescribe != ''"> and dealDescribe = #{dealDescribe}</if>
             <if test="acountR != null  and acountR != ''"> and acountR = #{acountR}</if>
             <if test="accountW != null  and accountW != ''"> and accountW = #{accountW}</if>
-         <!--   <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if> -->
             <if test="status != null "> and status = #{status}</if>
             <if test="runType != null  and runType != ''"> and runType = #{runType}</if>
             <if test="amountType != null  and amountType != ''"> and amountType = #{amountType}</if>
             <if test="amountNow != null "> and amountNow = #{amountNow}</if>
-            <if test="retain4 != null  and retain4 != ''"> and retain4 = #{retain4}</if>
-            <if test="retain5 != null  and retain5 != ''"> and retain5 = #{retain5}</if>
         </where>
     </select>
     

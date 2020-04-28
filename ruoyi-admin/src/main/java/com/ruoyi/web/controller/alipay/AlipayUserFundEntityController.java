@@ -62,7 +62,7 @@ public class AlipayUserFundEntityController extends BaseController {
     private SysPasswordService passwordService;
 
 
-    @RequiresPermissions("alipay:fund:view")
+    @RequiresPermissions("fund:alipay:view")
     @GetMapping()
     public String fund() {
         return prefix + "/fund";
@@ -71,7 +71,7 @@ public class AlipayUserFundEntityController extends BaseController {
     /**
      * 查询用户资金账户列表
      */
-    @RequiresPermissions("alipay:fund:list")
+    @RequiresPermissions("fund:alipay:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserFundEntity alipayUserFundEntity) {
@@ -84,7 +84,7 @@ public class AlipayUserFundEntityController extends BaseController {
     /**
      * 导出用户资金账户列表
      */
-    @RequiresPermissions("alipay:fund:export")
+    @RequiresPermissions("fund:alipay:export")
     @Log(title = "用户资金账户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -94,66 +94,6 @@ public class AlipayUserFundEntityController extends BaseController {
         ExcelUtil<AlipayUserFundEntity> util = new ExcelUtil<AlipayUserFundEntity>(AlipayUserFundEntity.class);
         return util.exportExcel(list, "fund");
     }
-
-    /**
-     * 新增用户资金账户
-     */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
-    }
-
-    /**
-     * 新增保存用户资金账户
-     */
-    @RequiresPermissions("alipay:fund:add")
-    @Log(title = "用户资金账户", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(AlipayUserFundEntity alipayUserFundEntity) {
-        return toAjax(alipayUserFundEntityService.insertAlipayUserFundEntity(alipayUserFundEntity));
-    }
-
-    /**
-     * 修改用户资金账户
-     */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-        AlipayUserFundEntity alipayUserFundEntity = alipayUserFundEntityService.selectAlipayUserFundEntityById(id);
-        mmap.put("alipayUserFundEntity", alipayUserFundEntity);
-        return prefix + "/edit";
-    }
-
-    /**
-     * 修改保存用户资金账户
-     */
-    @RequiresPermissions("alipay:fund:edit")
-    @Log(title = "用户资金账户", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(AlipayUserFundEntity alipayUserFundEntity) {
-        return toAjax(alipayUserFundEntityService.updateAlipayUserFundEntity(alipayUserFundEntity));
-    }
-
-    /**
-     * 删除用户资金账户
-     */
-    @RequiresPermissions("alipay:fund:remove")
-    @Log(title = "用户资金账户", businessType = BusinessType.DELETE)
-    @PostMapping("/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids) {
-        return toAjax(alipayUserFundEntityService.deleteAlipayUserFundEntityByIds(ids));
-    }
-
-
-    @GetMapping("/fundInfo/{id}")
-    public String fundInfo(@PathVariable("id") Long id, ModelMap mmap) {
-        AlipayUserFundEntity alipayUserFundEntity = alipayUserFundEntityService.selectAlipayUserFundEntityById(id);
-        mmap.put("alipayUserFundEntity", alipayUserFundEntity);
-        return prefix + "/fundInfo";
-    }
-
 
     /*最新的资金账户处理逻辑*/
 
@@ -171,7 +111,7 @@ public class AlipayUserFundEntityController extends BaseController {
     /**
      * 加款保存用户加款记录
      */
-    @RequiresPermissions("alipay:fund:refund")
+    @RequiresPermissions("fund:refund:add")
     @Log(title = "用户资金账户", businessType = BusinessType.UPDATE)
     @PostMapping("/refund")
     @ResponseBody
@@ -203,7 +143,7 @@ public class AlipayUserFundEntityController extends BaseController {
     /**
      * 减款保存用户减款记录
      */
-    @RequiresPermissions("alipay:fund:deduct")
+    @RequiresPermissions("fund:refund:deduct")
     @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/deduct")
     @ResponseBody

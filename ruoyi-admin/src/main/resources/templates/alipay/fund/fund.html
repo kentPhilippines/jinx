@@ -52,7 +52,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:fund:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fund:alipay:export">
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
@@ -64,8 +64,8 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var refundFlag = [[${@permission.hasPermi('alipay:fund:refund')}]];
-    var deductFlag = [[${@permission.hasPermi('alipay:fund:deduct')}]];
+    var refundFlag = [[${@permission.hasPermi('fund:refund:add')}]];
+    var deductFlag = [[${@permission.hasPermi('fund:refund:deduct')}]];
     var userType = [[${@dict.getType('userType')}]];
     var prefix = ctx + "alipay/fund";
 

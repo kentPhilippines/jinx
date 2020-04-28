@@ -66,26 +66,6 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 		return alipayUserFundEntityMapper.updateAlipayUserFundEntity(alipayUserFundEntity);
 	}
 
-	/**
-	 * 删除用户资金账户对象
-	 * @param ids 需要删除的数据ID
-	 * @return 结果
-	 */
-	@Override
-	public int deleteAlipayUserFundEntityByIds(String ids) {
-		return alipayUserFundEntityMapper.deleteAlipayUserFundEntityByIds(Convert.toStrArray(ids));
-	}
-
-	/**
-	 * 删除用户资金账户信息
-	 * @param id 用户资金账户ID
-	 * @return 结果
-	 */
-	@Override
-	public int deleteAlipayUserFundEntityById(Long id) {
-		return alipayUserFundEntityMapper.deleteAlipayUserFundEntityById(id);
-	}
-
     @Override
 	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayUserFundEntity findAlipayUserFundByUserId(String merchantId) {

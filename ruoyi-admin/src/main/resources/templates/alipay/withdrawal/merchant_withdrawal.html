@@ -53,7 +53,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="payfor:withdrawal:merchant:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="withdrawal:alipay:merchant:export">
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
@@ -66,7 +66,7 @@
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     const approvalFlag = [[${@permission.hasPermi('merchant:withdrawal:approval')}]];
-    const detailFlag = [[${@permission.hasPermi('merchant:withdrawal:detail')}]];
+    const detailFlag = [[${@permission.hasPermi('withdrawal:merchant:detail')}]];
     const orderStatus = [[${@dict.getType('withdrawal_status')}]];
     const prefix = ctx + "alipay/withdrawal";
 

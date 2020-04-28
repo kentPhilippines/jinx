@@ -74,7 +74,7 @@ public class AlipayWithdrawEntityController extends BaseController {
         return getDataTable(list);
     }
 
-    @RequiresPermissions("payfor:withdrawal:merchant:view")
+    @RequiresPermissions("withdrawal:alipay:merchant:view")
     @GetMapping("/merchant")
     public String merchant_withdrawal() {
         return prefix + "/merchant_withdrawal";
@@ -83,7 +83,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 查询商户提现记录列表
      */
-    @RequiresPermissions("payfor:withdrawal:merchant:list")
+    @RequiresPermissions("withdrawal:alipay:merchant:list")
     @PostMapping("/merchant/list")
     @ResponseBody
     public TableDataInfo merchant_list(AlipayWithdrawEntity alipayWithdrawEntity) {
@@ -97,6 +97,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 显示商户提现详情页
      */
+    @RequiresPermissions("withdrawal:merchant:detail")
     @GetMapping("/merchant/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayWithdrawEntity alipayWithdrawEntity = alipayWithdrawEntityService.selectAlipayWithdrawEntityById(id);
@@ -147,7 +148,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 导出商户提现记录列表
      */
-    @RequiresPermissions("payfor:withdrawal:merchant:export")
+    @RequiresPermissions("withdrawal:alipay:merchant:export")
     @Log(title = "商户代付订单", businessType = BusinessType.EXPORT)
     @PostMapping("/merchant/export")
     @ResponseBody
@@ -161,7 +162,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 显示商户提现详情页
      */
-    @RequiresPermissions("merchant:withdrawal:detail")
+    @RequiresPermissions("withdrawal:alipay:merchant:detail")
     @GetMapping("/merchant/detail/{id}")
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayWithdrawEntity alipayWithdrawEntity = alipayWithdrawEntityService.selectAlipayWithdrawEntityById(id);

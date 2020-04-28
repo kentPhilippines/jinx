@@ -22,7 +22,7 @@ public interface AlipayUserFundEntityMapper {
      * @param id 用户资金账户ID
      * @return 用户资金账户
      */
-    public AlipayUserFundEntity selectAlipayUserFundEntityById(Long id);
+    AlipayUserFundEntity selectAlipayUserFundEntityById(Long id);
 
     /**
      * 查询用户资金账户列表
@@ -30,7 +30,7 @@ public interface AlipayUserFundEntityMapper {
      * @param alipayUserFundEntity 用户资金账户
      * @return 用户资金账户集合
      */
-    public List<AlipayUserFundEntity> selectAlipayUserFundEntityList(AlipayUserFundEntity alipayUserFundEntity);
+    List<AlipayUserFundEntity> selectAlipayUserFundEntityList(AlipayUserFundEntity alipayUserFundEntity);
 
     /**
      * 新增用户资金账户
@@ -38,7 +38,7 @@ public interface AlipayUserFundEntityMapper {
      * @param alipayUserFundEntity 用户资金账户
      * @return 结果
      */
-    public int insertAlipayUserFundEntity(AlipayUserFundEntity alipayUserFundEntity);
+    int insertAlipayUserFundEntity(AlipayUserFundEntity alipayUserFundEntity);
 
     /**
      * 修改用户资金账户
@@ -46,23 +46,7 @@ public interface AlipayUserFundEntityMapper {
      * @param alipayUserFundEntity 用户资金账户
      * @return 结果
      */
-    public int updateAlipayUserFundEntity(AlipayUserFundEntity alipayUserFundEntity);
-
-    /**
-     * 删除用户资金账户
-     *
-     * @param id 用户资金账户ID
-     * @return 结果
-     */
-    public int deleteAlipayUserFundEntityById(Long id);
-
-    /**
-     * 批量删除用户资金账户
-     *
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-    public int deleteAlipayUserFundEntityByIds(String[] ids);
+    int updateAlipayUserFundEntity(AlipayUserFundEntity alipayUserFundEntity);
 
     @Insert("insert into alipay_user_fund (userId,userName,userType,isAgent) values(#{userId},#{userName},#{userType},#{isAgent})")
     int insertAlipayUserFundInfo(AlipayUserInfo merchantInfoEntity);

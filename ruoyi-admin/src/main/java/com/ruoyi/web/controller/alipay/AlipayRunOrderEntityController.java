@@ -33,7 +33,7 @@ public class AlipayRunOrderEntityController extends BaseController {
 	@Autowired
 	private IAlipayRunOrderEntityService alipayRunOrderEntityService;
 
-	@RequiresPermissions("alipay:running:view")
+	@RequiresPermissions("running:alipay:view")
 	@GetMapping()
 	public String running() {
 		return prefix + "/running";
@@ -42,7 +42,7 @@ public class AlipayRunOrderEntityController extends BaseController {
 	/**
 	 * 查询流水订单记录列表
 	 */
-	@RequiresPermissions("alipay:running:list")
+	@RequiresPermissions("running:alipay:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayRunOrderEntity alipayRunOrderEntity) {
@@ -54,8 +54,8 @@ public class AlipayRunOrderEntityController extends BaseController {
 	/**
 	 * 导出流水订单记录列表
 	 */
-	@RequiresPermissions("alipay:running:export")
-	@Log(title = "流水订单记录", businessType = BusinessType.EXPORT)
+	@RequiresPermissions("running:alipay:export")
+	@Log(title = "资金流水", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody
 	public AjaxResult export(AlipayRunOrderEntity alipayRunOrderEntity) {

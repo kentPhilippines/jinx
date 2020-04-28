@@ -147,16 +147,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where id = #{id}
     </update>
-
-    <delete id="deleteAlipayUserFundEntityById" parameterType="Long">
-        delete from alipay_user_fund where id = #{id}
-    </delete>
-
-    <delete id="deleteAlipayUserFundEntityByIds" parameterType="String">
-        delete from alipay_user_fund where id in 
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
-    
 </mapper>
