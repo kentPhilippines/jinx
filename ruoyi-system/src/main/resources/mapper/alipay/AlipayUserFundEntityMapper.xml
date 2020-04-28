@@ -36,7 +36,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAlipayUserFundEntityList" parameterType="AlipayUserFundEntity" resultMap="AlipayUserFundEntityResult">
         <include refid="selectAlipayUserFundEntityVo"/>
-        <where>  
+        <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
             <if test="userName != null  and userName != ''"> and userName like concat('%', #{userName}, '%')</if>
             <if test="cashBalance != null "> and cashBalance = #{cashBalance}</if>
@@ -55,8 +56,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userType != null  and userType != ''"> and userType = #{userType}</if>
             <if test="agent != null  and agent != ''"> and agent = #{agent}</if>
             <if test="isAgent != null  and isAgent != ''"> and isAgent = #{isAgent}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+<!--            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>-->
             <if test="status != null "> and status = #{status}</if>
             <if test="version != null "> and version = #{version}</if>
         </where>
