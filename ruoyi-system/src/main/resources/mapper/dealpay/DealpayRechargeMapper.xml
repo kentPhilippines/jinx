@@ -32,7 +32,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectDealpayRechargeList" parameterType="DealpayRechargeEntity" resultMap="DealpayRechargeResult">
         <include refid="selectDealpayRechargeVo"/>
-        <where>  
+        <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
             <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
             <if test="rechargeType != null "> and rechargeType = #{rechargeType}</if>
@@ -47,8 +48,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="notfiy != null  and notfiy != ''"> and notfiy = #{notfiy}</if>
             <if test="chargeCard != null  and chargeCard != ''"> and chargeCard = #{chargeCard}</if>
             <if test="chargePerson != null  and chargePerson != ''"> and chargePerson = #{chargePerson}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+<!--            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>-->
             <if test="status != null "> and status = #{status}</if>
             <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
         </where>
