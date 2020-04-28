@@ -25,7 +25,6 @@
     <select id="selectAlipayProductListEntityList" parameterType="com.ruoyi.alipay.domain.AlipayProductEntity" resultMap="AlipayProductListEntity">
         <include refid="selectAlipayProductListEntityVo"/>
         <where>
-            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="productId != null  and productId != ''"> and productId = #{productId}</if>
             <if test="productCode != null  and productCode != ''"> and productCode = #{productCode}</if>
             <if test="productName != null  and productName != ''"> and productName = #{productName}</if>
@@ -35,8 +34,8 @@
             <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
             <if test="retain4 != null  and retain4 != ''"> and retain4 = #{retain4}</if>
             <if test="status != null"> and status = #{status}</if>
-  <!--          <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if> -->
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
         </where>
         order by createTime desc
     </select>
