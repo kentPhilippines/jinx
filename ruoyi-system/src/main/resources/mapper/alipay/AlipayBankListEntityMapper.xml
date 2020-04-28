@@ -31,7 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAlipayBankListEntityList" parameterType="AlipayBankListEntity" resultMap="AlipayBankListEntityResult">
         <include refid="selectAlipayBankListEntityVo"/>
-        <where>  
+        <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="bankcardId != null  and bankcardId != ''"> and bankcardId = #{bankcardId}</if>
             <if test="bankcardAccount != null  and bankcardAccount != ''"> and bankcardAccount = #{bankcardAccount}</if>
             <if test="accountHolder != null  and accountHolder != ''"> and accountHolder = #{accountHolder}</if>
@@ -47,12 +48,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="qrcodeNote != null  and qrcodeNote != ''"> and qrcodeNote = #{qrcodeNote}</if>
             <if test="status != null "> and status = #{status}</if>
             <if test="isDeal != null "> and isDeal = #{isDeal}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+        <!-- <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if> -->
         </where>
         order by cardType, createTime desc
     </select>
-    
+
+
+
     <select id="selectAlipayBankListEntityById" parameterType="Long" resultMap="AlipayBankListEntityResult">
         <include refid="selectAlipayBankListEntityVo"/>
         where id = #{id}
