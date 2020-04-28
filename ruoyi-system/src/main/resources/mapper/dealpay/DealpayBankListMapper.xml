@@ -32,6 +32,7 @@
     <select id="selectDealpayBankListList" parameterType="DealpayBankListEntity" resultMap="DealpayBankListResult">
         <include refid="selectDealpayBankListVo"/>
         <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="bankcardAccount != null  and bankcardAccount != ''">and bankcardAccount = #{bankcardAccount}</if>
             <if test="accountHolder != null  and accountHolder != ''">and accountHolder = #{accountHolder}</if>
             <if test="openAccountBank != null  and openAccountBank != ''">and openAccountBank = #{openAccountBank}</if>
@@ -46,8 +47,8 @@
             <if test="qrcodeNote != null  and qrcodeNote != ''">and qrcodeNote = #{qrcodeNote}</if>
             <if test="status != null ">and status = #{status}</if>
             <if test="isDeal != null ">and isDeal = #{isDeal}</if>
-            <if test="createTime != null ">and createTime = #{createTime}</if>
-            <if test="submitTime != null ">and submitTime = #{submitTime}</if>
+<!--        <if test="createTime != null ">and createTime = #{createTime}</if>
+            <if test="submitTime != null ">and submitTime = #{submitTime}</if> -->
         </where>
     </select>
 
