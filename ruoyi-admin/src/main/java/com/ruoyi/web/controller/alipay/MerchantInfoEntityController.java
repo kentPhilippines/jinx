@@ -21,7 +21,6 @@ import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -48,7 +47,6 @@ public class MerchantInfoEntityController extends BaseController {
     @Autowired
     private SysPasswordService passwordService;
 
-    @RequiresPermissions("alipay:merchant:view")
     @GetMapping()
     public String merchant() {
         return prefix + "/merchant";
@@ -57,7 +55,6 @@ public class MerchantInfoEntityController extends BaseController {
     /**
      * 查询商户信息列表
      */
-    @RequiresPermissions("alipay:merchant:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserInfo merchantInfoEntity) {
@@ -88,7 +85,6 @@ public class MerchantInfoEntityController extends BaseController {
     /**
      * 新增保存商户信息
      */
-    @RequiresPermissions("alipay:merchant:add")
     @Log(title = "商户信息", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -109,7 +105,6 @@ public class MerchantInfoEntityController extends BaseController {
     /**
      * 修改保存商户信息
      */
-    @RequiresPermissions("alipay:merchant:edit")
     @Log(title = "商户信息", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -152,7 +147,6 @@ public class MerchantInfoEntityController extends BaseController {
      * 商户修改状态（调用api）
      */
     @Log(title = "码商查询", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("alipay:merchant:switch")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(AlipayUserInfo user) {
@@ -197,7 +191,6 @@ public class MerchantInfoEntityController extends BaseController {
      * 重置用戶的提現密碼
      */
     @Log(title = "码商查询", businessType = BusinessType.RESET)
-    @RequiresPermissions("alipay:merchant:reset:payPassword")
     @PostMapping("resetPayPassword")
     @ResponseBody
     public AjaxResult resetWithdrawalPwd(Long id) {
@@ -230,7 +223,6 @@ public class MerchantInfoEntityController extends BaseController {
     /**
      * 新增下级开户保存信息
      */
-    @RequiresPermissions("alipay:merchant:save:children")
     @Log(title = "商户信息", businessType = BusinessType.INSERT)
     @PostMapping("/save/children")
     @ResponseBody

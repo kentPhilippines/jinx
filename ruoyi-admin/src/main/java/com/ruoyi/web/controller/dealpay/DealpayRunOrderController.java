@@ -8,7 +8,6 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.dealpay.domain.DealpayRunOrderEntity;
 import com.ruoyi.dealpay.service.IDealpayRunOrderService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,7 +29,6 @@ public class DealpayRunOrderController extends BaseController {
     @Autowired
     private IDealpayRunOrderService dealpayRunOrderService;
 
-    @RequiresPermissions("dealpay:runOrder:view")
     @GetMapping()
     public String runOrder() {
         return prefix + "/runOrder";
@@ -39,7 +37,6 @@ public class DealpayRunOrderController extends BaseController {
     /**
      * 查询流水订单记录列表
      */
-    @RequiresPermissions("dealpay:runOrder:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayRunOrderEntity dealpayRunOrder) {
@@ -51,7 +48,6 @@ public class DealpayRunOrderController extends BaseController {
     /**
      * 导出流水订单记录列表
      */
-    @RequiresPermissions("dealpay:runOrder:export")
     @Log(title = "流水订单记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -72,7 +68,6 @@ public class DealpayRunOrderController extends BaseController {
     /**
      * 新增保存流水订单记录
      */
-    @RequiresPermissions("dealpay:runOrder:add")
     @Log(title = "流水订单记录", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -93,7 +88,6 @@ public class DealpayRunOrderController extends BaseController {
     /**
      * 修改保存流水订单记录
      */
-    @RequiresPermissions("dealpay:runOrder:edit")
     @Log(title = "流水订单记录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -104,7 +98,6 @@ public class DealpayRunOrderController extends BaseController {
     /**
      * 删除流水订单记录
      */
-    @RequiresPermissions("dealpay:runOrder:remove")
     @Log(title = "流水订单记录", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody

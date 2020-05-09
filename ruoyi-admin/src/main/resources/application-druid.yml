@@ -6,30 +6,30 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://47.52.108.99:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: user_gw
-                password: teus2019gw
+                url: jdbc:mysql://182.16.89.146:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                username: root
+                password: 8sd7f6d7ff7af0afa0fasf0
             # alipay从库数据源
             alipay:
                 # 从数据源开关/默认关闭
                 enabled: true
-                url: jdbc:mysql://47.52.108.99:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: user_gw
-                password: teus2019gw
+                url: jdbc:mysql://182.16.89.146:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                username: root
+                password: 8sd7f6d7ff7af0afa0fasf0
             # pay从库数据源
             pay:
                 # 从数据源开关/默认关闭
                 enabled: false
-                url: jdbc:mysql://47.52.108.99:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: user_gw
-                password: teus2019gw
+                url: jdbc:mysql://182.16.89.146:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                username: root
+                password: 8sd7f6d7ff7af0afa0fasf0
             # dealpay从库数据源
             dealpay:
                 # 从数据源开关/默认关闭
                 enabled: true
-                url: jdbc:mysql://47.52.108.99:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: user_gw
-                password: teus2019gw
+                url: jdbc:mysql://182.16.89.146:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                username: root
+                password: 8sd7f6d7ff7af0afa0fasf0
             # 初始连接数
             initialSize: 5
             # 最小连接池数量

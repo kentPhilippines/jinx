@@ -51,6 +51,7 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 	 * @return 结果
 	 */
 	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
 	public int insertAlipayUserFundEntity(AlipayUserFundEntity alipayUserFundEntity) {
 		alipayUserFundEntity.setCreateTime(DateUtils.getNowDate());
 		return alipayUserFundEntityMapper.insertAlipayUserFundEntity(alipayUserFundEntity);
@@ -71,4 +72,10 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
     public AlipayUserFundEntity findAlipayUserFundByUserId(String merchantId) {
 		return alipayUserFundEntityMapper.selectAlipayUserFundByUserId(merchantId);
     }
+
+	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
+	public List<AlipayUserFundEntity> findChannelAccount(AlipayUserFundEntity alipayUserFundEntity) {
+		return alipayUserFundEntityMapper.findChannelAccount(alipayUserFundEntity);
+	}
 }

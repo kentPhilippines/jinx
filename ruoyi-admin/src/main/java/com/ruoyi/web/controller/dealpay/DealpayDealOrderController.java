@@ -11,7 +11,6 @@ import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -49,7 +48,6 @@ public class DealpayDealOrderController extends BaseController {
     @Autowired
     private DictionaryUtils dictionaryUtils;
 
-    @RequiresPermissions("dealpay:dealOrder:view")
     @GetMapping()
     public String dealOrder() {
         return prefix + "/dealOrder";
@@ -58,7 +56,6 @@ public class DealpayDealOrderController extends BaseController {
     /**
      * 查询交易订单列表
      */
-    @RequiresPermissions("dealpay:dealOrder:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayDealOrderEntity dealpayDealOrder) {
@@ -70,7 +67,6 @@ public class DealpayDealOrderController extends BaseController {
     /**
      * 导出交易订单列表
      */
-    @RequiresPermissions("dealpay:dealOrder:export")
     @Log(title = "交易订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -91,7 +87,6 @@ public class DealpayDealOrderController extends BaseController {
     /**
      * 新增保存交易订单
      */
-    @RequiresPermissions("dealpay:dealOrder:add")
     @Log(title = "交易订单", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -112,7 +107,6 @@ public class DealpayDealOrderController extends BaseController {
     /**
      * 修改保存交易订单
      */
-    @RequiresPermissions("dealpay:dealOrder:edit")
     @Log(title = "交易订单", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -121,7 +115,6 @@ public class DealpayDealOrderController extends BaseController {
     }
 
 
-    @RequiresPermissions("dealpay:orderDeal:updataOrder")
     @PostMapping("/updataOrder")
     @ResponseBody
     public AjaxResult updataOrder(String id) {
@@ -134,7 +127,6 @@ public class DealpayDealOrderController extends BaseController {
 
     /*财务手动处理订单操作逻辑*/
 
-    @RequiresPermissions("dealpay:finance:check")
     @GetMapping("/finance/check")
     public String orderDeal() {
         return finance_prefix + "/manual";
@@ -143,7 +135,6 @@ public class DealpayDealOrderController extends BaseController {
     /**
      * 查询交易订单列表
      */
-    @RequiresPermissions("dealpay:finance:showList")
     @PostMapping("/finance/show")
     @ResponseBody
     public TableDataInfo financeCheck(DealpayDealOrderEntity dealpayDealOrderEntity) {
@@ -155,7 +146,6 @@ public class DealpayDealOrderController extends BaseController {
     /**
      * <p>卡商交易订单状态确认</p>
      */
-    @RequiresPermissions("dealpay:finance:additional")
     @PostMapping("/finance/updataOrder")
     @ResponseBody
     @Log(title = "人工补单", businessType = BusinessType.UPDATE)

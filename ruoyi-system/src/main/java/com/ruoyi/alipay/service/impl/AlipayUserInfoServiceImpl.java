@@ -60,8 +60,9 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int insertAlipayUserInfo(AlipayUserInfo alipayUserInfo) {
-        return alipayUserInfoMapper.insertAliaUserInfo(alipayUserInfo);
+        return alipayUserInfoMapper.insertAlipayUserInfo(alipayUserInfo);
     }
 
     /**

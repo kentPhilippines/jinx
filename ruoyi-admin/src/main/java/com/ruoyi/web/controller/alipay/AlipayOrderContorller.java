@@ -15,7 +15,6 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,7 +37,6 @@ public class AlipayOrderContorller extends BaseController {
     @Autowired
     private IAlipayDealOrderEntityService alipayDealOrderEntityService;
 
-    @RequiresPermissions("alipay:order:view")
     @GetMapping()
     public String orderDeal() {
         return prefix + "/order";
@@ -47,7 +45,6 @@ public class AlipayOrderContorller extends BaseController {
     /**
      * 查询交易订单列表
      */
-    @RequiresPermissions("alipay:order:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayDealOrderEntity alipayDealOrderEntity) {
@@ -60,7 +57,6 @@ public class AlipayOrderContorller extends BaseController {
     /**
      * 导出交易订单列表
      */
-    @RequiresPermissions("alipay:order:export")
     @Log(title = "交易订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -74,7 +70,6 @@ public class AlipayOrderContorller extends BaseController {
     /**
      * <p>码商交易订单状态确认</p>
      */
-    @RequiresPermissions("alipay:order:updataOrder")
     @PostMapping("/updataOrder")
     @ResponseBody
     @Log(title = "交易订单", businessType = BusinessType.UPDATE)

@@ -9,7 +9,6 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,7 +27,6 @@ public class AlipayProductController extends BaseController {
     IAlipayProductService iAlipayProductService;
 
 
-    @RequiresPermissions("alipay:product:view")
     @GetMapping()
     public String Product() {
         return prefix + "/product";
@@ -37,7 +35,6 @@ public class AlipayProductController extends BaseController {
     /**
      * 查询产品列表列表
      */
-    @RequiresPermissions("alipay:product:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayProductEntity alipayProductEntity) {
@@ -49,7 +46,6 @@ public class AlipayProductController extends BaseController {
     /**
      * 导出产品列表列表
      */
-    @RequiresPermissions("alipay:product:export")
     @Log(title = "产品列表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -69,7 +65,6 @@ public class AlipayProductController extends BaseController {
     /**
      * 新增保存产品列表
      */
-    @RequiresPermissions("alipay:product:add")
     @Log(title = "产品列表", businessType = BusinessType.INSERT)
     @PostMapping("/submitAdd")
     @ResponseBody
@@ -94,7 +89,6 @@ public class AlipayProductController extends BaseController {
     /**
      * 修改保存产品列表
      */
-    @RequiresPermissions("alipay:product:edit")
     @Log(title = "产品列表", businessType = BusinessType.UPDATE)
     @PostMapping("/submitEdit")
     @ResponseBody
@@ -105,7 +99,6 @@ public class AlipayProductController extends BaseController {
     /**
      * 批量删除产品列表
      */
-    @RequiresPermissions("alipay:product:remove")
     @Log(title = "产品列表", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -119,7 +112,6 @@ public class AlipayProductController extends BaseController {
      * 产品状态修改（调用api）
      */
     @Log(title = "产品查询", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("alipay:product:status")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(AlipayProductEntity alipayProductEntity) {

@@ -90,7 +90,7 @@
                     }
                 },
                 {field: 'orderAmount', title: '订单金额 '},
-                {field: 'feeId', title: '费率'},
+                {field: 'retain3', title: '交易手续费'},
                 {field: 'orderIp', title: '订单生成IP'},
                 {field: 'createTime', title: '创建时间'},
                 {field: 'dealDescribe', title: '交易备注'},
@@ -100,7 +100,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + updateOrder + '" href="javascript:void(0)" onclick="onUpdateOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>扔给财务</a> ');
+                /*        actions.push('<a class="btn btn-danger btn-xs ' + updateOrder + '" href="javascript:void(0)" onclick="onUpdateOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>扔给财务</a> ');*/
                         return actions.join('');
                     }
                 }]

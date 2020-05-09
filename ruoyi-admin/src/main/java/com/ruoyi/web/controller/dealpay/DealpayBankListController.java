@@ -3,7 +3,6 @@ package com.ruoyi.web.controller.dealpay;
 import java.util.List;
 
 import com.ruoyi.alipay.domain.AlipayBankListEntity;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,7 +34,6 @@ public class DealpayBankListController extends BaseController {
     @Autowired
     private IDealpayBankListService dealpayBankListService;
 
-    @RequiresPermissions("dealpay:bankCard:view")
     @GetMapping()
     public String bankCard() {
         return prefix + "/bankCard";
@@ -44,7 +42,6 @@ public class DealpayBankListController extends BaseController {
     /**
      * 查询银行卡列列表
      */
-    @RequiresPermissions("dealpay:bankCard:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayBankListEntity dealpayBankList) {
@@ -56,7 +53,6 @@ public class DealpayBankListController extends BaseController {
     /**
      * 导出银行卡列列表
      */
-    @RequiresPermissions("dealpay:bankCard:export")
     @Log(title = "银行卡列", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -77,7 +73,6 @@ public class DealpayBankListController extends BaseController {
     /**
      * 新增保存银行卡列
      */
-    @RequiresPermissions("dealpay:bankCard:add")
     @Log(title = "银行卡列", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -98,7 +93,6 @@ public class DealpayBankListController extends BaseController {
     /**
      * 修改保存银行卡列
      */
-    @RequiresPermissions("dealpay:bankCard:edit")
     @Log(title = "银行卡列", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -109,7 +103,6 @@ public class DealpayBankListController extends BaseController {
     /**
      * 删除银行卡列
      */
-    @RequiresPermissions("dealpay:bankCard:remove")
     @Log(title = "银行卡列", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -121,7 +114,6 @@ public class DealpayBankListController extends BaseController {
      * 码商状态修改（调用api）
      */
     @Log(title = "码商查询", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("dealpay:bankCard:status")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(DealpayBankListEntity dealpayBankListEntity) {

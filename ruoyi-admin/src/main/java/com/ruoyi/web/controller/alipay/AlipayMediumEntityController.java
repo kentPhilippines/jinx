@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ruoyi.alipay.domain.AlipayFileListEntity;
 import com.ruoyi.alipay.service.IAlipayFileListEntityService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -40,7 +39,6 @@ public class AlipayMediumEntityController extends BaseController {
 	@Autowired
 	private IAlipayFileListEntityService alipayFileListEntityService;
 
-	@RequiresPermissions("alipay:medium:view")
 	@GetMapping()
 	public String medium() {
 		return prefix + "/medium";
@@ -48,7 +46,6 @@ public class AlipayMediumEntityController extends BaseController {
 	/**
 	 * 查询收款媒介列列表
 	 */
-	@RequiresPermissions("alipay:medium:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayMediumEntity alipayMediumEntity) {
@@ -60,7 +57,6 @@ public class AlipayMediumEntityController extends BaseController {
 	/**
 	 * 导出收款媒介列列表
 	 */
-	@RequiresPermissions("alipay:medium:export")
 	@Log(title = "收款媒介列", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody
@@ -81,7 +77,6 @@ public class AlipayMediumEntityController extends BaseController {
 	/**
 	 * 新增保存收款媒介列
 	 */
-	@RequiresPermissions("alipay:medium:add")
 	@Log(title = "收款媒介列", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -102,7 +97,6 @@ public class AlipayMediumEntityController extends BaseController {
 	/**
 	 * 修改保存收款媒介列
 	 */
-	@RequiresPermissions("alipay:medium:edit")
 	@Log(title = "收款媒介列", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -113,7 +107,6 @@ public class AlipayMediumEntityController extends BaseController {
 	/**
 	 * 删除收款媒介列
 	 */
-	@RequiresPermissions("alipay:medium:remove")
 	@Log(title = "收款媒介列", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody

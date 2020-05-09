@@ -9,7 +9,7 @@ otc:
   # 实例演示开关
   demoEnabled: false
   # 文件路径 示例（ Windows配置D:/otc/admin/uploadPath，Linux配置 /home/otc/admin/uploadPath）
-  profile: D:/otc/admin/uploadPath
+  profile:  /img/
   #profile: /home/otc/admin/uploadPath
   # 获取ip地址开关
   addressEnabled: false

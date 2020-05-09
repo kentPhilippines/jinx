@@ -24,7 +24,6 @@ import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -55,7 +54,6 @@ public class DealpayUserFundController extends BaseController {
     private SysPasswordService passwordService;
 
 
-    @RequiresPermissions("dealpay:cardFund:view")
     @GetMapping()
     public String cardFund() {
         return prefix + "/cardFund";
@@ -64,7 +62,6 @@ public class DealpayUserFundController extends BaseController {
     /**
      * 查询卡商资金账户列表
      */
-    @RequiresPermissions("dealpay:cardFund:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayUserFundEntity dealpayUserFundEntity) {
@@ -77,7 +74,6 @@ public class DealpayUserFundController extends BaseController {
     /**
      * 导出卡商资金账户列表
      */
-    @RequiresPermissions("dealpay:cardFund:export")
     @Log(title = "用户资金账户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -99,7 +95,6 @@ public class DealpayUserFundController extends BaseController {
     /**
      * 新增保存卡商资金账户
      */
-    @RequiresPermissions("dealpay:cardFund:add")
     @Log(title = "用户资金账户", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -120,7 +115,6 @@ public class DealpayUserFundController extends BaseController {
     /**
      * 修改保存卡商资金账户
      */
-    @RequiresPermissions("dealpay:cardFund:edit")
     @Log(title = "用户资金账户", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -131,7 +125,6 @@ public class DealpayUserFundController extends BaseController {
     /**
      * 删除卡商资金账户
      */
-    @RequiresPermissions("dealpay:cardFund:remove")
     @Log(title = "用户资金账户", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -161,7 +154,6 @@ public class DealpayUserFundController extends BaseController {
     /**
      * 加款保存用户加款记录
      */
-    @RequiresPermissions("dealpay:cardFund:refund")
     @Log(title = "用户资金账户", businessType = BusinessType.UPDATE)
     @PostMapping("/refund")
     @ResponseBody
@@ -192,7 +184,6 @@ public class DealpayUserFundController extends BaseController {
     /**
      * 减款保存卡商减款记录
      */
-    @RequiresPermissions("dealpay:cardFund:deduct")
     @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/deduct")
     @ResponseBody

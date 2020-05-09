@@ -52,11 +52,12 @@
 
     function submitHandler() {
         if ($.validate.form()) {
+          var a =   $('#form-rate-add').serialize();
             $.operate.save(prefix + "/add", $('#form-rate-add').serialize());
         }
     }
 
-    /*监听事件*/
+  /*  /!*监听事件*!/
     $('#feeType').on('select2:select', function (e) {
         const feeType = $('#feeType').select2('val');
         if (feeType === '2') {
@@ -65,7 +66,7 @@
         }else if(feeType === '1'){
             $('#payTypr').prop('disabled', false);
         }
-    });
+    });*/
 </script>
 </body>
 </html>

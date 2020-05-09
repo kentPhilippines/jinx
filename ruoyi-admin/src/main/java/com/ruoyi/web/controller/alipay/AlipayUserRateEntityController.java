@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.service.IAlipayProductService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -39,7 +38,6 @@ public class AlipayUserRateEntityController extends BaseController {
     @Autowired
     IAlipayProductService iAlipayProductService;
 
-    @RequiresPermissions("merchant:rate:view")
     @GetMapping()
     public String rate(ModelMap modelMap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
@@ -53,7 +51,6 @@ public class AlipayUserRateEntityController extends BaseController {
     /**
      * 查询用户产品费率列表
      */
-    @RequiresPermissions("merchant:rate:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserRateEntity alipayUserRateEntity) {
@@ -78,7 +75,6 @@ public class AlipayUserRateEntityController extends BaseController {
     /**
      * 新增保存用户产品费率
      */
-    @RequiresPermissions("merchant:rate:add")
     @Log(title = "用户产品费率", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -104,7 +100,6 @@ public class AlipayUserRateEntityController extends BaseController {
     /**
      * 修改保存用户产品费率
      */
-    @RequiresPermissions("merchant:rate:edit")
     @Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -115,7 +110,6 @@ public class AlipayUserRateEntityController extends BaseController {
     /**
      * 删除用户产品费率
      */
-    @RequiresPermissions("merchant:rate:remove")
     @Log(title = "用户产品费率", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -126,7 +120,6 @@ public class AlipayUserRateEntityController extends BaseController {
     /**
      * 商户费率状态更新
      */
-    @RequiresPermissions("merchant:rate:status")
     @Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody

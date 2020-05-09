@@ -1,7 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,7 +32,6 @@ public class AlipayLogEntityController extends BaseController {
 	@Autowired
 	private IAlipayLogEntityService alipayLogEntityService;
 
-	@RequiresPermissions("alipay:loginLog:view")
 	@GetMapping()
 	public String loginLog() {
 		return prefix + "/loginLog";
@@ -41,7 +39,6 @@ public class AlipayLogEntityController extends BaseController {
 	/**
 	 * 查询日志表列表
 	 */
-	@RequiresPermissions("alipay:loginLog:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayLogEntity alipayLogEntity) {
@@ -53,7 +50,6 @@ public class AlipayLogEntityController extends BaseController {
 	/**
 	 * 导出日志表列表
 	 */
-	@RequiresPermissions("alipay:loginLog:export")
 	@Log(title = "日志表", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody
@@ -74,7 +70,6 @@ public class AlipayLogEntityController extends BaseController {
 	/**
 	 * 新增保存日志表
 	 */
-	@RequiresPermissions("alipay:loginLog:add")
 	@Log(title = "日志表", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -95,7 +90,6 @@ public class AlipayLogEntityController extends BaseController {
 	/**
 	 * 修改保存日志表
 	 */
-	@RequiresPermissions("alipay:loginLog:edit")
 	@Log(title = "日志表", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -106,7 +100,6 @@ public class AlipayLogEntityController extends BaseController {
 	/**
 	 * 删除日志表
 	 */
-	@RequiresPermissions("alipay:loginLog:remove")
 	@Log(title = "日志表", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody

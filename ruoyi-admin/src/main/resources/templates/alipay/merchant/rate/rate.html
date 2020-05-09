@@ -67,7 +67,7 @@
     const editFlag = [[${@permission.hasPermi('merchant:rate:edit')}]];
     const removeFlag = [[${@permission.hasPermi('merchant:rate:remove')}]];
 
-    const productType = [[${@dict.getProductType()}]];
+    const productType =    [[${@dict.getType('payTypr')}]];
 
     const prefix = ctx + "alipay/rate";
 
@@ -101,7 +101,7 @@
                     field: 'payTypr',
                     title: '产品类型',
                     formatter: function (value, row, index) {
-                        return $.table.showProductLabel(productType,'该产品已停用或不存在', value);
+                        return $.table.selectDictLabel(productType, value);
                     }
                 },
                 {

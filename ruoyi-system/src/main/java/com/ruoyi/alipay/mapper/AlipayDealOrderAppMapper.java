@@ -59,14 +59,26 @@ public interface AlipayDealOrderAppMapper {
             "coalesce(sum(orderAmount),0) totalAmount," +
             "coalesce(sum(case orderStatus when 2 then orderAmount else 0 end),0) successAmount," +
             "count(*) totalCount," +
-            "count(case orderStatus when 2 then id else null end) successCount " +
+            "count(case orderStatus when 2 then id else null end) successCount ," +
+
+            "coalesce(sum(retain3),0) fee ," +
+            "coalesce(sum(case orderStatus when 2 then retain3 else 0 end),0) successFee " +
+
             "from alipay_deal_order_app where createTime between #{dayStart} and #{dayEnd} and orderType = 1 " +
+
+
             " union all " +
+
+
             "select orderAccount userId, " +
             "coalesce(sum(orderAmount),0.00) totalAmount," +
             "coalesce(sum(case orderStatus when 2 then orderAmount else 0 end),0) successAmount," +
             "count(*) totalCount," +
-            "count(case orderStatus when 2 then id else null end) successCount " +
+            "count(case orderStatus when 2 then id else null end) successCount ," +
+
+            "coalesce(sum(retain3),0) fee ," +
+            "coalesce(sum(case orderStatus when 2 then retain3 else 0 end),0) successFee " +
+
             "from alipay_deal_order_app " +
             "where createTime between #{dayStart} and #{dayEnd} and orderType = 1 " +
             "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +

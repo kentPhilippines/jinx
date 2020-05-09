@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isNotify != null  and isNotify != ''"> and isNotify = #{isNotify}</if>
             <if test="status != null "> and status = #{status}</if>
         </where>
-        order by orderStatus=1 desc,createTime asc
+        order by  createTime desc
     </select>
 
 

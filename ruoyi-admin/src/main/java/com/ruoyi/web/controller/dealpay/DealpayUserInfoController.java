@@ -14,7 +14,6 @@ import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -48,7 +47,6 @@ public class DealpayUserInfoController extends BaseController {
     @Autowired
     private IDealpayUserInfoService dealpayUserInfoService;
 
-    @RequiresPermissions("dealpay:cardInfo:view")
     @GetMapping()
     public String cardInfo() {
         return prefix + "/cardInfo";
@@ -57,7 +55,6 @@ public class DealpayUserInfoController extends BaseController {
     /**
      * 查询卡商详情列表
      */
-    @RequiresPermissions("dealpay:cardInfo:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayUserInfoEntity dealpayUserInfoEntity) {
@@ -78,7 +75,6 @@ public class DealpayUserInfoController extends BaseController {
     /**
      * 新增保存卡商详情
      */
-    @RequiresPermissions("dealpay:cardInfo:add")
     @Log(title = "用户详情", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -131,7 +127,6 @@ public class DealpayUserInfoController extends BaseController {
     /**
      * 修改保存卡商详情
      */
-    @RequiresPermissions("dealpay:cardInfo:edit")
     @Log(title = "用户详情", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -165,7 +160,6 @@ public class DealpayUserInfoController extends BaseController {
     /**
      * 删除卡商详情(调用api)
      */
-    @RequiresPermissions("dealpay:cardInfo:remove")
     @Log(title = "用户详情", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -192,7 +186,6 @@ public class DealpayUserInfoController extends BaseController {
      * 卡商状态修改（调用api）
      */
     @Log(title = "码商查询", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("dealpay:cardInfo:switch")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(DealpayUserInfoEntity user) {
@@ -232,7 +225,6 @@ public class DealpayUserInfoController extends BaseController {
      * 重置用戶的登陸密碼
      */
     @Log(title = "码商查询", businessType = BusinessType.RESET)
-    @RequiresPermissions("dealpay:cardInfo:reset:login")
     @PostMapping("resetLoginPwd")
     @ResponseBody
     public AjaxResult resetLoginPwd(Long id) {
@@ -247,7 +239,6 @@ public class DealpayUserInfoController extends BaseController {
      * 重置用戶的提現密碼
      */
     @Log(title = "码商查询", businessType = BusinessType.RESET)
-    @RequiresPermissions("dealpay:cardInfo:reset:withdrawal")
     @PostMapping("resetWithdrawalPwd")
     @ResponseBody
     public AjaxResult resetWithdrawalPwd(Long id) {

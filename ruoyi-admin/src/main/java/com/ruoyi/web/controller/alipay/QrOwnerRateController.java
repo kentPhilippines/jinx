@@ -10,7 +10,6 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,7 +34,6 @@ public class QrOwnerRateController extends BaseController {
     @Autowired
     IAlipayProductService iAlipayProductService;
 
-    @RequiresPermissions("qr:rate:view")
     @GetMapping()
     public String rate(ModelMap modelMap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
@@ -49,7 +47,6 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 查询用户产品费率列表
      */
-    @RequiresPermissions("qr:rate:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserRateEntity alipayUserRateEntity) {
@@ -74,7 +71,6 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 新增保存用户产品费率
      */
-    @RequiresPermissions("qr:rate:add")
     @Log(title = "码商费率", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -100,7 +96,6 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 修改保存用户产品费率
      */
-    @RequiresPermissions("qr:rate:edit")
     @Log(title = "码商费率", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -111,7 +106,6 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 删除用户产品费率
      */
-    @RequiresPermissions("qr:rate:remove")
     @Log(title = "码商费率", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -122,7 +116,6 @@ public class QrOwnerRateController extends BaseController {
     /**
      * 码商费率状态更新
      */
-    @RequiresPermissions("qr:rate:status")
     @Log(title = "码商费率", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody

@@ -16,7 +16,6 @@ import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -42,7 +41,6 @@ public class AlipayUserInfoController extends BaseController {
     @Autowired
     private IAlipayUserInfoService alipayUserInfoService;
 
-    @RequiresPermissions("alipay:userInfo:view")
     @GetMapping()
     public String userInfo() {
         return prefix + "/userInfo";
@@ -50,7 +48,6 @@ public class AlipayUserInfoController extends BaseController {
     /**
      * 查询用户详情列表
      */
-    @RequiresPermissions("alipay:userInfo:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserInfo alipayUserInfo) {
@@ -71,7 +68,6 @@ public class AlipayUserInfoController extends BaseController {
     /**
      * 新增保存用户详情
      */
-    @RequiresPermissions("alipay:userInfo:add")
     @Log(title = "用户详情", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -124,7 +120,6 @@ public class AlipayUserInfoController extends BaseController {
     /**
      * 修改保存用户详情
      */
-    @RequiresPermissions("alipay:userInfo:edit")
     @Log(title = "用户详情", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -158,7 +153,6 @@ public class AlipayUserInfoController extends BaseController {
     /**
      * 删除用户详情(调用api)
      */
-    @RequiresPermissions("alipay:userInfo:remove")
     @Log(title = "用户详情", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -185,7 +179,6 @@ public class AlipayUserInfoController extends BaseController {
      * 码商状态修改（调用api）
      */
     @Log(title = "码商查询", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("alipay:userInfo:switch")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(AlipayUserInfo user) {
@@ -214,7 +207,6 @@ public class AlipayUserInfoController extends BaseController {
     /**
      * 检验登陆用户ID是否唯一
      */
-    @PostMapping("checkAlipayUserIdUnique")
     @ResponseBody
     public String checkAlipayUserIdUnique(AlipayUserInfo alipayUserInfo) {
         logger.info("进入验证用户名是否唯一");
@@ -225,7 +217,6 @@ public class AlipayUserInfoController extends BaseController {
      * 重置用戶的登陸密碼
      */
     @Log(title = "码商查询", businessType = BusinessType.RESET)
-    @RequiresPermissions("alipay:userInfo:reset:login")
     @PostMapping("resetLoginPwd")
     @ResponseBody
     public AjaxResult resetLoginPwd(Long id) {
@@ -241,7 +232,6 @@ public class AlipayUserInfoController extends BaseController {
      * 重置用戶的提現密碼
      */
     @Log(title = "码商查询", businessType = BusinessType.RESET)
-    @RequiresPermissions("alipay:userInfo:reset:withdrawal")
     @PostMapping("resetWithdrawalPwd")
     @ResponseBody
     public AjaxResult resetWithdrawalPwd(Long id) {

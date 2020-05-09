@@ -20,7 +20,6 @@ import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.dealpay.domain.DealpayBankListEntity;
 import com.ruoyi.dealpay.service.IDealpayBankListService;
 import com.ruoyi.web.controller.dealpay.DealpayBankListController;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -56,7 +55,6 @@ public class MerchantControlController extends BaseController {
     @Autowired
     private IDealpayBankListService dealpayBankListService;
 
-    @RequiresPermissions("control:account:merchant:view")
     @GetMapping()
     public String merchant() {
         return prefix + "/merchant";
@@ -65,7 +63,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 查询商户风控信息列表
      */
-    @RequiresPermissions("control:account:merchant:list")
     @PostMapping("/merchant/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserInfo merchantInfoEntity) {
@@ -129,7 +126,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 修改保存商户风控信息
      */
-    @RequiresPermissions("control:account:merchant:edit")
     @Log(title = "商户风控", businessType = BusinessType.UPDATE)
     @PostMapping("/merchant/save")
     @ResponseBody
@@ -142,7 +138,6 @@ public class MerchantControlController extends BaseController {
      *
      * @return
      */
-    @RequiresPermissions("control:account:qrOwner:view")
     @GetMapping("/qr/show")
     public String qr() {
         return prefix + "/qr";
@@ -151,7 +146,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 查询码商信息列表
      */
-    @RequiresPermissions("control:account:qrOwner:list")
     @PostMapping("/qr/list")
     @ResponseBody
     public TableDataInfo qrList(AlipayUserInfo alipayUserInfo) {
@@ -174,7 +168,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 修改保存商户风控信息
      */
-    @RequiresPermissions("control:account:qrOwner:edit")
     @Log(title = "商户风控", businessType = BusinessType.UPDATE)
     @PostMapping("/qr/save")
     @ResponseBody
@@ -185,7 +178,6 @@ public class MerchantControlController extends BaseController {
 
     /*码商银行卡黑名单处理逻辑*/
 
-    @RequiresPermissions("qr:bankCard:black")
     @GetMapping("/bankCard/qr/view")
     public String bank() {
         return bankcardControl_prefix + "/qrBankCard";
@@ -195,7 +187,6 @@ public class MerchantControlController extends BaseController {
      *
      * 查询码商银行卡黑名单
      */
-    @RequiresPermissions("qr:bankCard:blackList")
     @PostMapping("/bankCard/qr/list")
     @ResponseBody
     public TableDataInfo list(AlipayBankListEntity alipayBankListEntity) {
@@ -217,7 +208,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 保存银行卡黑名单
      */
-    @RequiresPermissions("qr:bankCard:saveBlackList")
     @Log(title = "码商银行卡", businessType = BusinessType.INSERT)
     @PostMapping("/add/qr/black")
     @ResponseBody
@@ -228,7 +218,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 删除银行卡黑名单
      */
-    @RequiresPermissions("qr:bankCard:removeBlackList")
     @Log(title = "码商银行卡", businessType = BusinessType.DELETE)
     @PostMapping("/remove/bankCard/qr")
     @ResponseBody
@@ -237,7 +226,6 @@ public class MerchantControlController extends BaseController {
     }
 
     /*商户银行卡黑名单处理逻辑*/
-    @RequiresPermissions("merchant:bankCard:black")
     @GetMapping("/bankCard/merchant/view")
     public String merchantBankCard() {
         return bankcardControl_prefix + "/merchantBankCard";
@@ -247,7 +235,6 @@ public class MerchantControlController extends BaseController {
      *
      * 查询码商银行卡黑名单
      */
-    @RequiresPermissions("merchant:bankCard:blackList")
     @PostMapping("/bankCard/merchant/list")
     @ResponseBody
     public TableDataInfo merchantBanklist(AlipayBankListEntity alipayBankListEntity) {
@@ -261,7 +248,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 保存商户银行卡黑名单
      */
-    @RequiresPermissions("merchant:bankCard:saveBlackList")
     @Log(title = "商户银行卡", businessType = BusinessType.INSERT)
     @PostMapping("/add/merchant/black")
     @ResponseBody
@@ -272,7 +258,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 删除银行卡黑名单
      */
-    @RequiresPermissions("merchant:bankCard:removeBlackList")
     @Log(title = "商户银行卡", businessType = BusinessType.DELETE)
     @PostMapping("/remove/bankCard/merchant")
     @ResponseBody
@@ -281,7 +266,6 @@ public class MerchantControlController extends BaseController {
     }
 
     /*卡商银行卡黑名单处理逻辑*/
-    @RequiresPermissions("payfor:bankCard:black")
     @GetMapping("/bankCard/card/view")
     public String cardBankCard() {
         return bankcardControl_prefix + "/payforCard";
@@ -291,7 +275,6 @@ public class MerchantControlController extends BaseController {
      *
      * 查询卡商银行卡黑名单
      */
-    @RequiresPermissions("payfor:bankCard:blackList")
     @PostMapping("/bankCard/payfor/list")
     @ResponseBody
     public TableDataInfo payforBanklist(DealpayBankListEntity dealpayBankListEntity) {
@@ -303,7 +286,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 保存商户银行卡黑名单
      */
-    @RequiresPermissions("merchant:bankCard:saveBlackList")
     @Log(title = "商户银行卡", businessType = BusinessType.INSERT)
     @PostMapping("/add/payfor/black")
     @ResponseBody
@@ -314,7 +296,6 @@ public class MerchantControlController extends BaseController {
     /**
      * 删除卡商银行卡黑名单
      */
-    @RequiresPermissions("merchant:bankCard:removeBlackList")
     @Log(title = "卡商银行卡", businessType = BusinessType.DELETE)
     @PostMapping("/remove/bankCard/payfor")
     @ResponseBody

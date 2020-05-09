@@ -11,7 +11,6 @@ import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
 import com.ruoyi.dealpay.domain.DealpayRechargeEntity;
 import com.ruoyi.framework.util.DictionaryUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -47,7 +46,6 @@ public class DealpayWithdrawalController extends BaseController {
     @Autowired
     private DictionaryUtils dictionaryUtils;
 
-    @RequiresPermissions("dealpay:cardWithdrawal:view")
     @GetMapping()
     public String cardWithdrawal() {
         return prefix + "/cardWithdrawal";
@@ -56,7 +54,6 @@ public class DealpayWithdrawalController extends BaseController {
     /**
      * 查询卡商出款记录表列表
      */
-    @RequiresPermissions("dealpay:cardWithdrawal:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayWithdrawalEntity dealpayWithdrawalEntity) {
@@ -68,7 +65,6 @@ public class DealpayWithdrawalController extends BaseController {
     /**
      * 导出卡商出款记录表列表
      */
-    @RequiresPermissions("dealpay:cardWithdrawal:export")
     @Log(title = "卡商出款记录表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -89,7 +85,6 @@ public class DealpayWithdrawalController extends BaseController {
     /**
      * 新增保存卡商出款记录表
      */
-    @RequiresPermissions("dealpay:cardWithdrawal:add")
     @Log(title = "卡商出款记录表", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -110,7 +105,6 @@ public class DealpayWithdrawalController extends BaseController {
     /**
      * 修改保存卡商出款记录表
      */
-    @RequiresPermissions("dealpay:cardWithdrawal:edit")
     @Log(title = "卡商出款记录表", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -121,7 +115,6 @@ public class DealpayWithdrawalController extends BaseController {
     /**
      * 删除卡商出款记录表
      */
-    @RequiresPermissions("dealpay:cardWithdrawal:remove")
     @Log(title = "卡商出款记录表", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -132,7 +125,6 @@ public class DealpayWithdrawalController extends BaseController {
 
     /*财务处理逻辑*/
 
-    @RequiresPermissions("finance:withdrawal:view")
     @GetMapping("/payfor/view")
     public String payforView() {
         return finance_prefix + "/payfor";
@@ -141,7 +133,6 @@ public class DealpayWithdrawalController extends BaseController {
     /**
      * <p>代付管理</p>
      */
-    @RequiresPermissions("finance:payfor:manage")
     @PostMapping("/finance/manage/payfor")
     @Log(title = "代付管理", businessType = BusinessType.UPDATE)
     @ResponseBody
@@ -165,7 +156,6 @@ public class DealpayWithdrawalController extends BaseController {
     /**
      * <p>代付管理</p>
      */
-    @RequiresPermissions("finance:withdrawal:updateStatus")
     @PostMapping("/finance/confirmStatus")
     @Log(title = "代付管理", businessType = BusinessType.UPDATE)
     @ResponseBody

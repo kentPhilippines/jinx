@@ -6,7 +6,6 @@ import java.util.List;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -37,7 +36,6 @@ public class AlipayDealOrderAppController extends BaseController {
     @Autowired
     private IAlipayDealOrderAppService alipayDealOrderAppService;
 
-    @RequiresPermissions("orderApp:merchant:view")
     @GetMapping()
     public String orderApp() {
         return prefix + "/orderApp";
@@ -46,7 +44,6 @@ public class AlipayDealOrderAppController extends BaseController {
     /**
      * 查询商户订单登记列表
      */
-    @RequiresPermissions("orderApp:merchant:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayDealOrderApp alipayDealOrderApp) {
@@ -58,7 +55,6 @@ public class AlipayDealOrderAppController extends BaseController {
     /**
      * 导出商户订单登记列表
      */
-    @RequiresPermissions("orderApp:merchant:export")
     @Log(title = "商户交易订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -71,7 +67,6 @@ public class AlipayDealOrderAppController extends BaseController {
     /**
      * 显示商户订单详情
      */
-    @RequiresPermissions("orderApp:merchant:detail")
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayDealOrderApp alipayDealOrderApp = alipayDealOrderAppService.selectAlipayDealOrderAppById(id);
@@ -82,7 +77,6 @@ public class AlipayDealOrderAppController extends BaseController {
     /**
      * 转发财务
      */
-    @RequiresPermissions("orderApp:merchant:toFiance")
     @Log(title = "商户交易订单", businessType = BusinessType.INSERT)
     @PostMapping("/updateOrder")
     @ResponseBody
@@ -104,7 +98,6 @@ public class AlipayDealOrderAppController extends BaseController {
     /**
      * 商户交易订单统计（仅当天数据）
      */
-    @RequiresPermissions("orderApp:merchant:statistics")
     @PostMapping("/statistics/merchant/orderApp")
     @ResponseBody
     public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {

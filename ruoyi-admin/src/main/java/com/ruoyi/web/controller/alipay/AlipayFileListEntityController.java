@@ -1,7 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,7 +32,6 @@ public class AlipayFileListEntityController extends BaseController {
 	@Autowired
 	private IAlipayFileListEntityService alipayFileListEntityService;
 
-	@RequiresPermissions("alipay:file:view")
 	@GetMapping()
 	public String file() {
 		return prefix + "/file";
@@ -42,7 +40,6 @@ public class AlipayFileListEntityController extends BaseController {
 	/**
 	 * 查询文件列列表
 	 */
-	@RequiresPermissions("alipay:file:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayFileListEntity alipayFileListEntity) {
@@ -55,7 +52,6 @@ public class AlipayFileListEntityController extends BaseController {
 	/**
 	 * 导出文件列列表
 	 */
-	@RequiresPermissions("alipay:file:export")
 	@Log(title = "文件列", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody
@@ -77,7 +73,6 @@ public class AlipayFileListEntityController extends BaseController {
 	/**
 	 * 新增保存文件列
 	 */
-	@RequiresPermissions("alipay:file:add")
 	@Log(title = "文件列", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -98,7 +93,6 @@ public class AlipayFileListEntityController extends BaseController {
 	/**
 	 * 修改保存文件列
 	 */
-	@RequiresPermissions("alipay:file:edit")
 	@Log(title = "文件列", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -109,7 +103,6 @@ public class AlipayFileListEntityController extends BaseController {
 	/**
 	 * 删除文件列
 	 */
-	@RequiresPermissions("alipay:file:remove")
 	@Log(title = "文件列", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody

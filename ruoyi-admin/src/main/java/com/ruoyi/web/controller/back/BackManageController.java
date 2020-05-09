@@ -21,7 +21,6 @@ import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.GoogleUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,10 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequestMapping("/back/merchant/admin")
 @Controller
@@ -71,7 +67,6 @@ public class BackManageController extends BaseController {
     /**
      * 商户后台用户登陆显示详细信息
      */
-    @RequiresPermissions("back:merchant:view")
     @GetMapping("/view")
     public String detail(ModelMap mmap) {
         SysUser sysUser = ShiroUtils.getSysUser();
@@ -89,7 +84,6 @@ public class BackManageController extends BaseController {
      * @param alipayUserInfo
      * @return
      */
-    @RequiresPermissions("back:merchant:edit")
     @Log(title = "商户信息", businessType = BusinessType.UPDATE)
     @PostMapping("/audit")
     @ResponseBody
@@ -99,7 +93,6 @@ public class BackManageController extends BaseController {
 
 
     //商户查询交易订单
-    @RequiresPermissions("back:order:view")
     @GetMapping("/order/view")
     public String orderShow() {
         return prefix + "/order";
@@ -109,7 +102,6 @@ public class BackManageController extends BaseController {
     /**
      * 查询商户订单
      */
-    @RequiresPermissions("back:order:list")
     @PostMapping("/order/list")
     @ResponseBody
     public TableDataInfo orderList(AlipayDealOrderApp alipayDealOrderApp) {
@@ -122,7 +114,6 @@ public class BackManageController extends BaseController {
 
 
     //商户查询交易流水
-    @RequiresPermissions("back:running:view")
     @GetMapping("/running/view")
     public String runningShow() {
         return prefix + "/running";
@@ -131,7 +122,6 @@ public class BackManageController extends BaseController {
     /**
      * 查询商户的交易流水
      */
-    @RequiresPermissions("back:running:list")
     @PostMapping("/running/list")
     @ResponseBody
     public TableDataInfo list(AlipayRunOrderEntity alipayRunOrderEntity) {
@@ -144,7 +134,6 @@ public class BackManageController extends BaseController {
 
 
     //商户提现申请
-    @RequiresPermissions("back:withdrawal:view")
     @GetMapping("/withdrawal/view")
     public String withdrawalShow() {
         return prefix + "/withdrawal";
@@ -153,7 +142,6 @@ public class BackManageController extends BaseController {
     /**
      * 查询商户提现记录列表
      */
-    @RequiresPermissions("back:withdrawal:list")
     @PostMapping("/withdrawal/list")
     @ResponseBody
     public TableDataInfo list(AlipayWithdrawEntity alipayWithdrawEntity) {
@@ -167,7 +155,6 @@ public class BackManageController extends BaseController {
     /**
      * 商户发起申请提现
      */
-    @RequiresPermissions("back:withdrawal:apply")
     @GetMapping("/withdrawal/apply")
     public String apply(ModelMap mmap) {
         SysUser sysUser = ShiroUtils.getSysUser();
@@ -183,7 +170,6 @@ public class BackManageController extends BaseController {
     /**
      * 保存提现提案
      */
-    @RequiresPermissions("back:withdrawal:save")
     @Log(title = "提现申请", businessType = BusinessType.INSERT)
     @PostMapping("/withdrawal/save")
     @ResponseBody
@@ -210,6 +196,8 @@ public class BackManageController extends BaseController {
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_6);
         AlipayUserInfo alipayUserInfo = merchantInfoEntityService.selectBackUserByUserId(currentUser.getMerchantId());
         String[] str = alipayWithdrawEntity.getBankNo().split(",");
+        AlipayBankListEntity bank =  alipayBankListEntityService.selectAlipayBankListEntityByAcc(str[0],currentUser.getMerchantId());
+
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("appid", currentUser.getMerchantId());
         mapParam.put("ordertime", new Date());
@@ -218,7 +206,8 @@ public class BackManageController extends BaseController {
         mapParam.put("acctname", str[1]);
         mapParam.put("apply", currentUser.getLoginName());
         mapParam.put("mobile", alipayWithdrawEntity.getMobile());
-        mapParam.put("bankcode", "R");//入款
+        mapParam.put("bankcode", bank.getBankType());//后台代付
+        mapParam.put("dpaytype", "Bankcard");//银行卡代付类型
         mapParam.put("orderStatus", WithdrawalStatusEnum.WITHDRAWAL_STATUS_PROCESS.getCode());
         mapParam.put("notifyurl", "http://localhost/iiiii");
         mapParam.put("apporderid", GenerateOrderNo.getInstance().Generate(StaticConstants.MERCHANT_WITHDRAWAL));
@@ -231,7 +220,6 @@ public class BackManageController extends BaseController {
     }
 
     //商户查询银行卡
-    @RequiresPermissions("back:bank:view")
     @GetMapping("/bank/view")
     public String bankCard() {
         return prefix + "/bank";
@@ -240,7 +228,6 @@ public class BackManageController extends BaseController {
     /**
      * 查询银行卡列表列表
      */
-    @RequiresPermissions("back:bank:list")
     @PostMapping("/bank/list")
     @ResponseBody
     public TableDataInfo list(AlipayBankListEntity alipayBankListEntity) {
@@ -263,7 +250,6 @@ public class BackManageController extends BaseController {
     /**
      * 新增保存银行卡列表
      */
-    @RequiresPermissions("back:bank:add")
     @Log(title = "银行卡列表", businessType = BusinessType.INSERT)
     @PostMapping("/bank/toSave")
     @ResponseBody
@@ -275,7 +261,6 @@ public class BackManageController extends BaseController {
     /**
      * 删除银行卡列表
      */
-    @RequiresPermissions("back:bank:remove")
     @Log(title = "银行卡列表", businessType = BusinessType.DELETE)
     @PostMapping("/bank/remove")
     @ResponseBody
@@ -285,7 +270,6 @@ public class BackManageController extends BaseController {
 
 
     //下线数据
-    @RequiresPermissions("back:data:view")
     @GetMapping("/data/view")
     public String agent() {
         return prefix + "/agent";
@@ -294,7 +278,6 @@ public class BackManageController extends BaseController {
     /**
      * 查询下线代理商户
      */
-    @RequiresPermissions("back:data:list")
     @PostMapping("/data/list")
     @ResponseBody
     public TableDataInfo agentList(AlipayUserInfo alipayUserInfo) {
@@ -306,7 +289,6 @@ public class BackManageController extends BaseController {
     }
 
     //下线订单
-    @RequiresPermissions("agent:order:view")
     @GetMapping("/agent/order/view")
     public String agentOrder() {
         return prefix + "/agent_order";
@@ -316,7 +298,6 @@ public class BackManageController extends BaseController {
     /**
      * 查询商户订单
      */
-    @RequiresPermissions("agent:order:list")
     @PostMapping("/agent/order/list")
     @ResponseBody
     public TableDataInfo agentOrder(AlipayDealOrderApp alipayDealOrderApp) {
@@ -338,7 +319,6 @@ public class BackManageController extends BaseController {
     /**
      * 后台管理员商户交易订单统计（仅当天数据）
      */
-    @RequiresPermissions("back:merchant:statistics")
     @PostMapping("/statistics/merchant/admin/order")
     @ResponseBody
     public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {
@@ -349,7 +329,13 @@ public class BackManageController extends BaseController {
         statisticsEntity.setUserId(sysUser.getMerchantId());
         startPage();
         List<StatisticsEntity> list = alipayDealOrderAppService.selectMerchantStatisticsDataByDay(statisticsEntity, DateUtils.dayStart(), DateUtils.dayEnd());
-        return getDataTable(list);
+        List<StatisticsEntity> dataList = new ArrayList();
+        for(StatisticsEntity statis :list){
+            if(!statis.getUserId().equals("所有")){
+                dataList.add(statis);
+            }
+        }
+        return getDataTable(dataList);
     }
 
 }

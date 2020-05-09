@@ -49,4 +49,11 @@ public interface IAlipayUserFundEntityService
      * @return
      */
     AlipayUserFundEntity findAlipayUserFundByUserId(String merchantId);
+
+    /**
+     * <p>渠道账户查询</p>
+     * @param alipayUserFundEntity
+     * @return
+     */
+    List<AlipayUserFundEntity> findChannelAccount(AlipayUserFundEntity alipayUserFundEntity);
 }

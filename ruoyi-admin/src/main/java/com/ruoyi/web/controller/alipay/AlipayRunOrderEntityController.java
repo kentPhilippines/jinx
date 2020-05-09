@@ -1,7 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,7 +32,6 @@ public class AlipayRunOrderEntityController extends BaseController {
 	@Autowired
 	private IAlipayRunOrderEntityService alipayRunOrderEntityService;
 
-	@RequiresPermissions("running:alipay:view")
 	@GetMapping()
 	public String running() {
 		return prefix + "/running";
@@ -42,7 +40,6 @@ public class AlipayRunOrderEntityController extends BaseController {
 	/**
 	 * 查询流水订单记录列表
 	 */
-	@RequiresPermissions("running:alipay:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayRunOrderEntity alipayRunOrderEntity) {
@@ -54,7 +51,6 @@ public class AlipayRunOrderEntityController extends BaseController {
 	/**
 	 * 导出流水订单记录列表
 	 */
-	@RequiresPermissions("running:alipay:export")
 	@Log(title = "资金流水", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody

@@ -1,7 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,7 +29,6 @@ public class AlipayExceptionOrderController extends BaseController {
 	private String prefix = "alipay/export";
 	@Autowired
 	private IAlipayExceptionOrderService alipayExceptionOrderService;
-	@RequiresPermissions("alipay:order:view")
 	@GetMapping()
 	public String order() {
 		return prefix + "/order";
@@ -38,7 +36,6 @@ public class AlipayExceptionOrderController extends BaseController {
 	/**
 	 * 查询拦截订单列表
 	 */
-	@RequiresPermissions("alipay:order:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayExceptionOrder alipayExceptionOrder) {
@@ -50,7 +47,6 @@ public class AlipayExceptionOrderController extends BaseController {
 	/**
 	 * 导出拦截订单列表
 	 */
-	@RequiresPermissions("alipay:order:export")
 	@Log(title = "拦截订单", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody
@@ -70,7 +66,6 @@ public class AlipayExceptionOrderController extends BaseController {
 	/**
 	 * 新增保存拦截订单
 	 */
-	@RequiresPermissions("alipay:order:add")
 	@Log(title = "拦截订单", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -89,7 +84,6 @@ public class AlipayExceptionOrderController extends BaseController {
 	/**
 	 * 修改保存拦截订单
 	 */
-	@RequiresPermissions("alipay:order:edit")
 	@Log(title = "拦截订单", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -99,7 +93,6 @@ public class AlipayExceptionOrderController extends BaseController {
 	/**
 	 * 删除拦截订单
 	 */
-	@RequiresPermissions("alipay:order:remove")
 	@Log(title = "拦截订单", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody

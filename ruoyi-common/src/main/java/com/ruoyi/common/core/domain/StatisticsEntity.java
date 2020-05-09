@@ -8,7 +8,12 @@ import java.math.BigDecimal;
 
 public class StatisticsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 5547968516186055805L;
-
+    private String fee;
+    public String getFee(){return this.fee;}
+    public  void setFee(String fee){this.fee = fee;}
+    private String successFee;
+    public String getSuccessFee(){return this.successFee;}
+    public  void setSuccessFee(String successFee){this.successFee = successFee;}
     /**
      * 用户账户
      */

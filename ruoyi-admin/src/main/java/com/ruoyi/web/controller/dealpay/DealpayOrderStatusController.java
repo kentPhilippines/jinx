@@ -8,7 +8,6 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.dealpay.domain.DealpayOrderStatusEntity;
 import com.ruoyi.dealpay.service.IDealpayOrderStatusService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,7 +29,6 @@ public class DealpayOrderStatusController extends BaseController {
     @Autowired
     private IDealpayOrderStatusService dealpayOrderStatusService;
 
-    @RequiresPermissions("dealpay:confirm:view")
     @GetMapping()
     public String confirm() {
         return prefix + "/confirm";
@@ -39,7 +37,6 @@ public class DealpayOrderStatusController extends BaseController {
     /**
      * 查询双方确认订单状态列表
      */
-    @RequiresPermissions("dealpay:confirm:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayOrderStatusEntity dealpayOrderStatus) {
@@ -51,7 +48,6 @@ public class DealpayOrderStatusController extends BaseController {
     /**
      * 导出双方确认订单状态列表
      */
-    @RequiresPermissions("dealpay:confirm:export")
     @Log(title = "双方确认订单状态", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -72,7 +68,6 @@ public class DealpayOrderStatusController extends BaseController {
     /**
      * 新增保存双方确认订单状态
      */
-    @RequiresPermissions("dealpay:confirm:add")
     @Log(title = "双方确认订单状态", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -93,7 +88,6 @@ public class DealpayOrderStatusController extends BaseController {
     /**
      * 修改保存双方确认订单状态
      */
-    @RequiresPermissions("dealpay:confirm:edit")
     @Log(title = "双方确认订单状态", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -104,7 +98,6 @@ public class DealpayOrderStatusController extends BaseController {
     /**
      * 删除双方确认订单状态
      */
-    @RequiresPermissions("dealpay:confirm:remove")
     @Log(title = "双方确认订单状态", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody

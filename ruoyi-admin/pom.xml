@@ -35,7 +35,11 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 		</dependency>
-		
+		<dependency><!-- 实时调式   线上发布时 关闭给jar  -->
+ 		    <groupId>org.springframework.boot</groupId>
+ 		    <artifactId>spring-boot-devtools</artifactId>
+ 		    <optional>true</optional> 
+ 		</dependency>
 		<!--防止进入swagger页面报类型转换错误，排除2.9.2中的引用，手动增加1.5.21版本-->
         <dependency>
             <groupId>io.swagger</groupId>

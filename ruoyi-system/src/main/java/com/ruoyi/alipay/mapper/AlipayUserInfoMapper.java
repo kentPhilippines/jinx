@@ -54,7 +54,7 @@ public interface AlipayUserInfoMapper {
      * @param alipayUserInfo 用户详情
      * @return 结果
      */
-    public int insertAliaUserInfo(AlipayUserInfo alipayUserInfo);
+    public int insertAlipayUserInfo(AlipayUserInfo alipayUserInfo);
 
     /**
      * 修改用户详情

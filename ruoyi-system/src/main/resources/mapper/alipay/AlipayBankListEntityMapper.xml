@@ -32,7 +32,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectAlipayBankListEntityList" parameterType="AlipayBankListEntity" resultMap="AlipayBankListEntityResult">
         <include refid="selectAlipayBankListEntityVo"/>
         <where>
-            createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="bankcardId != null  and bankcardId != ''"> and bankcardId = #{bankcardId}</if>
             <if test="bankcardAccount != null  and bankcardAccount != ''"> and bankcardAccount = #{bankcardAccount}</if>
             <if test="accountHolder != null  and accountHolder != ''"> and accountHolder = #{accountHolder}</if>

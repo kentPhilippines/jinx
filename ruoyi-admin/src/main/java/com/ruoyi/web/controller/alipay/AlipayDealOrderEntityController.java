@@ -11,7 +11,6 @@ import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,7 +44,6 @@ public class AlipayDealOrderEntityController extends BaseController {
     @Autowired
     private IAlipayDealOrderEntityService alipayDealOrderEntityService;
 
-    @RequiresPermissions("orderDeal:qr:view")
     @GetMapping()
     public String orderDeal() {
         return prefix + "/orderDeal";
@@ -54,7 +52,6 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 查询交易订单列表
      */
-    @RequiresPermissions("orderDeal:qr:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayDealOrderEntity alipayDealOrderEntity) {
@@ -67,7 +64,6 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 交由财务处理
      */
-    @RequiresPermissions("orderDeal:qr:status")
     @PostMapping("/updataOrder")
     @ResponseBody
     public AjaxResult updataOrder(String id) {
@@ -81,7 +77,6 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 导出交易订单列表
      */
-    @RequiresPermissions("orderDeal:qr:export")
     @Log(title = "码商交易订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -96,7 +91,6 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 显示交易订单详情
      */
-    @RequiresPermissions("orderDeal:qr:detail")
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayDealOrderEntity alipayDealOrderEntity = alipayDealOrderEntityService.selectAlipayDealOrderEntityById(id);
@@ -111,7 +105,6 @@ public class AlipayDealOrderEntityController extends BaseController {
      * @param mmap
      * @return
      */
-    @RequiresPermissions("orderDeal:qr:codeDetail")
     @GetMapping("/showCode/{imgId}")
     public String showCode(@PathVariable("imgId") String imgId, ModelMap mmap) {
         //获取二维码服务器地址
@@ -122,7 +115,6 @@ public class AlipayDealOrderEntityController extends BaseController {
     }
 
 
-    @RequiresPermissions("orderDeal:qr:renotify")
     @Log(title = "交易订单", businessType = BusinessType.UPDATE)
     @PostMapping("/renotify")
     @ResponseBody
@@ -147,7 +139,6 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 显示具体统计内容
      */
-    @RequiresPermissions("orderDeal:qr:statistics")
     @PostMapping("/statistics/qr/order")
     @ResponseBody
     public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {

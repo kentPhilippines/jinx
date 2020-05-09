@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +38,6 @@ public class AlipayRechargeEntityController extends BaseController {
 	@Autowired
 	private IAlipayRechargeEntityService alipayRechargeEntityService;
 
-	@RequiresPermissions("deposit:qr:view")
 	@GetMapping()
 	public String deposit() {
 		return prefix + "/deposit";
@@ -48,7 +46,6 @@ public class AlipayRechargeEntityController extends BaseController {
 	/**
 	 * 查询充值记录列表
 	 */
-	@RequiresPermissions("deposit:qr:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayRechargeEntity alipayRechargeEntity) {
@@ -61,7 +58,6 @@ public class AlipayRechargeEntityController extends BaseController {
 	/**
 	 * 导出充值记录列表
 	 */
-	@RequiresPermissions("deposit:qr:export")
 	@Log(title = "码商充值订单", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody
@@ -85,7 +81,6 @@ public class AlipayRechargeEntityController extends BaseController {
 	/**
 	 * 转发财务
 	 */
-	@RequiresPermissions("deposit:qr:toFinance")
 	@Log(title = "码商充值订单", businessType = BusinessType.DELETE)
 	@PostMapping("/updateOrder")
 	@ResponseBody

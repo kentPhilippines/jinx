@@ -12,7 +12,6 @@ import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -47,7 +46,6 @@ public class DealpayAmountController extends BaseController {
     @Autowired
     private DictionaryUtils dictionaryUtils;
 
-    @RequiresPermissions("dealpay:dealDeduct:view")
     @GetMapping()
     public String dealDeduct() {
         return prefix + "/dealDeduct";
@@ -56,7 +54,6 @@ public class DealpayAmountController extends BaseController {
     /**
      * 查询手动加扣款记录列表
      */
-    @RequiresPermissions("dealpay:dealDeduct:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayAmountEntity dealpayAmountEntity) {
@@ -68,7 +65,6 @@ public class DealpayAmountController extends BaseController {
     /**
      * 导出手动加扣款记录列表
      */
-    @RequiresPermissions("dealpay:dealDeduct:export")
     @Log(title = "加减款记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -91,7 +87,6 @@ public class DealpayAmountController extends BaseController {
     /**
      * 修改保存手动加扣款记录
      */
-    @RequiresPermissions("dealpay:dealDeduct:edit")
     @Log(title = "手动加扣款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -102,7 +97,6 @@ public class DealpayAmountController extends BaseController {
     /**
      * 删除手动加扣款记录
      */
-    @RequiresPermissions("dealpay:dealDeduct:remove")
     @Log(title = "手动加扣款记录", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -112,7 +106,6 @@ public class DealpayAmountController extends BaseController {
 
     /*财务处理加减款的controller逻辑处理*/
 
-    @RequiresPermissions("dealpay:finance:view")
     @GetMapping("/view")
     public String financeView() {
         return finance_prefix + "/deduct";
@@ -124,7 +117,6 @@ public class DealpayAmountController extends BaseController {
     /**
      * 财务查询卡商加减款记录
      */
-    @RequiresPermissions("dealpay:finance:list")
     @PostMapping("/finance/list")
     @ResponseBody
     public TableDataInfo financeList(DealpayAmountEntity dealpayAmountEntity) {
@@ -148,7 +140,6 @@ public class DealpayAmountController extends BaseController {
     /**
      * 财务审核加减款记录
      */
-    @RequiresPermissions("dealpay:finance:approval")
     @Log(title = "财务管理", businessType = BusinessType.UPDATE)
     @PostMapping("/dealpay/approval")
     @ResponseBody
@@ -172,7 +163,6 @@ public class DealpayAmountController extends BaseController {
     /**
      * 财务审核加减款记录
      */
-    @RequiresPermissions("dealpay:finance:reject")
     @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/dealpay/reject")
     @ResponseBody

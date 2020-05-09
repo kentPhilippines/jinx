@@ -13,7 +13,6 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.dealpay.domain.DealpayUserInfoEntity;
 import com.ruoyi.dealpay.service.IDealpayUserInfoService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,7 +34,6 @@ public class ServiceControlController extends BaseController {
     private IDealpayUserInfoService dealpayUserInfoService;
 
 
-    @RequiresPermissions("qr:service:view")
     @GetMapping("/qr")
     public String qrControl() {
         return prefix + "/qr";
@@ -44,7 +42,6 @@ public class ServiceControlController extends BaseController {
     /**
      * 查询码商顶代风控信息列表
      */
-    @RequiresPermissions("qr:service:list")
     @PostMapping("/qr/list")
     @ResponseBody
     public TableDataInfo qrList(AlipayUserInfo alipayUserInfo) {
@@ -84,7 +81,6 @@ public class ServiceControlController extends BaseController {
     /**
      * 保存码商风控卡商服务群信息
      */
-    @RequiresPermissions("qr:service:save")
     @Log(title = "码商服务群", businessType = BusinessType.UPDATE)
     @PostMapping("/qr/save")
     @ResponseBody
@@ -92,7 +88,6 @@ public class ServiceControlController extends BaseController {
         return toAjax(alipayUserInfoService.toSaveQrChargeList(alipayUserInfo));
     }
 
-    @RequiresPermissions("merchant:service:view")
     @GetMapping("/merchant")
     public String control() {
         return prefix + "/merchant";
@@ -101,7 +96,6 @@ public class ServiceControlController extends BaseController {
     /**
      * 查询商户顶代风控信息列表
      */
-    @RequiresPermissions("merchant:service:list")
     @PostMapping("/merchant/list")
     @ResponseBody
     public TableDataInfo merchantList(AlipayUserInfo alipayUserInfo) {
@@ -156,7 +150,6 @@ public class ServiceControlController extends BaseController {
      * 保存商户风控卡商服务群信息
      */
 
-    @RequiresPermissions("merchant:service:save")
     @Log(title = "商户服务群", businessType = BusinessType.UPDATE)
     @PostMapping("/merchant/save")
     @ResponseBody

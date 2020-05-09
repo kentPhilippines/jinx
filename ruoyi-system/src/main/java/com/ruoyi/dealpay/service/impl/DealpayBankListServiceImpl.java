@@ -8,7 +8,6 @@ import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
-import com.sun.org.apache.xpath.internal.operations.Number;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.dealpay.mapper.DealpayBankListMapper;
@@ -25,7 +24,7 @@ import com.ruoyi.common.core.text.Convert;
 @Service
 public class DealpayBankListServiceImpl implements IDealpayBankListService {
     @Autowired
-    private DealpayBankListMapper dealpayBankListMapper;
+    protected DealpayBankListMapper dealpayBankListMapper;
 
     /**
      * 查询银行卡列

@@ -10,7 +10,6 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
 import com.ruoyi.framework.util.DictionaryUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,7 +44,6 @@ public class DealpayRechargeController extends BaseController {
     @Autowired
     private DictionaryUtils dictionaryUtils;
 
-    @RequiresPermissions("dealpay:recharge:view")
     @GetMapping()
     public String recharge() {
         return prefix + "/recharge";
@@ -54,7 +52,6 @@ public class DealpayRechargeController extends BaseController {
     /**
      * 查询充值记录列表
      */
-    @RequiresPermissions("dealpay:recharge:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayRechargeEntity dealpayRecharge) {
@@ -66,7 +63,6 @@ public class DealpayRechargeController extends BaseController {
     /**
      * 导出充值记录列表
      */
-    @RequiresPermissions("dealpay:recharge:export")
     @Log(title = "充值记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -87,7 +83,6 @@ public class DealpayRechargeController extends BaseController {
     /**
      * 新增保存充值记录
      */
-    @RequiresPermissions("dealpay:recharge:add")
     @Log(title = "充值记录", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -108,7 +103,6 @@ public class DealpayRechargeController extends BaseController {
     /**
      * 修改保存充值记录
      */
-    @RequiresPermissions("dealpay:recharge:edit")
     @Log(title = "充值记录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -119,7 +113,6 @@ public class DealpayRechargeController extends BaseController {
     /**
      * 删除充值记录
      */
-    @RequiresPermissions("dealpay:recharge:remove")
     @Log(title = "充值记录", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -130,7 +123,6 @@ public class DealpayRechargeController extends BaseController {
 
     /*财务管理-充值管理逻辑处理*/
 
-    @RequiresPermissions("finance:deposit:view")
     @GetMapping("/deposit/view")
     public String depositView() {
         return finance_prefix + "/deposit";
@@ -139,7 +131,6 @@ public class DealpayRechargeController extends BaseController {
     /**
      * <p>充值管理 查询 </p>
      */
-    @RequiresPermissions("finance:deposit:manage")
     @PostMapping("/finance/manage/deposit")
     @Log(title = "代付管理", businessType = BusinessType.UPDATE)
     @ResponseBody
@@ -163,7 +154,6 @@ public class DealpayRechargeController extends BaseController {
     /**
      * <p>充值管理 修改订单状态</p>
      */
-    @RequiresPermissions("finance:deposit:updateStatus")
     @PostMapping("/finance/confirmDeposit")
     @Log(title = "代付管理", businessType = BusinessType.UPDATE)
     @ResponseBody

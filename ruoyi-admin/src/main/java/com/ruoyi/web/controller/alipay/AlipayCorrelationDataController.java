@@ -1,7 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,7 +31,6 @@ public class AlipayCorrelationDataController extends BaseController {
 	@Autowired
 	private IAlipayCorrelationDataService alipayCorrelationDataService;
 
-	@RequiresPermissions("alipay:record:view")
 	@GetMapping()
 	public String record() {
 		return prefix + "/record";
@@ -41,7 +39,6 @@ public class AlipayCorrelationDataController extends BaseController {
 	/**
 	 * 查询订单记录表列表
 	 */
-	@RequiresPermissions("alipay:record:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayCorrelationData alipayCorrelationData) {
@@ -54,7 +51,6 @@ public class AlipayCorrelationDataController extends BaseController {
 	/**
 	 * 导出订单记录表列表
 	 */
-	@RequiresPermissions("alipay:record:export")
 	@Log(title = "订单记录表", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody
@@ -76,7 +72,6 @@ public class AlipayCorrelationDataController extends BaseController {
 	/**
 	 * 新增保存订单记录表
 	 */
-	@RequiresPermissions("alipay:record:add")
 	@Log(title = "订单记录表", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -97,7 +92,6 @@ public class AlipayCorrelationDataController extends BaseController {
 	/**
 	 * 修改保存订单记录表
 	 */
-	@RequiresPermissions("alipay:record:edit")
 	@Log(title = "订单记录表", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -108,7 +102,6 @@ public class AlipayCorrelationDataController extends BaseController {
 	/**
 	 * 删除订单记录表
 	 */
-	@RequiresPermissions("alipay:record:remove")
 	@Log(title = "订单记录表", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody

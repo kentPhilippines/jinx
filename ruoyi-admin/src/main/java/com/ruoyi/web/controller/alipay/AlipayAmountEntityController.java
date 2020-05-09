@@ -16,7 +16,6 @@ import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,7 +49,6 @@ public class AlipayAmountEntityController extends BaseController {
     @Autowired
     private DictionaryUtils dictionaryUtils;
 
-    @RequiresPermissions("alipay:deduct:view")
     @GetMapping()
     public String deduct() {
         return prefix + "/deduct";
@@ -59,7 +57,6 @@ public class AlipayAmountEntityController extends BaseController {
     /**
      * 查询手动加扣款记录列表
      */
-    @RequiresPermissions("alipay:deduct:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayAmountEntity alipayAmountEntity) {
@@ -71,7 +68,6 @@ public class AlipayAmountEntityController extends BaseController {
     /**
      * 导出加减款记录列表
      */
-    @RequiresPermissions("alipay:deduct:export")
     @Log(title = "加减款记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -96,7 +92,6 @@ public class AlipayAmountEntityController extends BaseController {
     /**
      * 财务审核加减款记录
      */
-    @RequiresPermissions("alipay:finance:approval")
     @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/alipay/approval")
     @ResponseBody
@@ -120,7 +115,6 @@ public class AlipayAmountEntityController extends BaseController {
     /**
      * 财务审核加减款记录
      */
-    @RequiresPermissions("alipay:finance:reject")
     @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/alipay/reject")
     @ResponseBody

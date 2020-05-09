@@ -81,7 +81,9 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
             if (agentRate == null) { //是否为空
                 throw new BusinessException("此商户的上级代理未设置同类型的费率或此费率通道已关闭");
             }
-            if (agentRate.getFee().compareTo(alipayUserRateEntity.getFee()) < 0) {
+            Double fee = agentRate.getFee();
+            Double fee1 = alipayUserRateEntity.getFee();
+            if (fee > fee1) {
                 throw new BusinessException("下级通道费率不能大于上级的通道费率：" + agentRate.getFee());
             }
         }

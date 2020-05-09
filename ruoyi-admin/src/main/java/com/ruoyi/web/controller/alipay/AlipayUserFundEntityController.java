@@ -22,8 +22,6 @@ import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import com.sun.org.apache.regexp.internal.RE;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -62,7 +60,6 @@ public class AlipayUserFundEntityController extends BaseController {
     private SysPasswordService passwordService;
 
 
-    @RequiresPermissions("fund:alipay:view")
     @GetMapping()
     public String fund() {
         return prefix + "/fund";
@@ -71,7 +68,6 @@ public class AlipayUserFundEntityController extends BaseController {
     /**
      * 查询用户资金账户列表
      */
-    @RequiresPermissions("fund:alipay:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserFundEntity alipayUserFundEntity) {
@@ -84,7 +80,6 @@ public class AlipayUserFundEntityController extends BaseController {
     /**
      * 导出用户资金账户列表
      */
-    @RequiresPermissions("fund:alipay:export")
     @Log(title = "用户资金账户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -111,7 +106,6 @@ public class AlipayUserFundEntityController extends BaseController {
     /**
      * 加款保存用户加款记录
      */
-    @RequiresPermissions("fund:refund:add")
     @Log(title = "用户资金账户", businessType = BusinessType.UPDATE)
     @PostMapping("/refund")
     @ResponseBody
@@ -143,7 +137,6 @@ public class AlipayUserFundEntityController extends BaseController {
     /**
      * 减款保存用户减款记录
      */
-    @RequiresPermissions("fund:refund:deduct")
     @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
     @PostMapping("/deduct")
     @ResponseBody

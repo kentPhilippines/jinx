@@ -10,7 +10,6 @@ import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.http.HttpUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,7 +40,6 @@ public class AlipayBankListEntityController extends BaseController {
     @Autowired
     private IAlipayBankListEntityService alipayBankListEntityService;
 
-    @RequiresPermissions("alipay:bankCard:view")
     @GetMapping()
     public String bankCard() {
         return prefix + "/bankCard";
@@ -50,7 +48,6 @@ public class AlipayBankListEntityController extends BaseController {
     /**
      * 查询银行卡列表列表
      */
-    @RequiresPermissions("alipay:bankCard:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayBankListEntity alipayBankListEntity) {
@@ -62,7 +59,6 @@ public class AlipayBankListEntityController extends BaseController {
     /**
      * 导出银行卡列表列表
      */
-    @RequiresPermissions("alipay:bankCard:export")
     @Log(title = "银行卡列表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -84,7 +80,6 @@ public class AlipayBankListEntityController extends BaseController {
     /**
      * 新增保存银行卡列表
      */
-    @RequiresPermissions("alipay:bankCard:add")
     @Log(title = "银行卡列表", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -105,7 +100,6 @@ public class AlipayBankListEntityController extends BaseController {
     /**
      * 修改保存银行卡列表
      */
-    @RequiresPermissions("alipay:bankCard:edit")
     @Log(title = "银行卡列表", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -116,7 +110,6 @@ public class AlipayBankListEntityController extends BaseController {
     /**
      * 删除银行卡列表
      */
-    @RequiresPermissions("alipay:bankCard:remove")
     @Log(title = "银行卡列表", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -128,7 +121,6 @@ public class AlipayBankListEntityController extends BaseController {
      * 码商状态修改（调用api）
      */
     @Log(title = "码商查询", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("alipay:bankCard:status")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(AlipayBankListEntity alipayBankListEntity) {

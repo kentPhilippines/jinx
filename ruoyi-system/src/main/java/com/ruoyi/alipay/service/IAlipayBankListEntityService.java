@@ -71,4 +71,12 @@ public interface IAlipayBankListEntityService
      * @return
      */
     int deleteAlipayBankBlackListById(String ids);
+
+    /**
+     * <p>根据银行卡卡号和银行卡所属人查询银行卡信息</p>
+     * @param s
+     * @param merchantId
+     * @return
+     */
+    AlipayBankListEntity selectAlipayBankListEntityByAcc(String s, String merchantId);
 }

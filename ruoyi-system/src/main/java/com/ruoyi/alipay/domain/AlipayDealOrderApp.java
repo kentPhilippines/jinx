@@ -71,15 +71,15 @@ public class AlipayDealOrderApp extends BaseEntity
     private Integer status;
 
     /** 备用字段添加业务使用 */
-    @Excel(name = "备用字段添加业务使用")
+    @Excel(name = "产品类型")
     private String retain1;
 
     /** 备用字段添加业务使用 */
-    @Excel(name = "备用字段添加业务使用")
+    @Excel(name = "订单是否以结算")
     private String retain2;
 
     /** 备用字段添加业务使用 */
-    @Excel(name = "备用字段添加业务使用")
+    @Excel(name = "订单结算手续费")
     private String retain3;
 
     public void setId(Long id) 

@@ -10,7 +10,6 @@ import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.GenerateOrderNo;
-import org.omg.CORBA.DATA_CONVERSION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.alipay.mapper.AlipayBankListEntityMapper;
@@ -115,6 +114,12 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int deleteAlipayBankBlackListById(String ids) {
         return alipayBankListEntityMapper.deleteAlipayBankListSysTypeById(ids);
+    }
+
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public AlipayBankListEntity selectAlipayBankListEntityByAcc(String s, String merchantId) {
+        return alipayBankListEntityMapper.selectAlipayBankListEntityByAcc(s,merchantId);
     }
 
 }

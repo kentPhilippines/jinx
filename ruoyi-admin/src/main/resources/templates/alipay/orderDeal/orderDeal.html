@@ -28,7 +28,7 @@
                             <input type="text" name="orderAccount"/>
                         </li>
                         <li>
-                            <span>码商账户：</span>
+                            <span>渠道账户：</span>
                             <input type="text" name="orderQrUser"/>
                         </li>
                         <li>
@@ -95,7 +95,7 @@
             detailUrl: prefix + "/edit/{id}",
             statisticsUrl: prefix + "/statistics/qr/table",
             exportUrl: prefix + "/export",
-            modalName: "码商交易订单",
+            modalName: "主交易订单",
             columns: [{
                 checkbox: true
             },
@@ -103,17 +103,18 @@
                 {field: 'orderId', title: '平台订单'},
                 {field: 'associatedId', title: '关联订单'},
                 {field: 'orderAccount', title: '商户账号'},
-                {field: 'orderQrUser', title: '码商账户'},
+                {field: 'orderQrUser', title: '渠道账户'},
                 {
                     field: 'orderStatus', title: '订单状态',
                     formatter: function (value, row, index) {
                         return $.table.selectDictLabel(orderstatusDatas, value);
                     }
                 },
+                {   field: 'externalOrderId',   title: '外部订单号'  },
                 {field: 'dealAmount', title: '交易金额'},
                 /*  {   field: 'dealFee',       title: '手续费'    },*/
                 /*                {   field: 'orderQr',       title: '关联二维码'  },*/
-                /* {   field: 'externalOrderId',   title: '外部订单号'  },
+                /*
                 {   field: 'isNotify',      title: '发送通知'   },*/
                 {field: 'createTime', title: '创建时间'},
                 {
@@ -122,10 +123,10 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
-                        if (row.orderStatus === '1') {
+                        if (row.orderStatus === '2') {
                             actions.push('<a class="btn btn-warning btn-xs ' + notifyFlag + '" href="javascript:void(0)" onclick="renotify(\'' + row.orderId + '\')"><i class="fa fa-bell-o"></i>重新通知</a> ');
                         }
-                        if (row.orderStatus != 7) {
+                        if (row.orderStatus != 7 && row.orderStatus != '2') {
                             actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
                         }
                         return actions.join('');

@@ -2,7 +2,6 @@ package com.ruoyi.web.controller.dealpay;
 
 import java.util.List;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,7 +33,6 @@ public class DealpayUserRateController extends BaseController {
     @Autowired
     private IDealpayUserRateService dealpayUserRateEntityService;
 
-    @RequiresPermissions("dealpay:dealRate:view")
     @GetMapping()
     public String dealRate() {
         return prefix + "/dealRate";
@@ -43,7 +41,6 @@ public class DealpayUserRateController extends BaseController {
     /**
      * 查询费率列表
      */
-    @RequiresPermissions("dealpay:dealRate:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(DealpayUserRateEntity dealpayUserRateEntity) {
@@ -55,7 +52,6 @@ public class DealpayUserRateController extends BaseController {
     /**
      * 导出费率列表
      */
-    @RequiresPermissions("dealpay:dealRate:export")
     @Log(title = "费率", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -76,7 +72,6 @@ public class DealpayUserRateController extends BaseController {
     /**
      * 新增保存费率
      */
-    @RequiresPermissions("dealpay:dealRate:add")
     @Log(title = "费率", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -101,7 +96,6 @@ public class DealpayUserRateController extends BaseController {
     /**
      * 修改保存费率
      */
-    @RequiresPermissions("dealpay:dealRate:edit")
     @Log(title = "费率", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -112,7 +106,6 @@ public class DealpayUserRateController extends BaseController {
     /**
      * 商户费率状态更新
      */
-    @RequiresPermissions("dealpay:dealRate:status")
     @Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody

@@ -1,7 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,7 +32,6 @@ public class AlipayCorrelationController extends BaseController {
 	@Autowired
 	private IAlipayCorrelationService alipayCorrelationService;
 
-	@RequiresPermissions("alipay:correlation:view")
 	@GetMapping()
 	public String correlation() {
 		return prefix + "/correlation";
@@ -42,7 +40,6 @@ public class AlipayCorrelationController extends BaseController {
 	/**
 	 * 查询代理关系表列表
 	 */
-	@RequiresPermissions("alipay:correlation:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(AlipayCorrelation alipayCorrelation) {
@@ -54,7 +51,6 @@ public class AlipayCorrelationController extends BaseController {
 	/**
 	 * 导出代理关系表列表
 	 */
-	@RequiresPermissions("alipay:correlation:export")
 	@Log(title = "代理关系表", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
 	@ResponseBody
@@ -75,7 +71,6 @@ public class AlipayCorrelationController extends BaseController {
 	/**
 	 * 新增保存代理关系表
 	 */
-	@RequiresPermissions("alipay:correlation:add")
 	@Log(title = "代理关系表", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -96,7 +91,6 @@ public class AlipayCorrelationController extends BaseController {
 	/**
 	 * 修改保存代理关系表
 	 */
-	@RequiresPermissions("alipay:correlation:edit")
 	@Log(title = "代理关系表", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -107,7 +101,6 @@ public class AlipayCorrelationController extends BaseController {
 	/**
 	 * 删除代理关系表
 	 */
-	@RequiresPermissions("alipay:correlation:remove")
 	@Log(title = "代理关系表", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody

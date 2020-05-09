@@ -71,4 +71,7 @@ public interface AlipayBankListEntityMapper
 
     @Update("update alipay_bank_list set sysTYpe = 2 where id = #{ids}")
     int deleteAlipayBankListSysTypeById(@Param("ids") String ids);
+
+    @Select("select * from alipay_bank_list where  bankcardAccount = #{s} and  account =#{merchantId} and isDeal = 2 and `status` = 1")
+    AlipayBankListEntity selectAlipayBankListEntityByAcc(@Param("s") String s,@Param("merchantId") String merchantId);
 }
