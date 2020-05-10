@@ -64,6 +64,11 @@ public class SysPasswordService {
     public boolean matches(SysUser user, String newPassword) {
         return user.getPassword().equals(encryptPassword(user.getLoginName(), newPassword, user.getSalt()));
     }
+    public boolean matchesDeal(SysUser user, String newPassword) {
+        String s = encryptPassword(user.getLoginName(), newPassword, user.getSalt());
+        boolean equals = user.getFundPassword().equals(s);
+        return equals;
+    }
 
     public void clearLoginRecordCache(String username) {
         loginRecordCache.remove(username);

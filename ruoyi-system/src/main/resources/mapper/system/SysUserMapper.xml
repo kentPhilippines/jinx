@@ -174,6 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="sex != null and sex != ''">sex = #{sex},</if>
  			<if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
  			<if test="password != null and password != ''">password = #{password},</if>
+ 			<if test="fundPassword != null and fundPassword != ''">fund_password = #{fundPassword},</if>
  			<if test="salt != null and salt != ''">salt = #{salt},</if>
  			<if test="status != null and status != ''">status = #{status},</if>
  			<if test="loginIp != null and loginIp != ''">login_ip = #{loginIp},</if>
