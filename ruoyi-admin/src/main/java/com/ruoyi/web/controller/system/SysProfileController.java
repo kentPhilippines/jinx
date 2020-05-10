@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
@@ -69,6 +73,12 @@ public class SysProfileController extends BaseController {
         mmap.put("user", userService.selectUserById(user.getUserId()));
         return prefix + "/resetPwd";
     }
+    @GetMapping("/resetPwdDeal")
+    public String resetPwdDeal(ModelMap mmap) {
+    	SysUser user = ShiroUtils.getSysUser();
+    	mmap.put("user", userService.selectUserById(user.getUserId()));
+    	return prefix + "/resetPwdDeal";
+    }
 
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
@@ -86,6 +96,31 @@ public class SysProfileController extends BaseController {
         } else {
             return error("修改密码失败，旧密码错误");
         }
+    }
+    @Autowired private IAlipayUserInfoService alipayUserInfoService;
+    @Log(title = "重置密码", businessType = BusinessType.UPDATE)
+    @PostMapping("/resetPwdDeal")
+    @ResponseBody
+    public AjaxResult resetPwdDeal(String oldPassword, String newPassword) {
+    	SysUser user = ShiroUtils.getSysUser();
+    	/*
+    	if (StringUtils.isNotEmpty(newPassword) && passwordService.matches(user, oldPassword)) {
+    		user.setSalt(ShiroUtils.randomSalt());
+    		user.setPassword(passwordService.encryptPassword(user.getLoginName(), newPassword, user.getSalt()));
+    		if (userService.resetUserPwd(user) > 0) {
+    			ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
+    			return success();
+    		}
+    		return error();
+    		*/
+    	 AlipayUserInfo userInfo = alipayUserInfoService.findMerchantInfoByUserId(user.getMerchantId());
+         String paypassword = HashKit.encodePassword(userInfo.getUserId(), oldPassword, userInfo.getSalt());
+         if(! userInfo.getPayPasword().equals(paypassword))
+         	return error();
+         boolean flag =  alipayUserInfoService.updatePaypassword(userInfo.getUserId(),newPassword,userInfo.getSalt());
+         if(flag)
+     		return success();
+     	return error();
     }
 
     /**

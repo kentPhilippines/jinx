@@ -1,11 +1,14 @@
 package com.ruoyi.web.controller.system;
 
+import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.GoogleUtils;
@@ -16,6 +19,9 @@ import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserGoogleService;
 import com.ruoyi.system.service.ISysUserService;
+
+import cn.hutool.core.util.ObjectUtil;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -163,7 +169,6 @@ public class SysUserController extends BaseController {
         return toAjax(userService.updateUser(user));
     }
 
-    @RequiresPermissions("system:user:resetPwd")
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @GetMapping("/resetPwd/{userId}")
     public String resetPwd(@PathVariable("userId") Long userId, ModelMap mmap) {
@@ -171,7 +176,6 @@ public class SysUserController extends BaseController {
         return prefix + "/resetPwd";
     }
 
-    @RequiresPermissions("system:user:resetPwd")
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
     @ResponseBody
@@ -186,6 +190,21 @@ public class SysUserController extends BaseController {
             return success();
         }
         return error();
+    }
+    @Autowired private IAlipayUserInfoService alipayUserInfoService;
+    @Log(title = "修改交易密码", businessType = BusinessType.UPDATE)
+    @PostMapping("/resetPwdDeal")
+    @ResponseBody
+    public AjaxResult resetPwdDeal(SysUser user) {
+        userService.checkUserAllowed(user);
+        SysUser selectUserById = userService.selectUserById(user.getUserId());
+        AlipayUserInfo userInfo = alipayUserInfoService.findMerchantInfoByUserId(selectUserById.getMerchantId());
+        if(ObjectUtil.isNull(userInfo))
+        	return error();
+        boolean flag =  alipayUserInfoService.updatePaypassword(userInfo.getUserId(),user.getPassword(),userInfo.getSalt());
+        if(flag)
+    		return success();
+    	return error();
     }
 
     /**

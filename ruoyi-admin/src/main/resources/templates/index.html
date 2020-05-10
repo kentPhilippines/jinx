@@ -197,6 +197,10 @@
 								<i class="fa fa-key"></i> 修改密码</a>
 							</li>
 							<li>
+								<a onclick="resetPwdDeal()">
+								<i class="fa fa-key"></i> 修改交易密码</a>
+							</li>
+							<li>
 								<a onclick="switchSkin()">
 								<i class="fa fa-dashboard"></i> 切换主题</a>
 							</li>
@@ -275,6 +279,11 @@ if($.common.isNotEmpty(skin)){
 function resetPwd() {
     var url = ctx + 'system/user/profile/resetPwd';
     $.modal.open("重置密码", url, '770', '380');
+}
+/* 用户管理-重置密码 */
+function resetPwdDeal() {
+    var url = ctx + 'system/user/profile/resetPwdDeal';
+    $.modal.open("重置交易密码", url, '770', '380');
 }
 /* 切换主题 */
 function switchSkin() {
