@@ -112,4 +112,13 @@ public interface IAlipayUserInfoService {
      * @return
      */
     List<AlipayUserInfo> selectdealpayUserInfoByAgent( );
+
+    /**
+     * <p>修改支付密码<p>
+     * @param userId
+     * @param password
+     * @param salt 
+     * @return
+     */
+	boolean updatePaypassword(String userId, String password, String salt);
 }

@@ -107,7 +107,7 @@ public interface AlipayUserInfoMapper {
     @Update("update alipay_user_info set payPasword = #{payPasword} where id = #{id}")
     int updateWithdrawalPwd(AlipayUserInfo alipayUserInfo);
 
-    @Select("select id, userId, userName, password, userType, switchs, userNode,isAgent, credit, remitOrderState, privateKey, publicKey from alipay_user_info where userId = #{userId} ")
+    @Select("select * from alipay_user_info where userId = #{userId} ")
     AlipayUserInfo selectMerhantInfoByUserId(@Param("userId") String userId);
 
 
@@ -142,4 +142,6 @@ public interface AlipayUserInfoMapper {
 
     @Update("update alipay_user_info set qrRechargeList = #{qrRechargeList}, queueList = #{queueList}, submitTime = sysdate() where id = #{id}")
     int updateAlipayUserInfo2Control(AlipayUserInfo alipayUserInfo);
+    @Update("update alipay_user_info set payPasword = #{payPasword} where userId = #{userId}")
+	int updatePaypassword(@Param("userId") String userId,@Param("payPasword") String payPasword);
 }
