@@ -9,6 +9,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.HashKit;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.GoogleUtils;
@@ -181,8 +182,8 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public AjaxResult resetPwdSave(SysUser user) {
         userService.checkUserAllowed(user);
-        user.setSalt(ShiroUtils.randomSalt());
-        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
+        SysUser user1 = userService.selectUserById(user.getUserId());
+        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user1.getSalt()));
         if (userService.resetUserPwd(user) > 0) {
             if (ShiroUtils.getUserId() == user.getUserId()) {
                 ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
@@ -197,13 +198,16 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public AjaxResult resetPwdDeal(SysUser user) {
         userService.checkUserAllowed(user);
-        SysUser selectUserById = userService.selectUserById(user.getUserId());
-        AlipayUserInfo userInfo = alipayUserInfoService.findMerchantInfoByUserId(selectUserById.getMerchantId());
-        if(ObjectUtil.isNull(userInfo))
-        	return error();
-        boolean flag =  alipayUserInfoService.updatePaypassword(userInfo.getUserId(),user.getPassword(),userInfo.getSalt());
-        if(flag)
-    		return success();
+        SysUser user1 = userService.selectUserById(user.getUserId());
+        if (true) {
+            user.setFundPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user1.getSalt()));
+            user.setPassword(null);
+            if (userService.resetUserPwd(user) > 0) {
+                ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
+                return success();
+            }
+            return error();
+        }
     	return error();
     }
 

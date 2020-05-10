@@ -102,25 +102,19 @@ public class SysProfileController extends BaseController {
     @PostMapping("/resetPwdDeal")
     @ResponseBody
     public AjaxResult resetPwdDeal(String oldPassword, String newPassword) {
-    	SysUser user = ShiroUtils.getSysUser();
-    	/*
-    	if (StringUtils.isNotEmpty(newPassword) && passwordService.matches(user, oldPassword)) {
-    		user.setSalt(ShiroUtils.randomSalt());
-    		user.setPassword(passwordService.encryptPassword(user.getLoginName(), newPassword, user.getSalt()));
-    		if (userService.resetUserPwd(user) > 0) {
-    			ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
-    			return success();
-    		}
-    		return error();
-    		*/
-    	 AlipayUserInfo userInfo = alipayUserInfoService.findMerchantInfoByUserId(user.getMerchantId());
-         String paypassword = HashKit.encodePassword(userInfo.getUserId(), oldPassword, userInfo.getSalt());
-         if(! userInfo.getPayPasword().equals(paypassword))
-         	return error();
-         boolean flag =  alipayUserInfoService.updatePaypassword(userInfo.getUserId(),newPassword,userInfo.getSalt());
-         if(flag)
-     		return success();
-     	return error();
+        SysUser user = ShiroUtils.getSysUser();
+        user = userService.selectUserById(user.getUserId());
+        if (StringUtils.isNotEmpty(newPassword) && passwordService.matchesDeal(user, oldPassword)) {
+              user.setSalt(ShiroUtils.randomSalt());
+              user.setFundPassword(passwordService.encryptPassword(user.getLoginName(), newPassword, user.getSalt()));
+              if (userService.resetUserPwd(user) > 0) {
+                  ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
+                  return success();
+              }
+              return error();
+          } else {
+              return error("修改密码失败，旧密码错误");
+          }
     }
 
     /**
