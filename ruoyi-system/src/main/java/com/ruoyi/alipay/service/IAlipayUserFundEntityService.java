@@ -56,4 +56,10 @@ public interface IAlipayUserFundEntityService
      * @return
      */
     List<AlipayUserFundEntity> findChannelAccount(AlipayUserFundEntity alipayUserFundEntity);
+
+    /**
+     * <p>获取所有的账户资金</p>
+     * @return
+     */
+    List<AlipayUserFundEntity> findUserFundAll();
 }

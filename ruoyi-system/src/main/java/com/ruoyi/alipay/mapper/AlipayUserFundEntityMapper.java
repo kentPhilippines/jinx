@@ -55,4 +55,7 @@ public interface AlipayUserFundEntityMapper {
     AlipayUserFundEntity selectAlipayUserFundByUserId(@Param("merchantId") String merchantId);
 
     List<AlipayUserFundEntity> findChannelAccount(AlipayUserFundEntity alipayUserFundEntity);
+
+    @Select("select userId  , accountBalance, rechargeNumber  from alipay_user_fund  ")
+    List<AlipayUserFundEntity> findUserFundAll();
 }

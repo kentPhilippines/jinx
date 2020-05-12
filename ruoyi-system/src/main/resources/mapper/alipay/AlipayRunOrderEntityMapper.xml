@@ -47,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amountType != null  and amountType != ''"> and amountType = #{amountType}</if>
             <if test="amountNow != null "> and amountNow = #{amountNow}</if>
         </where>
+        order by  createTime desc
     </select>
     
     <select id="selectAlipayRunOrderEntityById" parameterType="Long" resultMap="AlipayRunOrderEntityResult">

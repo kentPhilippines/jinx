@@ -2,7 +2,13 @@ package com.ruoyi.web.controller.alipay;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
@@ -35,6 +41,8 @@ public class AlipayDealOrderAppController extends BaseController {
     private String prefix = "alipay/orderApp";
     @Autowired
     private IAlipayDealOrderAppService alipayDealOrderAppService;
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
 
     @GetMapping()
     public String orderApp() {
@@ -111,6 +119,11 @@ public class AlipayDealOrderAppController extends BaseController {
 //            statisticsEntity.setSuccessPercent(successPercent);
 //        }
 //        mmap.put("statisticsEntity",statisticsEntity);
+        List<AlipayUserFundEntity> listFund =  alipayUserFundEntityService.findUserFundAll();
+        ConcurrentHashMap<String, AlipayUserFundEntity> userCollect = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        for (StatisticsEntity  sta :list)
+            if(ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
+                sta.setAccountAmount(userCollect.get(sta.getUserId()).getAccountBalance().toString());
         return getDataTable(list);
     }
 

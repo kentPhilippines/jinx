@@ -102,26 +102,19 @@ public class HashKit {
 
 
     public static String md5(String str) {
-        MessageDigest md5 = null;
+        String c = "";
+        MessageDigest md5;
+        String result="";
         try {
-            md5 = MessageDigest.getInstance("MD5");
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            e.printStackTrace();
-            return "";
+            md5 = MessageDigest.getInstance(ENCODE_TYPE);
+            md5.update(str.getBytes(UTF_8));
+            byte[] temp;
+            temp=md5.digest(c.getBytes(UTF_8));
+            for (int i=0; i<temp.length; i++)
+                result+=Integer.toHexString((0x000000ff & temp[i]) | 0xffffff00).substring(6);
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            log.info("获取秘钥失败");
         }
-        char[] charArray = str.toCharArray();
-        byte[] byteArray = new byte[charArray.length];
-        for (int i = 0; i < charArray.length; i++)
-            byteArray[i] = (byte) charArray[i];
-        byte[] md5Bytes = md5.digest(byteArray);
-        StringBuffer hexValue = new StringBuffer();
-        for (int i = 0; i < md5Bytes.length; i++) {
-            int val = ((int) md5Bytes[i]) & 0xff;
-            if (val < 16)
-                hexValue.append("0");
-            hexValue.append(Integer.toHexString(val));
-        }
-        return hexValue.toString();
+        return result;
     }
 }
