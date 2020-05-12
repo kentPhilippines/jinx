@@ -64,7 +64,7 @@ public interface AlipayDealOrderAppMapper {
             "coalesce(sum(retain3),0) fee ," +
             "coalesce(sum(case orderStatus when 2 then retain3 else 0 end),0) successFee " +
 
-            "from alipay_deal_order_app where createTime between #{dayStart} and #{dayEnd} and orderType = 1 " +
+            "from alipay_deal_order_app where createTime between #{statisticsEntity.params.dayStart} and #{statisticsEntity.params.dayEnd} and orderType = 1 " +
 
 
             " union all " +
@@ -80,7 +80,7 @@ public interface AlipayDealOrderAppMapper {
             "coalesce(sum(case orderStatus when 2 then retain3 else 0 end),0) successFee " +
 
             "from alipay_deal_order_app " +
-            "where createTime between #{dayStart} and #{dayEnd} and orderType = 1 " +
+            "where createTime between #{statisticsEntity.params.dayStart} and #{statisticsEntity.params.dayEnd} and orderType = 1 " +
             "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
             "and orderAccount = #{statisticsEntity.userId} " +
             "</if>" +

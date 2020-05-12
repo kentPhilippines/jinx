@@ -20,6 +20,7 @@ public class AlipayUserFundEntity extends BaseEntity {
          return this.userNode;
      }
      public  void setUserNode(String userNode){this.userNode = userNode;}
+
     /**
      * 数据id
      */

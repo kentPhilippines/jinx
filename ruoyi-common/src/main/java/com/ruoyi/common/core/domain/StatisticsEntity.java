@@ -14,6 +14,9 @@ public class StatisticsEntity extends BaseEntity implements Serializable {
     private String successFee;
     public String getSuccessFee(){return this.successFee;}
     public  void setSuccessFee(String successFee){this.successFee = successFee;}
+    private String accountAmount;
+    public  String getAccountAmount (){return this.accountAmount;}
+    public  void  setAccountAmount(String accountAmount){this.accountAmount = accountAmount;}
     /**
      * 用户账户
      */
