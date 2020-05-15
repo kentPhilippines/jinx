@@ -7,6 +7,30 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 select-table table-striped">
+
+
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <span>创建时间：</span>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[dayStart]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[dayEnd]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </form>
             <table id="bootstrap-table"></table>
         </div>
     </div>
@@ -75,6 +99,24 @@
             return '<span>' + result + '%</span>';
         }
     }
+    //初始化时间
+    layui.use('laydate', function(){
+        const laydate = layui.laydate;
+        laydate.render({
+            elem: '#startTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g,"-") + " 00:00:00",
+            isInitValue: true
+        });
+        laydate.render({
+            elem: '#endTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g,"-") + " 23:59:59",
+            isInitValue: true
+        });
+    });
 </script>
 </body>
 </html>
