@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayChanelFeeMapper">
+    
+    <resultMap type="AlipayChanelFee" id="AlipayChanelFeeResult">
+        <result property="id"    column="id"    />
+        <result property="channelId"    column="channelId"    />
+        <result property="productId"    column="productId"    />
+        <result property="impl"    column="impl"    />
+        <result property="channelRFee"    column="channelRFee"    />
+        <result property="channelDFee"    column="channelDFee"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="submitTime"    column="submitTime"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectAlipayChanelFeeVo">
+        select id, channelId, productId, impl, createTime, submitTime, status from alipay_chanel_fee
+    </sql>
+
+    <select id="selectAlipayChanelFeeList" parameterType="AlipayChanelFee" resultMap="AlipayChanelFeeResult">
+        <include refid="selectAlipayChanelFeeVo"/>
+        <where>  
+            <if test="channelId != null  and channelId != ''"> and channelId = #{channelId}</if>
+            <if test="productId != null  and productId != ''"> and productId = #{productId}</if>
+            <if test="impl != null  and impl != ''"> and impl = #{impl}</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayChanelFeeById" parameterType="Long" resultMap="AlipayChanelFeeResult">
+        <include refid="selectAlipayChanelFeeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayChanelFee" parameterType="AlipayChanelFee" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_chanel_fee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelId != null  and channelId != ''">channelId,</if>
+            <if test="productId != null  and productId != ''">productId,</if>
+            <if test="impl != null  and impl != ''">impl,</if>
+            <if test="channelRFee != null  and channelRFee != ''">channelRFee,</if>
+            <if test="channelDFee != null  and channelDFee != ''">channelDFee,</if>
+            <if test="createTime != null ">createTime,</if>
+            <if test="submitTime != null ">submitTime,</if>
+            <if test="status != null ">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelId != null  and channelId != ''">#{channelId},</if>
+            <if test="productId != null  and productId != ''">#{productId},</if>
+            <if test="impl != null  and impl != ''">#{impl},</if>
+             <if test="channelRFee != null  and channelRFee != ''">#{channelRFee},</if>
+            <if test="channelDFee != null  and channelDFee != ''">#{channelDFee},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="submitTime != null ">#{submitTime},</if>
+            <if test="status != null ">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayChanelFee" parameterType="AlipayChanelFee">
+        update alipay_chanel_fee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="channelId != null  and channelId != ''">channelId = #{channelId},</if>
+            <if test="productId != null  and productId != ''">productId = #{productId},</if>
+            <if test="impl != null  and impl != ''">impl = #{impl},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="submitTime != null ">submitTime = #{submitTime},</if>
+            <if test="status != null ">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayChanelFeeById" parameterType="Long">
+        delete from alipay_chanel_fee where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayChanelFeeByIds" parameterType="String">
+        delete from alipay_chanel_fee where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

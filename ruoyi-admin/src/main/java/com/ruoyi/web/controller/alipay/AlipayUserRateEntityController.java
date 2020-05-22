@@ -1,9 +1,15 @@
 package com.ruoyi.web.controller.alipay;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import com.ruoyi.alipay.domain.AlipayProductEntity;
-import com.ruoyi.alipay.service.IAlipayProductService;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.alipay.domain.*;
+import com.ruoyi.alipay.service.*;
+import com.ruoyi.common.exception.BusinessException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.alipay.domain.AlipayUserRateEntity;
-import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -31,13 +35,12 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/alipay/rate")
 public class AlipayUserRateEntityController extends BaseController {
     private String prefix = "alipay/merchant/rate";
-
-    @Autowired
-    private IAlipayUserRateEntityService alipayUserRateEntityService;
-
-    @Autowired
-    IAlipayProductService iAlipayProductService;
-
+    @Autowired private IAlipayUserRateEntityService alipayUserRateEntityService;
+    @Autowired private IAlipayUserFundEntityService alipayUserFundEntityService;
+    @Autowired IAlipayProductService iAlipayProductService;
+    @Autowired IAlipayChanelFeeService alipayChanelFeeServiceImpl;
+    @Autowired private IAlipayUserInfoService alipayUserInfoService;
+    @RequiresPermissions("merchant:rate:view")
     @GetMapping()
     public String rate(ModelMap modelMap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
@@ -47,42 +50,73 @@ public class AlipayUserRateEntityController extends BaseController {
         modelMap.put("productList", list);
         return prefix + "/rate";
     }
-
-    /**
-     * 查询用户产品费率列表
+    /*
+     * 查询商户产品费率列表
      */
+    @RequiresPermissions("merchant:rate:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserRateEntity alipayUserRateEntity) {
         startPage();
         List<AlipayUserRateEntity> list = alipayUserRateEntityService.selectAlipayUserRateEntityList(alipayUserRateEntity);
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        ConcurrentHashMap<String, AlipayUserFundEntity> qrCollect = rateList.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        for (AlipayUserRateEntity rate : list) {
+            AlipayUserFundEntity channel = qrCollect.get(rate.getChannelId());
+            AlipayProductEntity product = prCollect.get(rate.getPayTypr());
+            if (ObjectUtil.isNotNull(channel))
+                rate.setChannelId(channel.getUserName());
+            if (ObjectUtil.isNotNull(product))
+                rate.setPayTypr(product.getProductName());
+        }
         return getDataTable(list);
     }
 
-    /**
+    /*
      * 新增用户产品费率
      */
     @GetMapping("/add")
     public String add(ModelMap modelMap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        AlipayUserInfo alipayUserInfo = new AlipayUserInfo();
         alipayProductEntity.setStatus(1);
         //查询产品类型下拉菜单
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         modelMap.put("productList", list);
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
+        modelMap.put("rateList", rateList);
+        //查询所有的商户
+        alipayUserInfo.setSwitchs(1);
+        alipayUserInfo.setUserType(1);
+        List<AlipayUserInfo> userInfo = alipayUserInfoService.selectAllUserInfoList(alipayUserInfo);
+        modelMap.put("merList", userInfo);
         return prefix + "/add";
     }
 
-    /**
+
+    /*
      * 新增保存用户产品费率
      */
-    @Log(title = "用户产品费率", businessType = BusinessType.INSERT)
+    @RequiresPermissions("merchant:rate:add")
+    @Log(title = "商户费率", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(AlipayUserRateEntity alipayUserRateEntity) {
+        AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy(alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
+        if (ObjectUtil.isNull(channel))
+            return error("当前渠道未接通，请联系技术人员对接");
+        AlipayUserRateEntity check = alipayUserRateEntityService.checkUniqueRate(alipayUserRateEntity);
+        if (null != check) {
+            throw new BusinessException("操作失败，商户费率重复");
+        }
         return toAjax(alipayUserRateEntityService.insertAlipayUserRateEntity(alipayUserRateEntity));
     }
 
-    /**
+    /*
      * 修改用户产品费率
      */
     @GetMapping("/edit/{id}")
@@ -93,24 +127,32 @@ public class AlipayUserRateEntityController extends BaseController {
         //查询产品类型下拉菜单
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         mmap.put("productList", list);
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
+        mmap.put("rateList", rateList);
         mmap.put("alipayUserRateEntity", alipayUserRateEntity);
         return prefix + "/edit";
     }
 
-    /**
+    /*
      * 修改保存用户产品费率
      */
-    @Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("merchant:rate:edit")
+    @Log(title = "商户费率", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(AlipayUserRateEntity alipayUserRateEntity) {
+        AlipayUserRateEntity check = alipayUserRateEntityService.checkUniqueRate(alipayUserRateEntity);
+        if (null != check) {
+            throw new BusinessException("操作失败，商户费率重复");
+        }
         return toAjax(alipayUserRateEntityService.updateAlipayUserRateEntity(alipayUserRateEntity));
     }
 
-    /**
+    /*
      * 删除用户产品费率
      */
-    @Log(title = "用户产品费率", businessType = BusinessType.DELETE)
+    @RequiresPermissions("merchant:rate:remove")
+    @Log(title = "商户费率", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
@@ -120,7 +162,8 @@ public class AlipayUserRateEntityController extends BaseController {
     /**
      * 商户费率状态更新
      */
-    @Log(title = "用户产品费率", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("merchant:rate:status")
+    @Log(title = "商户费率", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult updateStatus(String id, String userId, String feeType, String switchs) {

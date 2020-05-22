@@ -58,4 +58,7 @@ public interface AlipayUserFundEntityMapper {
 
     @Select("select userId  , accountBalance, rechargeNumber  from alipay_user_fund  ")
     List<AlipayUserFundEntity> findUserFundAll();
+
+    @Select("select * from alipay_user_fund where userType = 3")
+    List<AlipayUserFundEntity> findUserFundRate();
 }

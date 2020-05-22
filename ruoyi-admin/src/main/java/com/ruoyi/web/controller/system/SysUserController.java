@@ -315,5 +315,27 @@ public class SysUserController extends BaseController {
         }
         return null;
     }
+    /**
+     * 验证用户绑定google
+     *
+     * @return 返回结果
+     */
+    @PostMapping("/googleBind")
+    @ResponseBody
+    public AjaxResult bind(ModelMap mmap) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        SysUserGoogle sysUserGoogle = sysUserGoogleService.selectSysUserGoogleByUsername(sysUser.getLoginName());
+        if (sysUserGoogle == null) {
+            return error("后台未绑定GOOGLE验证器，请联系管理员");
+        }
+        Long expire = sysUserGoogle.getExpireTime() * 60;
+        Long now = System.currentTimeMillis() / 1000;
+        Long past = sysUserGoogle.getCreateTime().getTime() / 1000;
+        if (now - past > expire) {
+            return error("二维码已过期，重新绑定请联系管理员");
+        }
+        mmap.put("google", sysUserGoogle.getGoogleUrl());
+        return AjaxResult.success(mmap);
+    }
 
 }

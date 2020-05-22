@@ -14,9 +14,13 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,7 +72,7 @@ public class AipayChannelContorller extends BaseController {
 
 
     /**
-     * 新增保存银行卡列表
+     * 新增渠道
      */
     @Log(title = "渠道账户表", businessType = BusinessType.INSERT)
     @PostMapping("/addChannel")
@@ -89,4 +93,21 @@ public class AipayChannelContorller extends BaseController {
         alipayUserInfoService.insertAlipayUserInfo(userInfo);
         return toAjax(alipayUserFundEntityService.insertAlipayUserFundEntity(fundEntity));
     }
+    /*
+            * 新增产品列表
+     */
+    @GetMapping("/addChannel")
+    public String add(ModelMap mmap) {
+        SysUser currentUser = ShiroUtils.getSysUser();
+        AlipayUserFundEntity userFundEntity = new AlipayUserFundEntity();
+        userFundEntity.setUserId(String.valueOf(currentUser.getUserId()));
+     /*   AlipayProductEntity alipayProductEntity=new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        mmap.put("productList", list);*/
+        mmap.put("userFund",userFundEntity);
+        return prefix + "/addChannel";
+    }
+
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('新增用户通道费率')"/>
+    <th:block th:include="include :: header('新增用户费率')"/>
     <th:block th:include="include :: select2-css" />
 </head>
 <body class="white-bg">
@@ -9,20 +9,38 @@
     <form class="form-horizontal m" id="form-rate-add">
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">商户账户：</label>
-            <div class="col-sm-8">
-                    <input name="userId" class="form-control" type="text" placeholder="请输入商户账户" required>
+            <div class="col-sm-8" th:if="${merList.size()} ne 0">
+                <select class="form-control" name="userId" id="userId" required>
+                    <option value="">请选择商户账户</option>
+                    <option th:each="user : ${merList}" th:text="'【商户账户】：'+${user.userId}+'，【商户名称】：' + ${user.userName}" th:value="${user.userId}"></option>
+                </select>
+            </div>
+            <div class="col-sm-8" th:if="${rateList.size()} eq 0">
+                <input class="form-control" type="text" name="flag" style="border-width: 0;background-color:white; color: red;" value="未找到任何商户，请新增商户" required readonly>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">产品类型：</label>
+            <label class="col-sm-3 control-label is-required">渠道名称：</label>
             <div class="col-sm-8" th:if="${productList.size()} ne 0">
-                <select class="form-control" name="payTypr" id="payTypr">
+                <select class="form-control" name="channelId" id="channelId" required>
+                    <option value="">请选择渠道名称</option>
+                    <option th:each="product : ${rateList}" th:text="${product.userName}" th:value="${product.userId}"></option>
+                </select>
+            </div>
+            <div class="col-sm-8" th:if="${rateList.size()} eq 0">
+                <input class="form-control" type="text" name="flag" style="border-width: 0;background-color:white; color: red;" value="未找到任何渠道名称，请新增渠道" required readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">产品类型：</label>
+            <div class="col-sm-8" th:if="${productList.size()} ne 0">
+                <select class="form-control" name="payTypr" id="payTypr" required>
                     <option value="">请选择产品类型</option>
                     <option th:each="product : ${productList}" th:text="${product.productName}" th:value="${product.productId}"></option>
                 </select>
             </div>
             <div class="col-sm-8" th:if="${productList.size()} eq 0">
-                <input class="form-control" type="text" name="flag" id="flag" style="border-width: 0;background-color:white; color: red;" value="未找到任何产品类型" required readonly>
+                <input class="form-control" type="text" name="flag" style="border-width: 0;background-color:white; color: red;" value="未找到任何产品类型" required readonly>
             </div>
         </div>
         <div class="form-group">
@@ -35,9 +53,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label is-required">通道费率：</label>
+            <label class="col-sm-3 control-label is-required">商户费率：</label>
             <div class="col-sm-8">
-                <input name="fee" class="form-control" type="number"  min="0.00" placeholder="请输入通道费率" required>
+                <input name="fee" class="form-control" type="number"  min="0.00" placeholder="请输入商户费率" required>
             </div>
         </div>
     </form>
@@ -52,21 +70,9 @@
 
     function submitHandler() {
         if ($.validate.form()) {
-          var a =   $('#form-rate-add').serialize();
             $.operate.save(prefix + "/add", $('#form-rate-add').serialize());
         }
     }
-
-  /*  /!*监听事件*!/
-    $('#feeType').on('select2:select', function (e) {
-        const feeType = $('#feeType').select2('val');
-        if (feeType === '2') {
-            $("#payTypr").select2("val", [""]);
-            $('#payTypr').prop('disabled', true);
-        }else if(feeType === '1'){
-            $('#payTypr').prop('disabled', false);
-        }
-    });*/
 </script>
 </body>
 </html>

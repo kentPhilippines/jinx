@@ -57,15 +57,7 @@ public class SysProfileController extends BaseController {
         return prefix + "/profile";
     }
 
-    @GetMapping("/checkPassword")
-    @ResponseBody
-    public boolean checkPassword(String password) {
-        SysUser user = ShiroUtils.getSysUser();
-        if (passwordService.matches(user, password)) {
-            return true;
-        }
-        return false;
-    }
+
 
     @GetMapping("/resetPwd")
     public String resetPwd(ModelMap mmap) {
@@ -86,7 +78,6 @@ public class SysProfileController extends BaseController {
     public AjaxResult resetPwd(String oldPassword, String newPassword) {
         SysUser user = ShiroUtils.getSysUser();
         if (StringUtils.isNotEmpty(newPassword) && passwordService.matches(user, oldPassword)) {
-            user.setSalt(ShiroUtils.randomSalt());
             user.setPassword(passwordService.encryptPassword(user.getLoginName(), newPassword, user.getSalt()));
             if (userService.resetUserPwd(user) > 0) {
                 ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
@@ -105,7 +96,6 @@ public class SysProfileController extends BaseController {
         SysUser user = ShiroUtils.getSysUser();
         user = userService.selectUserById(user.getUserId());
         if (StringUtils.isNotEmpty(newPassword) && passwordService.matchesDeal(user, oldPassword)) {
-              user.setSalt(ShiroUtils.randomSalt());
               user.setFundPassword(passwordService.encryptPassword(user.getLoginName(), newPassword, user.getSalt()));
               if (userService.resetUserPwd(user) > 0) {
                   ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
@@ -117,6 +107,20 @@ public class SysProfileController extends BaseController {
           }
     }
 
+    /**
+     * 验证登陆密码
+     * @param password
+     * @return
+     */
+    @GetMapping("/checkPassword")
+    @ResponseBody
+    public boolean checkPassword(String password) {
+        SysUser user = ShiroUtils.getSysUser();
+        if (passwordService.matches(user, password)) {
+            return true;
+        }
+        return false;
+    }
     /**
      * 修改用户
      */

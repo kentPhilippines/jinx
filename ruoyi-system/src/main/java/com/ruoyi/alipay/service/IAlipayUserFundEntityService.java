@@ -62,4 +62,10 @@ public interface IAlipayUserFundEntityService
      * @return
      */
     List<AlipayUserFundEntity> findUserFundAll();
+
+    /**
+     * <p>查询所有的渠道账户</p>
+     * @return
+     */
+    List<AlipayUserFundEntity> findUserFundRate();
 }
