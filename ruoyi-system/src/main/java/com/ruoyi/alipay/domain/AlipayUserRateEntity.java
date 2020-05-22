@@ -27,6 +27,9 @@ public class AlipayUserRateEntity extends BaseEntity
     @Excel(name = "用户类型,商户1 码商2")
     private Integer userType;
 
+    private String channelId;
+    public void setChannelId(String channelId){this.channelId = channelId;}
+    public String getChannelId(){return this.channelId;}
     /** 当前用户总开关 1开启0关闭【码商商户后台控制,该数据只能在后台显示】 */
     @Excel(name = "当前用户总开关 1开启0关闭【码商商户后台控制,该数据只能在后台显示】")
     private Integer switchs;

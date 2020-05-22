@@ -127,4 +127,7 @@ public interface AlipayUserRateEntityMapper {
             " and switchs = 1 " +
             "</script> ")
     AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType, @Param("payTypr") String payTypr);
+    @Select("select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where " +
+            "userId = #{alipayUserRateEntity.userId} and feeType = #{alipayUserRateEntity.feeType} and payTypr = #{alipayUserRateEntity.payTypr} and status = 1 ")
+    AlipayUserRateEntity checkUniqueRate(AlipayUserRateEntity alipayUserRateEntity);
 }

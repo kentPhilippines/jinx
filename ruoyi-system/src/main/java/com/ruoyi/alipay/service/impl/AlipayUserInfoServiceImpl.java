@@ -201,4 +201,10 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
 	     int i = alipayUserInfoMapper.updatePaypassword(userId, md5);
 		return i > 0 && i  < 2;
 	}
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserInfo> selectAllUserInfoList(AlipayUserInfo alipayUserInfo) {
+        return alipayUserInfoMapper.selectAllUserInfoList(  alipayUserInfo);
+    }
 }

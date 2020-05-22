@@ -31,10 +31,10 @@
                             <span>渠道账户：</span>
                             <input type="text" name="orderQrUser"/>
                         </li>
-                        <li>
+                       <!-- <li>
                             <span>二维码ID：</span>
                             <input type="text" name="orderQr"/>
-                        </li>
+                        </li>-->
                         <li class="select-selectpicker">
                             <label>订单状态： </label>
                             <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"
@@ -67,7 +67,7 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="orderDeal:qr:export">
                 <i class="fa fa-download"></i> 导出
             </a>
-            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天交易数据(码商)')"
+            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天交易数据(渠道)')"
                shiro:hasPermission="orderDeal:qr:statistics">
                 <i class="fa fa-bar-chart"></i> 当天数据统计
             </a>

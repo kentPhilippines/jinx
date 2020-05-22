@@ -179,4 +179,10 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         return alipayUserRateEntityMapper.updateStatus(id, switchs);
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserRateEntity checkUniqueRate(AlipayUserRateEntity alipayUserRateEntity) {
+        return alipayUserRateEntityMapper.checkUniqueRate(  alipayUserRateEntity);
+    }
+
 }

@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fee"    column="fee"    />
         <result property="feeType"    column="feeType"    />
         <result property="createTime"    column="createTime"    />
+        <result property="channelId"    column="channelId"    />
         <result property="submitTime"    column="submitTime"    />
         <result property="status"    column="status"    />
         <result property="retain1"    column="retain1"    />
@@ -22,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAlipayUserRateEntityVo">
-        select id, userId, userType, switchs, payTypr, fee, feeType, createTime, submitTime, status, retain1, retain2, retain3, retain4 from alipay_user_rate
+        select id, userId, userType, switchs,channelId, payTypr, fee, feeType, createTime, submitTime, status, retain1, retain2, retain3, retain4 from alipay_user_rate
     </sql>
 
     <select id="selectAlipayUserRateEntityList" parameterType="AlipayUserRateEntity" resultMap="AlipayUserRateEntityResult">
@@ -33,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="switchs != null "> and switchs = #{switchs}</if>
             <if test="payTypr != null  and payTypr != ''"> and payTypr = #{payTypr}</if>
             <if test="feeType != null "> and feeType = #{feeType}</if>
+            <if test="channelId != null "> and channelId = #{channelId}</if>
             <if test="status != null "> and status = #{status}</if>
         </where>
         order by createTime desc
@@ -52,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payTypr != null  and payTypr != ''">payTypr,</if>
             <if test="fee != null ">fee,</if>
             <if test="feeType != null ">feeType,</if>
+            <if test="channelId != null ">channelId,</if>
             <if test="createTime != null ">createTime,</if>
             <if test="submitTime != null ">submitTime,</if>
             <if test="status != null ">status,</if>
@@ -63,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payTypr != null  and payTypr != ''">#{payTypr},</if>
             <if test="fee != null ">#{fee},</if>
             <if test="feeType != null ">#{feeType},</if>
+            <if test="channelId != null ">#{channelId},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="submitTime != null ">#{submitTime},</if>
             <if test="status != null ">#{status},</if>
@@ -78,6 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payTypr != null  and payTypr != ''">payTypr = #{payTypr},</if>
             <if test="fee != null ">fee = #{fee},</if>
             <if test="feeType != null ">feeType = #{feeType},</if>
+            <if test="channelId != null ">channelId = #{channelId},</if>
             <if test="createTime != null ">createTime = #{createTime},</if>
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
             <if test="status != null ">status = #{status},</if>
@@ -109,6 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payTypr != null  and payTypr != ''"> and payTypr = #{payTypr}</if>
             <if test="fee != null "> and fee = #{fee}</if>
             <if test="feeType != null "> and feeType = #{feeType}</if>
+              <if test="channelId != null "> and channelId = #{channelId}</if>
             <if test="createTime != null "> and createTime = #{createTime}</if>
             <if test="submitTime != null "> and submitTime = #{submitTime}</if>
             <if test="status != null "> and status = #{status}</if>
@@ -124,6 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payTypr != null  and payTypr != ''">payTypr,</if>
             <if test="fee != null ">fee,</if>
             <if test="feeType != null ">feeType,</if>
+             <if test="channelId != null ">channelId,</if>
             <if test="createTime != null ">createTime,</if>
             <if test="submitTime != null ">submitTime,</if>
             <if test="status != null ">status,</if>
@@ -135,6 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payTypr != null  and payTypr != ''">#{payTypr},</if>
             <if test="fee != null ">#{fee},</if>
             <if test="feeType != null ">#{feeType},</if>
+             <if test="channelId != null ">#{channelId},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="submitTime != null ">#{submitTime},</if>
             <if test="status != null ">#{status},</if>

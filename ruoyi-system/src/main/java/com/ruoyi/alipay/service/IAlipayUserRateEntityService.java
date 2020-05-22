@@ -75,4 +75,6 @@ public interface IAlipayUserRateEntityService {
      * @return
      */
     int changeStatus(String id, String userId, String feeType, String switchs);
+
+    AlipayUserRateEntity checkUniqueRate(AlipayUserRateEntity alipayUserRateEntity);
 }

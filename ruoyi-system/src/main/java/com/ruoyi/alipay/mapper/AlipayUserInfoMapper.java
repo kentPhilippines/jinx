@@ -144,4 +144,30 @@ public interface AlipayUserInfoMapper {
     int updateAlipayUserInfo2Control(AlipayUserInfo alipayUserInfo);
     @Update("update alipay_user_info set payPasword = #{payPasword} where userId = #{userId}")
 	int updatePaypassword(@Param("userId") String userId,@Param("payPasword") String payPasword);
+
+
+
+    /**
+     * 查询全部的码商代理
+     *
+     * @param alipayUserInfo
+     * @return
+     */
+    @Select("<script>" +
+            "select id, userId, userName, agent, isAgent, switchs, qrRechargeList,queueList,createTime,submitTime, dealUrl from alipay_user_info where status = 1 "+
+            "<if test=\"userType == 1 or userType == 2\">" +
+            " and userType = #{userType}" +
+            "</if>" +
+            "<if test=\"userId != null and userId != ''\">" +
+            " and userId = #{userId}" +
+            "</if>" +
+            "<if test=\"userName != null and userName != ''\">" +
+            " and userName like concat('%',#{userName}, '%') " +
+            "</if>" +
+            "<if test=\"switchs == 0 or switchs == 1\">" +
+            " and switchs = #{switchs}" +
+            "</if>" +
+            " order by switchs desc, createTime desc " +
+            "</script>")
+    List<AlipayUserInfo> selectAllUserInfoList(AlipayUserInfo alipayUserInfo);
 }

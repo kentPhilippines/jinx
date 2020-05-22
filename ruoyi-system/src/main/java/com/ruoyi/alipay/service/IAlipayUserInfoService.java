@@ -121,4 +121,6 @@ public interface IAlipayUserInfoService {
      * @return
      */
 	boolean updatePaypassword(String userId, String password, String salt);
+
+    List<AlipayUserInfo> selectAllUserInfoList(AlipayUserInfo alipayUserInfo);
 }
