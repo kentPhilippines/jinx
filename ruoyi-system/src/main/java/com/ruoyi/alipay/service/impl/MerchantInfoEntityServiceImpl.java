@@ -225,4 +225,24 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         return merchantInfoEntityMapper.updateMerchantInfoById(merchantInfoEntity);
     }
 
+	@Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+	public List<String> selectNextAgentByParentId(String orderAccount) {
+		   List<String> agentList = merchantInfoEntityMapper.selectNextAgentByParentId(orderAccount);
+		return agentList;
+	}
+
+	@Override
+	@DataSource(DataSourceType.ALIPAY_SLAVE)
+	public List<AlipayUserInfo> selectAgentByMerchantId(List<String> list) {
+		if(list.size()>0){
+            List<AlipayUserInfo> sub = merchantInfoEntityMapper.selectSubAgentMembersByList(list);
+            return sub;
+        }else{
+            return Lists.newArrayList();
+        }
+		
+		
+	}
+
 }

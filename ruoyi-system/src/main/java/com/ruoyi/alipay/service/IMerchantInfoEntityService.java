@@ -113,4 +113,8 @@ public interface IMerchantInfoEntityService
      * @return
      */
     int updateMerchantInfoById(AlipayUserInfo merchantInfoEntity);
+
+	List<String> selectNextAgentByParentId(String orderAccount);
+
+	List<AlipayUserInfo> selectAgentByMerchantId(List<String> list);
 }
