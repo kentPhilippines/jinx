@@ -47,6 +47,9 @@
             <a class="btn btn-primary" onclick="$.operate.statistics('统计当天交易订单数据（商户）')" >
                 <i class="fa fa-bar-chart"></i> 当天数据统计
             </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" <!--shiro:hasPermission="alipay:running:export"-->>
+            <i class="fa fa-download"></i> 导出
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -88,6 +91,24 @@
           ]
         };
         $.table.init(options);
+    });
+    //初始化时间
+    layui.use('laydate', function(){
+        const laydate = layui.laydate;
+        laydate.render({
+            elem: '#startTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g,"-") + " 00:00:00",
+            isInitValue: true
+        });
+        laydate.render({
+            elem: '#endTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g,"-") + " 23:59:59",
+            isInitValue: true
+        });
     });
 </script>
 </body>

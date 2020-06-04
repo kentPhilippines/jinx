@@ -44,32 +44,17 @@ import java.util.List;
 @RequestMapping("/system/user")
 public class SysUserController extends BaseController {
     private String prefix = "system/user";
-
-    @Autowired
-    private ISysUserService userService;
-
-    @Autowired
-    private ISysRoleService roleService;
-
-    @Autowired
-    private ISysPostService postService;
-
-    @Autowired
-    private SysPasswordService passwordService;
-
-    @Autowired
-    private GoogleUtils googleUtils;
-
-    @Autowired
-    private ISysUserGoogleService sysUserGoogleService;
-
-
+    @Autowired private ISysUserService userService;
+    @Autowired private ISysRoleService roleService;
+    @Autowired private ISysPostService postService;
+    @Autowired private SysPasswordService passwordService;
+    @Autowired private GoogleUtils googleUtils;
+    @Autowired private ISysUserGoogleService sysUserGoogleService;
     @RequiresPermissions("system:user:view")
     @GetMapping()
     public String user() {
         return prefix + "/user";
     }
-
     @RequiresPermissions("system:user:list")
     @PostMapping("/list")
     @ResponseBody
@@ -78,7 +63,6 @@ public class SysUserController extends BaseController {
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
-
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:user:export")
     @PostMapping("/export")
@@ -192,7 +176,10 @@ public class SysUserController extends BaseController {
         }
         return error();
     }
-    @Autowired private IAlipayUserInfoService alipayUserInfoService;
+
+    @Autowired
+    private IAlipayUserInfoService alipayUserInfoService;
+
     @Log(title = "修改交易密码", businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwdDeal")
     @ResponseBody
@@ -208,11 +195,12 @@ public class SysUserController extends BaseController {
             }
             return error();
         }
-    	return error();
+        return error();
     }
 
     /**
      * 删除用户
+     *
      * @param ids 用户ID
      * @return 结果
      */
@@ -222,7 +210,7 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids, String check) {
         try {
-            return toAjax(userService.deleteUserByIds(ids,check));
+            return toAjax(userService.deleteUserByIds(ids, check));
         } catch (Exception e) {
             return error(e.getMessage());
         }
@@ -306,15 +294,16 @@ public class SysUserController extends BaseController {
             int i = sysUserGoogleService.deleteSysUserGoogleByLoginName(user.getLoginName());
             if (i == 1) {
                 int j = userService.updateUserInfo(user);
-                if(j == 1){
+                if (j == 1) {
                     return AjaxResult.success();
-                }else{
+                } else {
                     return AjaxResult.error("解绑失败");
                 }
             }
         }
         return null;
     }
+
     /**
      * 验证用户绑定google
      *

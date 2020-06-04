@@ -54,7 +54,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="alipay:running:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" <!--shiro:hasPermission="alipay:running:export"-->>
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
@@ -102,10 +102,14 @@
                     title: '金额'
                 },
                 {
+                    field: 'retain4',
+                    title: '分润账户来源'
+                },
+                {
                     field: 'createTime',
                     title: '创建时间'
                 },
-                {
+              /*  {
                     field: 'runType',
                     title: '操作类型',
                     formatter: function (value, item, index) {
@@ -115,7 +119,7 @@
                             return '<span>人工</span>';
                         }
                     }
-                },
+                },*/
                 {
                     field: 'amountType',
                     title: '账变类型',
@@ -134,6 +138,24 @@
             ]
         };
         $.table.init(options);
+    });
+    //初始化时间
+    layui.use('laydate', function(){
+        const laydate = layui.laydate;
+        laydate.render({
+            elem: '#startTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g,"-") + " 00:00:00",
+            isInitValue: true
+        });
+        laydate.render({
+            elem: '#endTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g,"-") + " 23:59:59",
+            isInitValue: true
+        });
     });
 </script>
 </body>

@@ -4,13 +4,25 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import javax.validation.constraints.Size;
 
 import com.google.common.collect.Maps;
+import com.ruoyi.alipay.domain.AlipayProductEntity;
+import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
+
+import cn.hutool.core.util.StrUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -39,11 +51,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class AlipayDealOrderEntityController extends BaseController {
     private String prefix = "alipay/orderDeal";
     private String code_prefix = "alipay/file";
-    @Autowired
-    private DictionaryUtils dictionaryUtils;
-    @Autowired
-    private IAlipayDealOrderEntityService alipayDealOrderEntityService;
-
+    @Autowired private DictionaryUtils dictionaryUtils;
+    @Autowired private IAlipayDealOrderEntityService alipayDealOrderEntityService;
+    @Autowired private ISysUserService userService;
     @GetMapping()
     public String orderDeal() {
         return prefix + "/orderDeal";
@@ -58,6 +68,15 @@ public class AlipayDealOrderEntityController extends BaseController {
         startPage();
         List<AlipayDealOrderEntity> list = alipayDealOrderEntityService
                 .selectAlipayDealOrderEntityList(alipayDealOrderEntity);
+        SysUser user = new SysUser();
+        List<SysUser> sysUsers = userService.selectUserList(user);
+        ConcurrentHashMap<String, SysUser> userCollect =  new ConcurrentHashMap<String, SysUser>();
+        for(SysUser   user1 : sysUsers)
+        	if(StrUtil.isNotBlank(user1.getMerchantId()))
+        	userCollect.put(user1.getMerchantId(), user1);
+        for (AlipayDealOrderEntity order : list)
+            order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
+        userCollect = null;
         return getDataTable(list);
     }
 

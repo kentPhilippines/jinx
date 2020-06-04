@@ -19,10 +19,10 @@ public class GoogleUtils {
         if (sysUserGoogle == null) {
             return 0;
         }
-        String key = sysUserGoogle.getSecretKey();
-        Long now = System.currentTimeMillis();
-
-       return GoogleAuthenticator.check_code(key, validateCode, now) ? 1 : 2 ;
+       String key = sysUserGoogle.getSecretKey();
+       Long now = System.currentTimeMillis();
+       boolean check_code = GoogleAuthenticator.check_code(key, validateCode, now);
+       return check_code ? 1 : 2 ;
     }
 
     public String getSecretKey(){

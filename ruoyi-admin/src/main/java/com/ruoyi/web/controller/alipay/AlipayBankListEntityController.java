@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.alipay;
 import java.util.List;
 import java.util.Map;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayUserInfo;

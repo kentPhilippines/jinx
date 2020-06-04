@@ -1,5 +1,7 @@
 package com.ruoyi.web.controller.back;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.*;
@@ -16,11 +18,14 @@ import com.ruoyi.common.enums.WithdrawalStatusEnum;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.*;
 import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.GoogleUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysDictDataService;
 import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,39 +36,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequestMapping("/back/merchant/admin")
 @Controller
 public class BackManageController extends BaseController {
     private String prefix = "merchant/info";
-
-    @Autowired
-    private IMerchantInfoEntityService merchantInfoEntityService;
-
-    @Autowired
-    private IAlipayDealOrderAppService alipayDealOrderAppService;
-
-    @Autowired
-    private IAlipayRunOrderEntityService alipayRunOrderEntityService;
-
-    @Autowired
-    private IAlipayWithdrawEntityService alipayWithdrawEntityService;
-
-    @Autowired
-    private IAlipayUserFundEntityService alipayUserFundEntityService;
-
-    @Autowired
-    private SysPasswordService passwordService;
-
-    @Autowired
-    private DictionaryUtils dictionaryUtils;
-
-    @Autowired
-    private IAlipayBankListEntityService alipayBankListEntityService;
-
-    @Autowired
-    private GoogleUtils googleUtils;
-
+    @Autowired private IMerchantInfoEntityService merchantInfoEntityService;
+    @Autowired private IAlipayDealOrderAppService alipayDealOrderAppService;
+    @Autowired private IAlipayRunOrderEntityService alipayRunOrderEntityService;
+    @Autowired private IAlipayWithdrawEntityService alipayWithdrawEntityService;
+    @Autowired private IAlipayUserFundEntityService alipayUserFundEntityService;
+    @Autowired private SysPasswordService passwordService;
+    @Autowired private DictionaryUtils dictionaryUtils;
+    @Autowired private IAlipayBankListEntityService alipayBankListEntityService;
+    @Autowired private GoogleUtils googleUtils;
+    @Autowired private ISysDictDataService dictDataService;
     /**
      * 商户后台用户登陆显示详细信息
      */
@@ -80,7 +70,6 @@ public class BackManageController extends BaseController {
 
     /**
      * 商户保存修改信息
-     *
      * @param alipayUserInfo
      * @return
      */
@@ -90,8 +79,6 @@ public class BackManageController extends BaseController {
     public AjaxResult toSave(AlipayUserInfo alipayUserInfo) {
         return toAjax(merchantInfoEntityService.updateMerchantByBackAdmin(alipayUserInfo));
     }
-
-
     //商户查询交易订单
     @GetMapping("/order/view")
     public String orderShow() {
@@ -110,6 +97,22 @@ public class BackManageController extends BaseController {
         startPage();
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
         return getDataTable(list);
+    }
+ /**
+     * 商户订单导出
+     */
+    @PostMapping("/order/export")
+    @ResponseBody
+    public AjaxResult exportOrderApp(AlipayDealOrderApp alipayDealOrderApp) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        alipayDealOrderApp.setOrderAccount(sysUser.getMerchantId());
+        startPage();
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
+        for(AlipayDealOrderApp orderApp : list) {
+        	orderApp.setFeeId(null);
+        }
+        ExcelUtil<AlipayDealOrderApp> util = new ExcelUtil<AlipayDealOrderApp>(AlipayDealOrderApp.class);
+        return util.exportExcel(list, "orderApp");
     }
 
 
@@ -130,6 +133,25 @@ public class BackManageController extends BaseController {
         startPage();
         List<AlipayRunOrderEntity> list = alipayRunOrderEntityService.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
         return getDataTable(list);
+    }
+    /**
+     * 导出流水订单记录列表
+     */
+    @Log(title = "商户资金流水导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/running/export")
+    @ResponseBody
+    public AjaxResult export(AlipayRunOrderEntity alipayRunOrderEntity) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        alipayRunOrderEntity.setOrderAccount(sysUser.getMerchantId());
+        startPage();
+        List<AlipayRunOrderEntity> list = alipayRunOrderEntityService
+                .selectAlipayRunOrderEntityList(alipayRunOrderEntity);
+        for(AlipayRunOrderEntity runorder : list) {
+        	runorder.setAccountW(null);
+        	runorder.setAcountR(null);
+        }
+        ExcelUtil<AlipayRunOrderEntity> util = new ExcelUtil<AlipayRunOrderEntity>(AlipayRunOrderEntity.class);
+        return util.exportExcel(list, "running");
     }
 
 
@@ -164,6 +186,10 @@ public class BackManageController extends BaseController {
         List<AlipayBankListEntity> list = alipayBankListEntityService.selectAlipayBankListEntityList(alipayBankListEntity);
         mmap.put("bankList", list);
         mmap.put("userFund", alipayUserFundEntity);
+        SysDictData dictData = new SysDictData();
+        dictData.setDictType("system_bankcode");
+        List<SysDictData> bankcode = dictDataService.selectDictDataList(dictData);
+        mmap.put("bankcode", bankcode);
         return prefix + "/apply";
     }
 
@@ -179,34 +205,37 @@ public class BackManageController extends BaseController {
         SysUser currentUser = ShiroUtils.getSysUser();
         String payPassword = (String) alipayWithdrawEntity.getParams().get("payPassword");
         String verify = passwordService.encryptPassword(currentUser.getLoginName(), payPassword, currentUser.getSalt());
-        if (!currentUser.getPassword().equals(verify)) {
+        if (!currentUser.getFundPassword().equals(verify)) {
             return AjaxResult.error("密码验证失败");
         }
+        SysDictData dictData = new SysDictData();
+        dictData.setDictType("system_bankcode");
+        List<SysDictData> bankcode = dictDataService.selectDictDataList(dictData);
+        ConcurrentHashMap<String, SysDictData> bankcodeCollect = bankcode.stream().collect(Collectors.toConcurrentMap(SysDictData::getDictValue, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        SysDictData sysDictData = bankcodeCollect.get(alipayWithdrawEntity.getBankcode());
         //正式环境解注
         //验证谷歌验证码
        String googleCode = alipayWithdrawEntity.getParams().get("googleCode").toString();
        int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
-       if (is == 0) {
+        if (is == 0) {
             return AjaxResult.error("未绑定谷歌验证器");
         } else if (is - 1 > 0) {
             return AjaxResult.error("谷歌验证码验证失败");
-        }
+        } 
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_6);
         AlipayUserInfo alipayUserInfo = merchantInfoEntityService.selectBackUserByUserId(currentUser.getMerchantId());
-        String[] str = alipayWithdrawEntity.getBankNo().split(",");
-        AlipayBankListEntity bank =  alipayBankListEntityService.selectAlipayBankListEntityByAcc(str[0],currentUser.getMerchantId());
-
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
         mapParam.put("appid", currentUser.getMerchantId());
         mapParam.put("ordertime", new Date());
         mapParam.put("amount", alipayWithdrawEntity.getAmount());
-        mapParam.put("acctno", str[0]);
-        mapParam.put("acctname", str[1]);
+        mapParam.put("acctno", alipayWithdrawEntity.getBankNo());
+        mapParam.put("acctname", alipayWithdrawEntity.getAccname());
         mapParam.put("apply", currentUser.getLoginName());
         mapParam.put("mobile", alipayWithdrawEntity.getMobile());
-        mapParam.put("bankcode", bank.getBankType());//后台代付
+        mapParam.put("bankcode",alipayWithdrawEntity.getBankcode());//后台代付
+        mapParam.put("bankName",sysDictData.getDictLabel());//后台代付
         mapParam.put("dpaytype", "Bankcard");//银行卡代付类型
         mapParam.put("orderStatus", WithdrawalStatusEnum.WITHDRAWAL_STATUS_PROCESS.getCode());
         mapParam.put("notifyurl", "http://localhost/iiiii");
@@ -218,7 +247,6 @@ public class BackManageController extends BaseController {
         extraParam.put("manage", "manage");
         return HttpUtils.adminMap2Gateway(mapParam, ipPort + urlPath, extraParam);
     }
-
     //商户查询银行卡
     @GetMapping("/bank/view")
     public String bankCard() {
@@ -315,7 +343,6 @@ public class BackManageController extends BaseController {
     public String showTable() {
         return prefix + "/currentTable";
     }
-
     /**
      * 后台管理员商户交易订单统计（仅当天数据）
      */

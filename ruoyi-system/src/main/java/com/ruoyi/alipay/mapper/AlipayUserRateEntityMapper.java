@@ -15,7 +15,6 @@ import org.apache.ibatis.annotations.Update;
  * @author kiwi
  * @date 2020-03-18
  */
-@Mapper
 public interface AlipayUserRateEntityMapper {
     /**
      * 查询用户产品费率
@@ -39,7 +38,7 @@ public interface AlipayUserRateEntityMapper {
      * @param alipayUserRateEntity 用户产品费率
      * @return 结果
      */
-    int insertAlipayUserRateEntity(AlipayUserRateEntity alipayUserRateEntity);
+    int insertAlipayUserRateEntity(  AlipayUserRateEntity alipayUserRateEntity);
 
     /**
      * 修改用户产品费率
@@ -80,7 +79,7 @@ public interface AlipayUserRateEntityMapper {
      * @param alipayUserRateEntity
      * @return
      */
-    int insertAlipayUserRateEntity_qr(AlipayUserRateEntity alipayUserRateEntity);
+    int insertAlipayUserRateEntity_qr( AlipayUserRateEntity alipayUserRateEntity);
 
     /**
      * 码商的逻辑
@@ -119,15 +118,17 @@ public interface AlipayUserRateEntityMapper {
 	List<AlipayUserRateEntity> selectListObjectEntityByUserId(@Param("userId") String userId,@Param("feeType") String feeType);
 
     @Select("<script>" +
-            "select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where userId = #{agent} and feeType = #{feeType}" +
+            "select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where userId = #{agent} and feeType = #{feeType} and channelId =#{channel}" +
             "<if test=\"payTypr != null and payTypr != ''\">" +
             " and payTypr = #{payTypr}" +
             "</if>" +
             " and status = 1" +
             " and switchs = 1 " +
             "</script> ")
-    AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType, @Param("payTypr") String payTypr);
+    AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType,  @Param("channel") String channel ,@Param("payTypr") String payTypr);
     @Select("select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where " +
-            "userId = #{alipayUserRateEntity.userId} and feeType = #{alipayUserRateEntity.feeType} and payTypr = #{alipayUserRateEntity.payTypr} and status = 1 ")
-    AlipayUserRateEntity checkUniqueRate(AlipayUserRateEntity alipayUserRateEntity);
+            "userId = #{alipayUserRateEntity.userId}   and payTypr = #{alipayUserRateEntity.payTypr} and status = 1 and channelId = #{alipayUserRateEntity.channelId}")
+    AlipayUserRateEntity checkUniqueRate(@Param("alipayUserRateEntity")AlipayUserRateEntity alipayUserRateEntity);
+    @Update("update alipay_user_rate set switchs = 0   where  userId = #{userId} and  id in ( select a.id from  (      select id from alipay_user_rate where userId =  #{userId} and payTypr in  (    select payTypr from alipay_user_rate where id = #{id}    ) )  a )")
+    int updateProduct( @Param("id")String id, @Param("userId") String userId);
 }

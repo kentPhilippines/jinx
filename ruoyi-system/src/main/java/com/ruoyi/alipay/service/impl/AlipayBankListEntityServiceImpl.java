@@ -122,4 +122,5 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
         return alipayBankListEntityMapper.selectAlipayBankListEntityByAcc(s,merchantId);
     }
 
+
 }

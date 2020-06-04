@@ -79,4 +79,5 @@ public interface IAlipayBankListEntityService
      * @return
      */
     AlipayBankListEntity selectAlipayBankListEntityByAcc(String s, String merchantId);
+
 }

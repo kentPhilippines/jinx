@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -77,7 +78,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         }
         if (StringUtils.isNotEmpty(result.getAgent())) {
             //查询上级同类型费率
-            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(), alipayUserRateEntity.getPayTypr());
+            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(),alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
             if (agentRate == null) { //是否为空
                 throw new BusinessException("此商户的上级代理未设置同类型的费率或此费率通道已关闭");
             }
@@ -149,7 +150,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         }
         if (StringUtils.isNotEmpty(result.getAgent())) {
             //查询上级同类型费率
-            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(), alipayUserRateEntity.getPayTypr());
+            AlipayUserRateEntity agentRate = alipayUserRateEntityMapper.findRateByUserIdAndType(result.getAgent(), alipayUserRateEntity.getFeeType(), alipayUserRateEntity.getChannelId(),alipayUserRateEntity.getPayTypr() );
             if (agentRate == null) { //是否为空
                 throw new BusinessException("此码商的上级代理未设置同类型的费率或此费率通道已关闭");
             }
@@ -175,6 +176,15 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         }
         if (result.getSwitchs() == 2) {
             throw new BusinessException("此用户已被停用");
+        }
+
+        /*如果是开启  则关闭该产品其他渠道
+        如果是关闭 则啥都不管
+        /
+         */
+        if(switchs.equals("1")){
+            //关闭该商户下  该产品所有的通道
+          int a =   alipayUserRateEntityMapper.updateProduct(id,userId);
         }
         return alipayUserRateEntityMapper.updateStatus(id, switchs);
     }

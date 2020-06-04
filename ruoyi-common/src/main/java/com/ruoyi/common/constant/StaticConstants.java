@@ -31,6 +31,10 @@ public interface StaticConstants {
      */
     public static final String BANK_CARD_ID = "B";
 
+    //bank
+    public static final String WIT_BANK = "WIT_BANK";
+
+
 
     //alipay查询
     public static final String ALIPAY_IP_URL_KEY = "alipay_ip_port";

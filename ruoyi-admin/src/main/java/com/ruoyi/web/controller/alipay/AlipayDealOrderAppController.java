@@ -121,9 +121,11 @@ public class AlipayDealOrderAppController extends BaseController {
 //        mmap.put("statisticsEntity",statisticsEntity);
         List<AlipayUserFundEntity> listFund =  alipayUserFundEntityService.findUserFundAll();
         ConcurrentHashMap<String, AlipayUserFundEntity> userCollect = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
-        for (StatisticsEntity  sta :list)
+        for (StatisticsEntity  sta :list){
             if(ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
                 sta.setAccountAmount(userCollect.get(sta.getUserId()).getAccountBalance().toString());
+            sta.setTodayAmount(sta.getSuccessAmount().subtract(new BigDecimal(sta.getSuccessFee())).toString());
+        }
         return getDataTable(list);
     }
 

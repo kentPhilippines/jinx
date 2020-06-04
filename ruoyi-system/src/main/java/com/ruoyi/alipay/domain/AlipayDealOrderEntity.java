@@ -18,6 +18,15 @@ public class AlipayDealOrderEntity extends BaseEntity
 
     /** 数据id */
     private Long id;
+    private String userName;
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 
     /** 订单号 */
     @Excel(name = "订单号")
