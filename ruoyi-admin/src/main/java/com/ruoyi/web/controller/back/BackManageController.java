@@ -2,9 +2,11 @@ package com.ruoyi.web.controller.back;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.*;
+import com.ruoyi.alipay.mapper.MerchantInfoEntityMapper;
 import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.annotation.RepeatSubmit;
@@ -26,6 +28,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDictDataService;
+import com.ruoyi.system.service.ISysUserService;
 import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -311,8 +314,22 @@ public class BackManageController extends BaseController {
     public TableDataInfo agentList(AlipayUserInfo alipayUserInfo) {
         SysUser sysUser = ShiroUtils.getSysUser();
         alipayUserInfo.setUserId(sysUser.getMerchantId());
+        List<String> agentList = merchantInfoEntityServiceImpl.selectNextAgentByParentId(alipayUserInfo.getUserId());
+        String str = CollUtil.getFirst(agentList);
+        List list1 = new ArrayList(Arrays.asList(str.split(",")));
+        if (str.split(",").length > 2) {
+        	list1.remove(0);
+        	list1.remove(0);
+        }
+        if(StrUtil.isNotBlank(alipayUserInfo.getUserId())) {
+        	if(list1.contains(alipayUserInfo.getUserId())) {
+        		list1.clear();
+        		list1 = new ArrayList();
+        		list1.add(alipayUserInfo.getUserId());
+        	}
+        }
         startPage();
-        List<AlipayUserInfo> list = merchantInfoEntityService.selectAgentByMerchantId(alipayUserInfo);
+        List<AlipayUserInfo> list = merchantInfoEntityService.selectAgentByMerchantId(list1);
         return getDataTable(list);
     }
 
@@ -322,17 +339,54 @@ public class BackManageController extends BaseController {
         return prefix + "/agent_order";
     }
 
-
+    @Autowired private ISysUserService userService;
+    @Autowired
+    private MerchantInfoEntityMapper merchantInfoEntityMapper;
     /**
      * 查询商户订单
      */
+    @Autowired IMerchantInfoEntityService merchantInfoEntityServiceImpl;
+    @Autowired IAlipayProductService iAlipayProductService;
     @PostMapping("/agent/order/list")
     @ResponseBody
     public TableDataInfo agentOrder(AlipayDealOrderApp alipayDealOrderApp) {
         SysUser sysUser = ShiroUtils.getSysUser();
         alipayDealOrderApp.setOrderAccount(sysUser.getMerchantId());
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        //查询商户所有的下级用户
+        List<String> agentList = merchantInfoEntityServiceImpl.selectNextAgentByParentId(alipayDealOrderApp.getOrderAccount());
+        String str = CollUtil.getFirst(agentList);
+        List list1 = new ArrayList(Arrays.asList(str.split(",")));
+        if (str.split(",").length > 2) {
+        	list1.remove(0);
+        	list1.remove(0);
+        }
+        if(StrUtil.isNotBlank(alipayDealOrderApp.getUserName())) {
+        	if(list1.contains(alipayDealOrderApp.getUserName())) {
+        		list1.clear();
+        		list1 = new ArrayList();
+        		list1.add(alipayDealOrderApp.getUserName());
+        	}
+        }
         startPage();
-        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(alipayDealOrderApp);
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(  list1);
+        ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        SysUser user = new SysUser();
+        List<SysUser> sysUsers = userService.selectUserList(user);
+        ConcurrentHashMap<String, SysUser> userCollect =  new ConcurrentHashMap<String, SysUser>();
+        for(SysUser   user1 : sysUsers)
+            if(StrUtil.isNotBlank(user1.getMerchantId()))
+                userCollect.put(user1.getMerchantId(), user1);
+        for (AlipayDealOrderApp order : list){
+            AlipayProductEntity product = prCollect.get(order.getRetain1());
+            order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
+            if(ObjectUtil.isNotNull(product))
+            	order.setRetain1(product.getProductName());
+        }
+        prCollect  = null;
+        userCollect = null;
         return getDataTable(list);
     }
 

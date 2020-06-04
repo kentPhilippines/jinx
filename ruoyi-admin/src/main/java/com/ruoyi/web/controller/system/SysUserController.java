@@ -323,6 +323,7 @@ public class SysUserController extends BaseController {
         if (now - past > expire) {
             return error("二维码已过期，重新绑定请联系管理员");
         }
+        
         mmap.put("google", sysUserGoogle.getGoogleUrl());
         return AjaxResult.success(mmap);
     }

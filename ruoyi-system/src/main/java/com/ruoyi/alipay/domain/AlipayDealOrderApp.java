@@ -16,6 +16,9 @@ public class AlipayDealOrderApp extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    private String userName;
+    public String getUserName(){return this.userName;}
+    public void setUserName(String userName){this.userName = userName;}
     /** 数据id */
     private Long id;
 

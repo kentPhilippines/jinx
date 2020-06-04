@@ -11,8 +11,8 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <span>订单号：</span>
-                            <input type="text" name="appOrderId"/>
+                            <span>下线账户：</span>
+                            <input type="text" name="userName"/>
                         </li>
                         <li>
                             <span>订单状态：</span>
@@ -63,8 +63,12 @@
             columns: [{
                 checkbox: true
             },
-                {field: 'orderAccount', title: '商户账号'},
+                {field: 'orderAccount', title: '交易账号'},
+                {field: 'userName', title: '商户昵称'},
                 {field: 'appOrderId', title: '交易订单号'},
+                {field: 'orderAmount', title: '交易金额'},
+                {field: 'retain3', title: '结算手续费'},
+                {field: 'retain1', title: '产品类型'},
                 {
                     field: 'orderStatus', title: '订单状态',
                     formatter: function (value, row, index) {

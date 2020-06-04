@@ -175,7 +175,7 @@ public interface MerchantInfoEntityMapper {
     List<String> selectNextAgentByParentId(@Param("userId") String userId);
 
     @Select("<script>" +
-            "select info.id, info.userId, info.userName, info.switchs, info.agent, info.isAgent, fund.accountBalance totalAmount, info.createTime from alipay_user_info info " +
+            "select info.id, info.userId, info.userName, info.switchs, info.agent, info.isAgent, fund.accountBalance totalAmount,fund.todayDealAmount todayDealAmount, info.createTime from alipay_user_info info " +
             "left join alipay_user_fund fund on info.userId = fund.userId " +
             "where info.status = 1 and info.userType = 1 and info.userId in " +
             "<foreach item='item' index='index' collection='userIds' separator=',' open='(' close=')'>" +

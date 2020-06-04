@@ -15,6 +15,25 @@ import java.util.Date;
  */
 public class AlipayUserInfo extends BaseEntity {
     private static final long serialVersionUID = 1L;
+    private String findUserId;
+    private String todayDealAmount;
+
+    public String getTodayDealAmount() {
+        return todayDealAmount;
+    }
+
+    public void setTodayDealAmount(String todayDealAmount) {
+        this.todayDealAmount = todayDealAmount;
+    }
+
+    public void setFindUserId(String findUserId) {
+        this.findUserId = findUserId;
+    }
+
+    public String getFindUserId() {
+        return findUserId;
+    }
+
     /**
      * 数据id
      */
