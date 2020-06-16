@@ -371,7 +371,7 @@ public class BackManageController extends BaseController {
         	}
         }
         startPage();
-        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(  list1);
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(  list1,alipayDealOrderApp);
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         SysUser user = new SysUser();
         List<SysUser> sysUsers = userService.selectUserList(user);
