@@ -69,9 +69,9 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
     @Override
     @DataSource(DataSourceType.ALIPAY_SLAVE)
     public List<AlipayDealOrderApp> selectSubMembersOrderList( 
-			List<String> list) {
+			List<String> list,AlipayDealOrderApp alipayDealOrderApp) {
         if (list.size()>0) {
-            List<AlipayDealOrderApp> orderList = alipayDealOrderAppMapper.selectSubAgentMembersOrderList(  list);
+            List<AlipayDealOrderApp> orderList = alipayDealOrderAppMapper.selectSubAgentMembersOrderList(  list,alipayDealOrderApp);
             return orderList;
         } else {
             return Lists.newArrayList();
@@ -83,6 +83,7 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
     public List<StatisticsEntity> selectMerchantStatisticsDataByDay(StatisticsEntity statisticsEntity, String dayStart, String dayEnd) {
         return alipayDealOrderAppMapper.selectOrderAppStatDateByDay(statisticsEntity, dayStart, dayEnd);
     }
+
 
 
 }

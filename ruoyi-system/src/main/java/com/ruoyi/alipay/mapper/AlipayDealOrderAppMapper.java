@@ -48,13 +48,16 @@ public interface AlipayDealOrderAppMapper {
 
     @Select("<script>" +
             "select orderAccount, appOrderId, orderType, orderStatus, createTime, orderAmount , retain1 ,"
-            + " retain3 from alipay_deal_order_app where "
-            + "   orderAccount in " +
+            + " retain3 from alipay_deal_order_app where  1=1 "+
+            "<if test = \"order.orderStatus != null and order.orderStatus != ''\">" +
+            "and orderStatus = #{order.orderStatus} " +
+            "</if>"  
+            + "  and  orderAccount in " +
             "<foreach item='item' index='index' collection='userIds' separator=',' open='(' close=')'>" +
             "#{item}" +
             "</foreach>" +
             "</script>")
-    List<AlipayDealOrderApp> selectSubAgentMembersOrderList(  @Param("userIds") List<String> userIds);
+    List<AlipayDealOrderApp> selectSubAgentMembersOrderList(  @Param("userIds") List<String> userIds, @Param("order")AlipayDealOrderApp alipayDealOrderApp);
 
     @Select("<script>" +
             "select '所有' userId, " +
