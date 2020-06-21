@@ -37,7 +37,7 @@ public interface IAlipayDealOrderAppService {
     int updateAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
 
 
-    List<AlipayDealOrderApp> selectSubMembersOrderList(  List<String> list);
+    List<AlipayDealOrderApp> selectSubMembersOrderList(  List<String> list, AlipayDealOrderApp alipayDealOrderApp);
 
     /**
      * 查询当天商户订单交易统计数据
