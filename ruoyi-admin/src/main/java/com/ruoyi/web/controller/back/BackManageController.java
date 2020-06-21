@@ -101,7 +101,7 @@ public class BackManageController extends BaseController {
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
         return getDataTable(list);
     }
- /**
+    /**
      * 商户订单导出
      */
     @PostMapping("/order/export")
@@ -112,7 +112,7 @@ public class BackManageController extends BaseController {
         startPage();
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
         for(AlipayDealOrderApp orderApp : list) {
-        	orderApp.setFeeId(null);
+            orderApp.setFeeId(null);
         }
         ExcelUtil<AlipayDealOrderApp> util = new ExcelUtil<AlipayDealOrderApp>(AlipayDealOrderApp.class);
         return util.exportExcel(list, "orderApp");
@@ -150,8 +150,8 @@ public class BackManageController extends BaseController {
         List<AlipayRunOrderEntity> list = alipayRunOrderEntityService
                 .selectAlipayRunOrderEntityList(alipayRunOrderEntity);
         for(AlipayRunOrderEntity runorder : list) {
-        	runorder.setAccountW(null);
-        	runorder.setAcountR(null);
+            runorder.setAccountW(null);
+            runorder.setAcountR(null);
         }
         ExcelUtil<AlipayRunOrderEntity> util = new ExcelUtil<AlipayRunOrderEntity>(AlipayRunOrderEntity.class);
         return util.exportExcel(list, "running");
@@ -218,13 +218,13 @@ public class BackManageController extends BaseController {
         SysDictData sysDictData = bankcodeCollect.get(alipayWithdrawEntity.getBankcode());
         //正式环境解注
         //验证谷歌验证码
-       String googleCode = alipayWithdrawEntity.getParams().get("googleCode").toString();
-       int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
+        String googleCode = alipayWithdrawEntity.getParams().get("googleCode").toString();
+        int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
         if (is == 0) {
             return AjaxResult.error("未绑定谷歌验证器");
         } else if (is - 1 > 0) {
             return AjaxResult.error("谷歌验证码验证失败");
-        } 
+        }
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_6);
@@ -318,15 +318,15 @@ public class BackManageController extends BaseController {
         String str = CollUtil.getFirst(agentList);
         List list1 = new ArrayList(Arrays.asList(str.split(",")));
         if (str.split(",").length > 2) {
-        	list1.remove(0);
-        	list1.remove(0);
+            list1.remove(0);
+            list1.remove(0);
         }
         if(StrUtil.isNotBlank(alipayUserInfo.getUserId())) {
-        	if(list1.contains(alipayUserInfo.getUserId())) {
-        		list1.clear();
-        		list1 = new ArrayList();
-        		list1.add(alipayUserInfo.getUserId());
-        	}
+            if(list1.contains(alipayUserInfo.getUserId())) {
+                list1.clear();
+                list1 = new ArrayList();
+                list1.add(alipayUserInfo.getUserId());
+            }
         }
         startPage();
         List<AlipayUserInfo> list = merchantInfoEntityService.selectAgentByMerchantId(list1);
@@ -360,18 +360,18 @@ public class BackManageController extends BaseController {
         String str = CollUtil.getFirst(agentList);
         List list1 = new ArrayList(Arrays.asList(str.split(",")));
         if (str.split(",").length > 2) {
-        	list1.remove(0);
-        	list1.remove(0);
+            list1.remove(0);
+            list1.remove(0);
         }
         if(StrUtil.isNotBlank(alipayDealOrderApp.getUserName())) {
-        	if(list1.contains(alipayDealOrderApp.getUserName())) {
-        		list1.clear();
-        		list1 = new ArrayList();
-        		list1.add(alipayDealOrderApp.getUserName());
-        	}
+            if(list1.contains(alipayDealOrderApp.getUserName())) {
+                list1.clear();
+                list1 = new ArrayList();
+                list1.add(alipayDealOrderApp.getUserName());
+            }
         }
         startPage();
-        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(  list1,alipayDealOrderApp);
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(  list1);
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         SysUser user = new SysUser();
         List<SysUser> sysUsers = userService.selectUserList(user);
@@ -383,7 +383,7 @@ public class BackManageController extends BaseController {
             AlipayProductEntity product = prCollect.get(order.getRetain1());
             order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
             if(ObjectUtil.isNotNull(product))
-            	order.setRetain1(product.getProductName());
+                order.setRetain1(product.getProductName());
         }
         prCollect  = null;
         userCollect = null;
@@ -420,3 +420,4 @@ public class BackManageController extends BaseController {
     }
 
 }
+

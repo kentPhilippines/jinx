@@ -105,13 +105,14 @@
                 {field: 'orderAccount', title: '商户账号'},
                 {field: 'userName', title: '商户昵称'},
                 {field: 'orderQrUser', title: '渠道账户'},
+                {field: 'retain1', title: '产品类型'},
                 {
                     field: 'orderStatus', title: '订单状态',
                     formatter: function (value, row, index) {
                         return $.table.selectDictLabel(orderstatusDatas, value);
                     }
                 },
-                {   field: 'externalOrderId',   title: '外部订单号'  },
+                {field: 'externalOrderId',   title: '外部订单号'},
                 {field: 'dealAmount', title: '交易金额'},
                 /*  {   field: 'dealFee',       title: '手续费'    },*/
                 /*                {   field: 'orderQr',       title: '关联二维码'  },*/

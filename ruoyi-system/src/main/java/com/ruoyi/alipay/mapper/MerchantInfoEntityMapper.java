@@ -41,6 +41,9 @@ public interface MerchantInfoEntityMapper {
             "<if test=\"userId != null and userId != ''\">" +
             " and userId = #{userId}" +
             "</if>" +
+            "<if test=\"userName != null and userName != ''\">" +
+            " and userName = #{userName}" +
+            "</if>" +
             "<if test=\"agent != null and agent != ''\">" +
             " and agent = #{agent}" +
             "</if>" +

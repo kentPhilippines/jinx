@@ -10,9 +10,12 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.Size;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.service.IAlipayProductService;
+import com.ruoyi.alipay.service.IAlipayRechargeEntityService;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
@@ -54,6 +57,7 @@ public class AlipayDealOrderEntityController extends BaseController {
     @Autowired private DictionaryUtils dictionaryUtils;
     @Autowired private IAlipayDealOrderEntityService alipayDealOrderEntityService;
     @Autowired private ISysUserService userService;
+    @Autowired IAlipayProductService iAlipayProductService;
     @GetMapping()
     public String orderDeal() {
         return prefix + "/orderDeal";
@@ -70,12 +74,20 @@ public class AlipayDealOrderEntityController extends BaseController {
                 .selectAlipayDealOrderEntityList(alipayDealOrderEntity);
         SysUser user = new SysUser();
         List<SysUser> sysUsers = userService.selectUserList(user);
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         ConcurrentHashMap<String, SysUser> userCollect =  new ConcurrentHashMap<String, SysUser>();
         for(SysUser   user1 : sysUsers)
         	if(StrUtil.isNotBlank(user1.getMerchantId()))
         	userCollect.put(user1.getMerchantId(), user1);
-        for (AlipayDealOrderEntity order : list)
+        for (AlipayDealOrderEntity order : list){
+            AlipayProductEntity product = prCollect.get(order.getRetain1());
+            if (ObjectUtil.isNotNull(product))
+                order.setRetain1(product.getProductName());
             order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
+        }
         userCollect = null;
         return getDataTable(list);
     }
