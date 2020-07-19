@@ -4,9 +4,16 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Maps;
+import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
+import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.service.IAlipayProductService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.domain.StatisticsEntity;
@@ -75,7 +82,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     public String merchant_withdrawal() {
         return prefix + "/merchant_withdrawal";
     }
-
+    @Autowired  IAlipayProductService iAlipayProductService;
     /**
      * 查询商户提现记录列表
      */
@@ -86,6 +93,15 @@ public class AlipayWithdrawEntityController extends BaseController {
         alipayWithdrawEntity.setWithdrawType("1");
         List<AlipayWithdrawEntity> list = alipayWithdrawEntityService
                 .selectAlipayWithdrawEntityList(alipayWithdrawEntity);
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        for (AlipayWithdrawEntity order : list){
+            AlipayProductEntity product = prCollect.get(order.getWitType());
+            if (ObjectUtil.isNotNull(product))
+                order.setWitType(product.getProductName());
+        }
         return getDataTable(list);
     }
 

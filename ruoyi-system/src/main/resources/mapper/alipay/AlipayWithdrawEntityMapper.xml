@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayWithdrawEntityMapper">
-    
+
     <resultMap type="AlipayWithdrawEntity" id="AlipayWithdrawEntityResult">
         <result property="id"    column="id"    />
         <result property="orderId"    column="orderId"    />
@@ -26,10 +26,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="apply"    column="apply"    />
         <result property="approval"    column="approval"    />
         <result property="comment"    column="comment"    />
+        <result property="witChannel"    column="witChannel"    />
+        <result property="witType"    column="witType"    />
     </resultMap>
 
     <sql id="selectAlipayWithdrawEntityVo">
-        select id, orderId, userId, withdrawType, bankNo, accname, orderStatus, bankName, amount, fee, actualAmount, mobile, notify, createTime, submitTime, status, retain1, retain2, apply, comment, approval from alipay_withdraw
+        select id, orderId, userId, withdrawType, bankNo, accname,
+         orderStatus, bankName, amount, fee, actualAmount, mobile,
+         notify, createTime, submitTime, status, retain1, retain2, apply, comment, approval,witChannel,witType
+
+          from alipay_withdraw
     </sql>
 
     <select id="selectAlipayWithdrawEntityList" parameterType="AlipayWithdrawEntity" resultMap="AlipayWithdrawEntityResult">
@@ -51,10 +57,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
          order by  createTime desc
     </select>
-    
+
     <select id="selectAlipayWithdrawEntityById" parameterType="Long" resultMap="AlipayWithdrawEntityResult">
         <include refid="selectAlipayWithdrawEntityVo"/>
         where id = #{id}
     </select>
-        
+
 </mapper>

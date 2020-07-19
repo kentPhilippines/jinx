@@ -137,6 +137,18 @@ public class AlipayWithdrawEntity extends BaseEntity {
      */
     @Excel(name = "审核人")
     private String approval;
+    @Excel(name = "代付产品")
+    private String witType;
+    //代付渠道
+    private String witChannel;
+
+    public String getWitType() {
+        return witType;
+    }
+
+    public void setWitType(String witType) {
+        this.witType = witType;
+    }
 
     /**
      * 审核意见
@@ -174,6 +186,14 @@ public class AlipayWithdrawEntity extends BaseEntity {
 
     public String getWithdrawType() {
         return withdrawType;
+    }
+
+    public String getWitChannel() {
+        return witChannel;
+    }
+
+    public void setWitChannel(String witChannel) {
+        this.witChannel = witChannel;
     }
 
     public void setBankNo(String bankNo) {
