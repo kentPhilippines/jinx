@@ -45,9 +45,11 @@ public class AlipayUserRateEntityController extends BaseController {
     public String rate(ModelMap modelMap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
+        List<AlipayUserFundEntity> channelList = alipayUserFundEntityService.findUserFundRate( );
         //查询产品类型下拉菜单
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         modelMap.put("productList", list);
+        modelMap.put("channelList", channelList);
         return prefix + "/rate";
     }
     /*

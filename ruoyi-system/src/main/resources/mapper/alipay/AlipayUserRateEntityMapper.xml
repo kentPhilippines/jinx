@@ -3,7 +3,6 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayUserRateEntityMapper">
-    
     <resultMap type="AlipayUserRateEntity" id="AlipayUserRateEntityResult">
         <result property="id"    column="id"    />
         <result property="userId"    column="userId"    />
@@ -34,17 +33,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="switchs != null "> and switchs = #{switchs}</if>
             <if test="payTypr != null  and payTypr != ''"> and payTypr = #{payTypr}</if>
             <if test="feeType != null "> and feeType = #{feeType}</if>
-            <if test="channelId != null "> and channelId = #{channelId}</if>
+            <if test="channelId != null and channelId != ''"> and channelId = #{channelId}</if>
             <if test="status != null "> and status = #{status}</if>
         </where>
         order by createTime desc
     </select>
-    
+
     <select id="selectAlipayUserRateEntityById" parameterType="Long" resultMap="AlipayUserRateEntityResult">
         <include refid="selectAlipayUserRateEntityVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertAlipayUserRateEntity" parameterType="AlipayUserRateEntity" useGeneratedKeys="true" keyProperty="id">
         insert into alipay_user_rate
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -95,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAlipayUserRateEntityByIds" parameterType="String">
-        delete from alipay_user_rate where id in 
+        delete from alipay_user_rate where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -148,5 +147,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null ">#{status},</if>
         </trim>
     </insert>
-    
+
 </mapper>

@@ -3,7 +3,7 @@
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.SysMenuMapper">
-
+	<cache/>
 	<resultMap type="SysMenu" id="SysMenuResult">
 		<id     property="menuId"         column="menu_id"        />
 		<result property="menuName"       column="menu_name"      />
@@ -24,7 +24,7 @@
 	</resultMap>
 
 	<sql id="selectMenuVo">
-        select menu_id, menu_name, parent_id, order_num, url, target, menu_type, visible, ifnull(perms,'') as perms, icon, create_by, create_time 
+        select menu_id, menu_name, parent_id, order_num, url, target, menu_type, visible, ifnull(perms,'') as perms, icon, create_by, create_time
 		from sys_menu
     </sql>
 
@@ -117,7 +117,7 @@
 	</select>
 
 	<select id="selectCountMenuByParentId" resultType="Integer">
-	    select count(1) from sys_menu where parent_id=#{menuId}  
+	    select count(1) from sys_menu where parent_id=#{menuId}
 	</select>
 
 	<select id="checkMenuNameUnique" parameterType="SysMenu" resultMap="SysMenuResult">

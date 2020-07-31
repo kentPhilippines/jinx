@@ -32,6 +32,13 @@
                             </select>
                         </li>
                         <li class="select-selectpicker">
+                            <label>渠道类型：</label>
+                            <select id="channelId" name="channelId" class="selectpicker" data-none-selected-text="请选择">
+                                <option value="">所有</option>
+                                <option th:each="channel : ${channelList}" th:text="${channel.userName}" th:value="${channel.userId}"></option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
                             <label>费率类型： </label>
                             <select id="feeType" name="feeType" th:with="type=${@dict.getType('feeType')}"
                                     class="selectpicker" data-none-selected-text="请选择" >
