@@ -21,6 +21,15 @@ public class StatisticsEntity extends BaseEntity implements Serializable {
     public void setTodayAmount(String todayAmount){this.todayAmount = todayAmount;}
     public String getTodayAmount(){return this.todayAmount;}
     private String   profit;
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public void setProfit(String profit) {
         this.profit = profit;

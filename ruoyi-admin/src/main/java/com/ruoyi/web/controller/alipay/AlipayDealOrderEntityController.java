@@ -16,6 +16,7 @@ import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.service.IAlipayProductService;
 import com.ruoyi.alipay.service.IAlipayRechargeEntityService;
+import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.utils.DateUtils;
@@ -62,7 +63,8 @@ public class AlipayDealOrderEntityController extends BaseController {
     public String orderDeal() {
         return prefix + "/orderDeal";
     }
-
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
     /**
      * 查询交易订单列表
      */
@@ -77,12 +79,15 @@ public class AlipayDealOrderEntityController extends BaseController {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
         List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        List<AlipayUserFundEntity> listFund =  alipayUserFundEntityService.findUserFundAll();
+        ConcurrentHashMap<String, AlipayUserFundEntity> userCollect1 = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         ConcurrentHashMap<String, SysUser> userCollect =  new ConcurrentHashMap<String, SysUser>();
         for(SysUser   user1 : sysUsers)
         	if(StrUtil.isNotBlank(user1.getMerchantId()))
         	userCollect.put(user1.getMerchantId(), user1);
         for (AlipayDealOrderEntity order : list){
+            order.setChannelName(userCollect1.get(order.getOrderQrUser()).getUserName());
             AlipayProductEntity product = prCollect.get(order.getRetain1());
             if (ObjectUtil.isNotNull(product))
                 order.setRetain1(product.getProductName());
@@ -183,6 +188,11 @@ public class AlipayDealOrderEntityController extends BaseController {
 //            statisticsEntity.setSuccessPercent(successPercent);
 //        }
 //        mmap.put("statisticsEntity",statisticsEntity);
+        List<AlipayUserFundEntity> listFund =  alipayUserFundEntityService.findUserFundAll();
+        ConcurrentHashMap<String, AlipayUserFundEntity> userCollect = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        for (StatisticsEntity  sta :list)
+            if(ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
+                sta.setUserName(userCollect.get(sta.getUserId()).getUserName());
         return getDataTable(list);
     }
 
