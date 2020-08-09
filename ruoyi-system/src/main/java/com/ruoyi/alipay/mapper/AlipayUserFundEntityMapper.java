@@ -2,6 +2,7 @@ package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -61,4 +62,18 @@ public interface AlipayUserFundEntityMapper {
 
     @Select("select * from alipay_user_fund where userType = 3")
     List<AlipayUserFundEntity> findUserFundRate();
+
+
+
+
+    @Select("SELECT * FROM `alipay_user_fund_bak` WHERE userId   IN (SELECT userId FROM alipay_user_info WHERE agent =  #{merchantId})  " +
+            "AND createTime > #{baseEntity.params.dayStart}" +
+            " AND createTime < #{baseEntity.params.dayEnd}  order by createTime ")
+    List<AlipayUserFundEntity> findUserBakBy( @Param("merchantId") String merchantId,@Param("baseEntity") BaseEntity baseEntity);
+
+
+    @Select("SELECT * FROM `alipay_user_fund_bak` where userId = #{merchantId}"+
+            "AND createTime > #{baseEntity.params.dayStart}" +
+            " AND createTime < #{baseEntity.params.dayEnd}  order by createTime ")
+    List<AlipayUserFundEntity> findMyUserBak(@Param("merchantId")  String merchantId,@Param("baseEntity")  BaseEntity baseEntity);
 }

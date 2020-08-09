@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,7 @@ import com.ruoyi.common.enums.DataSourceType;
 
 /**
  * 用户资金账户Service业务层处理
- * 
+ *
  * @author kiwi
  * @date 2020-03-17
  */
@@ -35,7 +37,7 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 
 	/**
 	 * 查询用户资金账户列表
-	 * 
+	 *
 	 * @param alipayUserFundEntity 用户资金账户
 	 * @return 用户资金账户
 	 */
@@ -89,5 +91,17 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
 	public List<AlipayUserFundEntity> findUserFundRate()  {
 		return alipayUserFundEntityMapper.findUserFundRate();
+	}
+
+	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
+	public List<AlipayUserFundEntity> findUserBakBy(String merchantId, BaseEntity baseEntity) {
+		return alipayUserFundEntityMapper.findUserBakBy(  merchantId,   baseEntity);
+	}
+
+	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
+	public List<AlipayUserFundEntity> findMyUserBak(String merchantId, BaseEntity baseEntity) {
+		return alipayUserFundEntityMapper.findMyUserBak(  merchantId,   baseEntity);
 	}
 }

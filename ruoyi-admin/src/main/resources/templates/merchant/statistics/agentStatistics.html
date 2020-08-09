@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <title>代理数据统计</title>
+    <th:block th:include="include :: header('代理数据统计')"/>
+</head>
+<script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <div ><p><h3>以下数据最终解释权归我司所有 <strong> @金星支付</strong></h3></p></div>
+        </div>
+        <div class="col-sm-12 select-table table-striped" style="height: 95%">
+            <div id="container" style="height: 50%;width: 100%"></div>
+            <div id="container1" style="height: 50%;width: 50%;float: left"></div>
+            <div id="container2" style="height: 50%;width: 50%;float: right";></div>
+        </div>
+    <!--<div class="col-sm-12 select-table table-striped" style="height: 95%">
+    </div>-->
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "back/merchant/statistics";
+    var containerDateList =  [[${data.CHART}]];
+    var containerTimeList =  [[${data.DATE}]];
+    var containerUserSList =  [[${data.USERS}]];
+    var TODAY_AGENT_PROFIT =  [[${data.TODAY_AGENT_PROFIT}]];
+    var SUM_AGENT_PROFIT =  [[${data.SUM_AGENT_PROFIT}]];
+    var WIT_MONEY =  [[${data.WIT_MONEY}]];
+    var sumMoneyList =  [[${data.sumMoneyList}]];
+    var myChart = echarts.init(document.getElementById('container'));
+    var myChart1 = echarts.init(document.getElementById('container1'));
+    var myChart2 = echarts.init(document.getElementById('container2'));
+    var option =  {
+        title: {
+            text: '月度下线数据情况',
+           /* subtext: '数据来源：金星支付'*/
+
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data:containerUserSList
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: false,
+                data:containerTimeList
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '交易量 (元 / 人民币 / ￥)',
+            }
+        ],
+        series: containerDateList
+    };
+     var option1   = {
+         title: {
+             text: '每日收益报表',
+             subtext: '数据来源：金星支付'
+         },
+         tooltip: {
+             trigger: 'axis',
+             axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                 type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+             },
+             formatter: function (params) {
+                 var tar;
+                 if (params[1].value !== '-') {
+                     tar = params[1];
+                 }
+                 else {
+                     tar = params[0];
+                 }
+                 return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
+             }
+         },
+         legend: {
+             data: ['支出', '收入']
+         },
+         grid: {
+             left: '3%',
+             right: '4%',
+             bottom: '3%',
+             containLabel: true
+         },
+         xAxis: {
+             type: 'category',
+             splitLine: {show: false},
+             data: containerTimeList /*function () {
+                 var list = [];
+                 for (var i = 1; i <= 11; i++) {
+                     list.push('11月' + i + '日');
+                 }
+                 return list;
+             }()*/
+         },
+         yAxis: {
+             type: 'value'
+         },
+         series: [
+             {
+                 name: '辅助',
+                 type: 'bar',
+                 stack: '总量',
+                 itemStyle: {
+                     barBorderColor: 'rgba(0,0,0,0)',
+                     color: 'rgba(0,0,0,0)'
+                 },
+                 emphasis: {
+                     itemStyle: {
+                         barBorderColor: 'rgba(0,0,0,0)',
+                         color: 'rgba(0,0,0,0)'
+                     }
+                 },
+                 data:SUM_AGENT_PROFIT
+             },
+             {
+                 name: '收入',
+                 type: 'bar',
+                 stack: '总量',
+                 label: {
+                     show: true,
+                     position: 'top'
+                 },
+                 data: TODAY_AGENT_PROFIT
+             },
+             {
+                 name: '支出',
+                 type: 'bar',
+                 stack: '总量',
+                 label: {
+                     show: true,
+                     position: 'bottom'
+                 },
+                 data: WIT_MONEY
+             }
+         ]
+     };
+    var option2 = {
+        title: {
+            text: '每日会员交易汇总',
+            subtext: '数据来源：金星支付'
+        },
+        color: ['#3398DB'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: containerTimeList,
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '会员当日交易总量，单位（元/￥/CNY）：',
+                type: 'bar',
+                barWidth: '60%',
+                data: sumMoneyList
+            }
+        ]
+    };
+    myChart.setOption(option);
+    myChart1.setOption(option1);
+    myChart2.setOption(option2);
+</script>
+</body>
+</html>

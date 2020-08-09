@@ -86,7 +86,7 @@ var table = {
                     sortOrder: options.sortOrder,                       // 排序方式  asc 或者 desc
                     pagination: options.pagination,                     // 是否显示分页（*）
                     pageNumber: 1,                                      // 初始化加载第一页，默认第一页
-                    pageSize: options.pageSize,                         // 每页的记录行数（*） 
+                    pageSize: options.pageSize,                         // 每页的记录行数（*）
                     pageList: options.pageList,                         // 可供选择的每页的行数（*）
                     firstLoad: options.firstLoad,                       // 是否首次请求加载数据，对于数据较大可以配置false
                     escape: options.escape,                             // 转义HTML字符串
@@ -1699,6 +1699,38 @@ var table = {
         },
         // 通用方法封装处理
         common: {
+          getPreMonthDay : function (date) {
+            var arr = date.split('-');
+            var year = arr[0];     //当前年
+            var month = arr[1];      //当前月
+            var day = arr[2];        //当前日
+            //验证日期格式为YYYY-MM-DD
+            var reg = date.match(/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/);
+            if ((!reg) || (month > 12) || (day > 31)) {
+                console.log('日期或格式有误！请输入正确的日期格式（年-月-日）');
+                return;
+            }
+
+            var pre_year = year;     //前一个月的年
+            var pre_month = parseInt(month) - 1;      //前一个月的月，以下几行是上月数值特殊处理
+            if (pre_month === 0) {
+                pre_year = parseInt(pre_year) - 1;
+                pre_month = 12;
+            }
+            var pre_day = parseInt(day);       //前一个月的日，以下几行是特殊处理前一个月总天数
+            var pre_month_alldays = new Date(pre_year, pre_month, 0).getDate();    //巧妙处理，返回某个月的总天数
+            if (pre_day > pre_month_alldays) {
+                pre_day = pre_month_alldays;
+            }
+            if (pre_month < 10) {   //补0
+                pre_month = '0' + pre_month;
+            }
+            else if (pre_day < 10) {   //补0
+                pre_day = '0' + pre_day;
+            }
+            var pre_month_day = pre_year + '-' + pre_month + '-' + pre_day;
+            return pre_month_day;
+        },
             // 判断字符串是否为空
             isEmpty: function (value) {
                 if (value == null || this.trim(value) == "") {

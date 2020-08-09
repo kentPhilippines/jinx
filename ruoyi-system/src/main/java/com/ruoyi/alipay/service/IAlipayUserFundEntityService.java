@@ -1,19 +1,20 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.common.core.domain.BaseEntity;
+
 import java.util.List;
 
 /**
  * 用户资金账户Service接口
- * 
+ *
  * @author kiwi
  * @date 2020-03-17
  */
-public interface IAlipayUserFundEntityService 
-{
+public interface IAlipayUserFundEntityService {
     /**
      * 查询用户资金账户
-     * 
+     *
      * @param id 用户资金账户ID
      * @return 用户资金账户
      */
@@ -21,7 +22,7 @@ public interface IAlipayUserFundEntityService
 
     /**
      * 查询用户资金账户列表
-     * 
+     *
      * @param alipayUserFundEntity 用户资金账户
      * @return 用户资金账户集合
      */
@@ -29,7 +30,7 @@ public interface IAlipayUserFundEntityService
 
     /**
      * 新增用户资金账户
-     * 
+     *
      * @param alipayUserFundEntity 用户资金账户
      * @return 结果
      */
@@ -37,7 +38,7 @@ public interface IAlipayUserFundEntityService
 
     /**
      * 修改用户资金账户
-     * 
+     *
      * @param alipayUserFundEntity 用户资金账户
      * @return 结果
      */
@@ -45,6 +46,7 @@ public interface IAlipayUserFundEntityService
 
     /**
      * 根据userId查询用户的资金账户对象
+     *
      * @param merchantId
      * @return
      */
@@ -52,6 +54,7 @@ public interface IAlipayUserFundEntityService
 
     /**
      * <p>渠道账户查询</p>
+     *
      * @param alipayUserFundEntity
      * @return
      */
@@ -59,13 +62,19 @@ public interface IAlipayUserFundEntityService
 
     /**
      * <p>获取所有的账户资金</p>
+     *
      * @return
      */
     List<AlipayUserFundEntity> findUserFundAll();
 
     /**
      * <p>查询所有的渠道账户</p>
+     *
      * @return
      */
     List<AlipayUserFundEntity> findUserFundRate();
+
+    List<AlipayUserFundEntity> findUserBakBy(String merchantId, BaseEntity baseEntity);
+
+    List<AlipayUserFundEntity> findMyUserBak(String merchantId, BaseEntity baseEntity);
 }
