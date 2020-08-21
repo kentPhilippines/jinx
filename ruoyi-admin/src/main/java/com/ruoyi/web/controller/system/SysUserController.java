@@ -1,6 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.UserConstants;
@@ -8,21 +7,17 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.HashKit;
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.GoogleUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.SysUserGoogle;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserGoogleService;
 import com.ruoyi.system.service.ISysUserService;
-
-import cn.hutool.core.util.ObjectUtil;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -93,12 +89,26 @@ public class SysUserController extends BaseController {
         return util.importTemplateExcel("用户数据");
     }
 
+    static final String ADMIN = "admin";
+    static final String ADMIN_NUMBER = "1";
+
     /**
      * 新增用户
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        mmap.put("roles", roleService.selectRoleAll());
+        List<SysRole> sysRoles = roleService.selectRoleAll();
+        String operName = ShiroUtils.getSysUser().getLoginName();
+        if (!ADMIN.equals(operName)) {
+            List<SysRole> roleList = new ArrayList<>();
+            for (SysRole role : sysRoles) {
+                if (role.getRoleId() == 113) {
+                    roleList.add(role);
+                }
+            }
+            sysRoles = roleList;
+        }
+        mmap.put("roles", sysRoles);
         mmap.put("posts", postService.selectPostAll());
         return prefix + "/add";
     }
@@ -323,7 +333,7 @@ public class SysUserController extends BaseController {
         if (now - past > expire) {
             return error("二维码已过期，重新绑定请联系管理员");
         }
-        
+
         mmap.put("google", sysUserGoogle.getGoogleUrl());
         return AjaxResult.success(mmap);
     }

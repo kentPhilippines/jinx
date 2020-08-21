@@ -125,7 +125,9 @@
                         <label class="col-xs-2 control-label is-required">用户角色：</label>
                         <div class="col-xs-10">
                             <label th:each="role:${roles}" class="radio-box">
-                                <input name="roles[0].roleId" type="radio" th:id="${role.roleId}" th:value="${role.roleId}" th:disabled="${role.status == '1'}">
+
+                                <input name="roles[0].roleId" th:disabled="${role.status == '1'}" th:id="${role.roleId}"
+                                       th:value="${role.roleId}" type="radio">
                                 <label th:for="${role.roleId}" th:text="${role.roleName}"></label></label>
 							</label>
                         </div>
@@ -145,7 +147,7 @@
             </div>
         </form>
     </div>
-      
+
     <div class="row">
         <div class="col-sm-offset-5 col-sm-10">
             <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
@@ -156,7 +158,7 @@
 	<th:block th:include="include :: select2-js" />
 	<script>
 	    let prefix = ctx + "system/user";
-	
+
         $("#form-user-add").validate({
         	onkeyup: false,
         	rules:{
@@ -228,7 +230,7 @@
             },
             focusCleanup: true
         });
-        
+
         function submitHandler() {
 	        if ($.validate.form()) {
 	        	var data = $("#form-user-add").serializeArray();
@@ -237,7 +239,7 @@
 	        	$.operate.saveTab(prefix + "/add", data);
 	        }
 	    }
-         
+
         /*用户管理-新增-选择部门树*/
         function selectDeptTree() {
         	var treeId = $("#treeId").val();
@@ -251,8 +253,8 @@
 			};
 			$.modal.openOptions(options);
 		}
-		
-		function doSubmit(index, layero){
+
+        function doSubmit(index, layero){
 			var tree = layero.find("iframe")[0].contentWindow.$._tree;
 			if ($.tree.notAllowParents(tree)) {
 				var body = layer.getChildFrame('body', index);
