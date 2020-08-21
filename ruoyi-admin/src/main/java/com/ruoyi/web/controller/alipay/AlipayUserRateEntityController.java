@@ -1,29 +1,25 @@
 package com.ruoyi.web.controller.alipay;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import cn.hutool.core.util.ObjectUtil;
 import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.service.*;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 用户产品费率Controller
@@ -35,26 +31,38 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/alipay/rate")
 public class AlipayUserRateEntityController extends BaseController {
     private String prefix = "alipay/merchant/rate";
-    @Autowired private IAlipayUserRateEntityService alipayUserRateEntityService;
-    @Autowired private IAlipayUserFundEntityService alipayUserFundEntityService;
-    @Autowired IAlipayProductService iAlipayProductService;
-    @Autowired IAlipayChanelFeeService alipayChanelFeeServiceImpl;
-    @Autowired private IAlipayUserInfoService alipayUserInfoService;
+    @Autowired
+    private IAlipayUserRateEntityService alipayUserRateEntityService;
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
+    @Autowired
+    IAlipayProductService iAlipayProductService;
+    @Autowired
+    IAlipayChanelFeeService alipayChanelFeeServiceImpl;
+    @Autowired
+    private IAlipayUserInfoService alipayUserInfoService;
+    /*
+     * 查询商户产品费率列表
+     */
+    static final String PAY_TYPE = "1";
+
     @RequiresPermissions("merchant:rate:view")
     @GetMapping()
     public String rate(ModelMap modelMap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
-        List<AlipayUserFundEntity> channelList = alipayUserFundEntityService.findUserFundRate( );
+        List<AlipayUserFundEntity> channelList = alipayUserFundEntityService.findUserFundRate();
         //查询产品类型下拉菜单
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         modelMap.put("productList", list);
         modelMap.put("channelList", channelList);
         return prefix + "/rate";
     }
-    /*
-     * 查询商户产品费率列表
-     */
+
+    static final String MSG = "【当交易额为1000时盈利：";
+    @Autowired
+    private IAlipayChanelFeeService alipayChanelFeeService;
+
     @RequiresPermissions("merchant:rate:list")
     @PostMapping("/list")
     @ResponseBody
@@ -67,9 +75,20 @@ public class AlipayUserRateEntityController extends BaseController {
         List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         ConcurrentHashMap<String, AlipayUserFundEntity> qrCollect = rateList.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        BigDecimal a = new BigDecimal("0");
         for (AlipayUserRateEntity rate : list) {
             AlipayUserFundEntity channel = qrCollect.get(rate.getChannelId());
             AlipayProductEntity product = prCollect.get(rate.getPayTypr());
+            AlipayChanelFee channelBy = alipayChanelFeeService.findChannelBy(rate.getChannelId(), rate.getPayTypr());
+            String channelRFee = channelBy.getChannelRFee();
+            a = new BigDecimal("" + rate.getFee());
+            if (rate.getFeeType().toString().equals(PAY_TYPE)) {
+                rate.setChannelFee(channelRFee);
+                rate.setProfit(String.valueOf(a.subtract(new BigDecimal(channelRFee))));
+            } else {
+                rate.setChannelFee(channelBy.getChannelDFee());
+                rate.setProfit(String.valueOf(a.subtract(new BigDecimal(channelBy.getChannelDFee()))));
+            }
             if (ObjectUtil.isNotNull(channel))
                 rate.setChannelId(channel.getUserName());
             if (ObjectUtil.isNotNull(product))

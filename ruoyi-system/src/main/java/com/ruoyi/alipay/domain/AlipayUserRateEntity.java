@@ -1,9 +1,10 @@
 package com.ruoyi.alipay.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.Date;
 
 /**
@@ -33,21 +34,38 @@ public class AlipayUserRateEntity extends BaseEntity {
     private Integer userType;
 
     private String channelId;
+    private String channelFee;
+    private String profit;
 
+    public String getChannelFee() {
+        return channelFee;
+    }
 
     public String getChannelId() {
-		return channelId;
-	}
+        return channelId;
+    }
 
-	public void setChannelId(String channelId) {
-		this.channelId = channelId;
-	}
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
 
-	/**
+    /**
      * 当前用户总开关 1开启0关闭【码商商户后台控制,该数据只能在后台显示】
      */
     @Excel(name = "当前用户总开关 1开启0关闭【码商商户后台控制,该数据只能在后台显示】")
     private Integer switchs;
+
+    public void setChannelFee(String channelFee) {
+        this.channelFee = channelFee;
+    }
+
+    public String getProfit() {
+        return profit;
+    }
+
+    public void setProfit(String profit) {
+        this.profit = profit;
+    }
 
     /**
      * 产品类型

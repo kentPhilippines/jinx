@@ -85,4 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+    <select id="findChannelBy" parameterType="String" resultMap="AlipayChanelFeeResult">
+    select * from alipay_chanel_fee where channelId = #{channelId} and productId = #{payTypr}
+    </select>
 </mapper>

@@ -77,4 +77,6 @@ public interface IAlipayUserFundEntityService {
     List<AlipayUserFundEntity> findUserBakBy(String merchantId, BaseEntity baseEntity);
 
     List<AlipayUserFundEntity> findMyUserBak(String merchantId, BaseEntity baseEntity);
+
+    List<AlipayUserFundEntity> findUserAppAll(BaseEntity baseEntity);
 }

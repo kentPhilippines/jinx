@@ -1,6 +1,5 @@
 package com.ruoyi.alipay.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import com.google.common.collect.Lists;
 import com.ruoyi.alipay.domain.AlipayDealOrderApp;
 import com.ruoyi.alipay.mapper.AlipayDealOrderAppMapper;
@@ -9,12 +8,9 @@ import com.ruoyi.alipay.service.IAlipayDealOrderAppService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.enums.DataSourceType;
-import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -68,10 +64,10 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
 
     @Override
     @DataSource(DataSourceType.ALIPAY_SLAVE)
-    public List<AlipayDealOrderApp> selectSubMembersOrderList( 
-			List<String> list,AlipayDealOrderApp alipayDealOrderApp) {
-        if (list.size()>0) {
-            List<AlipayDealOrderApp> orderList = alipayDealOrderAppMapper.selectSubAgentMembersOrderList(  list,alipayDealOrderApp);
+    public List<AlipayDealOrderApp> selectSubMembersOrderList(
+            List<String> list, AlipayDealOrderApp alipayDealOrderApp) {
+        if (list.size() > 0) {
+            List<AlipayDealOrderApp> orderList = alipayDealOrderAppMapper.selectSubAgentMembersOrderList(list, alipayDealOrderApp);
             return orderList;
         } else {
             return Lists.newArrayList();
@@ -84,6 +80,11 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
         return alipayDealOrderAppMapper.selectOrderAppStatDateByDay(statisticsEntity, dayStart, dayEnd);
     }
 
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public List<StatisticsEntity> selectMerchantStatisticsDataByHours(StatisticsEntity statisticsEntity, String dayStart, String dayEnd) {
+        return alipayDealOrderAppMapper.selectOrderAppStatDateByHours(statisticsEntity, dayStart, dayEnd);
+    }
 
 
 }

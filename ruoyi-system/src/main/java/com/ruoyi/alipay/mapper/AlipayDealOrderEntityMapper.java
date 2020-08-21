@@ -63,4 +63,22 @@ public interface AlipayDealOrderEntityMapper {
             "group by o.orderQrUser, o.retain1 " +
             "</script>")
     List<StatisticsEntity> selectStatDateByDay(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
+
+
+    @Select("<script>" +
+            "select o.orderQrUser userId, p.productName ," +
+            "coalesce(sum(dealAmount),0.00) totalAmount," +
+            "coalesce(sum(case orderStatus when 2 then dealAmount else 0 end),0) successAmount," +
+            "coalesce(sum(case orderStatus when 2 then o.retain3 else 0 end),0) profit," +
+            "count(*) totalCount," +
+            "count(case orderStatus when 2 then o.id else null end) successCount ," +
+            "DATE_FORMAT(o.createTime,'%Y%m%d%H') time " +
+            "from alipay_deal_order o left join alipay_product p on o.retain1 = p.productId " +
+            "where o.createTime between #{statisticsEntity.params.dayStart} and #{statisticsEntity.params.dayEnd} and orderType = 1 " +
+            "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
+            "and o.orderQrUser = #{statisticsEntity.userId} " +
+            "</if>" +
+            "group by o.orderQrUser, o.retain1 , time" +
+            "</script>")
+    List<StatisticsEntity> selectStatDateByHours(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 }

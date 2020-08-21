@@ -1,17 +1,16 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.List;
-
+import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
+import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
+import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
-import com.ruoyi.alipay.domain.AlipayUserFundEntity;
-import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
-import com.ruoyi.common.annotation.DataSource;
-import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.enums.DataSourceType;
+
+import java.util.List;
 
 /**
  * 用户资金账户Service业务层处理
@@ -94,14 +93,20 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 	}
 
 	@Override
-	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
-	public List<AlipayUserFundEntity> findUserBakBy(String merchantId, BaseEntity baseEntity) {
-		return alipayUserFundEntityMapper.findUserBakBy(  merchantId,   baseEntity);
-	}
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserFundEntity> findUserBakBy(String merchantId, BaseEntity baseEntity) {
+        return alipayUserFundEntityMapper.findUserBakBy(merchantId, baseEntity);
+    }
 
-	@Override
-	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
-	public List<AlipayUserFundEntity> findMyUserBak(String merchantId, BaseEntity baseEntity) {
-		return alipayUserFundEntityMapper.findMyUserBak(  merchantId,   baseEntity);
-	}
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserFundEntity> findMyUserBak(String merchantId, BaseEntity baseEntity) {
+        return alipayUserFundEntityMapper.findMyUserBak(merchantId, baseEntity);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserFundEntity> findUserAppAll(BaseEntity baseEntity) {
+        return alipayUserFundEntityMapper.findUserAppAll(baseEntity);
+    }
 }

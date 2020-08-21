@@ -1,20 +1,15 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import cn.hutool.core.util.ObjectUtil;
-import com.ruoyi.common.core.domain.StatisticsEntity;
-import com.ruoyi.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayDealOrderEntityMapper;
 import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
+import com.ruoyi.alipay.mapper.AlipayDealOrderEntityMapper;
 import com.ruoyi.alipay.service.IAlipayDealOrderEntityService;
 import com.ruoyi.common.annotation.DataSource;
-import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.enums.DataSourceType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 交易订单Service业务层处理
@@ -73,6 +68,12 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<StatisticsEntity> selectStatisticsDataByDate(StatisticsEntity statisticsEntity, String dayStart, String dayEnd) {
         return alipayDealOrderEntityMapper.selectStatDateByDay(statisticsEntity, dayStart, dayEnd);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<StatisticsEntity> selectStatisticsDataByHours(StatisticsEntity statisticsEntity, String dayStart, String dayEnd) {
+        return alipayDealOrderEntityMapper.selectStatDateByHours(statisticsEntity, dayStart, dayEnd);
     }
 
 }

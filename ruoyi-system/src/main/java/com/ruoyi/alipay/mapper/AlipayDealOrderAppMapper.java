@@ -51,7 +51,7 @@ public interface AlipayDealOrderAppMapper {
             + " retain3 from alipay_deal_order_app where  1=1 "+
             "<if test = \"order.orderStatus != null and order.orderStatus != ''\">" +
             "and orderStatus = #{order.orderStatus} " +
-            "</if>"  
+            "</if>"
             + "  and  orderAccount in " +
             "<foreach item='item' index='index' collection='userIds' separator=',' open='(' close=')'>" +
             "#{item}" +
@@ -92,4 +92,25 @@ public interface AlipayDealOrderAppMapper {
             "group by orderAccount " +
             "</script>")
     List<StatisticsEntity> selectOrderAppStatDateByDay(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
+
+
+    @Select("<script>" +
+            "select orderAccount userId, " +
+            "coalesce(sum(orderAmount),0.00) totalAmount," +
+            "coalesce(sum(case orderStatus when 2 then orderAmount else 0 end),0) successAmount," +
+            "count(*) totalCount," +
+            "count(case orderStatus when 2 then id else null end) successCount ," +
+            "coalesce(sum(retain3),0) fee ," +
+            "coalesce(sum(case orderStatus when 2 then retain3 else 0 end),0) successFee ," +
+            "DATE_FORMAT(createTime,'%Y%m%d%H') time " +
+            "from alipay_deal_order_app " +
+            "where createTime between #{statisticsEntity.params.dayStart} and #{statisticsEntity.params.dayEnd} and orderType = 1 " +
+            "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
+            "and orderAccount = #{statisticsEntity.userId} " +
+            "</if>" +
+            "group by orderAccount , time " +
+            "</script>")
+    List<StatisticsEntity> selectOrderAppStatDateByHours(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
+
+
 }

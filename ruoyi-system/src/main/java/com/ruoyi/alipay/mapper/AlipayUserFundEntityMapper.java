@@ -6,7 +6,6 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -64,16 +63,20 @@ public interface AlipayUserFundEntityMapper {
     List<AlipayUserFundEntity> findUserFundRate();
 
 
-
-
     @Select("SELECT * FROM `alipay_user_fund_bak` WHERE userId   IN (SELECT userId FROM alipay_user_info WHERE agent =  #{merchantId})  " +
             "AND createTime > #{baseEntity.params.dayStart}" +
             " AND createTime < #{baseEntity.params.dayEnd}  order by createTime ")
-    List<AlipayUserFundEntity> findUserBakBy( @Param("merchantId") String merchantId,@Param("baseEntity") BaseEntity baseEntity);
+    List<AlipayUserFundEntity> findUserBakBy(@Param("merchantId") String merchantId, @Param("baseEntity") BaseEntity baseEntity);
 
 
-    @Select("SELECT * FROM `alipay_user_fund_bak` where userId = #{merchantId}"+
+    @Select("SELECT * FROM `alipay_user_fund_bak` where userId = #{merchantId}" +
             "AND createTime > #{baseEntity.params.dayStart}" +
             " AND createTime < #{baseEntity.params.dayEnd}  order by createTime ")
-    List<AlipayUserFundEntity> findMyUserBak(@Param("merchantId")  String merchantId,@Param("baseEntity")  BaseEntity baseEntity);
+    List<AlipayUserFundEntity> findMyUserBak(@Param("merchantId") String merchantId, @Param("baseEntity") BaseEntity baseEntity);
+
+
+    @Select("select * from alipay_user_fund_bak where userType = 1 " +
+            "AND createTime > #{baseEntity.params.dayStart}" +
+            " AND createTime < #{baseEntity.params.dayEnd}  order by createTime ")
+    List<AlipayUserFundEntity> findUserAppAll(@Param("baseEntity") BaseEntity baseEntity);
 }

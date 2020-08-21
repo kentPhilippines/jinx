@@ -34,17 +34,19 @@
             	</a>
             	<li>
             		<div class="user-panel">
-            			<a class="menuItem" title="个人中心" th:href="@{/system/user/profile}"> 
-            				<div class="hide" th:text="个人中心"></div>
-					        <div class="pull-left image">
-		                    	<img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}" class="img-circle" alt="User Image">
-					        </div>
-				        </a>
-				        <div class="pull-left info">
-				          <p>[[${user.loginName}]]</p>
-				          <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
-				          <a th:href="@{logout}" style="padding-left:5px;"><i class="fa fa-sign-out text-danger"></i> 注销</a>
-				        </div>
+                        <a class="menuItem" th:href="@{/system/user/profile}" title="个人中心">
+                            <div class="hide" th:text="个人中心"></div>
+                            <div class="pull-left image">
+                                <img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}"
+                                     class="img-circle" alt="User Image">
+                            </div>
+                        </a>
+                        <div class="pull-left info">
+                            <p>[[${user.loginName}]]</p>
+                            <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+                            <a th:href="@{logout}" style="padding-left:5px;"><i class="fa fa-sign-out text-danger"></i>
+                                注销</a>
+                        </div>
 				    </div>
             	</li>
 <!--                <li>-->
@@ -54,11 +56,12 @@
 <!--                    </ul>-->
 <!--                </li>-->
                 <li th:each="menu : ${menus}">
-                	<a th:class="@{${menu.url != '' && menu.url != '#'} ? ${menu.target}}" th:href="@{${menu.url == ''} ? |#| : ${menu.url}}">
-                		<i class="fa fa-bar-chart-o" th:class="${menu.icon}"></i>
-                    	<span class="nav-label" th:text="${menu.menuName}">一级菜单</span> 
-                    	<span th:class="${menu.url == '' || menu.url == '#'} ? |fa arrow|"></span>
-                	</a>
+                    <a th:class="@{${menu.url != '' && menu.url != '#'} ? ${menu.target}}"
+                       th:href="@{${menu.url == ''} ? |#| : ${menu.url}}">
+                        <i class="fa fa-bar-chart-o" th:class="${menu.icon}"></i>
+                        <span class="nav-label" th:text="${menu.menuName}">一级菜单</span>
+                        <span th:class="${menu.url == '' || menu.url == '#'} ? |fa arrow|"></span>
+                    </a>
                     <ul class="nav nav-second-level collapse">
 						<li th:each="cmenu : ${menu.children}">
 							<a th:if="${#lists.isEmpty(cmenu.children)}" th:class="${cmenu.target == ''} ? |menuItem| : ${cmenu.target}" th:utext="${cmenu.menuName}" th:href="@{${cmenu.url}}">二级菜单</a>
@@ -170,7 +173,7 @@
         </div>
     </nav>
     <!--左侧导航结束-->
-    
+
     <!--右侧部分开始-->
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
@@ -228,15 +231,15 @@
             </button>
             <a href="javascript:void(0);" class="roll-nav roll-right tabReload"><i class="fa fa-refresh"></i> 刷新</a>
         </div>
-        
+
         <a id="ax_close_max" class="ax_close_max" href="#" title="关闭全屏"> <i class="fa fa-times-circle-o"></i> </a>
-                    
+
         <div class="row mainContent" id="content-main">
             <iframe class="RuoYi_iframe" name="iframe0" width="100%" height="100%" data-id="/system/home"
                     th:src="@{/system/home}" frameborder="0" seamless></iframe>
         </div>
         <div class="footer">
-            <div class="pull-right">© [[${copyrightYear}]] YueChuang Copyright </div>
+            <div class="pull-right">© [[${copyrightYear}]] 金星 支付</div>
         </div>
     </div>
     <!--右侧部分结束-->

@@ -52,4 +52,6 @@ public interface IAlipayDealOrderEntityService {
      * @return 返回结果
      */
     List<StatisticsEntity> selectStatisticsDataByDate(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
+
+    List<StatisticsEntity> selectStatisticsDataByHours(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
 }
