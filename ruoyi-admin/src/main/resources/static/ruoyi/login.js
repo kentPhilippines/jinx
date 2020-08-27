@@ -95,6 +95,7 @@ function getParam(paramName) {
 }
 
 function bind() {
+    debugger;
     let username = $.common.trim($("input[name='username']").val());
     let password = $.common.trim($("input[name='password']").val());
     $.ajax({
@@ -106,7 +107,7 @@ function bind() {
         },
         success: function(r) {
             if (r.code == 0) {
-                $.modal.openCode(null,r.data.google,200,200,null);
+                $.modal.openCode("请扫码", r.data.google, "400px", "400px", null);
             } else {
                 $.modal.msg(r.msg);
             }

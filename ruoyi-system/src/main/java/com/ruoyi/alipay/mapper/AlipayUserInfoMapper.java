@@ -170,4 +170,7 @@ public interface AlipayUserInfoMapper {
             " order by switchs desc, createTime desc " +
             "</script>")
     List<AlipayUserInfo> selectAllUserInfoList(AlipayUserInfo alipayUserInfo);
+
+    @Update("update alipay_user_info set  autoWit  = #{autoWitStatus} where id = #{id}")
+    int updateAutoWit(@Param("id") String id, @Param("autoWitStatus") String autoWitStatus);
 }

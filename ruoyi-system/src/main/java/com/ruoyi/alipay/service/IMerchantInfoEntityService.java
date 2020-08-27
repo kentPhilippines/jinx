@@ -1,21 +1,19 @@
 package com.ruoyi.alipay.service;
 
-import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
-import com.ruoyi.alipay.domain.MerchantInfoEntity;
+
 import java.util.List;
 
 /**
  * 商户信息Service接口
- * 
+ *
  * @author ruoyi
  * @date 2020-03-18
  */
-public interface IMerchantInfoEntityService 
-{
+public interface IMerchantInfoEntityService {
     /**
      * 查询商户信息
-     * 
+     *
      * @param id 商户信息ID
      * @return 商户信息
      */
@@ -23,46 +21,47 @@ public interface IMerchantInfoEntityService
 
     /**
      * 查询商户信息列表
-     * 
+     *
      * @param merchantInfoEntity 商户信息
      * @return 商户信息集合
      */
-     List<AlipayUserInfo> selectMerchantInfoEntityList(AlipayUserInfo merchantInfoEntity);
+    List<AlipayUserInfo> selectMerchantInfoEntityList(AlipayUserInfo merchantInfoEntity);
 
     /**
      * 新增商户信息
-     * 
+     *
      * @param merchantInfoEntity 商户信息
      * @return 结果
      */
-     int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
+    int insertMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
 
     /**
      * 修改商户信息
-     * 
+     *
      * @param merchantInfoEntity 商户信息
      * @return 结果
      */
-     int updateMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
+    int updateMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
 
     /**
      * 批量删除商户信息
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-     int deleteMerchantInfoEntityByIds(String ids);
+    int deleteMerchantInfoEntityByIds(String ids);
 
     /**
      * 删除商户信息信息
-     * 
+     *
      * @param id 商户信息ID
      * @return 结果
      */
-     int deleteMerchantInfoEntityById(Long id);
+    int deleteMerchantInfoEntityById(Long id);
 
     /**
      * 重置商户的提现密码
+     *
      * @param id
      * @return
      */
@@ -73,7 +72,8 @@ public interface IMerchantInfoEntityService
     /*下面处理风控模块的业务逻辑*/
 
     /**
-     *  风控信息列表
+     * 风控信息列表
+     *
      * @param merchantInfoEntity
      * @return
      */
@@ -81,6 +81,7 @@ public interface IMerchantInfoEntityService
 
     /**
      * 根据userId查询商户详情
+     *
      * @param userId
      * @return
      */
@@ -88,6 +89,7 @@ public interface IMerchantInfoEntityService
 
     /**
      * 商户自行修改保存信息
+     *
      * @param alipayUserInfo
      * @return
      */
@@ -95,6 +97,7 @@ public interface IMerchantInfoEntityService
 
     /**
      * 更新码商的交易地址
+     *
      * @param alipayUserInfo
      * @return
      */
@@ -102,6 +105,7 @@ public interface IMerchantInfoEntityService
 
     /**
      * 根据UserId查询下线代理
+     *
      * @param alipayUserInfo
      * @return
      */
@@ -109,12 +113,13 @@ public interface IMerchantInfoEntityService
 
     /**
      * 更新商户信息
+     *
      * @param merchantInfoEntity
      * @return
      */
     int updateMerchantInfoById(AlipayUserInfo merchantInfoEntity);
 
-	List<String> selectNextAgentByParentId(String orderAccount);
+    List<String> selectNextAgentByParentId(String orderAccount);
 
-	List<AlipayUserInfo> selectAgentByMerchantId(List<String> list);
+    List<AlipayUserInfo> selectAgentByMerchantId(List<String> list);
 }

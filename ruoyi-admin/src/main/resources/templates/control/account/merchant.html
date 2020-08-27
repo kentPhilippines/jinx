@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('商户风控详情列表')"/>
     <th:block th:include="include :: bootstrap-select-css"/>
@@ -61,26 +61,12 @@
             columns: [{
                 checkbox: true
             },
+                {field: 'id', title: '数据ID', visible: false},
+                {field: 'userId', title: '商户账户'},
+                {field: 'userName', title: '商户名称'},
+                {field: 'agent', title: '上级代理'},
                 {
-                    field: 'id',
-                    title: '数据ID',
-                    visible: false
-                },
-                {
-                    field: 'userId',
-                    title: '商户账户'
-                },
-                {
-                    field: 'userName',
-                    title: '商户名称'
-                },
-                {
-                    field: 'agent',
-                    title: '上级代理'
-                },
-                {
-                    field: 'switchs',
-                    title: '状态',
+                    field: 'switchs', title: '状态',
                     formatter: function (value, row, index) {
                         if (row.switchs == '1') {
                             return '<span style="color: #00B83F">开启</span>';
@@ -89,38 +75,23 @@
                         }
                     }
                 },
+                {field: 'minAmount', title: '最小金额'},
+                {field: 'maxAmount', title: '最大金额'},
+                {field: 'totalAmount', title: '总金额'},
+                {field: 'timesTotal', title: '下单次数'},
+                {field: 'startTime', title: '开始时间'},
+                {field: 'endTime', title: '结束时间'},
+                {field: 'witip', title: '代付IP'},
                 {
-                    field: 'minAmount',
-                    title: '最小金额'
+                    field: 'autoWit', title: '是否为自动代付', formatter: function (value, row, index) {
+                        if (row.autoWit == 0) {
+                            return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="autoWitAuto(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击切换为自动代付</a> '
+                        } else if (row.autoWit == 1) {
+                            return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="autoWitManual(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击切换为手动代付</a> '
+                        }
+                    }
                 },
-                {
-                    field: 'maxAmount',
-                    title: '最大金额'
-                },
-                {
-                    field: 'totalAmount',
-                    title: '总金额'
-                },
-                {
-                    field: 'timesTotal',
-                    title: '下单次数'
-                },
-                {
-                    field: 'startTime',
-                    title: '开始时间'
-                },
-                {
-                    field: 'endTime',
-                    title: '结束时间'
-                },
-                {
-                    field: 'witip',
-                    title: '代付IP'
-                },
-                {
-                    field: 'dealUrl',
-                    title: '交易IP'
-                },
+                {field: 'dealUrl', title: '交易IP'},
                 {
                     title: '操作',
                     align: 'center',
@@ -133,6 +104,36 @@
         };
         $.table.init(options);
     });
+
+    /**
+     * 切换为自动代付
+     * @param id
+     */
+    function autoWitAuto(id) {
+        let msg = "确认要【启用】此商户的【自动代付功能】吗？";
+        let val = 1;
+        return autoWit(id, msg, val);
+    };
+
+    /**
+     * 切换为手动代付
+     * @param id
+     */
+    function autoWitManual(id) {
+        let msg = "确认要【停用】此商户【自动代付功能】吗？";
+        let val = 0;
+        return autoWit(id, msg, val);
+    };
+
+    function autoWit(id, msg, autoWitStatus) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefix + "/updateAutoWit", {
+                "id": id,
+                "autoWitStatus": autoWitStatus
+            });
+        })
+    }
+
 
 </script>
 </body>

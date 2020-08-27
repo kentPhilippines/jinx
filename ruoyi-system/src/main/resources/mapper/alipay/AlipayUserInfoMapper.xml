@@ -37,12 +37,14 @@
         <result property="dealUrl" column="dealUrl"/>
         <result property="queueList" column="queueList"/>
         <result property="qrRechargeList" column="qrRechargeList"/>
+        <result property="autoWit" column="autoWit"/>
     </resultMap>
 
     <sql id="selectAlipayUserInfoVo">
         select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent,
         isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status,queueList,
-        privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip, dealUrl, qrRechargeList from alipay_user_info
+        privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip, dealUrl
+        , qrRechargeList,autoWit from alipay_user_info
     </sql>
 
     <select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">
@@ -65,6 +67,7 @@
             <if test="startTime != null  and startTime != ''">and startTime = #{startTime}</if>
             <if test="endTime != null  and endTime != ''">and endTime = #{endTime}</if>
             <if test="witip != null  and witip != ''">and witip = #{witip}</if>
+            <if test="autoWit != null  and autoWit != ''">and autoWit = #{autoWit}</if>
         </where>
     </select>
 
@@ -105,6 +108,7 @@
             <if test="endTime != null  and endTime != ''">endTime,</if>
             <if test="witip != null  and witip != ''">witip,</if>
             <if test="dealUrl != null  and dealUrl != ''">dealUrl,</if>
+            <if test="autoWit != null  and autoWit != ''">autoWit,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null  and userId != ''">#{userId},</if>
@@ -136,6 +140,7 @@
             <if test="endTime != null  and endTime != ''">#{endTime},</if>
             <if test="witip != null  and witip != ''">#{witip},</if>
             <if test="dealUrl != null  and dealUrl != ''">#{dealUrl},</if>
+            <if test="autoWit != null  and autoWit != ''">#{autoWit},</if>
         </trim>
     </insert>
 
@@ -173,6 +178,7 @@
             <if test="dealUrl != null  and dealUrl != ''">dealUrl = #{dealUrl},</if>
             <if test="qrRechargeList != null  and qrRechargeList != ''">qrRechargeList = #{qrRechargeList},</if>
             <if test="queueList != null  and queueList != ''">queueList = #{queueList},</if>
+            <if test="autoWit != null  and autoWit != ''">autoWit = #{autoWit},</if>
         </trim>
         where id = #{id}
     </update>

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayDealOrderEntityMapper">
-    
+
     <resultMap type="AlipayDealOrderEntity" id="AlipayDealOrderEntityResult">
         <result property="id"    column="id"    />
         <result property="orderId"    column="orderId"    />
@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isNotify != null  and isNotify != ''"> and isNotify = #{isNotify}</if>
             <if test="status != null "> and status = #{status}</if>
         </where>
-        order by  createTime desc
+        order by id desc
     </select>
 
 
@@ -82,12 +82,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null "> and status = #{status}</if>
         </where>
     </select>
-    
+
     <select id="selectAlipayDealOrderEntityById" parameterType="Long" resultMap="AlipayDealOrderEntityResult">
         <include refid="selectAlipayDealOrderEntityVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertAlipayDealOrderEntity" parameterType="AlipayDealOrderEntity" useGeneratedKeys="true" keyProperty="id">
         insert into alipay_deal_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -180,10 +180,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAlipayDealOrderEntityByIds" parameterType="String">
-        delete from alipay_deal_order where id in 
+        delete from alipay_deal_order where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

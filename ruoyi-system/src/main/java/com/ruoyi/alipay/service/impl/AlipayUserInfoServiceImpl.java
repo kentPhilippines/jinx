@@ -1,21 +1,20 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
+import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
+import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.constant.UserConstants;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
-import com.ruoyi.alipay.domain.AlipayUserInfo;
-import com.ruoyi.alipay.service.IAlipayUserInfoService;
-import com.ruoyi.common.core.text.Convert;
+
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -197,14 +196,20 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
 	@Override
 	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
 	public boolean updatePaypassword(String userId, String password,String salt) {
-	     String md5 = HashKit.encodePassword(userId, password, salt);
-	     int i = alipayUserInfoMapper.updatePaypassword(userId, md5);
-		return i > 0 && i  < 2;
-	}
+        String md5 = HashKit.encodePassword(userId, password, salt);
+        int i = alipayUserInfoMapper.updatePaypassword(userId, md5);
+        return i > 0 && i < 2;
+    }
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserInfo> selectAllUserInfoList(AlipayUserInfo alipayUserInfo) {
-        return alipayUserInfoMapper.selectAllUserInfoList(  alipayUserInfo);
+        return alipayUserInfoMapper.selectAllUserInfoList(alipayUserInfo);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int updateAutoWit(String id, String autoWitStatus) {
+        return alipayUserInfoMapper.updateAutoWit(id, autoWitStatus);
     }
 }

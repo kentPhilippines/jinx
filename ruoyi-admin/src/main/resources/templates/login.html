@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    
+
     <title>登录后台系统</title>
     <meta name="description" content="后台管理系统">
     <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
@@ -62,7 +62,8 @@
 						    <input type="text" name="validateCode" class="form-control code" placeholder="谷歌验证码" maxlength="6" autocomplete="off">
 						</div>
                         <div class="col-xs-6">
-                            <a href="javascript:void(0);" title="点击绑定Google验证器" class="btn btn-w-m btn-primary" style="min-width: 103px;margin-top: 0px;" onclick="bind();">
+                            <a class="btn btn-w-m btn-primary" href="javascript:void(0);" onclick="bind();"
+                               style="min-width: auto;margin-top: 0px;" title="点击绑定Google验证器">
                                 绑定Google
                             </a>
                         </div>

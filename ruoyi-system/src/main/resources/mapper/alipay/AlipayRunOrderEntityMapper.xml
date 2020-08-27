@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayRunOrderEntityMapper">
-    
+
     <resultMap type="AlipayRunOrderEntity" id="AlipayRunOrderEntityResult">
         <result property="id"    column="id"    />
         <result property="orderId"    column="orderId"    />
@@ -47,14 +47,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amountType != null  and amountType != ''"> and amountType = #{amountType}</if>
             <if test="amountNow != null "> and amountNow = #{amountNow}</if>
         </where>
-        order by  createTime desc
+        order by id desc
     </select>
-    
+
     <select id="selectAlipayRunOrderEntityById" parameterType="Long" resultMap="AlipayRunOrderEntityResult">
         <include refid="selectAlipayRunOrderEntityVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertAlipayRunOrderEntity" parameterType="AlipayRunOrderEntity" useGeneratedKeys="true" keyProperty="id">
         insert into alipay_run_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -126,10 +126,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAlipayRunOrderEntityByIds" parameterType="String">
-        delete from alipay_run_order where id in 
+        delete from alipay_run_order where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

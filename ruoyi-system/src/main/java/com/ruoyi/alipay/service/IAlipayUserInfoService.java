@@ -1,7 +1,6 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
-import com.ruoyi.dealpay.domain.DealpayUserInfoEntity;
 
 import java.util.List;
 
@@ -115,12 +114,23 @@ public interface IAlipayUserInfoService {
 
     /**
      * <p>修改支付密码<p>
+     *
      * @param userId
      * @param password
-     * @param salt 
+     * @param salt
      * @return
      */
-	boolean updatePaypassword(String userId, String password, String salt);
+    boolean updatePaypassword(String userId, String password, String salt);
 
     List<AlipayUserInfo> selectAllUserInfoList(AlipayUserInfo alipayUserInfo);
+
+
+    /**
+     * <p>修改商户自动代付状态</p>
+     *
+     * @param id            商户数据id
+     * @param autoWitStatus 需要变更改状态
+     * @return
+     */
+    int updateAutoWit(String id, String autoWitStatus);
 }

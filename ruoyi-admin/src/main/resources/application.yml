@@ -12,7 +12,7 @@ otc:
   profile:  /img/
   #profile: /home/otc/admin/uploadPath
   # 获取ip地址开关
-  addressEnabled: false
+  addressEnabled: true
 
 # 开发环境配置
 server:
@@ -99,7 +99,7 @@ shiro:
     # 验证码开关
     captchaEnabled: true
     # 验证码类型 math 数组计算 char 字符 google 谷歌动态口令
-    captchaType: math
+    captchaType: google
   cookie:
     # 设置Cookie的域名 默认空，即当前访问的域名
     domain:

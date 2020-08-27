@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayAmountEntityMapper">
-    
+
     <resultMap type="AlipayAmountEntity" id="AlipayAmountEntityResult">
         <result property="id"    column="id"    />
         <result property="orderId"    column="orderId"    />
@@ -28,28 +28,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAlipayAmountEntityList" parameterType="AlipayAmountEntity" resultMap="AlipayAmountEntityResult">
         <include refid="selectAlipayAmountEntityVo"/>
-        <where>  
-            <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
-            <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
-            <if test="amountType != null  and amountType != ''"> and amountType = #{amountType}</if>
-            <if test="accname != null  and accname != ''"> and accname like concat('%', #{accname}, '%')</if>
-            <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
-            <if test="amount != null "> and amount = #{amount}</if>
-            <if test="fee != null "> and fee = #{fee}</if>
-            <if test="actualAmount != null "> and actualAmount = #{actualAmount}</if>
-            <if test="dealDescribe != null  and dealDescribe != ''"> and dealDescribe = #{dealDescribe}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>
+        <where>
+            <if test="orderId != null  and orderId != ''">and orderId = #{orderId}</if>
+            <if test="userId != null  and userId != ''">and userId = #{userId}</if>
+            <if test="amountType != null  and amountType != ''">and amountType = #{amountType}</if>
+            <if test="accname != null  and accname != ''">and accname like concat('%', #{accname}, '%')</if>
+            <if test="orderStatus != null  and orderStatus != ''">and orderStatus = #{orderStatus}</if>
+            <if test="amount != null ">and amount = #{amount}</if>
+            <if test="fee != null ">and fee = #{fee}</if>
+            <if test="actualAmount != null ">and actualAmount = #{actualAmount}</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">and dealDescribe = #{dealDescribe}</if>
+            <if test="createTime != null ">and createTime = #{createTime}</if>
             <if test="submitTime != null "> and submitTime = #{submitTime}</if>
             <if test="status != null "> and status = #{status}</if>
             <if test="approval != null "> and approval = #{approval}</if>
         </where>
+        order by id desc
     </select>
-    
+
     <select id="selectAlipayAmountEntityById" parameterType="Long" resultMap="AlipayAmountEntityResult">
         <include refid="selectAlipayAmountEntityVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertAlipayAmountEntity" parameterType="AlipayAmountEntity" useGeneratedKeys="true" keyProperty="id">
         insert into alipay_amount
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -112,10 +113,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAlipayAmountEntityByIds" parameterType="String">
-        delete from alipay_amount where id in 
+        delete from alipay_amount where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

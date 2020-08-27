@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayDealOrderAppMapper">
-    
+
     <resultMap type="AlipayDealOrderApp" id="AlipayDealOrderAppResult">
         <result property="id"    column="id"    />
         <result property="orderId"    column="orderId"    />
@@ -50,14 +50,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
             <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
         </where>
-        order by  createTime desc
+        order by id desc
     </select>
-    
+
     <select id="selectAlipayDealOrderAppById" parameterType="Long" resultMap="AlipayDealOrderAppResult">
         <include refid="selectAlipayDealOrderAppVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertAlipayDealOrderApp" parameterType="AlipayDealOrderApp" useGeneratedKeys="true" keyProperty="id">
         insert into alipay_deal_order_app
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -129,10 +129,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAlipayDealOrderAppByIds" parameterType="String">
-        delete from alipay_deal_order_app where id in 
+        delete from alipay_deal_order_app where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

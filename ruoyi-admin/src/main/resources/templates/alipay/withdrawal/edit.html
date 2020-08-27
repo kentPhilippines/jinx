@@ -88,7 +88,8 @@
            onclick="approval('2');">成功 </a>
         <a name="reject" class="btn btn-w-m btn-danger" href="javascript:void(0)"
            onclick="approval('3');"> 失败</a>
-        <a name="reject" class="btn btn-w-m btn-danger" href="javascript:void(0)"
+        <a class="btn btn-w-m btn-danger" href="javascript:void(0)" name="reject"
+           th:if="${(autoWit == 0 or autoWit === 0) && ( alipayWithdrawEntity.orderStatus == 1 or alipayWithdrawEntity.orderStatus === 1  )}"
            onclick="approval('100');"> 确认出款</a>
     </div>
 </div>

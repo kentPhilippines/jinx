@@ -1,8 +1,6 @@
 package com.ruoyi.alipay.mapper;
 
-import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
-import com.ruoyi.alipay.domain.MerchantInfoEntity;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -120,7 +118,7 @@ public interface MerchantInfoEntityMapper {
      */
     @Select("<script>" +
             "select " +
-            " id,userId, userName, userType, switchs, agent, minAmount, maxAmount,totalAmount, timesTotal, startTime, endTime, witip, dealUrl, submitTime " +
+            " id,userId, userName, userType, switchs, agent, minAmount, maxAmount,totalAmount, timesTotal, startTime, endTime, witip, dealUrl, submitTime ,autoWit " +
             " from " +
             " alipay_user_info" +
             " where userType = 1 " +

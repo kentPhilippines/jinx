@@ -1,33 +1,23 @@
 package com.ruoyi.web.controller.control;
 
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayBankListEntity;
-import com.ruoyi.alipay.domain.AlipayDealOrderApp;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayBankListEntityService;
 import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.exception.BusinessException;
-import com.ruoyi.common.utils.RSAUtils;
-import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.dealpay.domain.DealpayBankListEntity;
 import com.ruoyi.dealpay.service.IDealpayBankListService;
-import com.ruoyi.web.controller.dealpay.DealpayBankListController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -301,6 +291,13 @@ public class MerchantControlController extends BaseController {
     @ResponseBody
     public AjaxResult removeBankpayfor(String ids) {
         return toAjax(dealpayBankListService.deleteDealpayBankBlackListById(ids));
+    }
+
+    @Log(title = "修改商户自动代付状态", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateAutoWit")
+    @ResponseBody
+    public AjaxResult updateAutoWit(String id, String autoWitStatus) {
+        return toAjax(alipayUserInfoService.updateAutoWit(id, autoWitStatus));
     }
 
 

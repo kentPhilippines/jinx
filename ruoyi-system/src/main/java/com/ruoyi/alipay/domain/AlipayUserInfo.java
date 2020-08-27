@@ -1,9 +1,9 @@
 package com.ruoyi.alipay.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
 
@@ -17,6 +17,15 @@ public class AlipayUserInfo extends BaseEntity {
     private static final long serialVersionUID = 1L;
     private String findUserId;
     private String todayDealAmount;
+    private Integer autoWit;
+
+    public Integer getAutoWit() {
+        return autoWit;
+    }
+
+    public void setAutoWit(Integer autoWit) {
+        this.autoWit = autoWit;
+    }
 
     public String getTodayDealAmount() {
         return todayDealAmount;
