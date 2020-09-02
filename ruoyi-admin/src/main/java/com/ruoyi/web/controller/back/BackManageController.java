@@ -3,7 +3,6 @@ package com.ruoyi.web.controller.back;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpUtil;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.mapper.MerchantInfoEntityMapper;
@@ -29,7 +28,6 @@ import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
-import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -351,7 +349,7 @@ public class BackManageController extends BaseController {
     @ResponseBody
     public TableDataInfo agentOrder(AlipayDealOrderApp alipayDealOrderApp) {
         SysUser sysUser = ShiroUtils.getSysUser();
-        alipayDealOrderApp.setOrderAccount(sysUser.getMerchantId());
+        alipayDealOrderApp.setOrderAccount("G9MwuE6l");
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
         List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);

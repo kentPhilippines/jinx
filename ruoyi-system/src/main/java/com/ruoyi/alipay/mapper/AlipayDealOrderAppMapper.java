@@ -47,19 +47,6 @@ public interface AlipayDealOrderAppMapper {
     int updateAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
 
     @Select("<script>" +
-            "select orderAccount, appOrderId, orderType, orderStatus, createTime, orderAmount , retain1 ,"
-            + " retain3 from alipay_deal_order_app where  1=1 "+
-            "<if test = \"order.orderStatus != null and order.orderStatus != ''\">" +
-            "and orderStatus = #{order.orderStatus} " +
-            "</if>"
-            + "  and  orderAccount in " +
-            "<foreach item='item' index='index' collection='userIds' separator=',' open='(' close=')'>" +
-            "#{item}" +
-            "</foreach>" +
-            "</script>")
-    List<AlipayDealOrderApp> selectSubAgentMembersOrderList(  @Param("userIds") List<String> userIds, @Param("order")AlipayDealOrderApp alipayDealOrderApp);
-
-    @Select("<script>" +
             "select '所有' userId, " +
             "coalesce(sum(orderAmount),0) totalAmount," +
             "coalesce(sum(case orderStatus when 2 then orderAmount else 0 end),0) successAmount," +
@@ -111,6 +98,19 @@ public interface AlipayDealOrderAppMapper {
             "group by orderAccount , time " +
             "</script>")
     List<StatisticsEntity> selectOrderAppStatDateByHours(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
+
+    @Select("<script>" +
+            "select orderAccount, appOrderId, orderType, orderStatus, createTime, orderAmount , retain1 ,"
+            + " retain3 from alipay_deal_order_app where  1=1 " +
+            "<if test = \"order.orderStatus != null and order.orderStatus != ''\">" +
+            "and orderStatus = #{order.orderStatus} " +
+            "</if>" +
+            "  and  orderAccount in " +
+            "<foreach item='item' index='index' collection='userIds' separator=',' open='(' close=')'>" +
+            "#{item}" +
+            "</foreach>" +
+            " order by id desc </script>")
+    List<AlipayDealOrderApp> selectSubAgentMembersOrderList(@Param("userIds") List<String> userIds, @Param("order") AlipayDealOrderApp alipayDealOrderApp);
 
 
 }

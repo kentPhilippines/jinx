@@ -3,12 +3,10 @@ package com.ruoyi.web.controller.alipay;
 import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
+import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.domain.AlipayWithdrawEntity;
-import com.ruoyi.alipay.service.IAlipayProductService;
-import com.ruoyi.alipay.service.IAlipayUserInfoService;
-import com.ruoyi.alipay.service.IAlipayWithdrawEntityService;
-import com.ruoyi.alipay.service.IMerchantInfoEntityService;
+import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -46,6 +44,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/alipay/withdrawal")
 public class AlipayWithdrawEntityController extends BaseController {
     private String prefix = "alipay/withdrawal";
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
     @Autowired
     private IAlipayUserInfoService alipayUserInfoServiceImpl;
     @Autowired
@@ -109,6 +109,8 @@ public class AlipayWithdrawEntityController extends BaseController {
         mmap.put("alipayWithdrawEntity", alipayWithdrawEntity);
         AlipayUserInfo userInfo = alipayUserInfoServiceImpl.findMerchantInfoByUserId(alipayWithdrawEntity.getUserId());
         mmap.put("autoWit", userInfo.getAutoWit());
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();//查询所有渠道账户
+        mmap.put("channelList", rateList);
         return prefix + "/edit";
     }
 
