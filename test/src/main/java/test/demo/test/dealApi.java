@@ -27,36 +27,35 @@ public class dealApi {
 	}
 	static SimpleDateFormat d = new SimpleDateFormat("yyyyMMddHHmmss");
 	 static void test() throws Exception {
-		 
-		 String key = "2593114D4AE7469FB0089F434B94AC6F";//½»Ò×ÃÜÔ¿
+		 String key = "2593114D4AE7469FB0089F434B94AC6F";//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿
 		 String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCe772h6hRLDhNsAbkUHMJHiEBezSaBqwoRRiC5slEM7AWEsNo3/RooO9wGRSqrRj9yCOdD0NDvLtTt9MMcZ3Z+fS54h18OI8dKCu+VW8rkzo1BN+Bj4uJh2KUEbx6/F6bwCb2OHTBjh9Pn1bw27cdbjSuiSKlNOQEgGnCbtTCKxwIDAQAB";
 		 Deal deal = new Deal();
-		 deal.setAmount("100");//½ð¶î
-		 deal.setAppId("AsgRTDFY");//ÉÌ»§ºÅ
+		 deal.setAmount("100");//ï¿½ï¿½ï¿½
+		 deal.setAppId("AsgRTDFY");//ï¿½Ì»ï¿½ï¿½ï¿½
 		 deal.setApplyDate(d.format(new Date()));
 		 deal.setNotifyUrl("www.baidu.com");
 		 deal.setOrderId(IdUtil.objectId());
-		 deal.setPassCode("ALIPAY_SCAN");
-		 deal.setSubject("¶©µ¥½»Ò×");
+		 deal.setPassCode("TEST_ALIPAY_SCAN");
+		 deal.setSubject("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		 deal.setUserid("asdas");
 		 Map<String, Object> objectToMap = MapUtil.objectToMap(deal);
 		 String createParam = MapUtil.createParam(objectToMap);
-		 System.out.println("Ç©ÃûÇ°ÇëÇó´®£º"+createParam);
+		 System.out.println("Ç©ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ó´®£ï¿½"+createParam);
 		 String md5 = md5(createParam+key);
-		 System.out.println("Ç©Ãû£º"+md5);
+		 System.out.println("Ç©ï¿½ï¿½ï¿½ï¿½"+md5);
 		 deal.setSign(md5);
 		 Map<String, Object> objectToMap2 = MapUtil.objectToMap(deal);
 		 String createParam2 = MapUtil.createParam(objectToMap2);
-		 System.out.println("¼ÓÃÜÇ°×Ö·û´®£º"+createParam2);
+		 System.out.println("ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½"+createParam2);
 		 XRsa rsa = new XRsa(publicKey);
 		 String publicEncrypt = rsa.publicEncrypt(createParam2);
-		 System.out.println("¼ÓÃÜºó×Ö·û´®£º"+publicEncrypt);
+		 System.out.println("ï¿½ï¿½ï¿½Üºï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½"+publicEncrypt);
 		 Map<String, Object> postMap = new HashMap<String, Object>();
 		 postMap.put("cipherText", publicEncrypt);
 		 postMap.put("userId","AsgRTDFY");
 		 String post = HttpUtil.post("127.0.0.1:9010/deal/pay", postMap);
-		 System.out.println("ÏàÓ¦½á¹û¼¯£º"+post);
-		 
+		 System.out.println("ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"+post);
+
 	 }
 	 public static String md5(String str) {
 	        MessageDigest md5 = null;

@@ -349,7 +349,7 @@ public class BackManageController extends BaseController {
     @ResponseBody
     public TableDataInfo agentOrder(AlipayDealOrderApp alipayDealOrderApp) {
         SysUser sysUser = ShiroUtils.getSysUser();
-        alipayDealOrderApp.setOrderAccount("G9MwuE6l");
+        alipayDealOrderApp.setOrderAccount(sysUser.getMerchantId());
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
         List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);

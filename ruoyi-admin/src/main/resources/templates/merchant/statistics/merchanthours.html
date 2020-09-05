@@ -14,6 +14,10 @@
                             <span>商户账户：</span>
                             <input id="userId" name="userId" type="text"/>
                         </li>
+                        <li>
+                            <span>代理商：</span>
+                            <input id="userAgent" name="userAgent" type="text"/>
+                        </li>
                         <li class="select-time">
                             <span>创建时间：</span>
                             <input class="time-input" id="startTime" name="params[dayStart]" placeholder="开始时间"
@@ -80,6 +84,10 @@
                 {
                     field: 'successFee',
                     title: '收取手续费'
+                },
+                {
+                    field: 'agentAmount',
+                    title: '代理商分润'
                 },
                 {
                     field: 'successPercent',

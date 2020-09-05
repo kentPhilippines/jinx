@@ -6,30 +6,30 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://182.16.89.146:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: root
-                password: 8sd7f6d7ff7af0afa0fasf0
+              url: jdbc:mysql://rm-3ns0wdzxpkyk00409qo.mysql.rds.aliyuncs.com:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+              username: kent
+              password: 9asdasd7dwgdo7$as8d)asd
             # alipay从库数据源
             alipay:
-                # 从数据源开关/默认关闭
-                enabled: true
-                url: jdbc:mysql://182.16.89.146:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: root
-                password: 8sd7f6d7ff7af0afa0fasf0
+              # 从数据源开关/默认关闭
+              enabled: true
+              url: jdbc:mysql://rm-3ns0wdzxpkyk00409qo.mysql.rds.aliyuncs.com:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+              username: kent
+              password: 9asdasd7dwgdo7$as8d)asd
             # pay从库数据源
             pay:
-                # 从数据源开关/默认关闭
-                enabled: false
-                url: jdbc:mysql://182.16.89.146:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: root
-                password: 8sd7f6d7ff7af0afa0fasf0
+              # 从数据源开关/默认关闭
+              enabled: false
+              url: jdbc:mysql://rm-3ns0wdzxpkyk00409qo.mysql.rds.aliyuncs.com:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+              username: kent
+              password: 9asdasd7dwgdo7$as8d)asd
             # dealpay从库数据源
             dealpay:
-                # 从数据源开关/默认关闭
-                enabled: true
-                url: jdbc:mysql://182.16.89.146:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: root
-                password: 8sd7f6d7ff7af0afa0fasf0
+              # 从数据源开关/默认关闭
+              enabled: true
+              url: jdbc:mysql://rm-3ns0wdzxpkyk00409qo.mysql.rds.aliyuncs.com:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+              username: kent
+              password: 9asdasd7dwgdo7$as8d)asd
             # 初始连接数
             initialSize: 5
             # 最小连接池数量
@@ -49,16 +49,16 @@ spring:
             testWhileIdle: true
             testOnBorrow: false
             testOnReturn: false
-            webStatFilter: 
-                enabled: true
+            webStatFilter:
+              enabled: true
             statViewServlet:
-                enabled: true
-                # 设置白名单，不填则允许所有访问
-                allow:
-                url-pattern: /druid/*
-                # 控制台管理用户名和密码
-                login-username: 
-                login-password: 
+              enabled: true
+              # 设置白名单，不填则允许所有访问
+              allow:
+              url-pattern: /druid/*
+              # 控制台管理用户名和密码
+              login-username:
+              login-password:
             filter:
                 stat:
                     enabled: true

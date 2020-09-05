@@ -126,6 +126,25 @@
         var url = ctx + "back/app/statistics/view?userId=" + userId;
         $.modal.openTab("商户月度交易数据", url);
     }
+
+    //初始化时间
+    layui.use('laydate', function () {
+        const laydate = layui.laydate;
+        laydate.render({
+            elem: '#startTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g, "-") + " 00:00:00",
+            isInitValue: true
+        });
+        laydate.render({
+            elem: '#endTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g, "-") + " 23:59:59",
+            isInitValue: true
+        });
+    });
 </script>
 </body>
 </html>

@@ -1,11 +1,9 @@
 package com.ruoyi.web.controller.alipay;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
-import com.ruoyi.alipay.domain.AlipayProductEntity;
-import com.ruoyi.alipay.domain.AlipayUserFundEntity;
-import com.ruoyi.alipay.domain.AlipayUserInfo;
-import com.ruoyi.alipay.domain.AlipayWithdrawEntity;
+import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
@@ -44,6 +42,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/alipay/withdrawal")
 public class AlipayWithdrawEntityController extends BaseController {
     private String prefix = "alipay/withdrawal";
+    @Autowired
+    private IAlipayChanelFeeService alipayChanelFeeService;
     @Autowired
     private IAlipayUserFundEntityService alipayUserFundEntityService;
     @Autowired
@@ -110,7 +110,12 @@ public class AlipayWithdrawEntityController extends BaseController {
         AlipayUserInfo userInfo = alipayUserInfoServiceImpl.findMerchantInfoByUserId(alipayWithdrawEntity.getUserId());
         mmap.put("autoWit", userInfo.getAutoWit());
         List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();//查询所有渠道账户
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        alipayProductEntity.setProductCode("1");
+        List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         mmap.put("channelList", rateList);
+        mmap.put("productList", productlist);
         return prefix + "/edit";
     }
 
@@ -123,6 +128,14 @@ public class AlipayWithdrawEntityController extends BaseController {
     public AjaxResult apporval(AlipayWithdrawEntity alipayWithdrawEntity) {
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
+        if ("2".equals(alipayWithdrawEntity.getOrderStatus())) {
+            if (StrUtil.isBlank(alipayWithdrawEntity.getChannelId()) && StrUtil.isBlank(alipayWithdrawEntity.getWitType()))
+                return error("实际出款渠道为空");
+            AlipayChanelFee channelBy = alipayChanelFeeService.findChannelBy(alipayWithdrawEntity.getChannelId(), alipayWithdrawEntity.getWitType());
+            if (ObjectUtil.isNull(channelBy)) {
+                return error("所选实际出款渠道未配置出款费率，请重新配置");
+            }
+        }
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_7);
@@ -132,6 +145,8 @@ public class AlipayWithdrawEntityController extends BaseController {
         mapParam.put("orderStatus", alipayWithdrawEntity.getOrderStatus());
         mapParam.put("approval", currentUser.getLoginName());
         mapParam.put("comment", alipayWithdrawEntity.getComment());
+        mapParam.put("channelId", alipayWithdrawEntity.getChannelId());
+        mapParam.put("witType", alipayWithdrawEntity.getWitType());
         if ("3".equals(alipayWithdrawEntity.getOrderStatus())) {
             mapParam.put("ip", IpUtils.getHostIp());
         }

@@ -10,6 +10,12 @@ public class StatisticsEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 5547968516186055805L;
     private String fee;
     private String time;
+    private String agentAmount;
+    private String userAgent;
+
+    public String getAgentAmount() {
+        return agentAmount;
+    }
 
     public String getTime() {
         return time;
@@ -81,6 +87,18 @@ public class StatisticsEntity extends BaseEntity implements Serializable {
      * 产品类型
      */
     private String productType;
+
+    public void setAgentAmount(String agentAmount) {
+        this.agentAmount = agentAmount;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
 
     /**
      * 产品名称

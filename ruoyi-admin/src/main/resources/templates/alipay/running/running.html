@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('流水订单记录列表')"/>
     <th:block th:include="include :: bootstrap-select-css"/>
@@ -136,13 +136,13 @@
                     title: '账户余额'
                 },
                 /*{
-                    field : 'generationIp', 
+                    field : 'generationIp',
                     title : '流水关联ip'
                 },*/
-                /*  {
-                      field : 'dealDescribe',
-                      title : '流水描述'
-                  },*/
+                {
+                    field: 'dealDescribe',
+                    title: '流水描述'
+                },
                 /* {
                      field : 'acountR',
                      title : '入款记录账户'

@@ -1,5 +1,6 @@
 package com.ruoyi.alipay.domain;
 
+import cn.hutool.core.date.DatePattern;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -60,7 +61,7 @@ public class AlipayWithdrawEntity extends BaseEntity {
     /**
      * 0预下单1处理中2成功3失败
      */
-    @Excel(name = "0预下单1处理中2成功3失败")
+    @Excel(name = "订单状态", readConverterExp = "0=预下单,1=处理中,2=成功,3=失败")
     private String orderStatus;
 
     /**
@@ -102,12 +103,12 @@ public class AlipayWithdrawEntity extends BaseEntity {
     /**
      * 数据修改时间
      */
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "创建时间", width = 30, dateFormat = DatePattern.NORM_DATETIME_PATTERN)
     private Date createTime;
     /**
      * 数据修改时间
      */
-    @Excel(name = "数据修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "数据修改时间", width = 30, dateFormat = DatePattern.NORM_DATETIME_PATTERN)
     private Date submitTime;
 
     /**
@@ -143,6 +144,16 @@ public class AlipayWithdrawEntity extends BaseEntity {
     private String witType;
     //代付渠道
     private String witChannel;
+    @Excel(name = "实际代付渠道")
+    private String channelId;//实际代付渠道
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
 
     public String getWitType() {
         return witType;

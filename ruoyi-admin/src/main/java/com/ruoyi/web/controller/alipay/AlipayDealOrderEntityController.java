@@ -1,48 +1,38 @@
 package com.ruoyi.web.controller.alipay;
 
-import java.math.BigDecimal;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.google.common.collect.Maps;
+import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
+import com.ruoyi.alipay.domain.AlipayProductEntity;
+import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.service.IAlipayDealOrderEntityService;
+import com.ruoyi.alipay.service.IAlipayProductService;
+import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import javax.validation.constraints.Size;
-
-import cn.hutool.core.util.ObjectUtil;
-import com.google.common.collect.Maps;
-import com.ruoyi.alipay.domain.AlipayProductEntity;
-import com.ruoyi.alipay.domain.AlipayUserFundEntity;
-import com.ruoyi.alipay.service.IAlipayProductService;
-import com.ruoyi.alipay.service.IAlipayRechargeEntityService;
-import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
-import com.ruoyi.common.constant.StaticConstants;
-import com.ruoyi.common.core.domain.StatisticsEntity;
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.http.HttpUtils;
-import com.ruoyi.framework.util.DictionaryUtils;
-import com.ruoyi.system.domain.SysUser;
-import com.ruoyi.system.service.ISysUserService;
-
-import cn.hutool.core.util.StrUtil;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
-import com.ruoyi.alipay.service.IAlipayDealOrderEntityService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 交易订单Controller
@@ -180,14 +170,6 @@ public class AlipayDealOrderEntityController extends BaseController {
     public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {
         startPage();
         List<StatisticsEntity> list = alipayDealOrderEntityService.selectStatisticsDataByDate(statisticsEntity, DateUtils.dayStart(), DateUtils.dayEnd());
-//        if(statisticsEntity.getTotalCount() == 0){
-//            statisticsEntity.setSuccessPercent(0.00);
-//        }else{
-//            BigDecimal percent = BigDecimal.valueOf((float) statisticsEntity.getSuccessCount() / statisticsEntity.getTotalCount());
-//            Double successPercent = percent.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
-//            statisticsEntity.setSuccessPercent(successPercent);
-//        }
-//        mmap.put("statisticsEntity",statisticsEntity);
         List<AlipayUserFundEntity> listFund =  alipayUserFundEntityService.findUserFundAll();
         ConcurrentHashMap<String, AlipayUserFundEntity> userCollect = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         for (StatisticsEntity  sta :list)

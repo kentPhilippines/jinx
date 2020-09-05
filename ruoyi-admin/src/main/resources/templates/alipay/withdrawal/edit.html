@@ -75,25 +75,49 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label is-required">审核意见：</label>
-            <div class="col-sm-8">
-                <textarea type="text" id="comment" name="comment" maxlength="100" class="form-control" required></textarea>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">实际出款渠道：</label>
+                <div class="col-sm-8" th:if="${channelList.size()} ne 0">
+                    <select class="form-control" id="channelId" name="channelId" required>
+                        <option value="">请选择渠道名称</option>
+                        <option th:each="channel : ${channelList}" th:text="${channel.userName}"
+                                th:value="${channel.userId}"></option>
+                    </select>
+                </div>
+                <div class="col-sm-8" th:if="${channelList.size()} eq 0">
+                    <input class="form-control" name="flag" readonly required
+                           style="border-width: 0;background-color:white; color: red;" type="text"
+                           value="未找到任何渠道名称，请新增渠道">
+                </div>
             </div>
         </div>
-        <!-- <div class="form-group">
-             <div class="form-group">
-                 <label class="col-sm-3 control-label is-required">渠道名称：</label>
-                 <div class="col-sm-8" th:if="${channelList.size()} ne 0">
-                     <select class="form-control" name="channelId" id="channelId" required>
-                         <option value="">请选择渠道名称</option>
-                         <option th:each="channel : ${channelList}" th:text="${channel.userName}" th:value="${channel.userId}"></option>
-                     </select>
-                 </div>
-                 <div class="col-sm-8" th:if="${channelList.size()} eq 0">
-                     <input class="form-control" type="text" name="flag" style="border-width: 0;background-color:white; color: red;" value="未找到任何渠道名称，请新增渠道" required readonly>
-                 </div>
-             </div>
-         </div>-->
+        <div class="form-group">
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">实际出款产品类型：</label>
+                <div class="col-sm-8" th:if="${productList.size()} ne 0">
+                    <select class="form-control" id="witType" name="witType" required>
+                        <option value="">请选择产品名称</option>
+                        <option th:each="product : ${productList}" th:text="${product.productName}"
+                                th:value="${product.productId}"></option>
+                    </select>
+                </div>
+                <div class="col-sm-8" th:if="${productList.size()} eq 0">
+                    <input class="form-control" name="flag" readonly required
+                           style="border-width: 0;background-color:white; color: red;" type="text"
+                           value="未找到任何产品名称，请新增产品">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">审核意见：</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" id="comment" maxlength="100" name="comment" required
+                          type="text"></textarea>
+            </div>
+        </div>
+
     </form>
 
 

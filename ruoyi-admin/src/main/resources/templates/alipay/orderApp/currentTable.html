@@ -1,28 +1,32 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('当天统计数据')"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
     <div class="row">
-		<div class="col-sm-12 search-collapse">
-			<form id="formId">
-				<div class="select-list">
-					<ul>
-						<li>
-							<span>商户账户：</span>
-							<input type="text" id="userId" name="userId"/>
-						</li>
-						<li class="select-time">
-							<span>创建时间：</span>
-							<input type="text" class="time-input" id="startTime" placeholder="开始时间"
-								   name="params[dayStart]"/>
-							<span>-</span>
-							<input type="text" class="time-input" id="endTime" placeholder="结束时间"
-								   name="params[dayEnd]"/>
-						</li>
-						<li>
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <span>商户账户：</span>
+                            <input type="text" id="userId" name="userId"/>
+                        </li>
+                        <li>
+                            <span>代理商：</span>
+                            <input id="userAgent" name="userAgent" type="text"/>
+                        </li>
+                        <li class="select-time">
+                            <span>创建时间：</span>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[dayStart]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[dayEnd]"/>
+                        </li>
+                        <li>
 							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
 									class="fa fa-search"></i>&nbsp;搜索</a>
 							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
@@ -72,20 +76,24 @@
 				{
 					field: 'totalAmount',
 					title: '订单总金额'
-				},
-				{
-					field: 'successAmount',
-					title: '成功交易金额'
-				},
-				{
+                },
+                {
+                    field: 'successAmount',
+                    title: '成功交易金额'
+                },
+                {
                     field: 'successFee',
                     title: '收取手续费'
                 },
-				{
+                {
+                    field: 'agentAmount',
+                    title: '代理商分润【未统计代付】'
+                },
+                {
                     field: 'todayAmount',
                     title: '当日商户流水'
                 },
-				{
+                {
                     field: 'accountAmount',
                     title: '当前商户余额'
                 },

@@ -1,9 +1,10 @@
 package com.ruoyi.alipay.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import cn.hutool.core.date.DatePattern;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
 
@@ -45,7 +46,7 @@ public class AlipayDealOrderEntity extends BaseEntity {
     /**
      * 订单状态:0预下单1处理中2成功3未收到回调4失败5超时6订单申述7人工处理
      */
-    @Excel(name = "订单状态:0预下单1处理中2成功3未收到回调4失败5超时6订单申述7人工处理")
+    @Excel(name = "订单状态", readConverterExp = "0=预下单,1=处理中,2=成功,3=未收到回调,4=失败,5=超时,6=订单申述,7=人工处理")
     private String orderStatus;
 
     /**
@@ -69,7 +70,6 @@ public class AlipayDealOrderEntity extends BaseEntity {
     /**
      * 订单类型:1交易,2系统加款
      */
-    @Excel(name = "订单类型:1交易,2系统加款")
     private String orderType;
 
     /**
@@ -81,25 +81,23 @@ public class AlipayDealOrderEntity extends BaseEntity {
     /**
      * 关联码商账户
      */
-    @Excel(name = "关联码商账户")
+    @Excel(name = "关联渠道账户")
     private String orderQrUser;
 
     /**
      * 关联二维码
      */
-    @Excel(name = "关联二维码")
     private String orderQr;
 
     /**
      * 外部订单号(下游商户请求参数,用户数据回调)
      */
-    @Excel(name = "外部订单号(下游商户请求参数,用户数据回调)")
+    @Excel(name = "外部订单号")
     private String externalOrderId;
 
     /**
      * 订单生成IP(客户端ip或者是下游商户id)
      */
-    @Excel(name = "订单生成IP(客户端ip或者是下游商户id)")
     private String generationIp;
 
     /**
@@ -111,49 +109,43 @@ public class AlipayDealOrderEntity extends BaseEntity {
     /**
      * 订单异步回调地址
      */
-    @Excel(name = "订单异步回调地址")
     private String notify;
 
     /**
      * 订单同步回调地址
      */
-    @Excel(name = "订单同步回调地址")
     private String back;
 
-    /**
-     * 是否發送通知 //  YES 已發送    NO 未發送
-     */
-    @Excel(name = "是否發送通知 //  YES 已發送    NO 未發送")
+    @Excel(name = "通知状态", readConverterExp = "YES=已发送,NO=未发送")
     private String isNotify;
 
     /**
      * 数据修改时间
      */
-    @Excel(name = "数据修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "数据修改时间", width = 30, dateFormat = DatePattern.NORM_DATETIME_PATTERN)
     private Date submitTime;
 
     /**
      * 使用费率id
      */
-    @Excel(name = "使用费率id")
     private Integer feeId;
 
     /**
      * 状态:1可使用；0不可使用
      */
-    @Excel(name = "状态:1可使用；0不可使用")
     private Integer status;
 
     /**
      * 备用字段添加业务使用
      */
-    @Excel(name = "备用字段添加业务使用")
+    @Excel(name = "交易产品", readConverterExp = "ALIPAY_SCAN=支付宝扫码,ALIPAY_H5=支付宝H5," +
+            "BANK_R=银行卡转卡,YUANSAHNFUTOBANK=云闪付转卡,ALIPAYTOBANK=支付宝转卡,ALIPAYTOBANKH5=支付宝转卡H5," +
+            "WECHARTOBANK=微信转卡,WANGYIN01=网银快捷,ALIPAYSCANTOABNK=支付宝扫码转卡")
     private String retain1;
 
     /**
      * 备用字段添加业务使用
      */
-    @Excel(name = "备用字段添加业务使用")
     private String retain2;
 
 
