@@ -46,46 +46,6 @@ public interface AlipayDealOrderAppMapper {
      */
     int updateAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
 
-    @Select("<script>" +
-            "select '所有' userId, " +
-            "coalesce(sum(app.orderAmount),0) totalAmount," +
-            "coalesce(sum(run.amount),0.00) agentAmount," +
-            "coalesce(sum(case app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount," +
-            "count(1) totalCount," +
-            "count(case app.orderStatus when 2 then app.id else null end) successCount ," +
-            "coalesce(sum(app.retain3),0) fee ," +
-            "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
-            "from alipay_deal_order_app app " +
-            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId " +
-            "where " +
-            "run.runOrderType = 13 " +
-            "and app.createTime between #{statisticsEntity.params.dayStart} " +
-            " and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
-            " union all " +
-            "select app.orderAccount userId, " +
-            "coalesce(sum(app.orderAmount),0.00) totalAmount," +
-            "coalesce(sum(run.amount),0.00) agentAmount," +
-            "coalesce(sum(case app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount," +
-            "count(1) totalCount," +
-            "count(case app.orderStatus when 2 then app.id else null end) successCount ," +
-            "coalesce(sum(app.retain3),0) fee ," +
-            "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
-            "from alipay_deal_order_app app " +
-            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId " +
-            "where " +
-            "run.runOrderType = 13 " +
-            "and app.createTime between #{statisticsEntity.params.dayStart} " +
-            "and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
-            "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
-            "and app.orderAccount = #{statisticsEntity.userId} " +
-            "</if>" +
-            "<if test = \"statisticsEntity.userAgent != null and statisticsEntity.userAgent != ''\">" +
-            "and app.orderAccount in (select userId from alipay_user_info where agent = #{statisticsEntity.userAgent}) " +
-            "</if>" +
-            "group by app.orderAccount " +
-            "</script>")
-    List<StatisticsEntity> selectOrderAppStatDateByDay(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
-
 
     @Select("<script>" +
             "select orderAccount userId, " +
@@ -107,6 +67,44 @@ public interface AlipayDealOrderAppMapper {
             "group by orderAccount , time " +
             "</script>")
     List<StatisticsEntity> selectOrderAppStatDateByHours(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
+
+    @Select("<script>" +
+            "select '所有' userId, " +
+            "coalesce(sum(app.orderAmount),0) totalAmount," +
+            "coalesce(sum(  CASE run.runOrderType   WHEN 13  THEN  run.amount  ELSE 0   END ),0.00) agentAmount," +
+            "coalesce(sum(case app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount," +
+            "count(1) totalCount," +
+            "count(case app.orderStatus when 2 then app.id else null end) successCount ," +
+            "coalesce(sum(app.retain3),0) fee ," +
+            "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
+            "from alipay_deal_order_app app " +
+            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId " +
+            "where " +
+            "  app.createTime between #{statisticsEntity.params.dayStart} " +
+            " and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
+            " union all " +
+            "select app.orderAccount userId, " +
+            "coalesce(sum(app.orderAmount),0.00) totalAmount," +
+            "coalesce(sum( CASE run.runOrderType   WHEN 13  THEN  run.amount  ELSE 0   END ),0.00) agentAmount," +
+            "coalesce(sum(case app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount," +
+            "count(1) totalCount," +
+            "count(case app.orderStatus when 2 then app.id else null end) successCount ," +
+            "coalesce(sum(app.retain3),0) fee ," +
+            "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
+            "from alipay_deal_order_app app " +
+            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId " +
+            "where " +
+            "  app.createTime between #{statisticsEntity.params.dayStart} " +
+            "and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
+            "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
+            "and app.orderAccount = #{statisticsEntity.userId} " +
+            "</if>" +
+            "<if test = \"statisticsEntity.userAgent != null and statisticsEntity.userAgent != ''\">" +
+            "and app.orderAccount in (select userId from alipay_user_info where agent = #{statisticsEntity.userAgent}) " +
+            "</if>" +
+            "group by app.orderAccount " +
+            "</script>")
+    List<StatisticsEntity> selectOrderAppStatDateByDay(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 
     @Select("<script>" +
             "select orderAccount, appOrderId, orderType, orderStatus, createTime, orderAmount , retain1 ,"
