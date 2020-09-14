@@ -1,13 +1,11 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayUserRateEntity;
-
-import java.util.List;
-
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
  * 用户产品费率Mapper接口
@@ -125,10 +123,27 @@ public interface AlipayUserRateEntityMapper {
             " and status = 1" +
             " and switchs = 1 " +
             "</script> ")
-    AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType,  @Param("channel") String channel ,@Param("payTypr") String payTypr);
+    AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType, @Param("channel") String channel, @Param("payTypr") String payTypr);
+
     @Select("select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where " +
             "userId = #{alipayUserRateEntity.userId}   and payTypr = #{alipayUserRateEntity.payTypr} and status = 1 and channelId = #{alipayUserRateEntity.channelId}")
-    AlipayUserRateEntity checkUniqueRate(@Param("alipayUserRateEntity")AlipayUserRateEntity alipayUserRateEntity);
+    AlipayUserRateEntity checkUniqueRate(@Param("alipayUserRateEntity") AlipayUserRateEntity alipayUserRateEntity);
+
     @Update("update alipay_user_rate set switchs = 0   where  userId = #{userId} and  id in ( select a.id from  (      select id from alipay_user_rate where userId =  #{userId} and payTypr in  (    select payTypr from alipay_user_rate where id = #{id}    ) )  a )")
-    int updateProduct( @Param("id")String id, @Param("userId") String userId);
+    int updateProduct(@Param("id") String id, @Param("userId") String userId);
+
+
+    @Select("<script>" +
+            "select * from alipay_user_rate where userId IN (select userId from alipay_user_info where " +
+            "agent = #{merchantId}" +
+            "<if test=\"rate.userId != null and rate.userId != ''\">" +
+            " and userId = #{rate.userId} " +
+            "</if>" +
+            ")   and  switchs = 1 " +
+            "<if test=\"rate.payTypr != null and rate.payTypr != ''\">" +
+            " and payTypr = #{rate.payTypr} " +
+            "</if>" +
+            "</script> "
+    )
+    List<AlipayUserRateEntity> findAgentRateLiat(@Param("merchantId") String merchantId, @Param("rate") AlipayUserRateEntity rate);
 }

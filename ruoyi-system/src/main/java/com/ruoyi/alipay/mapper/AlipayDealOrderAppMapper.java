@@ -78,7 +78,7 @@ public interface AlipayDealOrderAppMapper {
             "coalesce(sum(app.retain3),0) fee ," +
             "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
             "from alipay_deal_order_app app " +
-            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId " +
+            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId AND run.`runOrderType`=13  " +
             "where " +
             "  app.createTime between #{statisticsEntity.params.dayStart} " +
             " and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
@@ -92,7 +92,7 @@ public interface AlipayDealOrderAppMapper {
             "coalesce(sum(app.retain3),0) fee ," +
             "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
             "from alipay_deal_order_app app " +
-            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId " +
+            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId AND run.`runOrderType`=13  " +
             "where " +
             "  app.createTime between #{statisticsEntity.params.dayStart} " +
             "and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +

@@ -1,21 +1,20 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.List;
-
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.domain.AlipayUserRateEntity;
 import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
-import com.ruoyi.common.annotation.Log;
+import com.ruoyi.alipay.mapper.AlipayUserRateEntityMapper;
+import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayUserRateEntityMapper;
-import com.ruoyi.alipay.domain.AlipayUserRateEntity;
-import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
-import com.ruoyi.common.annotation.DataSource;
-import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.enums.DataSourceType;
+
+import java.util.List;
 
 /**
  * 用户产品费率Service业务层处理
@@ -192,7 +191,13 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayUserRateEntity checkUniqueRate(AlipayUserRateEntity alipayUserRateEntity) {
-        return alipayUserRateEntityMapper.checkUniqueRate(  alipayUserRateEntity);
+        return alipayUserRateEntityMapper.checkUniqueRate(alipayUserRateEntity);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserRateEntity> findAgentRateLiat(String merchantId, AlipayUserRateEntity rate) {
+        return alipayUserRateEntityMapper.findAgentRateLiat(merchantId, rate);
     }
 
 }

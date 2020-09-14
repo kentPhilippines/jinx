@@ -1,18 +1,18 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.List;
-
+import com.ruoyi.alipay.domain.AlipayAmountEntity;
+import com.ruoyi.alipay.mapper.AlipayAmountEntityMapper;
+import com.ruoyi.alipay.service.IAlipayAmountEntityService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.GenerateOrderNo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayAmountEntityMapper;
-import com.ruoyi.alipay.domain.AlipayAmountEntity;
-import com.ruoyi.alipay.service.IAlipayAmountEntityService;
-import com.ruoyi.common.core.text.Convert;
+
+import java.util.List;
 
 /**
  * 手动加扣款记录Service业务层处理
@@ -97,5 +97,13 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
     @Override
     public int deleteAlipayAmountEntityById(Long id) {
         return alipayAmountEntityMapper.deleteAlipayAmountEntityById(id);
+    }
+
+    @Override
+    public int addAppOrder(AlipayAmountEntity alipayAmountEntity) {
+        alipayAmountEntity.setCreateTime(DateUtils.getNowDate());
+        alipayAmountEntity.setOrderId(GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_REFUND_APP));
+        alipayAmountEntity.setOrderStatus("2");
+        return alipayAmountEntityMapper.insertAlipayAmountEntity(alipayAmountEntity);
     }
 }

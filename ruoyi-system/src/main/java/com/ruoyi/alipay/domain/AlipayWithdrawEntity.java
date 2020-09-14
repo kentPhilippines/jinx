@@ -16,8 +16,6 @@ import java.util.Date;
  */
 public class AlipayWithdrawEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
-
-
     private String bankcode;
     public void  setBankcode(String bankcode){this.bankcode = bankcode;}
     public String getBankcode(){
@@ -27,79 +25,66 @@ public class AlipayWithdrawEntity extends BaseEntity {
      * 数据id(主键索引)
      */
     private Long id;
-
     /**
      * 会员提现单号
      */
     @Excel(name = "会员提现单号")
     private String orderId;
-
     /**
      * 会员id(唯一识别号)(index索引)
      */
     @Excel(name = "会员id(唯一识别号)(index索引)")
     private String userId;
-
     /**
      * 商户提现1，码商提现2
      */
     @Excel(name = "商户提现1，码商提现2")
     private String withdrawType;
-
     /**
      * 银行卡号
      */
     @Excel(name = "银行卡号")
     private String bankNo;
-
     /**
      * 提现人姓名
      */
     @Excel(name = "提现人姓名")
     private String accname;
-
     /**
      * 0预下单1处理中2成功3失败
      */
     @Excel(name = "订单状态", readConverterExp = "0=预下单,1=处理中,2=成功,3=失败")
     private String orderStatus;
-
     /**
      * 开户行姓名
      */
     @Excel(name = "开户行姓名")
     private String bankName;
-
     /**
      * 提现金额
      */
     @Excel(name = "提现金额")
     private Double amount;
-
     /**
      * 手续费
      */
     @Excel(name = "手续费")
     private Double fee;
-
     /**
      * 真实到账金额
      */
     @Excel(name = "真实到账金额")
     private Double actualAmount;
-
     /**
      * 手机号
      */
     @Excel(name = "手机号")
     private String mobile;
-
     /**
      * 提现成功回调地址
      */
     @Excel(name = "提现成功回调地址")
     private String notify;
-
     /**
      * 数据修改时间
      */

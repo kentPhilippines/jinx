@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.*;
+import com.ruoyi.alipay.domain.util.WitAppExport;
 import com.ruoyi.alipay.mapper.MerchantInfoEntityMapper;
 import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
@@ -54,7 +55,10 @@ public class BackManageController extends BaseController {
     @Autowired private DictionaryUtils dictionaryUtils;
     @Autowired private IAlipayBankListEntityService alipayBankListEntityService;
     @Autowired private GoogleUtils googleUtils;
-    @Autowired private ISysDictDataService dictDataService;
+    @Autowired
+    private ISysDictDataService dictDataService;
+    @Autowired
+    private IAlipayProductService alipayProductService;
     /**
      * 商户后台用户登陆显示详细信息
      */
@@ -85,8 +89,6 @@ public class BackManageController extends BaseController {
     public String orderShow() {
         return prefix + "/order";
     }
-
-
     /**
      * 查询商户订单
      */
@@ -99,6 +101,8 @@ public class BackManageController extends BaseController {
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
         return getDataTable(list);
     }
+
+
     /**
      * 商户订单导出
      */
@@ -156,6 +160,7 @@ public class BackManageController extends BaseController {
     }
 
 
+
     //商户提现申请
     @GetMapping("/withdrawal/view")
     public String withdrawalShow() {
@@ -174,6 +179,50 @@ public class BackManageController extends BaseController {
         List<AlipayWithdrawEntity> list = alipayWithdrawEntityService.selectAlipayWithdrawEntityList(alipayWithdrawEntity);
         return getDataTable(list);
     }
+
+    /**
+     * 导出流水订单记录列表
+     */
+    @Log(title = "商户代付详情导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/withdrawal/export")
+    @ResponseBody
+    public AjaxResult withdrawalExport(AlipayWithdrawEntity alipayWithdrawEntity) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        alipayWithdrawEntity.setUserId(sysUser.getMerchantId());
+        startPage();
+        List<AlipayWithdrawEntity> list = alipayWithdrawEntityService.selectAlipayWithdrawEntityList(alipayWithdrawEntity);
+        List<WitAppExport> exportList = new ArrayList<>();
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        List<AlipayProductEntity> productlist = alipayProductService.selectAlipayProductList(alipayProductEntity);
+        ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        for (AlipayWithdrawEntity wit : list) {
+            WitAppExport export = new WitAppExport();
+            export.setUserId(wit.getUserId());
+            export.setAccname(wit.getAccname());
+            export.setActualAmount(wit.getActualAmount());
+            export.setAmount(wit.getAmount());
+            export.setBankName(wit.getBankName());
+            export.setBankNo(wit.getBankNo());
+            export.setComment(wit.getComment());
+            export.setFee(wit.getFee());
+            export.setMobile(wit.getMobile());
+            export.setNotify(wit.getNotify());
+            export.setOrderId(wit.getOrderId());
+            export.setOrderStatus(wit.getOrderStatus());
+            AlipayProductEntity product = prCollect.get(wit.getWitType());
+            if (ObjectUtil.isNotNull(product))
+                wit.setWitType(product.getProductName());
+            export.setWitType(wit.getWitType());
+            export.setSubmitTime(wit.getSubmitTime());
+            export.setCreateTime(wit.getCreateTime());
+            exportList.add(export);
+            export = null;
+        }
+        ExcelUtil<WitAppExport> util = new ExcelUtil<WitAppExport>(WitAppExport.class);
+        return util.exportExcel(exportList, "wit");
+    }
+
 
     /**
      * 商户发起申请提现

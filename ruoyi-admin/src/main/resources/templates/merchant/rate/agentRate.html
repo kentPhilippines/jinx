@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('下线用户产品费率列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>商户账户：</p>
+                            <input id="userId" name="userId" type="text"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>产品类型：</label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="payTypr" name="payTypr">
+                                <option value="">所有</option>
+                                <option th:each="product : ${productList}" th:text="${product.productName}"
+                                        th:value="${product.productId}"></option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>费率类型： </label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="feeType"
+                                    name="feeType" th:with="type=${@dict.getType('feeType')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+        <div class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <p><strong>自身费率情况：</strong></p>
+            </div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table-myfee"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    const editFlag = [[${@permission.hasPermi('merchant:rate:edit')}]];
+    const removeFlag = [[${@permission.hasPermi('merchant:rate:remove')}]];
+    const productType = [[${@dict.getType('payTypr')}]];
+    const prefix = ctx + "appManage";
+    $(function () {
+        var options = {
+            id: 'bootstrap-table',
+            url: prefix + "/appRateList",
+            modalName: "商户通道费率",
+            columns: [{checkbox: true},
+                {field: 'userId', title: '商户账户'},
+                {
+                    field: 'userType', title: '用户类型',
+                    formatter: function (value, item, index) {
+                        if (item.userType == '1') {
+                            return '<span>下级代理商户</span>';
+                        }
+                    }
+                },
+                {field: 'payTypr', title: '产品类型'},
+                {
+                    field: 'feeType', title: '费率类型 ',
+                    formatter: function (value, item, index) {
+                        if (item.feeType == '1') {
+                            return '<span>交易费率</span>';
+                        } else if (item.feeType == '2') {
+                            return '<span>代付费率</span>';
+                        }
+                    }
+                },
+                {field: 'fee', title: '商户费率'},
+                {
+                    field: 'channelFee', title: '我的费率',
+                    formatter: function (value, item, index) {
+                        if (item.channelFee == null || item.channelFee == '') {
+                            return '<span>联系运营人员查看</span>';
+                        } else {
+                            return item.channelFee;
+                        }
+                    }
+                },
+                {field: 'profit', title: '盈利点位'},
+                {field: 'createTime', title: '创建时间', align: 'center'},
+            ]
+        };
+        $.table.init(options);
+        var options1 = {
+            id: 'bootstrap-table-myfee',
+            url: prefix + "/myRateList",
+            modalName: "商户通道费率",
+            columns: [{checkbox: true},
+                {field: 'userId', title: '商户账户'},
+                {
+                    field: 'userType', title: '用户类型',
+                    formatter: function (value, item, index) {
+                        if (item.userType == '1') {
+                            return '<span>自己</span>';
+                        }
+                    }
+                },
+                {field: 'payTypr', title: '产品类型'},
+                {
+                    field: 'feeType', title: '费率类型 ',
+                    formatter: function (value, item, index) {
+                        if (item.feeType == '1') {
+                            return '<span>交易费率</span>';
+                        } else if (item.feeType == '2') {
+                            return '<span>代付费率</span>';
+                        }
+                    }
+                },
+                {field: 'fee', title: '商户费率'},
+                {field: 'createTime', title: '创建时间', align: 'center'},
+            ]
+        };
+        $.table.init(options1);
+    });
+</script>
+</body>
+</html>

@@ -28,13 +28,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="comment"    column="comment"    />
         <result property="witChannel"    column="witChannel"    />
         <result property="witType"    column="witType"    />
+        <result property="channelId" column="channelId"/>
     </resultMap>
 
     <sql id="selectAlipayWithdrawEntityVo">
         select id, orderId, userId, withdrawType, bankNo, accname,
          orderStatus, bankName, amount, fee, actualAmount, mobile,
-         notify, createTime, submitTime, status, retain1, retain2, apply, comment, approval,witChannel,witType
-
+         notify, createTime, submitTime, status, retain1, retain2, apply, comment, approval,witChannel,witType,
+        channelId
           from alipay_withdraw
     </sql>
 

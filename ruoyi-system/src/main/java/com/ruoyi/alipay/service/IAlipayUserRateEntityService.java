@@ -77,4 +77,13 @@ public interface IAlipayUserRateEntityService {
     int changeStatus(String id, String userId, String feeType, String switchs);
 
     AlipayUserRateEntity checkUniqueRate(AlipayUserRateEntity alipayUserRateEntity);
+
+    /**
+     * <p>查询自己代理用的的费率情况</p>
+     *
+     * @param merchantId
+     * @param rate
+     * @return
+     */
+    List<AlipayUserRateEntity> findAgentRateLiat(String merchantId, AlipayUserRateEntity rate);
 }

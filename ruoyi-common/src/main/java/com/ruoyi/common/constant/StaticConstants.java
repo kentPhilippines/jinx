@@ -16,6 +16,10 @@ public interface StaticConstants {
      * 加款订单号前缀
      */
     public static final String PERFIX_REFUND = "R";
+    /**
+     * 补单申请
+     */
+    public static final String PERFIX_REFUND_APP = "B";
 
     /**
      * 减款订单号前缀
