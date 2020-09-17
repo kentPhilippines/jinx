@@ -110,7 +110,7 @@ public class AppManageContorller extends BaseController {
     @ResponseBody
     public TableDataInfo appRate(AlipayUserRateEntity rate) {
         SysUser currentUser = ShiroUtils.getSysUser();
-        String merchantId = "5IXQkxUu";//currentUser.getMerchantId();
+        String merchantId = currentUser.getMerchantId();
         startPage();
         List<AlipayUserRateEntity> rateList = alipayUserRateEntityService.findAgentRateLiat(merchantId, rate);
         AlipayUserRateEntity userRate = new AlipayUserRateEntity();
