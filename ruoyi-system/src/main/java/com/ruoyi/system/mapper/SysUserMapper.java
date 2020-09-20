@@ -1,8 +1,11 @@
 package com.ruoyi.system.mapper;
 
-import java.util.List;
-
 import com.ruoyi.system.domain.SysUser;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
  * 用户表 数据层
@@ -121,4 +124,23 @@ public interface SysUserMapper {
      * @return 结果
      */
     SysUser checkEmailUnique(String email);
+
+    // 以下是商户后台的处理逻辑
+
+    /**
+     * 根据商户id查询自己的下子账户
+     *
+     * @param user
+     * @return
+     */
+    List<SysUser> backSelectUserList(SysUser user);
+
+    @Update("update sys_user set status = '1' where merchant_id = #{merchantId} ")
+    void updateColseSubAccountByMerchantId(@Param("merchantId") String merchantId);
+
+    @Insert("insert into sys_user_role (user_id, role_id) values (#{userId}, 113)")
+    int insertRoleUser(SysUser sysUser);
+
+    @Update("update sys_user set email = #{email} where login_name = #{userId}")
+    int updateUserEmailByUserId(@Param("userId") String userId, @Param("email") String email);
 }

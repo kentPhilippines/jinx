@@ -1,37 +1,31 @@
 package com.ruoyi.web.controller.alipay;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import com.ruoyi.alipay.domain.AlipayAmountEntity;
+import com.ruoyi.alipay.domain.AlipayProductEntity;
+import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.service.IAlipayAmountEntityService;
+import com.ruoyi.alipay.service.IAlipayProductService;
+import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
-import com.ruoyi.common.exception.BusinessException;
-import com.ruoyi.common.utils.GenerateOrderNo;
-import com.ruoyi.common.utils.MapDataUtil;
-import com.ruoyi.common.utils.RSAUtils;
-import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.alipay.domain.AlipayAmountEntity;
-import com.ruoyi.alipay.service.IAlipayAmountEntityService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 加减款记录表Controller
@@ -43,15 +37,59 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/alipay/deduct")
 public class AlipayAmountEntityController extends BaseController {
     private String prefix = "alipay/deduct";
-
+    private static final String AMOUNT_TYPE_APP = "3";
+    private String prefixAddition = "alipay/amount";
     @Autowired
     private IAlipayAmountEntityService alipayAmountEntityService;
+    @Autowired
+    private IAlipayProductService alipayProductService;
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
+
     @Autowired
     private DictionaryUtils dictionaryUtils;
 
     @GetMapping()
     public String deduct() {
         return prefix + "/deduct";
+    }
+
+    @GetMapping("/additional")
+    public String additional() {
+        return prefixAddition + "/amount";
+    }
+
+    @PostMapping("/additional")
+    @ResponseBody
+    public TableDataInfo additionaList(AlipayAmountEntity alipayAmountEntity) {
+        alipayAmountEntity.setAmountType(AMOUNT_TYPE_APP);
+        startPage();
+        List<AlipayAmountEntity> list = alipayAmountEntityService.selectAlipayAmountEntityList(alipayAmountEntity);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/additionaEdit/{id}")
+    public String additionaEdit(@PathVariable("id") Long id, ModelMap mmap) {
+        AlipayAmountEntity alipayAmountEntity = alipayAmountEntityService.selectAlipayAmountEntityById(id);
+        mmap.put("alipayAmountEntity", alipayAmountEntity);
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        List<AlipayUserFundEntity> channelList = alipayUserFundEntityService.findUserFundRate();
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = alipayProductService.selectAlipayProductList(alipayProductEntity);
+        mmap.put("productList", list);
+        mmap.put("channelList", channelList);
+        return prefix + "/edit";
+    }
+
+    @Log(title = "运营人员审核商户补单", businessType = BusinessType.EXPORT)
+    @PostMapping("/additionaEdit")
+    @ResponseBody
+    public AjaxResult additionaEditEnter(AlipayAmountEntity amountEntity) {
+        SysUser currentUser = ShiroUtils.getSysUser();
+        amountEntity.setApproval(currentUser.getLoginName());
+        return toAjax(alipayAmountEntityService.additionaEditEnter(amountEntity));
+
     }
 
     /**

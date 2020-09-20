@@ -1,10 +1,9 @@
 package com.ruoyi.system.mapper;
 
-import java.util.List;
-
 import com.ruoyi.system.domain.SysRole;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * 角色表 数据层
@@ -74,7 +73,7 @@ public interface SysRoleMapper {
      * @param roleName 角色名称
      * @return 角色信息
      */
-    SysRole checkRoleNameUnique(String roleName);
+    SysRole checkRoleNameUnique(SysRole roleName);
 
     /**
      * 校验角色权限是否唯一
@@ -82,7 +81,7 @@ public interface SysRoleMapper {
      * @param roleKey 角色权限
      * @return 角色信息
      */
-    SysRole checkRoleKeyUnique(String roleKey);
+    SysRole checkRoleKeyUnique(SysRole roleKey);
 
     /**
      * 查询角色列表
@@ -91,4 +90,30 @@ public interface SysRoleMapper {
      * @return 结果
      */
     List<SysRole> selectRoleIdsByNotice(@Param("roleId") List<String> roleId);
+
+
+    /**
+     * 根据商户账户查询角色列表
+     *
+     * @param sysRole
+     * @return
+     */
+    List<SysRole> backSelectRoleListByMerchantId(SysRole sysRole);
+
+    /**
+     * 查询已经选中的角色
+     *
+     * @param userId
+     * @param merchantId
+     * @return
+     */
+    List<SysRole> findRolesCheckedByMerchantId(@Param("userId") Long userId, @Param("merchantId") String merchantId);
+
+    /**
+     * 查询全部角色根据商户账户
+     *
+     * @param merchantId
+     * @return
+     */
+    List<SysRole> findRolesMerchantAll(@Param("merchantId") String merchantId);
 }

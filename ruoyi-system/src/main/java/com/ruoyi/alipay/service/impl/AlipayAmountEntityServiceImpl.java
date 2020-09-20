@@ -9,20 +9,20 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.GenerateOrderNo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * 手动加扣款记录Service业务层处理
  *
- * @author kiwi
+ * @author kent
  * @date 2020-03-24
  */
 @Service
 public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService {
-    @Autowired
+    @Resource
     private AlipayAmountEntityMapper alipayAmountEntityMapper;
 
     /**
@@ -105,5 +105,28 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
         alipayAmountEntity.setOrderId(GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_REFUND_APP));
         alipayAmountEntity.setOrderStatus("2");
         return alipayAmountEntityMapper.insertAlipayAmountEntity(alipayAmountEntity);
+    }
+
+    /**
+     * 审核商户补单申请，
+     *
+     * @param amountEntity
+     * @return
+     */
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int additionaEditEnter(AlipayAmountEntity amountEntity) {
+        /**
+         * ###############
+         * 补单申请确认逻辑
+         * 1，修改amount 补单记录表的数据 和状态
+         * 2，生成商户交易订单和主交易订单以供结算
+         */
+        // 1 修改当前补单申请的申请订单
+        int i = alipayAmountEntityMapper.updateAlipayAmountEntity(amountEntity);
+        //2，生成商户交易订单
+
+
+        return 0;
     }
 }

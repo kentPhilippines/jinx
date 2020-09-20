@@ -1,12 +1,13 @@
 package com.ruoyi.system.domain;
 
-import javax.validation.constraints.*;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.ColumnType;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * 角色表 sys_role
@@ -15,6 +16,24 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 public class SysRole extends BaseEntity {
     private static final long serialVersionUID = 1L;
+    private String merchantId;//商户id
+    private Integer accountType;//0:平台用户 1:商户子账户
+
+    public Integer getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(Integer accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
 
     /**
      * 角色ID
@@ -114,7 +133,7 @@ public class SysRole extends BaseEntity {
         this.roleName = roleName;
     }
 
-    @NotBlank(message = "权限字符不能为空")
+
     @Size(min = 0, max = 100, message = "权限字符长度不能超过100个字符")
     public String getRoleKey() {
         return roleKey;

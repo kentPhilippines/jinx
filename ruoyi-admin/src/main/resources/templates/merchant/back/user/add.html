@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增用户')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body>
+<div class="main-content">
+    <form class="form-horizontal" id="form-user-back-add">
+        <input id="treeId" name="deptId" type="hidden"/>
+        <h4 class="form-header h4">基本信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">登录账号：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" id="loginName" maxlength="30" name="loginName" placeholder="请输入登录账号"
+                               required type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">归属部门：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" th:if="${dept} ne null">
+                            <input class="form-control" id="treeName" name="deptName" onclick="selectDeptTree()"
+                                   placeholder="请选择归属部门" required type="text">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        </div>
+                        <div class="input-group" th:if="${dept} eq null">
+                            <input class="form-control" id="flag" name="flag" readonly required
+                                   style="border-width: 0;background-color:white; color: red;" type="text"
+                                   value="未添加部门">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">用户昵称：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" maxlength="30" name="userName" placeholder="请输入用户昵称" required
+                               type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">登录密码：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" maxlength="20" minlength="6" name="password" placeholder="请输入登录密码"
+                               required type="password">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">用户性别：</label>
+                    <div class="col-sm-8">
+                        <select class="form-control m-b" name="sex" th:with="type=${@dict.getType('sys_user_sex')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">提现密码：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" maxlength="20" minlength="6" name="fundPassword"
+                               placeholder="请输入资金管理密码" required type="password">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">手机号码：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" id="phonenumber" maxlength="11" name="phonenumber"
+                               placeholder="请输入手机号码" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label is-required">用户角色：</label>
+                    <div class="col-xs-10">
+                        <label class="radio-box" th:each="role:${roles}">
+                            <input name="roles[0].roleId" th:disabled="${role.status == '1'}" th:id="${role.roleId}"
+                                   th:value="${role.roleId}" type="radio">
+                            <label th:for="${role.roleId}" th:text="${role.roleName}"></label></label>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="form-header h4">其他信息</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">备注：</label>
+                    <div class="col-xs-10">
+                        <textarea class="form-control" maxlength="500" name="remark" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="form-header h4">验证信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">谷歌验证码：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" id="googleCode" maxlength="6" name="params[googleCode]"
+                               placeholder="请输入动态谷歌验证码" required type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button class="btn btn-sm btn-primary" onclick="submitHandler()" type="button"><i class="fa fa-check"></i>保 存
+        </button>&nbsp;
+        <button class="btn btn-sm btn-danger" onclick="closeItem()" type="button"><i class="fa fa-reply-all"></i>关 闭
+        </button>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script>
+    const prefix = ctx + "system/user";
+    const backPrefix = ctx + "back/merchant/user";
+
+    $("#form-user-back-add").validate({
+        onkeyup: false,
+        rules: {
+            loginName: {
+                minlength: 2,
+                maxlength: 20,
+                remote: {
+                    url: prefix + "/checkLoginNameUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "loginName": function () {
+                            return $.common.trim($("#loginName").val());
+                        }
+                    },
+                    dataFilter: function (data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+            password: {
+                minlength: 5,
+                maxlength: 20
+            },
+        },
+        messages: {
+            "loginName": {
+                remote: "登录账号已经存在"
+            }
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            const data = $("#form-user-back-add").serializeArray();
+            const postIds = $.form.selectSelects("post");
+            data.push({"name": "postIds", "value": postIds});
+            $.operate.saveTab(backPrefix + "/add", data);
+        }
+    }
+
+    /*用户管理-新增-选择部门树*/
+    function selectDeptTree() {
+        const treeId = $("#treeId").val();
+        const deptId = $.common.isEmpty(treeId) ? [[${dept.deptId}]] : $("#treeId").val();
+        const url = ctx + "back/merchant/dept/selectDeptTree/" + deptId;
+        const options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+    }
+
+    $(function () {
+        $('#post').select2({
+            placeholder: "请选择岗位",
+            allowClear: true
+        });
+    })
+
+</script>
+</body>
+</html>

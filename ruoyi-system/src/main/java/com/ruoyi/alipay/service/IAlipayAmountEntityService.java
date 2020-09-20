@@ -67,4 +67,12 @@ public interface IAlipayAmountEntityService {
      * @return
      */
     int addAppOrder(AlipayAmountEntity alipayAmountEntity);
+
+    /**
+     * 审核商户补单申请确认
+     *
+     * @param amountEntity
+     * @return
+     */
+    int additionaEditEnter(AlipayAmountEntity amountEntity);
 }

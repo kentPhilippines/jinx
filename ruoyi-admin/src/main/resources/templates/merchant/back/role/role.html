@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('角色列表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="role-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            角色名称：<input name="roleName" type="text"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>角色状态：</label>
+                            <select class="selectpicker" data-none-selected-text="请选择" name="status"
+                                    th:with="type=${@dict.getType('sys_normal_disable')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <label>创建时间： </label>
+                            <input class="time-input" id="startTime" name="params[beginTime]" placeholder="开始时间"
+                                   type="text"/>
+                            <span>-</span>
+                            <input class="time-input" id="endTime" name="params[endTime]" placeholder="结束时间"
+                                   type="text"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="back:merchant:role:add">
+                <i class="fa fa-plus"></i> 新增
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    const editFlag = [[${@permission.hasPermi('back:merchant:role:edit')}]];
+    const userFlag = [[${@permission.hasPermi('back:merchant:role:user')}]];
+    const removeFlag = [[${@permission.hasPermi('back:merchant:role:remove')}]];
+    const prefix = ctx + "back/merchant/role";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            sortName: "roleSort",
+            modalName: "角色",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'roleId',
+                    title: '角色编号'
+                },
+                {
+                    field: 'roleName',
+                    title: '角色名称'
+                },
+                {
+                    field: 'roleSort',
+                    title: '显示顺序',
+                    sortable: true
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '角色状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    sortable: true,
+                    align: 'center'
+                },
+                {
+                    field: 'remark',
+                    title: '备注',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.roleId + '\')"><i class="fa fa-edit"></i> 编辑权限</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + userFlag + '" href="javascript:void(0)" onclick="authUser(\'' + row.roleId + '\')"><i class="fa fa-user"></i> 用户管理</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.roleId + '\')"><i class="fa fa-remove"></i> 删除</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* 角色管理-分配用户 */
+    function authUser(roleId) {
+        var url = prefix + '/authUser/' + roleId;
+        $.modal.openTab("用户管理", url);
+    }
+
+    /* 角色状态显示 */
+    function statusTools(row) {
+        if (row.status == 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.roleId + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.roleId + '\')"></i> ';
+        }
+    }
+
+    /* 角色管理-停用 */
+    function disable(roleId) {
+        $.modal.confirm("确认要【停用】角色吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"roleId": roleId, "status": 1});
+        })
+    }
+
+    /* 角色管理启用 */
+    function enable(roleId) {
+        $.modal.confirm("确认要【启用】角色吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"roleId": roleId, "status": 0});
+        })
+    }
+</script>
+</body>
+</html>

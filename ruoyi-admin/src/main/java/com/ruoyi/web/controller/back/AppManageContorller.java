@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/appManage")
 @Controller
 public class AppManageContorller extends BaseController {
-    private static final String AMOUNT_TYPE_APP = "3";
+    private static final String AMOUNT_TYPE_APP = "3";//商户主动申请补单订单类型
     private String prefix = "merchant/other";
     private String prefixRate = "merchant/rate";
     @Autowired

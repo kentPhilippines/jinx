@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('手动加扣款记录列表')" />
+    <th:block th:include="include :: header('商户手动补单记录')"/>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -17,13 +17,6 @@
                             <li>
                                 <p>会员id：</p>
                                 <input type="text" name="userid"/>
-                            </li>
-                            <li>
-                                <p>订单类型：</p>
-                                <select name="amounttype" th:with="type=${@dict.getType('amountType')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
                             </li>
                             <li>
                                 <p>操作人：</p>
@@ -67,39 +60,37 @@
         var removeFlag = [[${@permission.hasPermi('system:amount:remove')}]];
         var amounttypeDatas = [[${@dict.getType('amountType')}]];
         var orderstatusDatas = [[${@dict.getType('orderStatusAmount')}]];
-        var prefix = ctx + "system/amount";
+        var prefix = ctx + "/alipay/deduct";
 
         $(function() {
             var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
+                url: prefix + "/additional",
+                updateUrl: prefix + "/additionaEdit/{id}",
                 exportUrl: prefix + "/export",
-                modalName: "加减款记录",
+                modalName: "用户手动补单记录",
                 columns: [{
                     checkbox: true
                 },
-                {
-                    field : 'id', 
-                    title : '数据id',
-                    visible: false
-                },
-                {
-                    field : 'orderid', 
-                    title : '平台订单'
-                },
-                {
-                    field : 'userid', 
-                    title : ''
-                },
-                {
-                    field : 'amounttype', 
-                    title : '订单类型',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(amounttypeDatas, value);
-                    }
-                },
+                    {
+                        field: 'id',
+                        title: '数据id',
+                        visible: false
+                    },
+                    {
+                        field: 'orderId',
+                        title: '平台订单'
+                    },
+                    {
+                        field: 'userId',
+                        title: '用户id'
+                    },
+                    {
+                        field: 'amountType',
+                        title: '订单类型',
+                        formatter: function (value, row, index) {
+                            return $.table.selectDictLabel(amounttypeDatas, value);
+                        }
+                    },
                 {
                     field : 'accname', 
                     title : '申请人姓名'
@@ -112,32 +103,37 @@
                     }
                 },
                 {
-                    field : 'amount', 
-                    title : '金额'
+                    field : 'amount',
+                    title: '金额'
                 },
-                {
-                    field : 'fee', 
-                    title : '手续费'
-                },
-                {
-                    field : 'actualamount', 
-                    title : '真实到账金额'
-                },
-                {
-                    field : 'dealdescribe', 
-                    title : '加扣款描述'
-                },
-                {
-                    field : 'createtime', 
-                    title : '数据创建时间'
-                },
-                {
-                    title: '操作',
+                    {
+                        field: 'fee',
+                        title: '手续费'
+                    },
+                    {
+                        field: 'actualamount',
+                        title: '真实到账金额'
+                    },
+                    {
+                        field: 'fee',
+                        title: '手续费'
+                    },
+                    {
+                        field: 'dealdescribe',
+                        title: '补单详细描述'
+                    },
+                    {
+                        field: 'createtime',
+                        title: '数据创建时间'
+                    },
+                    {
+                        title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        if (row.orderStatus == 2) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>审核</a> ');
+                        }
                         return actions.join('');
                     }
                 }]

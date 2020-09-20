@@ -87,6 +87,25 @@ public class AlipayAmountEntity extends BaseEntity {
     @Excel(name = "审核意见")
     private String comment;
 
+    private String channelId;//补单时候 渠道选择
+    private String productId;//补单时候 产品选择
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
     public String getLoginName() {
         return loginName;
     }

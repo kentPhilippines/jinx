@@ -1,7 +1,10 @@
 package com.ruoyi.system.mapper;
 
-import java.util.List;
+import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysRoleMenu;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 角色与菜单关联表 数据层
@@ -33,12 +36,40 @@ public interface SysRoleMenuMapper
      * @return 结果
      */
     public int selectCountRoleMenuByMenuId(Long menuId);
-    
+
     /**
      * 批量新增角色菜单信息
-     * 
+     *
      * @param roleMenuList 角色菜单列表
      * @return 结果
      */
     public int batchRoleMenu(List<SysRoleMenu> roleMenuList);
+
+
+    //商户子账户处理逻辑
+
+    /**
+     * 根据商户账户查询角色列表
+     *
+     * @param sysRole
+     * @return
+     */
+    List<SysRole> backSelectRoleListByMerchantId(SysRole sysRole);
+
+    /**
+     * 查询已经选中的角色
+     *
+     * @param userId
+     * @param merchantId
+     * @return
+     */
+    List<SysRole> findRolesCheckedByMerchantId(@Param("userId") Long userId, @Param("merchantId") String merchantId);
+
+    /**
+     * 查询全部角色根据商户账户
+     *
+     * @param merchantId
+     * @return
+     */
+    List<SysRole> findRolesMerchantAll(@Param("merchantId") String merchantId);
 }

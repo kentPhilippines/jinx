@@ -1,21 +1,19 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
+import com.ruoyi.alipay.domain.AlipayBankListEntity;
+import com.ruoyi.alipay.mapper.AlipayBankListEntityMapper;
+import com.ruoyi.alipay.service.IAlipayBankListEntityService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.constant.StaticConstants;
-import com.ruoyi.common.constant.SystemConstants;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
-import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.GenerateOrderNo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayBankListEntityMapper;
-import com.ruoyi.alipay.domain.AlipayBankListEntity;
-import com.ruoyi.alipay.service.IAlipayBankListEntityService;
-import com.ruoyi.common.core.text.Convert;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 银行卡列表Service业务层处理
@@ -25,7 +23,7 @@ import com.ruoyi.common.core.text.Convert;
  */
 @Service
 public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntityService {
-    @Autowired
+    @Resource
     private AlipayBankListEntityMapper alipayBankListEntityMapper;
 
     /**

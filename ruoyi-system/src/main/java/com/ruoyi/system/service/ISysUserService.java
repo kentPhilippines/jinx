@@ -1,8 +1,9 @@
 package com.ruoyi.system.service;
 
-import java.util.List;
-
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.SysUserRole;
+
+import java.util.List;
 
 /**
  * 用户 业务层
@@ -179,5 +180,14 @@ public interface ISysUserService {
      * @return 结果
      */
     int changeStatus(SysUser user);
+
+    //以下是商户后台的处理逻辑
+    List<SysUser> backSelectUserList(SysUser user);
+
+    int backInsertUserByMerchantId(SysUser user);
+
+    int updateUserEmailByUserId(String userId, String email);
+
+    SysUserRole selectUserRoleByUserId(Long userId);
 
 }

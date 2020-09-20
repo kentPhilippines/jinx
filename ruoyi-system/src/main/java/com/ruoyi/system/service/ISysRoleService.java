@@ -1,10 +1,10 @@
 package com.ruoyi.system.service;
 
-import java.util.List;
-import java.util.Set;
-
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUserRole;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 角色业务层
@@ -164,4 +164,17 @@ public interface ISysRoleService {
      * @return 结果
      */
     List selectRoleByNoticeId(String roldeIds);
+    //以下是商户账户的后台处理逻辑start
+
+    /**
+     * 查询商户自行新的角色列表
+     *
+     * @param sysRole
+     * @return
+     */
+    List<SysRole> backSelectRolesByMerchantId(SysRole sysRole);
+
+    List<SysRole> backFindCheckedRolesById(Long userId, String merchantId);
+
+    //以上是商户账户的后台处理逻辑end
 }

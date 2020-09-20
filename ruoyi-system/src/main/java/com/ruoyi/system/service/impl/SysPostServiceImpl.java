@@ -1,9 +1,5 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.BusinessException;
@@ -12,6 +8,10 @@ import com.ruoyi.system.domain.SysPost;
 import com.ruoyi.system.mapper.SysPostMapper;
 import com.ruoyi.system.mapper.SysUserPostMapper;
 import com.ruoyi.system.service.ISysPostService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 岗位信息 服务层处理
@@ -20,10 +20,10 @@ import com.ruoyi.system.service.ISysPostService;
  */
 @Service
 public class SysPostServiceImpl implements ISysPostService {
-    @Autowired
+    @Resource
     private SysPostMapper postMapper;
 
-    @Autowired
+    @Resource
     private SysUserPostMapper userPostMapper;
 
     /**
@@ -139,7 +139,7 @@ public class SysPostServiceImpl implements ISysPostService {
     @Override
     public String checkPostNameUnique(SysPost post) {
         Long postId = StringUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
-        SysPost info = postMapper.checkPostNameUnique(post.getPostName());
+        SysPost info = postMapper.checkPostNameUnique(post);
         if (StringUtils.isNotNull(info) && info.getPostId().longValue() != postId.longValue()) {
             return UserConstants.POST_NAME_NOT_UNIQUE;
         }
@@ -155,10 +155,31 @@ public class SysPostServiceImpl implements ISysPostService {
     @Override
     public String checkPostCodeUnique(SysPost post) {
         Long postId = StringUtils.isNull(post.getPostId()) ? -1L : post.getPostId();
-        SysPost info = postMapper.checkPostCodeUnique(post.getPostCode());
+        SysPost info = postMapper.checkPostCodeUnique(post);
         if (StringUtils.isNotNull(info) && info.getPostId().longValue() != postId.longValue()) {
             return UserConstants.POST_CODE_NOT_UNIQUE;
         }
         return UserConstants.POST_CODE_UNIQUE;
+    }
+
+
+    @Override
+    public List<SysPost> backSelectPostByMerchantId(SysPost sysPost) {
+        return postMapper.backSelectPostByMerchantId(sysPost);
+    }
+
+    @Override
+    public List<SysPost> backFindCheckedPostsById(Long userId, String merchantId) {
+        List<SysPost> userPosts = postMapper.findPostsCheckedByMerchantId(userId, merchantId);
+        List<SysPost> posts = postMapper.findPostsMerchantAll(merchantId);
+        for (SysPost post : posts) {
+            for (SysPost userRole : userPosts) {
+                if (post.getPostId().longValue() == userRole.getPostId().longValue()) {
+                    post.setFlag(true);
+                    break;
+                }
+            }
+        }
+        return posts;
     }
 }

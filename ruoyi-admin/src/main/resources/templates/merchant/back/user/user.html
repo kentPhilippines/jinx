@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('用户列表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+</head>
+<body class="gray-bg">
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                登录账号：<input name="loginName" type="text"/>
+                            </li>
+                            <li>
+                                手机号码：<input name="phonenumber" type="text"/>
+                            </li>
+                            <li class="select-selectpicker">
+                                <label>部门名称：</label>
+                                <select class="selectpicker" data-none-selected-text="请选择" id="deptId" name="deptId">
+                                    <option value="">所有</option>
+                                    <option th:each="dept : ${depts}" th:text="${dept.deptName}"
+                                            th:value="${dept.deptId}"></option>
+                                </select>
+                            </li>
+                            <li class="select-selectpicker">
+                                <label>用户状态：</label>
+                                <select class="selectpicker" name="status"
+                                        th:with="type=${@dict.getType('sys_normal_disable')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <label>创建时间： </label>
+                                <input class="time-input" id="startTime" name="params[beginTime]" placeholder="开始时间"
+                                       type="text"/>
+                                <span>-</span>
+                                <input class="time-input" id="endTime" name="params[endTime]" placeholder="结束时间"
+                                       type="text"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="back:merchant:user:add">
+                    <i class="fa fa-plus"></i> 新增
+                </a>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    const editFlag = [[${@permission.hasPermi('back:merchant:user:edit')}]];
+    const removeFlag = [[${@permission.hasPermi('back:merchant:user:remove')}]];
+    const resetPwdFlag = [[${@permission.hasPermi('back:merchant:resetPwd')}]];
+    const fundPwdFlag = [[${@permission.hasPermi('back:merchant:fundPwd')}]];
+    const bindGoogleFlag = [[${@permission.hasPermi('merchant:user:bind')}]];
+    const statusFlag = [[${@permission.hasPermi('back:merchant:status')}]];
+    const prefix = ctx + "back/merchant/user";
+    const prefix_ver = ctx + "verify/identity";
+
+    $(function () {
+        let panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        queryUserList();
+    });
+
+    function queryUserList() {
+        const options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            sortName: "createTime",
+            sortOrder: "desc",
+            modalName: "子账户",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'userId',
+                    title: '用户ID'
+                },
+                {
+                    field: 'loginName',
+                    title: '登录名称',
+                    sortable: true
+                },
+                {
+                    field: 'userName',
+                    title: '用户名称'
+                },
+                {
+                    field: 'accountType',
+                    title: '用户类型',
+                    formatter: function (value, row, index) {
+                        if (row.accountType === 0) {
+                            return '<span>一级账号</span>';
+                        } else {
+                            return '<span>二级子账号</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'dept.deptName',
+                    title: '部门名称'
+                },
+                {
+                    field: 'email',
+                    title: '邮箱',
+                    visible: false
+                },
+                {
+                    field: 'phonenumber',
+                    title: '手机'
+                },
+                {
+                    visible: statusFlag == 'hidden' ? false : true,
+                    title: '用户状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return isBind(row);
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function queryDeptTree() {
+        const url = ctx + "back/merchant/dept/treeData";
+        var options = {
+            url: url,
+            expandLevel: 2,
+            onClick: zOnClick
+        };
+        $.tree.init(options);
+
+        function zOnClick(event, treeId, treeNode) {
+            $("#deptId").val(treeNode.id);
+            $("#parentId").val(treeNode.pId);
+            $.table.search();
+        }
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+    $('#btnRefresh').click(function () {
+        queryDeptTree();
+    });
+
+    /* 用户管理-部门 */
+    function dept() {
+        const url = ctx + "system/dept";
+        $.modal.openTab("部门管理", url);
+    }
+
+    /* 用户管理-重置密码 */
+    function resetPwd(userId) {
+        var url = prefix + '/resetPwd/' + userId;
+        $.modal.open("重置用户登陆密码", url, '800', '300');
+    }
+
+    /* 用户管理-重置资金密码 */
+    function resetFundPwd(userId) {
+        var url = prefix + '/resetFundPwd/' + userId;
+        $.modal.open("重置资金管理密码", url, '800', '300');
+    }
+
+    /* 用户状态显示 */
+    function statusTools(row) {
+        if (row.status == 1) {
+            if (row.accountType === '0') {
+                return '<span style="color: red">关闭</span>';
+            } else {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="变更状态" onclick="enable(\'' + row.userId + '\')"></i> ';
+            }
+        } else {
+            if (row.accountType === '0') {
+                return '<span style="color: #00a65a">开启</span>';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="变更状态" onclick="disable(\'' + row.userId + '\')"></i> ';
+            }
+        }
+    }
+
+    /* 用户管理-停用 */
+    function disable(userId) {
+        $.modal.confirm("确认要停用用户吗？", function () {
+            $.operate.post(sys_prefix + "/changeStatus", {"userId": userId, "status": 1});
+        })
+    }
+
+    /* 用户管理启用 */
+    function enable(userId) {
+        $.modal.confirm("确认要启用用户吗？", function () {
+            $.operate.post(sys_prefix + "/changeStatus", {"userId": userId, "status": 0});
+        })
+    }
+
+
+    function isBind(row) {
+        if (row.isBind === '0') {
+            var actions = [];
+            if (row.accountType === 1) {
+                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.userId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.userId + '\')"><i class="fa fa-remove"></i> 删除</a> ');
+                actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetPwd(\'' + row.userId + '\')"><i class="fa fa-key"></i> 登陆密码</a> ');
+                actions.push('<a class="btn btn-info btn-xs ' + fundPwdFlag + '" href="javascript:void(0)" onclick="resetFundPwd(\'' + row.userId + '\')"><i class="fa fa-key"></i> 提现密码</a> ');
+                actions.push('<a class="btn btn-warning btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleBind(\'' + row.userId + '\',\'' + row.loginName + '\')"><i class="fa fa-close"></i> 绑定</a> ');
+            }
+            return actions.join('');
+        }
+        if (row.isBind === '1') {
+            var actions = [];
+            if (row.accountType === 1) {
+                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.userId + '\')"><i class="fa fa-edit"></i> 编辑</a> ');
+                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.userId + '\')"><i class="fa fa-remove"></i> 删除</a> ');
+                actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetPwd(\'' + row.userId + '\')"><i class="fa fa-key"></i> 登陆密码</a> ');
+                actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetFundPwd(\'' + row.userId + '\')"><i class="fa fa-key"></i> 提现密码</a> ');
+                actions.push('<a class="btn btn-primary btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleUnbind(\'' + row.userId + '\',\'' + row.loginName + '\')"><i class="fa fa-check"></i> 解绑</a>');
+            }
+            return actions.join('');
+        }
+
+    }
+
+    function googleBind(userId, loginName) {
+        $.modal.confirm("确认要为此用户【绑定】谷歌验证器吗？", function () {
+            layer.prompt({title: "请输入谷歌验证码", fromType: 1, maxLength: 6}, function (googleCode, index) {
+                layer.close(index);
+                $.ajax({
+                    type: "get",
+                    url: prefix_ver + "/google",
+                    data: {"googleCode": googleCode},
+                    dataType: "json",
+                    success: function (data) {
+                        if (0 == data.code) {
+                            $.operate.post(prefix + "/bind", {"userId": userId, "loginName": loginName, "isBind": '1'});
+                        } else {
+                            layer.msg(data.msg, {icon: 2, time: 2000});
+                        }
+                    }
+                });
+            });
+        })
+    }
+
+    function googleUnbind(userId, loginName) {
+        $.modal.confirm("确认要为此用户【解绑】谷歌验证器吗？", function () {
+            layer.prompt({title: "请输入谷歌验证码", fromType: 1, maxLength: 6}, function (googleCode, index) {
+                layer.close(index);
+                $.ajax({
+                    type: "get",
+                    url: prefix_ver + "/google",
+                    data: {"googleCode": googleCode},
+                    dataType: "json",
+                    success: function (data) {
+                        if (0 == data.code) {
+                            $.operate.post(prefix + "/bind", {"userId": userId, "loginName": loginName, "isBind": '0'});
+                        } else {
+                            layer.msg(data.msg, {icon: 2, time: 2000});
+                        }
+                    }
+                });
+            });
+        })
+    }
+</script>
+</body>
+</html>

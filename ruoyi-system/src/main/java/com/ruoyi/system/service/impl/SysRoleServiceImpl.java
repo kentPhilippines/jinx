@@ -1,10 +1,5 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.text.Convert;
@@ -20,6 +15,11 @@ import com.ruoyi.system.mapper.SysRoleMapper;
 import com.ruoyi.system.mapper.SysRoleMenuMapper;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.service.ISysRoleService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * 角色 业务层处理
@@ -28,16 +28,16 @@ import com.ruoyi.system.service.ISysRoleService;
  */
 @Service
 public class SysRoleServiceImpl implements ISysRoleService {
-    @Autowired
+    @Resource
     private SysRoleMapper roleMapper;
 
-    @Autowired
+    @Resource
     private SysRoleMenuMapper roleMenuMapper;
 
-    @Autowired
+    @Resource
     private SysUserRoleMapper userRoleMapper;
 
-    @Autowired
+    @Resource
     private SysRoleDeptMapper roleDeptMapper;
 
     /**
@@ -240,7 +240,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public String checkRoleNameUnique(SysRole role) {
         Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
-        SysRole info = roleMapper.checkRoleNameUnique(role.getRoleName());
+        SysRole info = roleMapper.checkRoleNameUnique(role);
         if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue()) {
             return UserConstants.ROLE_NAME_NOT_UNIQUE;
         }
@@ -256,7 +256,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public String checkRoleKeyUnique(SysRole role) {
         Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
-        SysRole info = roleMapper.checkRoleKeyUnique(role.getRoleKey());
+        SysRole info = roleMapper.checkRoleKeyUnique(role);
         if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue()) {
             return UserConstants.ROLE_KEY_NOT_UNIQUE;
         }
@@ -347,6 +347,27 @@ public class SysRoleServiceImpl implements ISysRoleService {
             for (SysRole role : roles) {
                 if (roleId.contains(role.getRoleId().toString())) {
                     role.setFlag(true);
+                }
+            }
+        }
+        return roles;
+    }
+
+    //商户子账户处理逻辑
+    @Override
+    public List<SysRole> backSelectRolesByMerchantId(SysRole sysRole) {
+        return roleMapper.backSelectRoleListByMerchantId(sysRole);
+    }
+
+    @Override
+    public List<SysRole> backFindCheckedRolesById(Long userId, String merchantId) {
+        List<SysRole> userRoles = roleMapper.findRolesCheckedByMerchantId(userId, merchantId);
+        List<SysRole> roles = roleMapper.findRolesMerchantAll(merchantId);
+        for (SysRole role : roles) {
+            for (SysRole userRole : userRoles) {
+                if (role.getRoleId().longValue() == userRole.getRoleId().longValue()) {
+                    role.setFlag(true);
+                    break;
                 }
             }
         }

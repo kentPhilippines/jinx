@@ -1,11 +1,5 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.Ztree;
@@ -15,6 +9,12 @@ import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.service.ISysDeptService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 部门管理 服务实现
@@ -23,7 +23,7 @@ import com.ruoyi.system.service.ISysDeptService;
  */
 @Service
 public class SysDeptServiceImpl implements ISysDeptService {
-    @Autowired
+    @Resource
     private SysDeptMapper deptMapper;
 
     /**
@@ -153,13 +153,50 @@ public class SysDeptServiceImpl implements ISysDeptService {
      */
     @Override
     public int insertDept(SysDept dept) {
+        int suNum = 0;
         SysDept info = deptMapper.selectDeptById(dept.getParentId());
         // 如果父节点不为"正常"状态,则不允许新增子节点
         if (!UserConstants.DEPT_NORMAL.equals(info.getStatus())) {
             throw new BusinessException("部门停用，不允许新增");
         }
-        dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
-        return deptMapper.insertDept(dept);
+        if (dept.getParams().isEmpty()) {
+            throw new BusinessException("请选择用户类型");
+        }
+        if ("1".equals(dept.getParams().get("BackDeptType").toString())) { //添加商户后台部门
+            if (StringUtils.isEmpty(dept.getMerchantId())) {
+                throw new BusinessException("商户账户不能为空");
+            } else {
+                SysDept d = deptMapper.checkUniqueDeptByMerchantId(dept.getMerchantId());
+                if (null != d) {
+                    throw new BusinessException("此商户账户已添加过部门，不允许重复添加");
+                }
+                dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
+                suNum = deptMapper.insertDept(dept);
+                SysDept p = deptMapper.checkUniqueDeptByMerchantId(dept.getMerchantId());
+                if (suNum > 0) { //插入成功后
+                    //为商户后台增加默认部门 客服 运营 其它
+                    String[] defaultDept = new String[]{"客服", "运营", "财务", "其它"};
+                    for (int i = 0; i < defaultDept.length; i++) {
+                        SysDept mDept = new SysDept();
+                        mDept.setAccountType(1);
+                        mDept.setMerchantId(p.getMerchantId());
+                        mDept.setDeptName(defaultDept[i]);
+                        mDept.setOrderNum(String.valueOf(i));
+                        mDept.setCreateBy(dept.getCreateBy());
+                        mDept.setStatus("0");
+                        mDept.setParentId(p.getDeptId());
+                        mDept.setAncestors(p.getAncestors() + "," + p.getDeptId());
+                        deptMapper.insertDept(mDept);
+                    }
+                }
+            }
+        } else {
+            //添加平台部门
+            dept.setMerchantId(null);
+            dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
+            suNum = deptMapper.insertDept(dept);
+        }
+        return suNum;
     }
 
     /**
@@ -236,10 +273,53 @@ public class SysDeptServiceImpl implements ISysDeptService {
     @Override
     public String checkDeptNameUnique(SysDept dept) {
         Long deptId = StringUtils.isNull(dept.getDeptId()) ? -1L : dept.getDeptId();
-        SysDept info = deptMapper.checkDeptNameUnique(dept.getDeptName(), dept.getParentId());
+        SysDept info = deptMapper.checkDeptNameUnique(dept);
+//        SysDept info = deptMapper.checkDeptNameUnique(dept.getDeptName(), dept.getParentId());
         if (StringUtils.isNotNull(info) && info.getDeptId().longValue() != deptId.longValue()) {
             return UserConstants.DEPT_NAME_NOT_UNIQUE;
         }
         return UserConstants.DEPT_NAME_UNIQUE;
     }
+
+    @Override
+    public List<SysDept> backSelectDeptListByMerchantId(SysDept sysDept) {
+        return deptMapper.backSelectDeptListByMerchantId(sysDept);
+    }
+
+    @Override
+    public SysDept backSelectDeptById(SysDept sysDept) {
+        SysDept dept = deptMapper.backSelectDeptById(sysDept);
+        return dept;
+    }
+
+    @Override
+    public List<Ztree> backSelectDeptMerchantTree(SysDept sysDept) {
+        List<SysDept> deptList = deptMapper.backSelectDeptList2Tree(sysDept);
+        List<Ztree> ztrees = initZtree(deptList);
+        return ztrees;
+    }
+
+    /**
+     * 商户子账户新增岗位选择
+     *
+     * @param dept
+     * @return
+     */
+    @Override
+    public int insertDeptSon(SysDept dept) {
+        SysDept info = deptMapper.selectDeptById(dept.getParentId());
+        SysDept mDept = new SysDept();
+        mDept.setAccountType(dept.getAccountType());
+        mDept.setMerchantId(dept.getMerchantId());
+        mDept.setDeptName(dept.getDeptName());
+        mDept.setOrderNum("1");
+        mDept.setCreateBy(dept.getCreateBy());
+        mDept.setStatus("0");
+        mDept.setParentId(info.getDeptId());
+        mDept.setAncestors(info.getAncestors() + "," + info.getDeptId());
+        int i = deptMapper.insertDept(mDept);
+        return i;
+    }
+
+
 }
