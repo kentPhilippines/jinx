@@ -23,6 +23,10 @@
                             <span>申请人：</span>
                             <input type="text" name="accname"/>
                         </li>
+                        <li>
+                            <span>商户代付订单号：</span>
+                            <input name="appOrderId" type="text"/>
+                        </li>
                         <li class="select-selectpicker">
                             <label>订单状态： </label>
                             <select id="orderStatus" name="orderStatus"
@@ -31,6 +35,30 @@
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
+                            </select>
+                        <li class="select-selectpicker">
+                            <label>是否为API： </label>
+                            <select data-none-selected-text="请选择" id="retain1" name="retain1">
+                                <option value="">所有</option>
+                                <option value="2">api代付</option>
+                                <option value="1">后台代付</option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>配置出款渠道：</label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="witChannel"
+                                    name="witChannel">
+                                <option value="">所有</option>
+                                <option th:each="channel : ${channelList}" th:text="${channel.userName}"
+                                        th:value="${channel.userId}"></option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>实际除款渠道：</label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="channelId" name="channelId">
+                                <option value="">所有</option>
+                                <option th:each="channel : ${channelList}" th:text="${channel.userName}"
+                                        th:value="${channel.userId}"></option>
                             </select>
                         </li>
                         <li class="select-time">
@@ -53,8 +81,13 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="withdrawal:alipay:merchant:export">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()"
+               shiro:hasPermission="withdrawal:alipay:merchant:export">
                 <i class="fa fa-download"></i> 导出
+            </a>
+            <a class="btn btn-primary" onclick="$.operate.statistics('统计当天代付数据')"
+               shiro:hasPermission="wit:order:statistics:chanel">
+                <i class="fa fa-bar-chart"></i> 当天数据统计
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -75,7 +108,7 @@
             url: prefix + "/merchant/list",
             updateUrl: prefix + "/merchant/edit/{id}",
             detailUrl: prefix + "/merchant/detail/{id}",
-            statisticsUrl: prefix + "/statistics/merchant/payfor",
+            statisticsUrl: prefix + "/statistics/merchant/channelWit",
             exportUrl: prefix + "/merchant/export",
             modalName: "会员提现记录",
             columns: [{
@@ -89,6 +122,10 @@
                 {
                     field: 'orderId',
                     title: '平台订单'
+                },
+                {
+                    field: 'appOrderId',
+                    title: '商户订单'
                 },
                 {
                     field: 'apply',
@@ -106,17 +143,16 @@
                     }
                 },
                 {
-
                     field: 'bankNo',
-                    title: '银行卡号'
-                },
-                {
-                    field: 'accname',
-                    title: '开户人'
-                },
-                {
-                    field: 'bankName',
-                    title: '开户行'
+                    title: '银行信息',
+                    formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '银行卡号：' + row.bankNo + '</li>'
+                        table += '<li>' + '开户人：' + row.accname + '</li>'
+                        table += '<li>' + '开户行：' + row.bankName + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
                 {
                     field: 'withdrawType',

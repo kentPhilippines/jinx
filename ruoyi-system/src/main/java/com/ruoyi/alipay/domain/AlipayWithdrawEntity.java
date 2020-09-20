@@ -17,10 +17,24 @@ import java.util.Date;
 public class AlipayWithdrawEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
     private String bankcode;
-    public void  setBankcode(String bankcode){this.bankcode = bankcode;}
-    public String getBankcode(){
+    private String appOrderId;
+
+    public String getAppOrderId() {
+        return appOrderId;
+    }
+
+    public void setAppOrderId(String appOrderId) {
+        this.appOrderId = appOrderId;
+    }
+
+    public void setBankcode(String bankcode) {
+        this.bankcode = bankcode;
+    }
+
+    public String getBankcode() {
         return this.bankcode;
     }
+
     /**
      * 数据id(主键索引)
      */

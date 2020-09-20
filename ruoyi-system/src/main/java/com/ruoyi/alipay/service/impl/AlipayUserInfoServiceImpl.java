@@ -10,9 +10,9 @@ import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.common.utils.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Service
 public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
-    @Autowired
+    @Resource
     private AlipayUserInfoMapper alipayUserInfoMapper;
 
     /**

@@ -1,17 +1,15 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.List;
-
-import com.ruoyi.common.core.domain.StatisticsEntity;
-import com.ruoyi.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayWithdrawEntityMapper;
 import com.ruoyi.alipay.domain.AlipayWithdrawEntity;
+import com.ruoyi.alipay.mapper.AlipayWithdrawEntityMapper;
 import com.ruoyi.alipay.service.IAlipayWithdrawEntityService;
 import com.ruoyi.common.annotation.DataSource;
-import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.enums.DataSourceType;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 会员提现记录Service业务层处理
@@ -21,9 +19,8 @@ import com.ruoyi.common.enums.DataSourceType;
  */
 @Service
 public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntityService {
-    @Autowired
+    @Resource
     private AlipayWithdrawEntityMapper alipayWithdrawEntityMapper;
-
     /**
      * 查询会员提现记录
      *
@@ -51,6 +48,36 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public StatisticsEntity selectPayforStatisticsDataByDay(String dayStart, String dayEnd) {
-       return alipayWithdrawEntityMapper.selectPayforStatDataByDay(dayStart, dayEnd);
+        return alipayWithdrawEntityMapper.selectPayforStatDataByDay(dayStart, dayEnd);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<StatisticsEntity> statisticsWit(StatisticsEntity statisticsEntity) {
+        /**
+         * #########  查询类型包括
+         * 1,账户类型
+         * 2,代付金额累计
+         * 3,代付手续费累计
+         * 4,api 和后台代付划分
+         * 5,不同渠道代付划分
+         * ############以上是商户维度数据
+         */
+
+
+        /**
+         * ##############
+         * 渠道维度数据
+         * 1,账户类型
+         * 2,代付金额累计
+         * 3,代付手续费累计
+         * 4,api 和后台代付划分
+         */
+
+
+        List<StatisticsEntity> staList = alipayWithdrawEntityMapper.statisticsWit(statisticsEntity);
+
+
+        return staList;
     }
 }

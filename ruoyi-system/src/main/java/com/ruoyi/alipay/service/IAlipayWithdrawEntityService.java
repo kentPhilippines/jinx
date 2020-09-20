@@ -31,9 +31,19 @@ public interface IAlipayWithdrawEntityService
 
     /**
      * 查询商户提现统计数据
+     *
      * @param dayStart
      * @param dayEnd
      * @return
      */
     StatisticsEntity selectPayforStatisticsDataByDay(String dayStart, String dayEnd);
+
+
+    /**
+     * 代付数据统计
+     *
+     * @param statisticsEntity
+     * @return
+     */
+    List<StatisticsEntity> statisticsWit(StatisticsEntity statisticsEntity);
 }

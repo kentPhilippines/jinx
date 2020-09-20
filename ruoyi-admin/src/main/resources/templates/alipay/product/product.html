@@ -86,7 +86,16 @@
                 title: '产品ID'
             },{
                 field: 'productCode',
-                title: '产品code'
+                title: '产品code',
+                formatter: function (value, row, index) {
+                    if (value == 2 || value == '2') {
+                        return '交易类型';
+                    } else {
+                        return '代付类型';
+                    }
+                    ;
+                }
+
             },{
                 field: 'productName',
                 title: '产品名称'

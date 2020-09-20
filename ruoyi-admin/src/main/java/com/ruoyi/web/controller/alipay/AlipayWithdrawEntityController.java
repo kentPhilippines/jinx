@@ -25,6 +25,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +75,9 @@ public class AlipayWithdrawEntityController extends BaseController {
     }
 
     @GetMapping("/merchant")
-    public String merchant_withdrawal() {
+    public String merchant_withdrawal(ModelMap modelMap) {
+        List<AlipayUserFundEntity> channelId = alipayUserFundEntityService.findUserFundRate();
+        modelMap.put("channelList", channelId);
         return prefix + "/merchant_withdrawal";
     }
     @Autowired  IAlipayProductService iAlipayProductService;
@@ -92,8 +95,14 @@ public class AlipayWithdrawEntityController extends BaseController {
         alipayProductEntity.setStatus(1);
         List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
-        for (AlipayWithdrawEntity order : list){
+        List<AlipayUserFundEntity> channel = alipayUserFundEntityService.findUserFundRate();
+        ConcurrentHashMap<String, AlipayUserFundEntity> channelMap = channel.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        for (AlipayWithdrawEntity order : list) {
             AlipayProductEntity product = prCollect.get(order.getWitType());
+            if (StrUtil.isNotBlank(order.getChannelId()))
+                order.setChannelId(channelMap.get(order.getChannelId()).getUserName());
+            if (StrUtil.isNotBlank(order.getWitChannel()))
+                order.setWitChannel(channelMap.get(order.getWitChannel()).getUserName());
             if (ObjectUtil.isNotNull(product))
                 order.setWitType(product.getProductName());
         }
@@ -208,5 +217,20 @@ public class AlipayWithdrawEntityController extends BaseController {
         mmap.put("statisticsEntity", statisticsEntity);
         return prefix + "/currentData";
     }
+
+    @GetMapping("/statistics/merchant/channelWit")
+    public String channelWit() {
+        return prefix + "/currentTable";
+    }
+
+    @PostMapping("/statistics/merchant/wit")
+    @ResponseBody
+    public TableDataInfo staWit(StatisticsEntity statisticsEntity) {
+        List<StatisticsEntity> staList = new ArrayList<>();
+        startPage();
+        staList = alipayWithdrawEntityService.statisticsWit(statisticsEntity);
+        return getDataTable(staList);
+    }
+
 
 }

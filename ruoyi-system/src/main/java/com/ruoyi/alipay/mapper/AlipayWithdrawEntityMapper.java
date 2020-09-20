@@ -39,4 +39,24 @@ public interface AlipayWithdrawEntityMapper {
             "from " +
             "alipay_withdraw where createTime BETWEEN #{dayStart} AND #{dayEnd} and withdrawType = 1 and status = 1")
     StatisticsEntity selectPayforStatDataByDay(@Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
+
+
+    @Select("<script>" +
+            "select " +
+            " userId as userId ," +
+            "COALESCE(SUM(amount),0) totalAmount," +
+            "COALESCE(SUM(CASE orderStatus WHEN 2 THEN amount ELSE 0 END),0) successAmount," +
+            "COUNT(1) totalCount," +
+            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount ," +
+            "coalesce(CASE retain1 WHEN 2   THEN 'API' ELSE 'MANAGE' END) userAgent " +     //api代付标示
+            "from " +
+            "alipay_withdraw where " +
+            "createTime BETWEEN #{statisticsEntity.params.dayStart} AND #{statisticsEntity.params.dayEnd} " +
+            "and withdrawType = 1 and status = 1 " +
+            "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
+            "and userId = #{statisticsEntity.userId} " +
+            "</if>" +
+            "group by userId, witChannel ,channelId , retain1" +
+            "</script>")
+    List<StatisticsEntity> statisticsWit(@Param("statisticsEntity") StatisticsEntity statisticsEntity);
 }

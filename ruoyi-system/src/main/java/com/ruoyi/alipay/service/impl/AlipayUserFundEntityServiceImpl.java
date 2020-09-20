@@ -7,9 +7,9 @@ import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,11 +20,12 @@ import java.util.List;
  */
 @Service
 public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntityService {
-	@Autowired
+	@Resource
 	private AlipayUserFundEntityMapper alipayUserFundEntityMapper;
 
 	/**
 	 * 查询用户资金账户
+	 *
 	 * @param id 用户资金账户ID
 	 * @return 用户资金账户
 	 */

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:include="include :: header('当日渠道代付统计')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="formId">
+				<div class="select-list">
+					<ul>
+						<li>
+							<span>账户：</span>
+							<input id="userId" name="userId" type="text"/>
+						</li>
+						<li class="select-time">
+							<span>创建时间：</span>
+							<input class="time-input" id="startTime" name="params[dayStart]" placeholder="开始时间"
+								   type="text"/>
+							<span>-</span>
+							<input class="time-input" id="endTime" name="params[dayEnd]" placeholder="结束时间"
+								   type="text"/>
+						</li>
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+									class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+									class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table"></table>
+		</div>
+	</div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+	const prefix = ctx + "alipay/withdrawal";
+
+	$(function () {
+		var options = {
+			url: prefix + "/statistics/merchant/wit",
+			showSearch: false,
+			showRefresh: false,
+			showToggle: false,
+			showColumns: false,
+			columns: [{
+				checkbox: true
+			},
+				{
+					field: 'userId',
+					title: '用户账户'
+				},
+				{
+					field: 'userName',
+					title: '用户昵称'
+				},
+				{
+					field: 'productName',
+					title: '产品名称'
+				},
+				{
+					field: 'totalCount',
+					title: '交易订单总数'
+				},
+				{
+					field: 'successCount',
+					title: '成功订单总数'
+				},
+				{
+					field: 'totalAmount',
+					title: '交易订单金额'
+				},
+				{
+					field: 'successAmount',
+					title: '成功订单金额'
+				},
+				{
+					field: 'userAgent',
+					title: 'api代付'
+				}
+			]
+		};
+		$.table.init(options);
+	});
+
+	function calSuccessPercent(row) {
+		let molecule = row.successCount;
+		let denominator = row.totalCount;
+		if (molecule == 0 || denominator == 0) {
+			return '<span>0.00%</span>';
+		} else {
+			let result = Math.round(molecule / denominator * 10000) / 100.00;
+			return '<span>' + result + '%</span>';
+		}
+	}
+
+	//初始化时间
+	layui.use('laydate', function () {
+		const laydate = layui.laydate;
+		laydate.render({
+			elem: '#startTime',
+			format: 'yyyy-MM-dd HH:mm:ss',
+			type: 'datetime',
+			value: new Date().toLocaleDateString().replace(/\//g, "-") + " 00:00:00",
+			isInitValue: true
+		});
+		laydate.render({
+			elem: '#endTime',
+			format: 'yyyy-MM-dd HH:mm:ss',
+			type: 'datetime',
+			value: new Date().toLocaleDateString().replace(/\//g, "-") + " 23:59:59",
+			isInitValue: true
+		});
+	});
+</script>
+</body>
+</html>
