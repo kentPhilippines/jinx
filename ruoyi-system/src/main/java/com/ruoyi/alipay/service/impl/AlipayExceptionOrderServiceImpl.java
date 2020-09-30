@@ -1,26 +1,30 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayExceptionOrderMapper;
 import com.ruoyi.alipay.domain.AlipayExceptionOrder;
+import com.ruoyi.alipay.mapper.AlipayExceptionOrderMapper;
 import com.ruoyi.alipay.service.IAlipayExceptionOrderService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 拦截订单Service业务层处理
+ *
  * @author ruoyi
  * @date 2020-03-19
  */
 @Service
 public class AlipayExceptionOrderServiceImpl implements IAlipayExceptionOrderService {
-	@Autowired
+	@Resource
 	private AlipayExceptionOrderMapper alipayExceptionOrderMapper;
+
 	/**
 	 * 查询拦截订单
+	 *
 	 * @param id 拦截订单ID
 	 * @return 拦截订单
 	 */

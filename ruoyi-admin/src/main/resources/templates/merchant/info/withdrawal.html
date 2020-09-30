@@ -76,13 +76,15 @@
             columns: [{
                 checkbox: true
             },
-                { field: 'orderId', title: '平台订单' },
-                { field: 'userId', title: '商户账户' },
-                { field: 'bankNo', title: '银行卡号' },
-                { field: 'bankName', title: '开户银行' },
-                { field: 'accname', title: '提现人姓名' },
-                { field: 'apply', title: '申请人(后台)' },
-                { field: 'orderStatus', title: '状态',
+                {field: 'orderId', title: '平台订单'},
+                {field: 'appOrderId', title: '商户提交订单'},
+                {field: 'userId', title: '商户账户'},
+                {field: 'bankNo', title: '银行卡号'},
+                {field: 'bankName', title: '开户银行'},
+                {field: 'accname', title: '提现人姓名'},
+                {field: 'apply', title: '申请人(后台)'},
+                {
+                    field: 'orderStatus', title: '状态',
                     formatter: function (value, row, index) {
                         return $.table.selectDictLabel(orderStatus, value);
                     }

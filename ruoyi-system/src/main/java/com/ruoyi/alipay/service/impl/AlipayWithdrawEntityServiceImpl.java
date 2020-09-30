@@ -61,7 +61,7 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
          * 3,代付手续费累计
          * 4,api 和后台代付划分
          * 5,不同渠道代付划分
-         * ############以上是商户维度数据
+         * ############以上是商·户维度数据
          */
 
 

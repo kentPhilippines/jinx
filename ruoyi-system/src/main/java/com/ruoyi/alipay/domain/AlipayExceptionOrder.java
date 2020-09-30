@@ -1,9 +1,10 @@
 package com.ruoyi.alipay.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.Date;
 
 /**
@@ -46,23 +47,33 @@ public class AlipayExceptionOrder extends BaseEntity {
 	@Excel(name = "异常订单生成IP(源头ip)")
 	private String orderGenerationip;
 
-	/** 异常说明 */
+	/**
+	 * 异常说明
+	 */
 	@Excel(name = "异常说明")
 	private String explains;
 
-	/** 操作人 */
+	/**
+	 * 操作人
+	 */
 	@Excel(name = "操作人")
 	private String operation;
 
-	/** 数据修改时间 */
+	/**
+	 * 数据修改时间
+	 */
 	@Excel(name = "数据修改时间", width = 30, dateFormat = "yyyy-MM-dd")
-	private Date submittime;
+	private Date submitTime;
 
-	/** 数据提交系统 */
+	/**
+	 * 数据提交系统
+	 */
 	@Excel(name = "数据提交系统")
 	private String submitsystem;
 
-	/** 状态:1可使用；0不可使用 */
+	/**
+	 * 状态:1可使用；0不可使用
+	 */
 	@Excel(name = "状态:1可使用；0不可使用")
 	private Integer status;
 
@@ -158,12 +169,12 @@ public class AlipayExceptionOrder extends BaseEntity {
 		return operation;
 	}
 
-	public void setSubmittime(Date submittime) {
-		this.submittime = submittime;
+	public Date getSubmitTime() {
+		return submitTime;
 	}
 
-	public Date getSubmittime() {
-		return submittime;
+	public void setSubmitTime(Date submitTime) {
+		this.submitTime = submitTime;
 	}
 
 	public void setSubmitsystem(String submitsystem) {
@@ -213,8 +224,8 @@ public class AlipayExceptionOrder extends BaseEntity {
 				.append("exceptStatus", getExceptStatus()).append("exceptType", getExceptType())
 				.append("orderAccount", getOrderAccount()).append("exceptOrderAmount", getExceptOrderAmount())
 				.append("orderGenerationip", getOrderGenerationip()).append("explains", getExplains())
-				.append("operation", getOperation()) 
-				.append("submittime", getSubmittime()).append("submitsystem", getSubmitsystem())
+				.append("operation", getOperation())
+				.append("submittime", getSubmitTime()).append("submitsystem", getSubmitsystem())
 				.append("status", getStatus()).append("retain1", getRetain1()).append("retain2", getRetain2())
 				.append("retain3", getRetain3()).toString();
 	}

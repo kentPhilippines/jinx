@@ -1,16 +1,16 @@
 package com.ruoyi.alipay.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
 
 /**
  * 用户资金账户对象 alipay_user_fund
  *
- * @author kiwi
+ * @author kent
  * @date 2020-03-17
  */
 public class AlipayUserFundEntity extends BaseEntity {

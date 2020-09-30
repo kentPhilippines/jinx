@@ -1,113 +1,49 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('拦截订单列表')" />
+    <th:block th:include="include :: header('拦截订单列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <p>流水单号�?</p>
-                                <input type="text" name="orderexceptId"/>
-                            </li>
-                            <li>
-                                <p>关联订单单号�?</p>
-                                <input type="text" name="orderId"/>
-                            </li>
-                            <li>
-                                <p>异常订单状态：</p>
-                                <select name="exceptStatus" th:with="type=${@dict.getType('')}">
-                                    <option value="">所�?</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>异常类型�?</p>
-                                <select name="exceptType" th:with="type=${@dict.getType('')}">
-                                    <option value="">所�?</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>订单关联商户账号�?</p>
-                                <input type="text" name="orderAccount"/>
-                            </li>
-                            <li>
-                                <p>异常订单金额�?</p>
-                                <input type="text" name="exceptOrderAmount"/>
-                            </li>
-                            <li>
-                                <p>异常订单生成IP(源头ip)�?</p>
-                                <input type="text" name="orderGenerationip"/>
-                            </li>
-                            <li>
-                                <p>异常说明�?</p>
-                                <input type="text" name="explains"/>
-                            </li>
-                            <li>
-                                <p>操作人：</p>
-                                <input type="text" name="operation"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据生成时间�?</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时�?" name="params[beginCreatetime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreatetime]"/>
-                            </li>
-                            <li class="select-time">
-                                <p>数据修改时间�?</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时�?" name="params[beginSubmittime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSubmittime]"/>
-                            </li>
-                            <li>
-                                <p>数据提交系统�?</p>
-                                <input type="text" name="submitsystem"/>
-                            </li>
-                            <li>
-                                <p>状�?:1可使用；0不可使用�?</p>
-                                <select name="status">
-                                    <option value="">所�?</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>保留字段(添加业务使用)�?</p>
-                                <input type="text" name="retain1"/>
-                            </li>
-                            <li>
-                                <p>保留字段(添加业务使用)�?</p>
-                                <input type="text" name="retain2"/>
-                            </li>
-                            <li>
-                                <p>保留字段(添加业务使用)�?</p>
-                                <input type="text" name="retain3"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>流水单号</p>
+                            <input type="text" name="orderexceptId"/>
+                        </li>
+                        <li>
+                            <p>关联订单单号</p>
+                            <input type="text" name="orderId"/>
+                        </li>
+                        <li>
+                            <p>订单关联商户账号</p>
+                            <input type="text" name="orderAccount"/>
+                        </li>
+                        <li>
+                            <p>源头ip</p>
+                            <input type="text" name="orderGenerationip"/>
+                        </li>
+
+                        <li class="select-time">
+                            <p>数据生成时间</p>
+                            <input class="time-input" id="startTime" name="params[beginCreateTime]" placeholder="开始时�?"
+                                   type="text"/>
+                            <span>-</span>
+                            <input class="time-input" id="endTime" name="params[endCreateTime]" placeholder="结束时间"
+                                   type="text"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
                     </div>
                 </form>
-            </div>
-
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:order:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:order:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:order:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:order:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -116,103 +52,93 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('alipay:order:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:order:remove')}]];
-        var prefix = ctx + "system/order";
-
+        var prefix = ctx + "alipay/export";
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
+                detailUrl: prefix + "/edit/{id}",
                 modalName: "拦截订单",
                 columns: [{
                     checkbox: true
                 },
-                {
-                    field : 'id', 
-                    title : '数据id',
-                    visible: false
+                    {
+                        field: 'id',
+                        title: '数据id',
+                        visible: false
+                    },
+                    {
+                        field: 'orderexceptId',
+                        title: '流水单号'
+                    },
+                    {
+                        field: 'orderId',
+                        title: '关联订单单号'
+                    },
+                    {
+                        field: 'exceptType',
+                        title: '异常类型'
                 },
-                {
-                    field : 'orderexceptId', 
-                    title : '流水单号'
-                },
-                {
-                    field : 'orderId', 
-                    title : '关联订单单号'
-                },
-                {
-                    field : 'exceptStatus', 
-                    title : '异常订单状�?'
-                },
-                {
-                    field : 'exceptType', 
-                    title : '异常类型'
-                },
-                {
-                    field : 'orderAccount', 
-                    title : '订单关联商户账号'
-                },
-                {
-                    field : 'exceptOrderAmount', 
-                    title : '异常订单金额'
-                },
-                {
-                    field : 'orderGenerationip', 
-                    title : '异常订单生成IP(源头ip)'
-                },
-                {
-                    field : 'explains', 
-                    title : '异常说明'
-                },
-                {
-                    field : 'operation', 
-                    title : '操作�?'
-                },
-                {
-                    field : 'createtime', 
-                    title : '数据生成时间'
-                },
-                {
-                    field : 'submittime', 
-                    title : '数据修改时间'
-                },
-                {
-                    field : 'submitsystem', 
-                    title : '数据提交系统'
-                },
-                {
-                    field : 'status', 
-                    title : '状�?:1可使用；0不可使用'
-                },
-                {
-                    field : 'retain1', 
-                    title : '保留字段(添加业务使用)'
-                },
-                {
-                    field : 'retain2', 
-                    title : '保留字段(添加业务使用)'
-                },
-                {
-                    field : 'retain3', 
-                    title : '保留字段(添加业务使用)'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
-                }]
+                    {
+                        field: 'orderAccount',
+                        title: '商户账号'
+                    },
+                    {
+                        field: 'exceptOrderAmount',
+                        title: '异常金额'
+                    },
+                    {
+                        field: 'orderGenerationip',
+                        title: '源头ip'
+                    },
+                    {
+                        field: 'explains',
+                        title: '异常说明'
+                    },
+                    {
+                        field: 'operation',
+                        title: '操作'
+                    },
+                    {
+                        field: 'createTime',
+                        title: '数据生成时间'
+                    },
+                    {
+                        field: 'submitTime',
+                        title: '数据修改时间'
+                    },
+
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-shower"></i>查看明细</a> ');
+                            return actions.join('');
+                        }
+                    }]
             };
             $.table.init(options);
         });
+        //初始化时间
+        layui.use('laydate', function () {
+            const laydate = layui.laydate;
+            laydate.render({
+                elem: '#startTime',
+                format: 'yyyy-MM-dd HH:mm:ss',
+                type: 'datetime',
+                value: new Date().toLocaleDateString().replace(/\//g, "-") + " 00:00:00",
+                isInitValue: true
+            });
+            laydate.render({
+                elem: '#endTime',
+                format: 'yyyy-MM-dd HH:mm:ss',
+                type: 'datetime',
+                value: new Date().toLocaleDateString().replace(/\//g, "-") + " 23:59:59",
+                isInitValue: true
+            });
+        })
+
+
     </script>
 </body>
 </html>

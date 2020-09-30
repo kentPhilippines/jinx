@@ -1,13 +1,13 @@
 package com.ruoyi.common.core.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.utils.DateUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ruoyi.common.utils.DateUtils;
 
 /**
  * Entity基类
@@ -32,6 +32,19 @@ public class BaseEntity implements Serializable {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createtime;
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
 
     /**
      * 更新者
