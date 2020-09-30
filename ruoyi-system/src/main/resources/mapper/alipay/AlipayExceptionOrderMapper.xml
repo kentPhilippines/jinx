@@ -57,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="retain2 != null  and retain2 != ''">and retain2 = #{retain2}</if>
             <if test="retain3 != null  and retain3 != ''">and retain3 = #{retain3}</if>
         </where>
+        order by id desc
     </select>
     
     <select id="selectAlipayExceptionOrderById" parameterType="Long" resultMap="AlipayExceptionOrderResult">
