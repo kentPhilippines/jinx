@@ -4,13 +4,14 @@ import com.ruoyi.alipay.domain.AlipayWithdrawEntity;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
 /**
  * 会员提现记录Mapper接口
  *
- * @author kiwi
+ * @author kent
  * @date 2020-03-17
  */
 public interface AlipayWithdrawEntityMapper {
@@ -59,4 +60,8 @@ public interface AlipayWithdrawEntityMapper {
             "group by userId, witChannel ,channelId , retain1" +
             "</script>")
     List<StatisticsEntity> statisticsWit(@Param("statisticsEntity") StatisticsEntity statisticsEntity);
+
+
+    @Update("update alipay_withdraw set orderStatus = 4 where id = #{id}")
+    void updateWitStatus(@Param("id") Long id);
 }

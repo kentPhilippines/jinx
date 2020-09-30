@@ -158,7 +158,10 @@ public class AlipayWithdrawEntityController extends BaseController {
         mapParam.put("witType", alipayWithdrawEntity.getWitType());
         if ("3".equals(alipayWithdrawEntity.getOrderStatus())) {
             mapParam.put("ip", IpUtils.getHostIp());
+        } else if ("100".equals(alipayWithdrawEntity.getOrderStatus())) {//商户后台大夫推送处理，将订单修改为已推送
+            alipayWithdrawEntityService.updateWitStatus(alipayWithdrawEntity.getId());
         }
+
         return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
 

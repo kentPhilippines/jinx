@@ -80,4 +80,10 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
 
         return staList;
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void updateWitStatus(Long id) {
+        alipayWithdrawEntityMapper.updateWitStatus(id);
+    }
 }
