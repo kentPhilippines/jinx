@@ -102,7 +102,7 @@
     const detailFlag = [[${@permission.hasPermi('withdrawal:merchant:detail')}]];
     const orderStatus = [[${@dict.getType('withdrawal_status')}]];
     const prefix = ctx + "alipay/withdrawal";
-
+    const prefix_ver = ctx + "verify/identity";
     $(function () {
         var options = {
             url: prefix + "/merchant/list",
@@ -206,11 +206,16 @@
 
     /* 状态显示 */
     function check(row) {
+        var actions = [];
         if (row.orderStatus === '1') {
-            return '<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>';
+            actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>')
         } else if (row.orderStatus === '2' || row.orderStatus === '3') {
-            return '<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i> 详情</a>';
+            if (row.orderStatus === '2') {
+                actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-angellist"></i>回滚</a>')
+            }
+            actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i> 详情</a>');
         }
+        return actions.join('');
     }
 
     //初始化时间
@@ -231,7 +236,6 @@
             isInitValue: true
         });
     });
-
 
 
 </script>
