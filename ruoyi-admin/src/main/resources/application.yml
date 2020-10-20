@@ -56,6 +56,7 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+    #发布到运营时候修改该配置
   profiles:
     active: druid
   # 文件上传
