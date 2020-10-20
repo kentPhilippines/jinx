@@ -86,4 +86,14 @@ public interface IAlipayUserRateEntityService {
      * @return
      */
     List<AlipayUserRateEntity> findAgentRateLiat(String merchantId, AlipayUserRateEntity rate);
+
+    /**
+     * 检查当前费率是否有重复配置，和  当前费率是否有配置渠道费率
+     *
+     * @param alipayUserRateEntity
+     * @return
+     */
+    Boolean clickFee(AlipayUserRateEntity alipayUserRateEntity);
+
+    Boolean isAgentFee(AlipayUserRateEntity alipayUserRateEntity);
 }

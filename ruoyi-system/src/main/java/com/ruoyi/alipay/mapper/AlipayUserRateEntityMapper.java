@@ -146,4 +146,16 @@ public interface AlipayUserRateEntityMapper {
             "</script> "
     )
     List<AlipayUserRateEntity> findAgentRateLiat(@Param("merchantId") String merchantId, @Param("rate") AlipayUserRateEntity rate);
+
+
+    /**
+     * 根据账号渠道ID 产品ID 查询费率情况
+     *
+     * @param userId
+     * @param channelId
+     * @param payTypr
+     * @return
+     */
+    @Select("select * from alipay_user_rate where userId = #{userId}  and channelId = #{channelId} and payTypr = #{payTypr}")
+    AlipayUserRateEntity findFee(@Param("userId") String userId, @Param("channelId") String channelId, @Param("payTypr") String payTypr);
 }

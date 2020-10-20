@@ -14,10 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="createTime"    />
         <result property="submitTime"    column="submitTime"    />
         <result property="status"    column="status"    />
+        <result property="channelNo" column="channelNo"/>
     </resultMap>
 
     <sql id="selectAlipayChanelFeeVo">
-        select id, channelId, productId, impl, createTime, submitTime, status from alipay_chanel_fee
+        select id, channelId, productId, impl, createTime, submitTime, status ,channelNo,channelDFee,channelRFee from alipay_chanel_fee
     </sql>
 
     <select id="selectAlipayChanelFeeList" parameterType="AlipayChanelFee" resultMap="AlipayChanelFeeResult">
@@ -48,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">createTime,</if>
             <if test="submitTime != null ">submitTime,</if>
             <if test="status != null ">status,</if>
+            <if test="channelNo != null ">channelNo,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="channelId != null  and channelId != ''">#{channelId},</if>
@@ -58,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="submitTime != null ">#{submitTime},</if>
             <if test="status != null ">#{status},</if>
+            <if test="channelNo != null ">#{channelNo},</if>
          </trim>
     </insert>
 
@@ -70,6 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">createTime = #{createTime},</if>
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
             <if test="status != null ">status = #{status},</if>
+            <if test="channelNo != null ">channelNo = #{channelNo},</if>
         </trim>
         where id = #{id}
     </update>

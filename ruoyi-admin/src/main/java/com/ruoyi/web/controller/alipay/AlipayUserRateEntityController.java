@@ -23,8 +23,9 @@ import java.util.stream.Collectors;
 
 /**
  * 用户产品费率Controller
+ * 为什么不到业务层写业务代码，因为多数据源切的是业务层，数据获取灵活度不高，所以业务层写业务不好弄
  *
- * @author kiwi
+ * @author kent
  * @date 2020-03-18
  */
 @Controller
@@ -166,6 +167,14 @@ public class AlipayUserRateEntityController extends BaseController {
         if (null != check) {
             throw new BusinessException("操作失败，商户费率重复");
         }
+        //1，查看当前修改完的费率是否有配置渠道费率,并检查是否有重复配置的情况
+        //2，查看当前修完费率是否有配置代理商费率
+        //3，如以上不存在问题，则保存当前修改完费率，且对相同产品类型的费率进行关闭
+        alipayUserRateEntityService.clickFee(alipayUserRateEntity);
+        alipayUserRateEntityService.isAgentFee(alipayUserRateEntity);
+        AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy(alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
+        if (ObjectUtil.isNull(channel))
+            return error("当前渠道未接通，请联系技术人员对接");
         return toAjax(alipayUserRateEntityService.updateAlipayUserRateEntity(alipayUserRateEntity));
     }
 

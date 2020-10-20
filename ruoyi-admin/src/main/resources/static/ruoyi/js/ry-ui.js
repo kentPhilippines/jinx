@@ -512,6 +512,8 @@ var table = {
                 var currentId = $.common.isEmpty(tableId) ? table.options.id : tableId;
                 $("#" + currentId).bootstrapTable('hideColumn', column);
             }
+
+
         },
         // 表格树封装处理
         treeTable: {

@@ -1,9 +1,9 @@
 package com.ruoyi.alipay.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
 
@@ -40,6 +40,16 @@ public class AlipayChanelFee extends BaseEntity {
     private String impl;
     private String channelRFee;
     private String channelDFee;
+    private String channelNo;
+
+    public String getChannelNo() {
+        return this.channelNo;
+    }
+
+    public void setChannelNo(String channelNo) {
+        this.channelNo = channelNo;
+    }
+
 
     public void setChannelRFee(String channelRFee) {
         this.channelRFee = channelRFee;
