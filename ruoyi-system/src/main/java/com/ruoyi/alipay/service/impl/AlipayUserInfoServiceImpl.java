@@ -71,6 +71,7 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int updateAlipayUserInfo(AlipayUserInfo alipayUserInfo) {
         return alipayUserInfoMapper.updateAlipayUserInfo(alipayUserInfo);
     }

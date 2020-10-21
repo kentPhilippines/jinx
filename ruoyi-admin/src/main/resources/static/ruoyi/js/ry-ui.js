@@ -1203,8 +1203,10 @@ var table = {
                 table.set();
                 if (flag == 'openUrl'){
                     $.modal.open(title, $.operate.openUrl(id));
-                }else if(flag == 'updateUrl'){
-                    $.modal.open(title,$.operate.editUrl(id))
+                }else if (flag == 'updateUrl') {
+                    $.modal.open(title, $.operate.editUrl(id))
+                } else if (flag == 'otherUrl') {
+                    $.modal.open(title, $.operate.otherUrl(id))
                 }
             },
             // 二维码详细列表
@@ -1336,6 +1338,20 @@ var table = {
                         return;
                     }
                     url = table.options.updateUrl.replace("{id}", id);
+                }
+                return url;
+            },
+            otherUrl: function (id) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.otherUrl.replace("{userId}", id);
+                } else {
+                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                    if (id.length == 0) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    url = table.options.otherUrl.replace("{id}", id);
                 }
                 return url;
             },

@@ -101,6 +101,7 @@ public class AlipayUserRateEntityController extends BaseController {
     /*
      * 新增用户产品费率
      */
+    @Log(title = "新增商户费率", businessType = BusinessType.INSERT)
     @GetMapping("/add")
     public String add(ModelMap modelMap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();

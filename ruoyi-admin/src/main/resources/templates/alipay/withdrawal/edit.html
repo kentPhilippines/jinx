@@ -129,7 +129,8 @@
            onclick="approval('2');">成功 </a>
         <a name="reject" class="btn btn-w-m btn-danger" href="javascript:void(0)"
            onclick="googleBind('3');"
-           th:if="${  (alipayWithdrawEntity.orderStatus == 1 ||  alipayWithdrawEntity.orderStatus == '1' ) || (alipayWithdrawEntity.orderStatus == '2' || alipayWithdrawEntity.orderStatus == 2)}">
+           th:if="${  (alipayWithdrawEntity.orderStatus == 1 ||  alipayWithdrawEntity.orderStatus == '1' )
+           || (alipayWithdrawEntity.orderStatus == '2' || alipayWithdrawEntity.orderStatus == 2)}">
             置为失败</a>
         <a class="btn btn-w-m btn-danger" href="javascript:void(0)" name="reject"
            th:if="${  (alipayWithdrawEntity.orderStatus == 1 ||  alipayWithdrawEntity.orderStatus == '1' ) && (autoWit == 0 || autoWit == '0')}"
@@ -139,6 +140,7 @@
 <th:block th:include="include :: footer"/>
 <script type="text/javascript">
     const prefix = ctx + "alipay/withdrawal";
+    const prefix_ver = ctx + "verify/identity";
     $("#form-withdrawal-edit").validate({
         focusCleanup: true
     });

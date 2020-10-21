@@ -1,6 +1,5 @@
 package com.ruoyi.web.controller.alipay;
 
-import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayAmountEntityService;
@@ -14,20 +13,12 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
-import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.SysUser;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 三方渠道管理Controller
@@ -88,26 +79,27 @@ public class AipayChannelContorller extends BaseController {
         String salt = HashKit.randomSalt();
         userInfo.setSalt(salt);
         userInfo.setUserNode(fundEntity.getUserNode());
-        userInfo.setPassword(HashKit.encodePassword(userInfo.getUserId(),"123456",salt));
-        userInfo.setPayPasword(HashKit.encodePassword(userInfo.getUserId(),"123456",salt));
+        userInfo.setPassword(HashKit.encodePassword(userInfo.getUserId(), "123456", salt));
+        userInfo.setPayPasword(HashKit.encodePassword(userInfo.getUserId(), "123456", salt));
         alipayUserInfoService.insertAlipayUserInfo(userInfo);
         return toAjax(alipayUserFundEntityService.insertAlipayUserFundEntity(fundEntity));
     }
-    /*
-            * 新增产品列表
+
+    @GetMapping("/edit/{userId}")
+    public String edit(@PathVariable("userId") String userId, ModelMap mmap) {
+        AlipayUserInfo channelInfo = alipayUserInfoService.findMerchantInfoByUserId(userId);
+        mmap.put("channelInfo", channelInfo);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 转发财务
      */
-    @GetMapping("/addChannel")
-    public String add(ModelMap mmap) {
-        SysUser currentUser = ShiroUtils.getSysUser();
-        AlipayUserFundEntity userFundEntity = new AlipayUserFundEntity();
-        userFundEntity.setUserId(String.valueOf(currentUser.getUserId()));
-     /*   AlipayProductEntity alipayProductEntity=new AlipayProductEntity();
-        alipayProductEntity.setStatus(1);
-        //查询产品类型下拉菜单
-        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
-        mmap.put("productList", list);*/
-        mmap.put("userFund",userFundEntity);
-        return prefix + "/addChannel";
+    @Log(title = "商户交易订单", businessType = BusinessType.INSERT)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editChannelIfo(AlipayUserInfo channelInfo) {
+        return toAjax(alipayUserInfoService.updateAlipayUserInfo(channelInfo));
     }
 
 }

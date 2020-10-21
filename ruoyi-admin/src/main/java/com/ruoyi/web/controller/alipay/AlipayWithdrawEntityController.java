@@ -195,6 +195,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 显示商户提现详情页
      */
+    @Log(title = "商户详情", businessType = BusinessType.OTHER)
     @GetMapping("/merchant/detail/{id}")
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayWithdrawEntity alipayWithdrawEntity = alipayWithdrawEntityService.selectAlipayWithdrawEntityById(id);
@@ -207,6 +208,7 @@ public class AlipayWithdrawEntityController extends BaseController {
      * @param mmap
      * @return
      */
+    @Log(title = "统计商户当天交易数据", businessType = BusinessType.OTHER)
     @GetMapping("/statistics/merchant/payfor")
     public String dayStat(ModelMap mmap) {
         StatisticsEntity statisticsEntity = alipayWithdrawEntityService.selectPayforStatisticsDataByDay(DateUtils.dayStart(), DateUtils.dayEnd());
