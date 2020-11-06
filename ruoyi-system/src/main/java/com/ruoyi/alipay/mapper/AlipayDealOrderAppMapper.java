@@ -71,28 +71,24 @@ public interface AlipayDealOrderAppMapper {
     @Select("<script>" +
             "select '所有' userId, " +
             "coalesce(sum(app.orderAmount),0) totalAmount," +
-            "coalesce(sum(  CASE run.runOrderType   WHEN 13  THEN  run.amount  ELSE 0   END ),0.00) agentAmount," +
             "coalesce(sum(case app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount," +
             "count(1) totalCount," +
             "count(case app.orderStatus when 2 then app.id else null end) successCount ," +
             "coalesce(sum(app.retain3),0) fee ," +
             "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
             "from alipay_deal_order_app app " +
-            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId AND run.`runOrderType`=13  " +
             "where " +
             "  app.createTime between #{statisticsEntity.params.dayStart} " +
             " and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
             " union all " +
             "select app.orderAccount userId, " +
             "coalesce(sum(app.orderAmount),0.00) totalAmount," +
-            "coalesce(sum( CASE run.runOrderType   WHEN 13  THEN  run.amount  ELSE 0   END ),0.00) agentAmount," +
             "coalesce(sum(case app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount," +
             "count(1) totalCount," +
             "count(case app.orderStatus when 2 then app.id else null end) successCount ," +
             "coalesce(sum(app.retain3),0) fee ," +
             "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
             "from alipay_deal_order_app app " +
-            "LEFT JOIN alipay_run_order run  ON  run.associatedId = app.orderId AND run.`runOrderType`=13  " +
             "where " +
             "  app.createTime between #{statisticsEntity.params.dayStart} " +
             "and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
@@ -120,4 +116,41 @@ public interface AlipayDealOrderAppMapper {
     List<AlipayDealOrderApp> selectSubAgentMembersOrderList(@Param("userIds") List<String> userIds, @Param("order") AlipayDealOrderApp alipayDealOrderApp);
 
 
+    /**
+     * 统计代理商分润情况，包括代付代理商分润和  交易代理商分润
+     *
+     * @param alipayDealOrderApp
+     * @return
+     */
+    @Select("<script>" +
+            "select * from (" +
+            "                  select  sum(amount) as orderAmount , '充值代理分润' as userName ,  '当日汇总'  as orderAccount ,createTime as createTime " +
+            "                  from   alipay_run_order  where runOrderType = 13  " +
+            " and  createTime between #{order.params.dayStart}  and #{order.params.dayEnd} " +
+            "                  union  all " +
+            "                  select  sum(amount) as orderAmount, '代付代理分润'  as userName ," +
+            "                         '当日汇总' as orderAccount , createTime as createTime" +
+            "                  from   alipay_run_order  where runOrderType = 26 " +
+            "and  createTime between #{order.params.dayStart}  and #{order.params.dayEnd} " +
+            "   ) b" +
+            "                  union  all " +
+            "select * from (" +
+            "                  select  sum(amount) as orderAmount , '充值代理分润' as userName , orderAccount  as orderAccount ,createTime as createTime " +
+            "                  from   alipay_run_order  where runOrderType = 13  " +
+            "<if test = \"order.orderAccount != null and order.orderAccount != ''\">" +
+            "and orderAccount = #{order.orderAccount} " +
+            "</if>" +
+            " and  createTime between #{order.params.dayStart} and #{order.params.dayEnd} " +
+            "                   group by  orderAccount ,createTime" +
+            "                  union  all " +
+            "                  select  sum(amount) as orderAmount, '代付代理分润'  as userName ," +
+            "                         orderAccount as orderAccount , createTime as createTime" +
+            "                  from   alipay_run_order  where runOrderType = 26 " +
+            "<if test = \"order.orderAccount != null and order.orderAccount != ''\">" +
+            "and orderAccount = #{order.orderAccount} " +
+            "</if>" +
+            "and   createTime between #{order.params.dayStart}  and #{order.params.dayEnd} " +
+            " group by  orderAccount ,createTime ) a" +
+            "</script>")
+    List<AlipayDealOrderApp> listAgent(@Param("order") AlipayDealOrderApp alipayDealOrderApp);
 }

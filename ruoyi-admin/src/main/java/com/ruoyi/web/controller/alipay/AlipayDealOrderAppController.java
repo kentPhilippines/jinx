@@ -55,6 +55,22 @@ public class AlipayDealOrderAppController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/orderAppAgent")
+    public String orderAppAgent() {
+        return prefix + "/orderAppAgent";
+    }
+
+    /**
+     * 查询代理商分润
+     */
+    @PostMapping("/listAgent")
+    @ResponseBody
+    public TableDataInfo listAgent(AlipayDealOrderApp alipayDealOrderApp) {
+        startPage();
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.listAgent(alipayDealOrderApp);
+        return getDataTable(list);
+    }
+
     /**
      * 导出商户订单登记列表
      */
@@ -106,13 +122,24 @@ public class AlipayDealOrderAppController extends BaseController {
     public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {
         startPage();
         List<StatisticsEntity> list = alipayDealOrderAppService.selectMerchantStatisticsDataByDay(statisticsEntity, DateUtils.dayStart(), DateUtils.dayEnd());
-        List<AlipayUserFundEntity> listFund =  alipayUserFundEntityService.findUserFundAll();
+        List<AlipayUserFundEntity> listFund = alipayUserFundEntityService.findUserFundAll();
         ConcurrentHashMap<String, AlipayUserFundEntity> userCollect = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
-        for (StatisticsEntity  sta :list){
-            if(ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
+        BigDecimal amount = new BigDecimal("0");
+        ConcurrentHashMap.KeySetView<String, AlipayUserFundEntity> strings = userCollect.keySet();
+        for (String key : strings) {
+            AlipayUserFundEntity alipayUserFundEntity = userCollect.get(key);
+            if (alipayUserFundEntity.getUserType().equals("1")) {
+                amount = amount.add(new BigDecimal(alipayUserFundEntity.getAccountBalance()));
+            }
+        }
+        for (StatisticsEntity sta : list) {
+            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
                 sta.setUserName(userCollect.get(sta.getUserId()).getUserName());
-            if(ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
+            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
                 sta.setAccountAmount(userCollect.get(sta.getUserId()).getAccountBalance().toString());
+            if ("所有".equals(sta.getUserId())) {
+                sta.setAccountAmount(amount.doubleValue() + "");
+            }
             sta.setTodayAmount(sta.getSuccessAmount().subtract(new BigDecimal(sta.getSuccessFee())).toString());
         }
         return getDataTable(list);

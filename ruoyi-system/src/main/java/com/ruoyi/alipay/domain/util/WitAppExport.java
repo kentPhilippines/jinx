@@ -11,8 +11,10 @@ import java.util.Date;
 public class WitAppExport extends BaseEntity {
     private static final long serialVersionUID = 1L;
     private Long id;
-    @Excel(name = "会员提现单号")
+    @Excel(name = "提现系统单号")
     private String orderId;
+    @Excel(name = "会员提现单号")
+    private String appOrderId;
     @Excel(name = "会员id")
     private String userId;
     @Excel(name = "银行卡号")
@@ -41,6 +43,15 @@ public class WitAppExport extends BaseEntity {
     private String witType;
     @Excel(name = "审核意见")
     private String comment;
+
+
+    public String getAppOrderId() {
+        return appOrderId;
+    }
+
+    public void setAppOrderId(String appOrderId) {
+        this.appOrderId = appOrderId;
+    }
 
     public String getWitType() {
         return witType;

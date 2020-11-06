@@ -8,9 +8,9 @@ import com.ruoyi.alipay.service.IAlipayDealOrderAppService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.enums.DataSourceType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -21,10 +21,9 @@ import java.util.List;
  */
 @Service
 public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService {
-    @Autowired
+    @Resource
     private AlipayDealOrderAppMapper alipayDealOrderAppMapper;
-
-    @Autowired
+    @Resource
     private MerchantInfoEntityMapper merchantInfoEntityMapper;
 
     /**
@@ -84,6 +83,12 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
     @DataSource(DataSourceType.ALIPAY_SLAVE)
     public List<StatisticsEntity> selectMerchantStatisticsDataByHours(StatisticsEntity statisticsEntity, String dayStart, String dayEnd) {
         return alipayDealOrderAppMapper.selectOrderAppStatDateByHours(statisticsEntity, dayStart, dayEnd);
+    }
+
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayDealOrderApp> listAgent(AlipayDealOrderApp alipayDealOrderApp) {
+        return alipayDealOrderAppMapper.listAgent(alipayDealOrderApp);
     }
 
 

@@ -209,6 +209,7 @@ public class BackManageController extends BaseController {
             export.setMobile(wit.getMobile());
             export.setNotify(wit.getNotify());
             export.setOrderId(wit.getOrderId());
+            export.setAppOrderId(wit.getAppOrderId());
             export.setOrderStatus(wit.getOrderStatus());
             AlipayProductEntity product = prCollect.get(wit.getWitType());
             if (ObjectUtil.isNotNull(product))

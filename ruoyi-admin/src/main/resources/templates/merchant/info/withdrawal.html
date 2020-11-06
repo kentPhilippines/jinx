@@ -16,12 +16,17 @@
                             <input type="text" name="orderId"/>
                         </li>
                         <li>
+                            <span>商户提现订单：</span>
+                            <input name="appOrderId" type="text"/>
+                        </li>
+                        <li>
                             <span>申请人：</span>
                             <input type="text" name="accname"/>
                         </li>
                         <li class="select-selectpicker">
                             <label>订单状态： </label>
-                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('withdrawal_status')}"
+                            <select id="orderStatus" name="orderStatus"
+                                    th:with="type=${@dict.getType('withdrawal_status')}"
                                     class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"

@@ -164,10 +164,6 @@ public class AlipayUserRateEntityController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(AlipayUserRateEntity alipayUserRateEntity) {
-        AlipayUserRateEntity check = alipayUserRateEntityService.checkUniqueRate(alipayUserRateEntity);
-        if (null != check) {
-            throw new BusinessException("操作失败，商户费率重复");
-        }
         //1，查看当前修改完的费率是否有配置渠道费率,并检查是否有重复配置的情况
         //2，查看当前修完费率是否有配置代理商费率
         //3，如以上不存在问题，则保存当前修改完费率，且对相同产品类型的费率进行关闭

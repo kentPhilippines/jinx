@@ -49,4 +49,13 @@ public interface IAlipayDealOrderAppService {
     List<StatisticsEntity> selectMerchantStatisticsDataByDay(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
 
     List<StatisticsEntity> selectMerchantStatisticsDataByHours(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
+
+
+    /**
+     * 统计代理商分润包括代付分润和交易分润
+     *
+     * @param alipayDealOrderApp
+     * @return
+     */
+    List<AlipayDealOrderApp> listAgent(AlipayDealOrderApp alipayDealOrderApp);
 }
