@@ -2,7 +2,6 @@ package com.ruoyi.web.controller.alipay;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
-import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.Log;
@@ -14,7 +13,6 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.NoUtils;
-import com.ruoyi.common.utils.RSAUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
@@ -26,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -146,11 +143,13 @@ public class MerchantInfoEntityController extends BaseController {
     /**
      * 商户修改状态（调用api）
      */
-    @Log(title = "码商查询", businessType = BusinessType.UPDATE)
+    @Log(title = "商户状态开启", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(AlipayUserInfo user) {
         //获取alipay处理接口URL
+        logger.info("[当前处理商户关闭或者开启的管理员账号为：" + ShiroUtils.getSysUser().getLoginName() + "]");
+        logger.info("[当前处理商户状态的参数为：" + user.getParams().toString() + "]");
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
         String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_2);
         Map<String, Object> mapParam = Maps.newHashMap();

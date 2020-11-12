@@ -9,6 +9,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -190,10 +191,12 @@ public class AlipayUserRateEntityController extends BaseController {
      * 商户费率状态更新
      */
     @RequiresPermissions("merchant:rate:status")
-    @Log(title = "商户费率", businessType = BusinessType.UPDATE)
+    @Log(title = "商户费率修改", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult updateStatus(String id, String userId, String feeType, String switchs) {
+        logger.info("[当前处理费率状态开启或关闭的管理员账号为：" + ShiroUtils.getSysUser().getLoginName() + "]");
+        logger.info("[当前处理商户状态的参数为：" + switchs + "]");
         return toAjax(alipayUserRateEntityService.changeStatus(id, userId, feeType, switchs));
     }
 

@@ -129,7 +129,10 @@ public interface AlipayUserRateEntityMapper {
             "userId = #{alipayUserRateEntity.userId}   and payTypr = #{alipayUserRateEntity.payTypr} and status = 1 and channelId = #{alipayUserRateEntity.channelId}")
     AlipayUserRateEntity checkUniqueRate(@Param("alipayUserRateEntity") AlipayUserRateEntity alipayUserRateEntity);
 
-    @Update("update alipay_user_rate set switchs = 0   where  userId = #{userId} and  id in ( select a.id from  (      select id from alipay_user_rate where userId =  #{userId} and payTypr in  (    select payTypr from alipay_user_rate where id = #{id}    ) )  a )")
+    @Update("update alipay_user_rate set switchs = 0   where " +
+            " userId = #{userId} and  id in ( select a.id from  (  " +
+            "    select id from alipay_user_rate where userId =  #{userId} and payTypr in " +
+            " (    select payTypr from alipay_user_rate where id = #{id}    ) )  a )")
     int updateProduct(@Param("id") String id, @Param("userId") String userId);
 
 

@@ -6,11 +6,11 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.RSAUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.shiro.realm.UserRealm;
 import com.ruoyi.system.domain.AdminAplipayDealOrder;
 import com.ruoyi.system.domain.AdminDealpayDealOrder;
 import com.ruoyi.system.service.IAdminAplipayDealOrderService;
 import com.ruoyi.system.service.IAdminDealpayDealOrderService;
+import io.gitee.tooleek.lock.spring.boot.annotation.Lock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -35,6 +34,7 @@ public class ApiGatewayController extends BaseController {
     private IAdminAplipayDealOrderService adminAplipayDealOrderService;
 
     @PostMapping("/alipay")
+    @Lock
     @ResponseBody
     public AjaxResult recordAlipayOrder(HttpServletRequest request) {
         String cipherText = request.getParameter("cipherText");

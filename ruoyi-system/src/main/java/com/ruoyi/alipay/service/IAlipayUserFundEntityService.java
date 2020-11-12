@@ -79,4 +79,13 @@ public interface IAlipayUserFundEntityService {
     List<AlipayUserFundEntity> findMyUserBak(String merchantId, BaseEntity baseEntity);
 
     List<AlipayUserFundEntity> findUserAppAll(BaseEntity baseEntity);
+
+
+    /**
+     * 查看商户每日对账数据
+     *
+     * @param alipayUserFundEntity
+     * @return
+     */
+    List<AlipayUserFundEntity> findaAcountList(AlipayUserFundEntity alipayUserFundEntity);
 }

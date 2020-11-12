@@ -141,7 +141,7 @@ public interface AlipayDealOrderAppMapper {
             "and orderAccount = #{order.orderAccount} " +
             "</if>" +
             " and  createTime between #{order.params.dayStart} and #{order.params.dayEnd} " +
-            "                   group by  orderAccount ,createTime" +
+            "                   group by  orderAccount  " +
             "                  union  all " +
             "                  select  sum(amount) as orderAmount, '代付代理分润'  as userName ," +
             "                         orderAccount as orderAccount , createTime as createTime" +
@@ -150,7 +150,7 @@ public interface AlipayDealOrderAppMapper {
             "and orderAccount = #{order.orderAccount} " +
             "</if>" +
             "and   createTime between #{order.params.dayStart}  and #{order.params.dayEnd} " +
-            " group by  orderAccount ,createTime ) a" +
+            " group by  orderAccount   ) a" +
             "</script>")
     List<AlipayDealOrderApp> listAgent(@Param("order") AlipayDealOrderApp alipayDealOrderApp);
 }
