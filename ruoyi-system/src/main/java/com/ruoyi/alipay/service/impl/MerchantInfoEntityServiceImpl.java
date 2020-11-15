@@ -1,16 +1,15 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import cn.hutool.core.collection.CollUtil;
 import com.google.common.collect.Lists;
-import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
 import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
+import com.ruoyi.alipay.mapper.MerchantInfoEntityMapper;
+import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
@@ -18,13 +17,9 @@ import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.common.utils.RSAUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.MerchantInfoEntityMapper;
-import com.ruoyi.alipay.domain.MerchantInfoEntity;
-import com.ruoyi.alipay.service.IMerchantInfoEntityService;
-import com.ruoyi.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.ValueExp;
+import java.util.*;
 
 /**
  * 商户信息Service业务层处理
@@ -181,6 +176,7 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
             Map<String, Object> map = merchantInfoEntityMapper.findFundUserBalanceByUserId(userId);
             alipayUserInfo.getParams().put("rechargeNumber", map.get("rechargeNumber"));
             alipayUserInfo.getParams().put("accountBalance", map.get("accountBalance"));
+            alipayUserInfo.getParams().put("freezeBalance", map.get("freezeBalance"));
             return alipayUserInfo;
         } catch (Exception e) {
             throw new BusinessException("查询结果不唯一,请核实");
