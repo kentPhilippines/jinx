@@ -1207,6 +1207,10 @@ var table = {
                     $.modal.open(title, $.operate.editUrl(id))
                 } else if (flag == 'otherUrl') {
                     $.modal.open(title, $.operate.otherUrl(id))
+                } else if (flag == 'addFreezeFlag') {
+                    $.modal.open(title, $.operate.addFreezeUrlM(id))
+                } else if (flag == 'deleteFreezeFlag') {
+                    $.modal.open(title, $.operate.deleteFreezeUrlM(id))
                 }
             },
             // 二维码详细列表
@@ -1355,6 +1359,38 @@ var table = {
                 }
                 return url;
             },
+
+            addFreezeUrlM: function (id) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.addFreezeUrl.replace("{userId}", id);
+                } else {
+                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                    if (id.length == 0) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    url = table.options.otherUrl.replace("{id}", id);
+                }
+                return url;
+            },
+
+            deleteFreezeUrlM: function (id) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.deleteFreezeUrl.replace("{userId}", id);
+                } else {
+                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                    if (id.length == 0) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    url = table.options.otherUrl.replace("{id}", id);
+                }
+                return url;
+            },
+
+
             // 保存信息 刷新表格
             save: function (url, data, callback) {
                 $.modal.confirm("确定要保存此编辑信息吗？", function () {

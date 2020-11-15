@@ -91,5 +91,10 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
         return alipayDealOrderAppMapper.listAgent(alipayDealOrderApp);
     }
 
+    @Override
+    public List<AlipayDealOrderApp> findOneHoursOrdeBySuccess(String strTime, String endTime) {
+        return null;
+    }
+
 
 }

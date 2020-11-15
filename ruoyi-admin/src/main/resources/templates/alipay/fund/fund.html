@@ -66,6 +66,8 @@
 <script th:inline="javascript">
     var refundFlag = [[${@permission.hasPermi('fund:refund:add')}]];
     var deductFlag = [[${@permission.hasPermi('fund:refund:deduct')}]];
+    var addFreezeFlag = [[${@permission.hasPermi('fund:refund:addFreezeFlag')}]];
+    var deleteFreezeFlag = [[${@permission.hasPermi('fund:refund:deleteFreezeFlag')}]];
     var userType = [[${@dict.getType('userType')}]];
     var prefix = ctx + "alipay/fund";
 
@@ -75,6 +77,8 @@
             updateUrl: prefix + "/deduct/{id}",
             openUrl: prefix + "/refund/{userId}",
             exportUrl: prefix + "/export",
+            addFreezeUrl: prefix + "/addFreezeUrl/{userId}",
+            deleteFreezeUrl: prefix + "/deleteFreezeUrl/{userId}",
             modalName: "用户资金账户",
             columns: [{
                 checkbox: true
@@ -108,25 +112,29 @@
                     field: 'accountBalance',
                     title: '可取现金额 '
                 },
-          /*      {
-                    field: 'sumDealAmount',
-                    title: '累计交易'
-                },
                 {
-                    field: 'sumRechargeAmount',
-                    title: '累计充值 '
+                    field: 'currency',
+                    title: '货币类型 '
                 },
-                {
-                    field: 'todayDealAmount',
-                    title: '当日接单金额'
-                },
-                {
-                    field: 'userType',
-                    title: '用户类型',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(userType, value);
-                    }
-                },*/
+                /*      {
+                          field: 'sumDealAmount',
+                          title: '累计交易'
+                      },
+                      {
+                          field: 'sumRechargeAmount',
+                          title: '累计充值 '
+                      },
+                      {
+                          field: 'todayDealAmount',
+                          title: '当日接单金额'
+                      },
+                      {
+                          field: 'userType',
+                          title: '用户类型',
+                          formatter: function (value, row, index) {
+                              return $.table.selectDictLabel(userType, value);
+                          }
+                      },*/
                 {
                     field: 'isAgent',
                     title: '账号性质',
@@ -147,8 +155,12 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-primary btn-xs ' + refundFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户加款\',\'openUrl\')"><i class="fa fa-plus"></i>加款</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + deductFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户减款\',\'updateUrl\')"><i class="fa fa-minus"></i>减款</a> ');
+                        if (row.userId != '所有') {
+                            actions.push('<a class="btn btn-primary btn-xs ' + refundFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户加款\',\'openUrl\')"><i class="fa fa-plus"></i>加款</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + deductFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户减款\',\'updateUrl\')"><i class="fa fa-minus"></i>减款</a> ');
+                            actions.push('<a class="btn btn-primary btn-xs ' + addFreezeFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户解冻\',\'addFreezeFlag\')"><i class="fa fa-plus"></i>账户解冻</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + deleteFreezeFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户冻结\',\'deleteFreezeFlag\')"><i class="fa fa-minus"></i>账户冻结</a> ');
+                        }
                         return actions.join('');
                     }
                 }]

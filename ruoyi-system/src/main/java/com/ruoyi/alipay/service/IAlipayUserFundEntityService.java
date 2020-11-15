@@ -88,4 +88,12 @@ public interface IAlipayUserFundEntityService {
      * @return
      */
     List<AlipayUserFundEntity> findaAcountList(AlipayUserFundEntity alipayUserFundEntity);
+
+
+    /**
+     * 统计当前商户冻结账户和余额账户
+     *
+     * @return
+     */
+    AlipayUserFundEntity findSumFundM();
 }

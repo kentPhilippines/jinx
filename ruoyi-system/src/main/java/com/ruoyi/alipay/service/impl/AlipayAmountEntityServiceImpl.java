@@ -66,6 +66,17 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
         return alipayAmountEntityMapper.insertAlipayAmountEntity(alipayAmountEntity);
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int insertAlipayAmountFreeze(AlipayAmountEntity alipayAmountEntity) {
+        alipayAmountEntity.setCreateTime(DateUtils.getNowDate());
+        alipayAmountEntity.setOrderId(GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_REFUND));
+        alipayAmountEntity.setAmountType("4");
+        alipayAmountEntity.setOrderStatus("2");
+        alipayAmountEntity.setActualAmount(alipayAmountEntity.getAmount());
+        return alipayAmountEntityMapper.insertAlipayAmountEntity(alipayAmountEntity);
+    }
+
     /**
      * 修改手动加扣款记录
      *

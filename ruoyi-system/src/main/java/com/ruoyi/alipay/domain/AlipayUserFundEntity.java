@@ -133,6 +133,15 @@ public class AlipayUserFundEntity extends BaseEntity {
      */
     @Excel(name = "是否为代理商:1代理商2普通码商【分润结算类型看用户类型userType】")
     private String isAgent;
+    private String currency;//账户货币
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
     /**
      * 最后一次数据修改时间

@@ -76,4 +76,9 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
         return alipayDealOrderEntityMapper.selectStatDateByHours(statisticsEntity, dayStart, dayEnd);
     }
 
+    @Override
+    public List<AlipayDealOrderEntity> findOneHoursOrderBySuccess(String strTime, String endTime) {
+        return null;
+    }
+
 }

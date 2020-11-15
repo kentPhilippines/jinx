@@ -35,6 +35,8 @@ public interface IAlipayAmountEntityService {
      */
     int insertAlipayAmountEntity(AlipayAmountEntity alipayAmountEntity);
 
+    int insertAlipayAmountFreeze(AlipayAmountEntity alipayAmountEntity);
+
     /**
      * 修改手动加扣款记录
      *

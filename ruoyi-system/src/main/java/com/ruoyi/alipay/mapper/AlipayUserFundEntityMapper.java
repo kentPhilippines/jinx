@@ -51,12 +51,12 @@ public interface AlipayUserFundEntityMapper {
     @Insert("insert into alipay_user_fund (userId,userName,userType,isAgent) values(#{userId},#{userName},#{userType},#{isAgent})")
     int insertAlipayUserFundInfo(AlipayUserInfo merchantInfoEntity);
 
-    @Select("select cashBalance, accountBalance, rechargeNumber  from alipay_user_fund where userId = #{merchantId}")
+    @Select("select cashBalance, accountBalance, rechargeNumber  ,freezeBalance from alipay_user_fund where userId = #{merchantId}")
     AlipayUserFundEntity selectAlipayUserFundByUserId(@Param("merchantId") String merchantId);
 
     List<AlipayUserFundEntity> findChannelAccount(AlipayUserFundEntity alipayUserFundEntity);
 
-    @Select("select userId  ,userName, accountBalance, rechargeNumber  ,userType from alipay_user_fund  ")
+    @Select("select userId  ,userName, accountBalance, rechargeNumber , freezeBalance ,userType from alipay_user_fund  ")
     List<AlipayUserFundEntity> findUserFundAll();
 
     @Select("select * from alipay_user_fund where userType = 3")
@@ -79,4 +79,9 @@ public interface AlipayUserFundEntityMapper {
             "AND createTime > #{baseEntity.params.dayStart}" +
             " AND createTime < #{baseEntity.params.dayEnd}  order by createTime ")
     List<AlipayUserFundEntity> findUserAppAll(@Param("baseEntity") BaseEntity baseEntity);
+
+
+    @Select("select '所有' as userId , '下游商户总余额' as userName , sum(freezeBalance) as freezeBalance , sum(accountBalance) as accountBalance from " +
+            "alipay_user_fund where userType = 1 ")
+    AlipayUserFundEntity findSumFundM();
 }

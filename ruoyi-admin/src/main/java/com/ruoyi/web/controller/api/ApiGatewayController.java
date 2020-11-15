@@ -10,7 +10,6 @@ import com.ruoyi.system.domain.AdminAplipayDealOrder;
 import com.ruoyi.system.domain.AdminDealpayDealOrder;
 import com.ruoyi.system.service.IAdminAplipayDealOrderService;
 import com.ruoyi.system.service.IAdminDealpayDealOrderService;
-import io.gitee.tooleek.lock.spring.boot.annotation.Lock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,6 @@ public class ApiGatewayController extends BaseController {
     private IAdminAplipayDealOrderService adminAplipayDealOrderService;
 
     @PostMapping("/alipay")
-    @Lock
     @ResponseBody
     public AjaxResult recordAlipayOrder(HttpServletRequest request) {
         String cipherText = request.getParameter("cipherText");

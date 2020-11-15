@@ -19,4 +19,13 @@ public interface IAlipayRunOrderEntityService {
      */
     List<AlipayRunOrderEntity> selectAlipayRunOrderEntityList(AlipayRunOrderEntity alipayRunOrderEntity);
 
+    /**
+     * 根据关联订单和时间查询数据
+     *
+     * @param orderId
+     * @param strTime
+     * @param endTime
+     * @return
+     */
+    List<AlipayRunOrderEntity> findAssociatedId(String orderId, String strTime, String endTime);
 }

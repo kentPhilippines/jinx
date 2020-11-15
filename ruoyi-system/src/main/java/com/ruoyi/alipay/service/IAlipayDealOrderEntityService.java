@@ -54,4 +54,7 @@ public interface IAlipayDealOrderEntityService {
     List<StatisticsEntity> selectStatisticsDataByDate(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
 
     List<StatisticsEntity> selectStatisticsDataByHours(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
+
+
+    List<AlipayDealOrderEntity> findOneHoursOrderBySuccess(String strTime, String endTime);
 }

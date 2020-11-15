@@ -1,16 +1,16 @@
 package com.ruoyi.dealpay.service.impl;
 
-import java.util.List;
-
 import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.dealpay.mapper.DealpayDealOrderMapper;
 import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
+import com.ruoyi.dealpay.mapper.DealpayDealOrderMapper;
 import com.ruoyi.dealpay.service.IDealpayDealOrderService;
-import com.ruoyi.common.core.text.Convert;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 交易订单Service业务层处理
@@ -20,7 +20,7 @@ import com.ruoyi.common.core.text.Convert;
  */
 @Service
 public class DealpayDealOrderServiceImpl implements IDealpayDealOrderService {
-    @Autowired
+    @Resource
     private DealpayDealOrderMapper dealpayDealOrderMapper;
 
     /**
@@ -94,5 +94,14 @@ public class DealpayDealOrderServiceImpl implements IDealpayDealOrderService {
     @DataSource(DataSourceType.DEALPAY_SLAVE)
     public int deleteDealpayDealOrderById(Long id) {
         return dealpayDealOrderMapper.deleteDealpayDealOrderById(id);
+    }
+
+
+    /**
+     * 订单核对方法
+     */
+    public void checkOrder() {
+
+
     }
 }

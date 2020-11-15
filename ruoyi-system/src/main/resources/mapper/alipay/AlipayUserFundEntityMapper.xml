@@ -28,10 +28,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="submitTime"    column="submitTime"    />
         <result property="status"    column="status"    />
         <result property="version"    column="version"    />
+        <result property="currency" column="currency"/>
     </resultMap>
 
     <sql id="selectAlipayUserFundEntityVo">
-        select id, userId, userName, cashBalance, rechargeNumber, freezeBalance, accountBalance, sumDealAmount, sumRechargeAmount, sumProfit, sumAgentProfit, sumOrderCount, todayDealAmount, todayProfit, todayOrderCount, todayAgentProfit, userType, agent, isAgent, createTime, submitTime, status, version from alipay_user_fund
+        select id, userId, userName, cashBalance, rechargeNumber, freezeBalance, accountBalance,
+         sumDealAmount, sumRechargeAmount, sumProfit, sumAgentProfit, sumOrderCount, todayDealAmount,
+         todayProfit, todayOrderCount, todayAgentProfit, userType, agent, isAgent,
+        createTime, submitTime, status, version , currency from alipay_user_fund
     </sql>
 
     <select id="selectAlipayUserFundEntityList" parameterType="AlipayUserFundEntity" resultMap="AlipayUserFundEntityResult">
@@ -49,18 +53,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sumAgentProfit != null "> and sumAgentProfit = #{sumAgentProfit}</if>
             <if test="sumOrderCount != null "> and sumOrderCount = #{sumOrderCount}</if>
             <if test="todayDealAmount != null "> and todayDealAmount = #{todayDealAmount}</if>
-            <if test="todayProfit != null "> and todayProfit = #{todayProfit}</if>
-            <if test="todayOrderCount != null "> and todayOrderCount = #{todayOrderCount}</if>
-            <if test="todayAgentProfit != null "> and todayAgentProfit = #{todayAgentProfit}</if>
-            <if test="userType != null  and userType != ''"> and userType = #{userType}</if>
-            <if test="agent != null  and agent != ''"> and agent = #{agent}</if>
-            <if test="isAgent != null  and isAgent != ''"> and isAgent = #{isAgent}</if>
-<!--            <if test="createTime != null "> and createTime = #{createTime}</if>
-            <if test="submitTime != null "> and submitTime = #{submitTime}</if>-->
-            <if test="status != null "> and status = #{status}</if>
-            <if test="version != null "> and version = #{version}</if>
-             and  userType != '3'
+            <if test="todayProfit != null ">and todayProfit = #{todayProfit}</if>
+            <if test="todayOrderCount != null ">and todayOrderCount = #{todayOrderCount}</if>
+            <if test="todayAgentProfit != null ">and todayAgentProfit = #{todayAgentProfit}</if>
+            <if test="userType != null  and userType != ''">and userType = #{userType}</if>
+            <if test="agent != null  and agent != ''">and agent = #{agent}</if>
+            <if test="isAgent != null  and isAgent != ''">and isAgent = #{isAgent}</if>
+            <!--            <if test="createTime != null "> and createTime = #{createTime}</if>
+                        <if test="submitTime != null "> and submitTime = #{submitTime}</if>-->
+            <if test="status != null ">and status = #{status}</if>
+            <if test="version != null ">and version = #{version}</if>
+            <if test="currency != null ">and currency = #{currency}</if>
+            and (userType != '3' and userType != '2')
         </where>
+        order by accountBalance desc
     </select>
     
     <select id="selectAlipayUserFundEntityById" parameterType="Long" resultMap="AlipayUserFundEntityResult">
@@ -93,6 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null ">submitTime,</if>
             <if test="status != null ">status,</if>
             <if test="version != null ">version,</if>
+            <if test="currency != null ">currency,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null  and userId != ''">#{userId},</if>
@@ -117,6 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null ">#{submitTime},</if>
             <if test="status != null ">#{status},</if>
             <if test="version != null ">#{version},</if>
+            <if test="currency != null ">#{currency},</if>
          </trim>
     </insert>
 
@@ -145,6 +153,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
             <if test="status != null ">status = #{status},</if>
             <if test="version != null ">version = #{version},</if>
+            <if test="currency != null ">currency = #{currency},</if>
         </trim>
         where id = #{id}
     </update>

@@ -58,4 +58,7 @@ public interface IAlipayDealOrderAppService {
      * @return
      */
     List<AlipayDealOrderApp> listAgent(AlipayDealOrderApp alipayDealOrderApp);
+
+
+    List<AlipayDealOrderApp> findOneHoursOrdeBySuccess(String strTime, String endTime);
 }

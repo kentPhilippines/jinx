@@ -7,17 +7,23 @@ import java.util.Map;
 
 public enum RefundDeductType {
     REFUND_TYPE(1, "加款申请"),
-    DEDUCT_TYPE(2, "减款申请");
+    DEDUCT_TYPE(2, "减款申请"),
+    DEDUCT_FREEZE_TYPE(3, "冻结申请"),
+    REFUND_FREEZE_TYPE(4, "解冻申请");
 
     private Integer code;
     private String desc;
+
+    public static Map<Integer, RefundDeductType> getHOLDER() {
+        return HOLDER;
+    }
 
     RefundDeductType(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 

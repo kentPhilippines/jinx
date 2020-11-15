@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('商户资金解冻')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-fund-refund" th:object="${userFund}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">解冻账户：</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="userId" name="userId" readonly th:field="*{userId}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">当前冻结资金：</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="freezeBalance" name="freezeBalance" readonly th:field="*{freezeBalance}"
+                       type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">解冻金额：</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="amount" min="0" name="amount" placeholder="请输入解冻金额" required
+                       type="number">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">解冻理由：</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" id="dealDescribe" name="dealDescribe" placeholder="请完整描述解冻账户资金理由"
+                          required type="text"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">资金密码：</label>
+            <div class="col-sm-9">
+                <input class="form-control" name="params[password]" placeholder="请输入密码" required type="password">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "alipay/fund"
+    $("#form-fund-refund").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/addFreeze", $('#form-fund-refund').serialize());
+        }
+    }
+</script>
+</body>
+</html>

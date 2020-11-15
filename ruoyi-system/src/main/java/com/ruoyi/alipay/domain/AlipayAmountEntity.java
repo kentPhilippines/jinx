@@ -34,7 +34,7 @@ public class AlipayAmountEntity extends BaseEntity {
     /**
      * 1 加款类型  2 扣款类型
      */
-    @Excel(name = "1 加款类型  2 扣款类型")
+    @Excel(name = "1 加款类型,2 扣款类型,3资金冻结,4资金解冻")
     private String amountType;
     /**
      * 申请人姓名【后台管理人员】
