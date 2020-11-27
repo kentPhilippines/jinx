@@ -117,6 +117,34 @@ public class AlipayUserFundEntityController extends BaseController {
     }
 
     /**
+     * 增加授权页面
+     */
+    @GetMapping("/addQuotaUrl/{userId}")
+    public String addQuotaUrl(@PathVariable("userId") String userId, ModelMap mmap) {
+        AlipayUserFundEntity userFundEntity = new AlipayUserFundEntity();
+        userFundEntity.setUserId(userId);
+        List<AlipayUserFundEntity> alipayUserFundEntities = alipayUserFundEntityService.selectAlipayUserFundEntityList(userFundEntity);
+        mmap.put("userFund", alipayUserFundEntities.get(0));
+        return prefix + "/addQuota";
+    }
+
+    /**
+     * 减少授权页面
+     *
+     * @param userId
+     * @param mmap
+     * @return
+     */
+    @GetMapping("/deleteQuotaUrl/{userId}")
+    public String deleteQuotaUrl(@PathVariable("userId") String userId, ModelMap mmap) {
+        AlipayUserFundEntity userFundEntity = new AlipayUserFundEntity();
+        userFundEntity.setUserId(userId);
+        List<AlipayUserFundEntity> alipayUserFundEntities = alipayUserFundEntityService.selectAlipayUserFundEntityList(userFundEntity);
+        mmap.put("userFund", alipayUserFundEntities.get(0));
+        return prefix + "/deleteQuota";
+    }
+
+    /**
      * 加款保存用户加款记录
      */
     @Log(title = "用户资金账户加款", businessType = BusinessType.UPDATE)
@@ -155,6 +183,24 @@ public class AlipayUserFundEntityController extends BaseController {
             return error("当前账户冻结资金不足，请确认好后提交");
         }
         return toAjax(alipayAmountEntityService.insertAlipayAmountFreeze(alipayAmountEntity));
+    }
+
+    /**
+     * 加款保存用户加款记录
+     */
+    @Log(title = "增加用户授权额度", businessType = BusinessType.UPDATE)
+    @PostMapping("/addQuota")
+    @ResponseBody
+    public AjaxResult addQuota(AlipayAmountEntity alipayAmountEntity) {
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        alipayAmountEntity.setAccname(currentUser.getLoginName());
+        String password = alipayAmountEntity.getParams().get("password").toString();
+        String verify = passwordService.encryptPassword(currentUser.getLoginName(), password, currentUser.getSalt());
+        if (!currentUser.getPassword().equals(verify)) {
+            return AjaxResult.error("密码验证失败");
+        }
+        return toAjax(alipayAmountEntityService.insertAlipayAmountQuota(alipayAmountEntity));
     }
 
 
@@ -199,6 +245,8 @@ public class AlipayUserFundEntityController extends BaseController {
             if (accountBalance < alipayAmountEntity.getAmount()) {
                 return error("当前账户余额不足，不支持账户冻结");
             }
+        } else if (alipayAmountEntity.getAmountType().toString().equals(RefundDeductType.DELETE_QUOTA_TYPE.getCode().toString())) {//减少授权额度
+            mapParam.put("amountType", RefundDeductType.DELETE_QUOTA_TYPE.getCode());//账户冻结
         } else {
             mapParam.put("amountType", RefundDeductType.DEDUCT_TYPE.getCode());//减款
         }

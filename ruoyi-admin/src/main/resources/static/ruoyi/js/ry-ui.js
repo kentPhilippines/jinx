@@ -1211,6 +1211,10 @@ var table = {
                     $.modal.open(title, $.operate.addFreezeUrlM(id))
                 } else if (flag == 'deleteFreezeFlag') {
                     $.modal.open(title, $.operate.deleteFreezeUrlM(id))
+                } else if (flag == 'deleteQuotaFlag') {
+                    $.modal.open(title, $.operate.deleteQuotaUrlM(id))
+                } else if (flag == 'addQuotaFlag') {
+                    $.modal.open(title, $.operate.addQuotaUrlM(id))
                 }
             },
             // 二维码详细列表
@@ -1364,13 +1368,12 @@ var table = {
                 var url = "/404.html";
                 if ($.common.isNotEmpty(id)) {
                     url = table.options.addFreezeUrl.replace("{userId}", id);
-                } else {
-                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-                    if (id.length == 0) {
-                        $.modal.alertWarning("请至少选择一条记录");
-                        return;
-                    }
-                    url = table.options.otherUrl.replace("{id}", id);
+                }
+                return url;
+            }, addQuotaUrlM: function (id) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.addQuotaUrl.replace("{userId}", id);
                 }
                 return url;
             },
@@ -1379,13 +1382,12 @@ var table = {
                 var url = "/404.html";
                 if ($.common.isNotEmpty(id)) {
                     url = table.options.deleteFreezeUrl.replace("{userId}", id);
-                } else {
-                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-                    if (id.length == 0) {
-                        $.modal.alertWarning("请至少选择一条记录");
-                        return;
-                    }
-                    url = table.options.otherUrl.replace("{id}", id);
+                }
+                return url;
+            }, deleteQuotaUrlM: function (id) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.deleteQuotaUrl.replace("{userId}", id);
                 }
                 return url;
             },

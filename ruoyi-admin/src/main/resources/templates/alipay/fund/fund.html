@@ -67,7 +67,9 @@
     var refundFlag = [[${@permission.hasPermi('fund:refund:add')}]];
     var deductFlag = [[${@permission.hasPermi('fund:refund:deduct')}]];
     var addFreezeFlag = [[${@permission.hasPermi('fund:refund:addFreezeFlag')}]];
+    var addQuotaFlag = [[${@permission.hasPermi('fund:refund:addFreezeFlag')}]];
     var deleteFreezeFlag = [[${@permission.hasPermi('fund:refund:deleteFreezeFlag')}]];
+    var deleteQuotaFlag = [[${@permission.hasPermi('fund:refund:deleteFreezeFlag')}]];
     var userType = [[${@dict.getType('userType')}]];
     var prefix = ctx + "alipay/fund";
 
@@ -78,7 +80,9 @@
             openUrl: prefix + "/refund/{userId}",
             exportUrl: prefix + "/export",
             addFreezeUrl: prefix + "/addFreezeUrl/{userId}",
+            addQuotaUrl: prefix + "/addQuotaUrl/{userId}",
             deleteFreezeUrl: prefix + "/deleteFreezeUrl/{userId}",
+            deleteQuotaUrl: prefix + "/deleteQuotaUrl/{userId}",
             modalName: "用户资金账户",
             columns: [{
                 checkbox: true
@@ -115,6 +119,10 @@
                 {
                     field: 'currency',
                     title: '货币类型 '
+                },
+                {
+                    field: 'quota',
+                    title: '预授额度'
                 },
                 /*      {
                           field: 'sumDealAmount',
@@ -160,6 +168,9 @@
                             actions.push('<a class="btn btn-danger btn-xs ' + deductFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户减款\',\'updateUrl\')"><i class="fa fa-minus"></i>减款</a> ');
                             actions.push('<a class="btn btn-primary btn-xs ' + addFreezeFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户解冻\',\'addFreezeFlag\')"><i class="fa fa-plus"></i>账户解冻</a> ');
                             actions.push('<a class="btn btn-danger btn-xs ' + deleteFreezeFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户冻结\',\'deleteFreezeFlag\')"><i class="fa fa-minus"></i>账户冻结</a> ');
+                            actions.push('<a class="btn btn-primary btn-xs ' + addQuotaFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'增加账户授权\',\'addQuotaFlag\')"><i class="fa fa-plus"></i>增加账户授权</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + deleteQuotaFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'减少账户授权\',\'deleteQuotaFlag\')"><i class="fa fa-minus"></i>减少账户授权</a> ');
+
                         }
                         return actions.join('');
                     }

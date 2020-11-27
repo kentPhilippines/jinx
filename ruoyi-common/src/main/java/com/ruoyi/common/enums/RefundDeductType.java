@@ -9,7 +9,9 @@ public enum RefundDeductType {
     REFUND_TYPE(1, "加款申请"),
     DEDUCT_TYPE(2, "减款申请"),
     DEDUCT_FREEZE_TYPE(3, "冻结申请"),
-    REFUND_FREEZE_TYPE(4, "解冻申请");
+    REFUND_FREEZE_TYPE(4, "解冻申请"),
+    REFUND_QUOTA_TYPE(5, "增加授权额度"),
+    DELETE_QUOTA_TYPE(6, "减少授权额度");
 
     private Integer code;
     private String desc;

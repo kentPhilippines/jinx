@@ -5,6 +5,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -67,6 +68,16 @@ public class AlipayUserFundEntity extends BaseEntity {
      */
     @Excel(name = "累计交易额")
     private Double sumDealAmount;
+    @Excel(name = "预授额度")
+    private BigDecimal quota;
+
+    public BigDecimal getQuota() {
+        return quota;
+    }
+
+    public void setQuota(BigDecimal quota) {
+        this.quota = quota;
+    }
 
     /**
      * 累计充值金额【充值成功时统计记录】

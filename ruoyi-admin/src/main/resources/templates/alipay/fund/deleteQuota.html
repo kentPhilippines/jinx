@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('减少商户授权额度')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-fund-deduct" th:object="${userFund}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">授权账户：</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="userId" name="userId" readonly th:field="*{userId}" type="text">
+                <input class="form-control" id="amountType" name="amountType" readonly type="hidden" value="6">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">当前授权余额：</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="quota" name="quota" readonly
+                       th:field="*{quota}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">减少授权金额：</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="amount" min="0" name="amount" placeholder="请输入金额" required
+                       type="number">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">减少授权额度理由：</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" id="dealDescribe" name="dealDescribe" placeholder="请完整描述减少授权额度理由"
+                          required type="text"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">资金密码：</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="password" name="params[password]" placeholder="请输入密码" required
+                       type="password">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "alipay/fund";
+    $("#form-fund-deduct").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/deduct", $('#form-fund-deduct').serialize());
+        }
+    }
+</script>
+</body>
+</html>

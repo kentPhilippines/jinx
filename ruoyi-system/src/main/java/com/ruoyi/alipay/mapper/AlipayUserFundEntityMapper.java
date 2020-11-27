@@ -81,7 +81,11 @@ public interface AlipayUserFundEntityMapper {
     List<AlipayUserFundEntity> findUserAppAll(@Param("baseEntity") BaseEntity baseEntity);
 
 
-    @Select("select '所有' as userId , '下游商户总余额' as userName , sum(freezeBalance) as freezeBalance , sum(accountBalance) as accountBalance from " +
+    @Select("select '所有' as userId , '下游商户总余额' as userName ," +
+            " sum(freezeBalance) as freezeBalance , " +
+            "sum(accountBalance) as accountBalance ," +
+            "sum(quota) as quota" +
+            " from " +
             "alipay_user_fund where userType = 1 ")
     AlipayUserFundEntity findSumFundM();
 }

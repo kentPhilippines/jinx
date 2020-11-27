@@ -140,4 +140,15 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
 
         return 0;
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int insertAlipayAmountQuota(AlipayAmountEntity alipayAmountEntity) {
+        alipayAmountEntity.setCreateTime(DateUtils.getNowDate());
+        alipayAmountEntity.setOrderId(GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_REFUND));
+        alipayAmountEntity.setAmountType("5");
+        alipayAmountEntity.setOrderStatus("2");
+        alipayAmountEntity.setActualAmount(alipayAmountEntity.getAmount());
+        return alipayAmountEntityMapper.insertAlipayAmountEntity(alipayAmountEntity);
+    }
 }

@@ -177,6 +177,7 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
             alipayUserInfo.getParams().put("rechargeNumber", map.get("rechargeNumber"));
             alipayUserInfo.getParams().put("accountBalance", map.get("accountBalance"));
             alipayUserInfo.getParams().put("freezeBalance", map.get("freezeBalance"));
+            alipayUserInfo.getParams().put("quota", map.get("quota"));
             return alipayUserInfo;
         } catch (Exception e) {
             throw new BusinessException("查询结果不唯一,请核实");

@@ -77,4 +77,6 @@ public interface IAlipayAmountEntityService {
      * @return
      */
     int additionaEditEnter(AlipayAmountEntity amountEntity);
+
+    int insertAlipayAmountQuota(AlipayAmountEntity alipayAmountEntity);
 }
