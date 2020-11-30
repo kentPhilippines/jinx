@@ -101,16 +101,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
 
+    <select id="findRates" parameterType="String" resultMap="AlipayUserRateEntityResult">
+        select * from alipay_user_rate where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
 
     <!-- 查询码商的费率-->
 
-    <select id="selectUserRateEntityList_qr" parameterType="AlipayUserRateEntity" resultMap="AlipayUserRateEntityResult">
+    <select id="selectUserRateEntityList_qr" parameterType="AlipayUserRateEntity"
+            resultMap="AlipayUserRateEntityResult">
         <include refid="selectAlipayUserRateEntityVo"/>
         <where>
             userType = 2
-            <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
-            <if test="switchs != null "> and switchs = #{switchs}</if>
-            <if test="payTypr != null  and payTypr != ''"> and payTypr = #{payTypr}</if>
+            <if test="userId != null  and userId != ''">and userId = #{userId}</if>
+            <if test="switchs != null ">and switchs = #{switchs}</if>
+            <if test="payTypr != null  and payTypr != ''">and payTypr = #{payTypr}</if>
             <if test="fee != null "> and fee = #{fee}</if>
             <if test="feeType != null "> and feeType = #{feeType}</if>
               <if test="channelId != null "> and channelId = #{channelId}</if>

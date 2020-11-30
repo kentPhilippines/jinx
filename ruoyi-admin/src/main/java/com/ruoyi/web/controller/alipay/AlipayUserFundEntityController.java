@@ -130,7 +130,6 @@ public class AlipayUserFundEntityController extends BaseController {
 
     /**
      * 减少授权页面
-     *
      * @param userId
      * @param mmap
      * @return
@@ -184,7 +183,6 @@ public class AlipayUserFundEntityController extends BaseController {
         }
         return toAjax(alipayAmountEntityService.insertAlipayAmountFreeze(alipayAmountEntity));
     }
-
     /**
      * 加款保存用户加款记录
      */

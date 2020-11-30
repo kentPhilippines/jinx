@@ -1185,6 +1185,22 @@ var table = {
                     $.operate.submit(url, "post", "json", data);
                 });
             },
+
+            // 批量修改信息
+            editAll: function (title) {
+                table.set();
+                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                var url = table.options.updateUrlAll.replace("{ids}", rows.join());
+                $.modal.open(title, url);
+            },
+
+            //     editAll
+
+
             // 清空信息
             clean: function () {
                 table.set();

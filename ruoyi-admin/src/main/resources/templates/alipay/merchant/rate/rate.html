@@ -62,6 +62,10 @@
             <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="merchant:rate:add">
                 <i class="fa fa-plus"></i> 新增
             </a>
+            <a class="btn btn-primary multiple disabled" onclick="$.operate.editAll('批量修改费率')"
+               shiro:hasPermission="merchant:rate:editAll">
+                <i class="fa fa-edit"></i> 批量修改
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -83,6 +87,7 @@
             url: prefix + "/list",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
+            updateUrlAll: prefix + "/edits/{ids}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "商户通道费率",
@@ -90,9 +95,15 @@
                 checkbox: true
             },
                 {
+                    field: 'id',
+                    title: '费率id',
+                    hidden: true
+                },
+                {
                     field: 'userId',
                     title: '商户账户'
                 },
+
                 {
                     field: 'userType',
                     title: '用户类型',
@@ -148,7 +159,8 @@
                 {
                     field: 'createTime',
                     title: '创建时间',
-                    align: 'center'
+                    align: 'center',
+                    hidden: true
                 },
                 {
                     title: '操作',

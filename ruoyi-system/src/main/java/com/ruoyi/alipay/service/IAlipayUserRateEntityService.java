@@ -96,4 +96,6 @@ public interface IAlipayUserRateEntityService {
     Boolean clickFee(AlipayUserRateEntity alipayUserRateEntity);
 
     Boolean isAgentFee(AlipayUserRateEntity alipayUserRateEntity);
+
+    List<AlipayUserRateEntity> findRates(String ids);
 }

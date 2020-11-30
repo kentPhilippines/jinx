@@ -1,5 +1,7 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.core.text.StrBuilder;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.service.*;
@@ -17,7 +19,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -157,11 +161,73 @@ public class AlipayUserRateEntityController extends BaseController {
         return prefix + "/edit";
     }
 
+    @GetMapping("/edits/{ids}")
+    public String edit(@PathVariable("ids") String ids, ModelMap mmap) {
+        //查询产品类型下拉菜单
+        mmap.put("ids", ids);
+        List<AlipayUserRateEntity> rateEntityList = alipayUserRateEntityService.findRates(ids);
+        StrBuilder strBuilder = StrBuilder.create();
+        for (AlipayUserRateEntity rateEntity : rateEntityList) {
+            strBuilder.append("id:").append(rateEntity.getId()).append(" 账号：").append(rateEntity.getUserId()).append(" ").append("原渠道：").
+                    append(rateEntity.getChannelId()).append(" ").append("原产品：").append(rateEntity.getPayTypr() + " ");
+        }
+        mmap.put("rete", strBuilder.toString());
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
+        mmap.put("rateList", rateList);
+        return prefix + "/edits";
+    }
+
+    @RequiresPermissions("merchant:rate:edit")
+    @Log(title = "商户费率批量修改", businessType = BusinessType.UPDATE)
+    @PostMapping("/edits")
+    @ResponseBody
+    public AjaxResult editsSave(String ids, final String channel) {
+        List<AlipayUserRateEntity> rateEntityList = alipayUserRateEntityService.findRates(ids);
+        Map map = new HashMap();
+        for (AlipayUserRateEntity rateEntity : rateEntityList) {
+            map.put(rateEntity.getChannelId(), rateEntity.getChannelId());
+        }
+        if (map.size() > 1) {
+            throw new BusinessException("当前批量修改中存在多个渠道，请选择相同渠道完成批量修改");
+        }
+        for (AlipayUserRateEntity rateEntity : rateEntityList) {
+            String channelId = rateEntity.getChannelId();
+            rateEntity.setChannelId(channel);
+            try {
+                alipayUserRateEntityService.clickFee(rateEntity);
+                alipayUserRateEntityService.isAgentFee(rateEntity);
+                AlipayChanelFee channel1 = alipayChanelFeeServiceImpl.findChannelBy(rateEntity.getChannelId(), rateEntity.getPayTypr());
+                if (ObjectUtil.isNull(channel1))
+                    throw new BusinessException("当前渠道未接通，请联系技术人员对接");
+                alipayUserRateEntityService.updateAlipayUserRateEntity(rateEntity);
+            } catch (Exception e) {
+                ThreadUtil.execute(() -> {
+                    if (e.getMessage().contains("java.sql.SQLIntegrityConstraintViolationException")) {//费率发生数据库唯一键约束
+                        //停用当前费率，开启目标费率
+                        int i = alipayUserRateEntityService.changeStatus(rateEntity.getId() + "", rateEntity.getUserId(), rateEntity.getFeeType() + "", "0");
+                        if (i > 0) {
+                            rateEntity.setStatus(null);
+                            rateEntity.setSwitchs(null);
+                            List<AlipayUserRateEntity> rateEntityList1 = alipayUserRateEntityService.selectAlipayUserRateEntityList(rateEntity);
+                            if (rateEntityList1.size() == 1) {
+                                AlipayUserRateEntity rateEntity1 = rateEntityList1.get(0);
+                                alipayUserRateEntityService.changeStatus(rateEntity1.getId() + "", rateEntity1.getUserId(), rateEntity1.getFeeType() + "", "1");
+                            }
+                        }
+                    }
+                });
+            }
+
+        }
+
+        return success("修改完毕");
+    }
+
     /*
      * 修改保存用户产品费率
      */
     @RequiresPermissions("merchant:rate:edit")
-    @Log(title = "商户费率", businessType = BusinessType.UPDATE)
+    @Log(title = "商户费率修改", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(AlipayUserRateEntity alipayUserRateEntity) {
