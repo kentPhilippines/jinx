@@ -213,4 +213,10 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     public int updateAutoWit(String id, String autoWitStatus) {
         return alipayUserInfoMapper.updateAutoWit(id, autoWitStatus);
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int updateStatus(String userId, Integer status) {
+        return alipayUserInfoMapper.updateStatus(userId, status);
+    }
 }

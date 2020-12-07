@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 import java.util.List;
@@ -96,4 +97,8 @@ public interface IAlipayUserFundEntityService {
      * @return
      */
     AlipayUserFundEntity findSumFundM();
+
+    List<AlipayUserInfo> findUserByAgent(String agentUserId);
+
+    int updateStatus(String userId, Integer status);
 }

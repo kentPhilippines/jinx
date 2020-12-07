@@ -50,8 +50,12 @@ public class BackManageController extends BaseController {
     @Autowired private IAlipayDealOrderAppService alipayDealOrderAppService;
     @Autowired private IAlipayRunOrderEntityService alipayRunOrderEntityService;
     @Autowired private IAlipayWithdrawEntityService alipayWithdrawEntityService;
-    @Autowired private IAlipayUserFundEntityService alipayUserFundEntityService;
-    @Autowired private SysPasswordService passwordService;
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
+    @Autowired
+    private IAlipayChanelFeeService alipayChanelFeeService;
+    @Autowired
+    private SysPasswordService passwordService;
     @Autowired private DictionaryUtils dictionaryUtils;
     @Autowired private IAlipayBankListEntityService alipayBankListEntityService;
     @Autowired private GoogleUtils googleUtils;
@@ -84,11 +88,20 @@ public class BackManageController extends BaseController {
     public AjaxResult toSave(AlipayUserInfo alipayUserInfo) {
         return toAjax(merchantInfoEntityService.updateMerchantByBackAdmin(alipayUserInfo));
     }
+
     //商户查询交易订单
     @GetMapping("/order/view")
-    public String orderShow() {
+    public String orderShow(ModelMap modelMap) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        //查询产品类型下拉菜单
+        //  List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        List<AlipayProductEntity> list = alipayChanelFeeService.findProductByName(sysUser.getMerchantId());
+        modelMap.put("productList", list);
         return prefix + "/order";
     }
+
     /**
      * 查询商户订单
      */
@@ -99,6 +112,16 @@ public class BackManageController extends BaseController {
         alipayDealOrderApp.setOrderAccount(sysUser.getMerchantId());
         startPage();
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
+
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        for (AlipayDealOrderApp order : list) {
+            AlipayProductEntity product = prCollect.get(order.getRetain1());
+            if (ObjectUtil.isNotNull(product))
+                order.setRetain1(product.getProductName());
+        }
         return getDataTable(list);
     }
 

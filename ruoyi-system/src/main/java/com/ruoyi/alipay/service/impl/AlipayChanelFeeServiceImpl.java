@@ -1,15 +1,17 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.List;
-import com.ruoyi.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayChanelFeeMapper;
 import com.ruoyi.alipay.domain.AlipayChanelFee;
+import com.ruoyi.alipay.domain.AlipayProductEntity;
+import com.ruoyi.alipay.mapper.AlipayChanelFeeMapper;
 import com.ruoyi.alipay.service.IAlipayChanelFeeService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.common.utils.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 渠道费率Service业务层处理
@@ -98,6 +100,12 @@ public class AlipayChanelFeeServiceImpl implements IAlipayChanelFeeService {
 	@Override
 	@DataSource(DataSourceType.ALIPAY_SLAVE)
 	public AlipayChanelFee findChannelBy(String channelId, String payTypr) {
-		return alipayChanelFeeMapper.findChannelBy(  channelId,   payTypr);
+		return alipayChanelFeeMapper.findChannelBy(channelId, payTypr);
+	}
+
+	@Override
+	@DataSource(DataSourceType.ALIPAY_SLAVE)
+	public List<AlipayProductEntity> findProductByName(String merchantId) {
+		return alipayChanelFeeMapper.findProductByName(merchantId);
 	}
 }

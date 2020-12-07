@@ -15,6 +15,7 @@
                             <p>商户账户：</p>
                             <input type="text" id="userId" name="userId"/>
                         </li>
+
                         <li class="select-selectpicker">
                             <label>通道状态： </label>
                             <select id="switchs" name="switchs" th:with="type=${@dict.getType('userSwitchs')}"
@@ -26,9 +27,10 @@
                         </li>
                         <li class="select-selectpicker">
                             <label>产品类型：</label>
-                            <select id="payTypr" name="payTypr" class="selectpicker" data-none-selected-text="请选择">
+                            <select class="selectpicker" data-none-selected-text="请选择" id="retain1" name="payTypr">
                                 <option value="">所有</option>
-                                <option th:each="product : ${productList}" th:text="${product.productName}" th:value="${product.productId}"></option>
+                                <option th:each="product : ${productList}" th:text="${product.productName}"
+                                        th:value="${product.productId}"></option>
                             </select>
                         </li>
                         <li class="select-selectpicker">
@@ -41,11 +43,15 @@
                         <li class="select-selectpicker">
                             <label>费率类型： </label>
                             <select id="feeType" name="feeType" th:with="type=${@dict.getType('feeType')}"
-                                    class="selectpicker" data-none-selected-text="请选择" >
+                                    class="selectpicker" data-none-selected-text="请选择">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
+                        </li>
+                        <li>
+                            <p>上级代理账户：</p>
+                            <input id="agentUserId" name="agentUserId" type="text"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i

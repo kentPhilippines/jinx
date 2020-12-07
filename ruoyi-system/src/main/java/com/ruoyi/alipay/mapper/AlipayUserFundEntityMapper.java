@@ -6,6 +6,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -59,7 +60,7 @@ public interface AlipayUserFundEntityMapper {
     @Select("select userId  ,userName, accountBalance, rechargeNumber , freezeBalance ,userType from alipay_user_fund  ")
     List<AlipayUserFundEntity> findUserFundAll();
 
-    @Select("select * from alipay_user_fund where userType = 3")
+    @Select("select * from alipay_user_fund where userType = 3 and status = 1 ")
     List<AlipayUserFundEntity> findUserFundRate();
 
 
@@ -88,4 +89,11 @@ public interface AlipayUserFundEntityMapper {
             " from " +
             "alipay_user_fund where userType = 1 ")
     AlipayUserFundEntity findSumFundM();
+
+
+    @Select("select * from alipay_user_info where agent = #{agentUserId}")
+    List<AlipayUserInfo> findUserByAgent(@Param("agentUserId") String agentUserId);
+
+    @Update("update alipay_user_fund set status = #{status} where userId = #{userId} ")
+    int updateStatus(@Param("userId") String userId, @Param("status") Integer status);
 }

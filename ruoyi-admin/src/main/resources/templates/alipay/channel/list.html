@@ -57,6 +57,7 @@
     var refundFlag = [[${@permission.hasPermi('fund:refund:add')}]];
     var deductFlag = [[${@permission.hasPermi('fund:refund:deduct')}]];
     var editChannel = [[${@permission.hasPermi('fund:refund:edit')}]];
+    var editFlag = [[${@permission.hasPermi('fund:refund:status')}]];
     var userType = [[${@dict.getType('userType')}]];
     var prefix = ctx + "alipay/channel";
     var prefix1 = ctx + "alipay/fund";
@@ -76,7 +77,16 @@
                 {field: 'userId', title: '渠道账户 '},
                 {field: 'userName', title: '账户名称 '},
                 {field: 'accountBalance', title: '可取现金额 '},
-                {   field: 'createTime',        title: '创建时间'       },
+                {field: 'createTime', title: '创建时间'},
+                {
+                    field: 'status', title: '热点&冷门', formatter: function (value, row, index) {
+                        if (row.status == 0) {
+                            return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.userId + '\')"><i class="fa fa-edit"></i>点击切换为热点类型</a> '
+                        } else if (row.status == 1) {
+                            return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.userId + '\')"><i class="fa fa-edit"></i>点击切换为冷门类型</a> '
+                        }
+                    }
+                },
                 {
                     title: '操作',
                     align: 'center',
@@ -91,6 +101,27 @@
         };
         $.table.init(options);
     });
+
+    function hut(id) {
+        let msg = "确认要将此产品置为【热点】吗？";
+        let val = 1;
+        return auto(id, msg, val);
+    }
+
+    function cood(id) {
+        let msg = "确认要将此产品置为【冷门】吗？";
+        let val = 0;
+        return auto(id, msg, val);
+    }
+
+    function auto(id, msg, status) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefix + "/updateStatus", {
+                "userId": id,
+                "status": status
+            });
+        })
+    }
 </script>
 </body>
 </html>

@@ -8,7 +8,6 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -107,7 +106,6 @@ public class AlipayProductController extends BaseController {
     }
 
 
-
     /**
      * 产品状态修改（调用api）
      */
@@ -115,6 +113,17 @@ public class AlipayProductController extends BaseController {
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(AlipayProductEntity alipayProductEntity) {
+        return toAjax(iAlipayProductService.updateProductStatusById(alipayProductEntity));
+    }
+
+
+    /**
+     * 产品状态修改（调用api）
+     */
+    @Log(title = "产品热冷修改", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateStatus")
+    @ResponseBody
+    public AjaxResult updateStatus(AlipayProductEntity alipayProductEntity) {
         return toAjax(iAlipayProductService.updateProductStatusById(alipayProductEntity));
     }
 }

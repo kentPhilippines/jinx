@@ -61,7 +61,7 @@ public class AlipayUserFundEntityController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserFundEntity alipayUserFundEntity) {
-        startPage();
+        startPage1();
         List<AlipayUserFundEntity> list = alipayUserFundEntityService
                 .selectAlipayUserFundEntityList(alipayUserFundEntity);
         AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.findSumFundM();

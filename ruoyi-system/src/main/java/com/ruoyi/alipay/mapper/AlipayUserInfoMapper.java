@@ -173,4 +173,7 @@ public interface AlipayUserInfoMapper {
 
     @Update("update alipay_user_info set  autoWit  = #{autoWitStatus} where id = #{id}")
     int updateAutoWit(@Param("id") String id, @Param("autoWitStatus") String autoWitStatus);
+
+    @Update("update alipay_user_info set status = #{status} where userId = #{userId}")
+    int updateStatus(@Param("userId") String userId, @Param("status") Integer status);
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('商户订单登记列表')"/>
     <th:block th:include="include :: bootstrap-select-css"/>
@@ -22,6 +22,14 @@
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>产品类型：</label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="retain1" name="retain1">
+                                <option value="">所有</option>
+                                <option th:each="product : ${productList}" th:text="${product.productName}"
+                                        th:value="${product.productId}"></option>
                             </select>
                         </li>
                         <li class="select-time">
@@ -83,12 +91,13 @@
                         return $.table.selectDictLabel(orderstatusDatas, value);
                     }
                 },
+                {field: 'retain1', title: '产品类型'},
                 {field: 'orderAmount', title: '订单金额 '},
                 {field: 'retain3', title: '交易手续费'},
                 {field: 'orderIp', title: '订单生成IP'},
                 {field: 'createTime', title: '创建时间'},
-                {field: 'dealDescribe', title: '交易备注'},
-          ]
+
+            ]
         };
         $.table.init(options);
     });

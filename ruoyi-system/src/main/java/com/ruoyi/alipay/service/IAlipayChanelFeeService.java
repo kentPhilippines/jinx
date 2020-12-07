@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayChanelFee;
+import com.ruoyi.alipay.domain.AlipayProductEntity;
+
 import java.util.List;
 
 /**
@@ -53,12 +55,14 @@ public interface IAlipayChanelFeeService
 
     /**
      * 删除渠道费率信息
-     * 
+     *
      * @param id 渠道费率ID
      * @return 结果
      */
     public int deleteAlipayChanelFeeById(Long id);
 
-    
-	public AlipayChanelFee findChannelBy(String channelId, String payTypr);
+
+    public AlipayChanelFee findChannelBy(String channelId, String payTypr);
+
+    List<AlipayProductEntity> findProductByName(String merchantId);
 }

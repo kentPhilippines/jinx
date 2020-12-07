@@ -6,9 +6,9 @@ import com.ruoyi.alipay.service.IAlipayProductService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Service
 public class IAlipayProductServiceImpl implements IAlipayProductService {
-    @Autowired
+    @Resource
     AlipayProductMapper alipayProductMapper;
 
     /**
@@ -28,7 +28,6 @@ public class IAlipayProductServiceImpl implements IAlipayProductService {
     @Override
     @DataSource(DataSourceType.ALIPAY_SLAVE)
     public List<AlipayProductEntity> selectAlipayProductList(AlipayProductEntity alipayProductEntity) {
-        alipayProductEntity.setStatus(1);
         return alipayProductMapper.selectAlipayProductListEntityList(alipayProductEntity);
     }
 

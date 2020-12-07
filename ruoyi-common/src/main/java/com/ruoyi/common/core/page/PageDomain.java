@@ -29,8 +29,16 @@ public class PageDomain {
         if (StringUtils.isEmpty(orderByColumn)) {
             return "";
         }
+        // return orderByColumn + " " + isAsc;
+        return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
+    }
+
+    public String getOrderBy1() {
+        if (StringUtils.isEmpty(orderByColumn)) {
+            return "";
+        }
         return orderByColumn + " " + isAsc;
-        //StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
+        //return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
     }
 
     public Integer getPageNum() {

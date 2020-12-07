@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户产品费率对象 alipay_user_rate
@@ -26,6 +27,24 @@ public class AlipayUserRateEntity extends BaseEntity {
      */
     @Excel(name = "用户id【登录账号】")
     private String userId;
+    private String agentUserId;
+    private List<String> agentList;
+
+    public List<String> getAgentList() {
+        return agentList;
+    }
+
+    public void setAgentList(List<String> agentList) {
+        this.agentList = agentList;
+    }
+
+    public String getAgentUserId() {
+        return agentUserId;
+    }
+
+    public void setAgentUserId(String agentUserId) {
+        this.agentUserId = agentUserId;
+    }
 
     /**
      * 用户类型,商户1 码商2

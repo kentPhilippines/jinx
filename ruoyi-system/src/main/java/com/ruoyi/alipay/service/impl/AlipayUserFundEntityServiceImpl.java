@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.service.impl;
 
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.common.annotation.DataSource;
@@ -64,8 +65,9 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 	 * @param alipayUserFundEntity 用户资金账户
 	 * @return 结果
 	 */
-	@Override
-	public int updateAlipayUserFundEntity(AlipayUserFundEntity alipayUserFundEntity) {
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int updateAlipayUserFundEntity(AlipayUserFundEntity alipayUserFundEntity) {
 		return alipayUserFundEntityMapper.updateAlipayUserFundEntity(alipayUserFundEntity);
 	}
 
@@ -111,14 +113,26 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 		return alipayUserFundEntityMapper.findUserAppAll(baseEntity);
 	}
 
-	@Override
-	public List<AlipayUserFundEntity> findaAcountList(AlipayUserFundEntity alipayUserFundEntity) {
-		return null;
-	}
+    @Override
+    public List<AlipayUserFundEntity> findaAcountList(AlipayUserFundEntity alipayUserFundEntity) {
+        return null;
+    }
 
-	@Override
-	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
-	public AlipayUserFundEntity findSumFundM() {
-		return alipayUserFundEntityMapper.findSumFundM();
-	}
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserFundEntity findSumFundM() {
+        return alipayUserFundEntityMapper.findSumFundM();
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserInfo> findUserByAgent(String agentUserId) {
+        return alipayUserFundEntityMapper.findUserByAgent(agentUserId);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int updateStatus(String userId, Integer status) {
+        return alipayUserFundEntityMapper.updateStatus(userId, status);
+    }
 }

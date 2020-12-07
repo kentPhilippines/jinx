@@ -65,7 +65,6 @@
 <script th:inline="javascript">
     let editFlag = [[${@permission.hasPermi('alipay:product:edit')}]];
     let removeFlag = [[${@permission.hasPermi('alipay:product:remove')}]];
-
     let prefix = ctx + "alipay/product";
     $(function () {
         var options = {
@@ -96,7 +95,7 @@
                     ;
                 }
 
-            },{
+            }, {
                 field: 'productName',
                 title: '产品名称'
             },/*{
@@ -106,16 +105,24 @@
                 formatter: function (value, row, index) {
                     return statusTools(row);
                 }
-            },*/ {
+            },*/  {
+                field: 'status', title: '热点&冷门', formatter: function (value, row, index) {
+                    if (row.status == 0) {
+                        return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击切换为热点类型</a> '
+                    } else if (row.status == 1) {
+                        return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击切换为冷门类型</a> '
+                    }
+                }
+            }, {
                 field: 'describe',
                 title: '备注'
-            },{
+            }, {
                 field: 'createTime',
                 title: '创建时间'
-            },{
+            }, {
                 field: 'submitTime',
                 title: '更新时间'
-            },{
+            }, {
                 title: '操作',
                 align: 'center',
                 formatter: function (value, row, index) {
@@ -149,6 +156,30 @@
             $.operate.post(prefix + "/changeStatus", {"id": id, "status": 2});
         })
     }
+
+    function hut(id) {
+        let msg = "确认要将此产品置为【热点】吗？";
+        let val = 1;
+        return auto(id, msg, val);
+    }
+
+    function cood(id) {
+        let msg = "确认要将此产品置为【冷门】吗？";
+        let val = 0;
+        return auto(id, msg, val);
+    }
+
+    function auto(id, msg, status) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefix + "/updateStatus", {
+                "id": id,
+                "status": status
+            });
+        })
+    }
+
+
+
 </script>
 </body>
 </html>

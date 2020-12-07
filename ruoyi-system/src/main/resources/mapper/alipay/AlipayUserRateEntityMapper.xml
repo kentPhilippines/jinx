@@ -29,12 +29,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectAlipayUserRateEntityVo"/>
         <where>
             userType = 1
-            <if test="userId != null  and userId != ''"> and userId = #{userId}</if>
-            <if test="switchs != null "> and switchs = #{switchs}</if>
-            <if test="payTypr != null  and payTypr != ''"> and payTypr = #{payTypr}</if>
-            <if test="feeType != null "> and feeType = #{feeType}</if>
-            <if test="channelId != null and channelId != ''"> and channelId = #{channelId}</if>
-            <if test="status != null "> and status = #{status}</if>
+            <if test="userId != null  and userId != ''">and userId = #{userId}</if>
+            <if test="switchs != null ">and switchs = #{switchs}</if>
+            <if test="payTypr != null  and payTypr != ''">and payTypr = #{payTypr}</if>
+            <if test="feeType != null ">and feeType = #{feeType}</if>
+            <if test="channelId != null and channelId != ''">and channelId = #{channelId}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="agentList != null ">and userId in
+                <foreach item="userId" collection="agentList" open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            </if>
         </where>
         order by createTime desc
     </select>

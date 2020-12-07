@@ -133,4 +133,6 @@ public interface IAlipayUserInfoService {
      * @return
      */
     int updateAutoWit(String id, String autoWitStatus);
+
+    int updateStatus(String userId, Integer status);
 }

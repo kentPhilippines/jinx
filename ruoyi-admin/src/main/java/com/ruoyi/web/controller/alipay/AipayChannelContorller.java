@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.core.thread.ThreadUtil;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayAmountEntityService;
@@ -10,6 +11,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
@@ -100,6 +102,26 @@ public class AipayChannelContorller extends BaseController {
     @ResponseBody
     public AjaxResult editChannelIfo(AlipayUserInfo channelInfo) {
         return toAjax(alipayUserInfoService.updateAlipayUserInfo(channelInfo));
+    }
+
+    /**
+     * 转发财务
+     */
+    @Log(title = "渠道冷热门切换", businessType = BusinessType.INSERT)
+    @PostMapping("/updateStatus")
+    @ResponseBody
+    public AjaxResult updateStatus(AlipayUserInfo channelInfo) {
+        int i = alipayUserFundEntityService.updateStatus(channelInfo.getUserId(), channelInfo.getStatus());
+        int i1 = alipayUserInfoService.updateStatus(channelInfo.getUserId(), channelInfo.getStatus());
+        if (i > 0 && i1 > 0) {
+            return success("修改成功");
+        } else {
+            ThreadUtil.execute(() -> {
+                alipayUserFundEntityService.updateStatus(channelInfo.getUserId(), 1);
+                alipayUserInfoService.updateStatus(channelInfo.getUserId(), 1);
+            });
+        }
+        throw new BusinessException("操作失败，修改失败");
     }
 
 }

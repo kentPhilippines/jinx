@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.alipay;
 import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
@@ -19,6 +20,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +75,17 @@ public class AlipayUserRateEntityController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AlipayUserRateEntity alipayUserRateEntity) {
+        List<AlipayUserInfo> userList = new ArrayList<>();
+        List<String> userNameList = new ArrayList<>();
+        if (StrUtil.isNotEmpty(alipayUserRateEntity.getAgentUserId())) {
+            userList = alipayUserFundEntityService.findUserByAgent(alipayUserRateEntity.getAgentUserId());
+        }
+        if (userList.size() > 0) {
+            for (AlipayUserInfo user : userList) {
+                userNameList.add(user.getUserId());
+            }
+            alipayUserRateEntity.setAgentList(userNameList);
+        }
         startPage();
         List<AlipayUserRateEntity> list = alipayUserRateEntityService.selectAlipayUserRateEntityList(alipayUserRateEntity);
         List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
