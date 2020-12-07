@@ -27,14 +27,31 @@
                             <span>商户账号：</span>
                             <input type="text" name="orderAccount"/>
                         </li>
-                        <li>
+                        <!--<li>
                             <span>渠道账户：</span>
                             <input type="text" name="orderQrUser"/>
-                        </li>
-                       <!-- <li>
-                            <span>二维码ID：</span>
-                            <input type="text" name="orderQr"/>
                         </li>-->
+                        <li class="select-selectpicker">
+                            <label>产品类型：</label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="retain1" name="retain1">
+                                <option value="">所有</option>
+                                <option th:each="product : ${productList}" th:text="${product.productName}"
+                                        th:value="${product.productId}"></option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>渠道类型：</label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="orderQrUser"
+                                    name="orderQrUser">
+                                <option value="">所有</option>
+                                <option th:each="channel : ${rateList}" th:text="${channel.userName}"
+                                        th:value="${channel.userId}"></option>
+                            </select>
+                        </li>
+                        <!-- <li>
+                             <span>二维码ID：</span>
+                             <input type="text" name="orderQr"/>
+                         </li>-->
                         <li class="select-selectpicker">
                             <label>订单状态： </label>
                             <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"

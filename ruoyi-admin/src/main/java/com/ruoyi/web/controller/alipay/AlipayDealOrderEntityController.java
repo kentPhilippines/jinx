@@ -50,7 +50,14 @@ public class AlipayDealOrderEntityController extends BaseController {
     @Autowired private ISysUserService userService;
     @Autowired IAlipayProductService iAlipayProductService;
     @GetMapping()
-    public String orderDeal() {
+    public String orderDeal(ModelMap mmap) {
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        mmap.put("productList", list);
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
+        mmap.put("rateList", rateList);
         return prefix + "/orderDeal";
     }
     @Autowired
