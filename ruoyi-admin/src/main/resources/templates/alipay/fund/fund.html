@@ -55,6 +55,7 @@
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="fund:alipay:export">
                 <i class="fa fa-download"></i> 导出
             </a>
+            <span> <mark style="color: red"><strong>统计数据为当日凌晨一点[01 am ]至当前时间</strong>  </mark></span>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -128,6 +129,15 @@
                     sortable: true
 
                 },
+                {
+                    field: 'todayDealAmount',
+                    title: '当日交易',
+                    sortable: true
+                }, {
+                    field: 'todayAgentProfit',
+                    title: '当日代理利润',
+                    sortable: true
+                },
                 /*      {
                           field: 'sumDealAmount',
                           title: '累计交易'
@@ -147,17 +157,17 @@
                               return $.table.selectDictLabel(userType, value);
                           }
                       },*/
-                {
-                    field: 'isAgent',
-                    title: '账号性质',
-                    formatter: function (value, item, index) {
-                        if (item.isAgent == '1') {
-                            return '<span>代理商</span>';
-                        } else if (item.userType == '2') {
-                            return '<span>普通账户</span>';
-                        }
-                    }
-                },
+                /* {
+                     field: 'isAgent',
+                     title: '账号性质',
+                     formatter: function (value, item, index) {
+                         if (item.isAgent == '1') {
+                             return '<span>代理商</span>';
+                         } else if (item.userType == '2') {
+                             return '<span>普通账户</span>';
+                         }
+                     }
+                 },*/
                 {
                     field: 'createTime',
                     title: '创建时间'

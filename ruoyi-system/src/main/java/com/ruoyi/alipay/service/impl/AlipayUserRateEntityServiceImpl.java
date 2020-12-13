@@ -1,5 +1,6 @@
 package com.ruoyi.alipay.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ruoyi.alipay.domain.AlipayChanelFee;
@@ -181,15 +182,20 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         if (result.getSwitchs() == 2) {
             throw new BusinessException("此用户已被停用");
         }
-
+        if (switchs.equals("1")) {
+            List<AlipayUserRateEntity> rate = alipayUserRateEntityMapper.clickPriorityOpen(id);
+            if (CollUtil.isNotEmpty(rate) && rate.size() > 1) {
+                throw new BusinessException("相同产品下，不允许开启优先级相同的费率，请调整费率后在重新开启");
+            }
+        }
         /*如果是开启  则关闭该产品其他渠道
         如果是关闭 则啥都不管
         /
          */
-        if(switchs.equals("1")){
+        /*if(switchs.equals("1")){
             //关闭该商户下  该产品所有的通道
           int a =   alipayUserRateEntityMapper.updateProduct(id,userId);
-        }
+        }*/
         return alipayUserRateEntityMapper.updateStatus(id, switchs);
     }
 

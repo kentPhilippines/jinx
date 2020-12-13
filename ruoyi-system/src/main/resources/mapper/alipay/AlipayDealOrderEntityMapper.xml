@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dealDescribe != null  and dealDescribe != ''"> and dealDescribe = #{dealDescribe}</if>
             <if test="isNotify != null  and isNotify != ''"> and isNotify = #{isNotify}</if>
             <if test="status != null "> and status = #{status}</if>
-            <if test="retain1 != null ">and retain1 = #{retain1}</if>
+            <if test="retain1 != null and retain1 != '' ">and retain1 = #{retain1}</if>
         </where>
         order by id desc
     </select>

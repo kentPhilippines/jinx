@@ -84,8 +84,8 @@
     const editFlag = [[${@permission.hasPermi('merchant:rate:edit')}]];
     const removeFlag = [[${@permission.hasPermi('merchant:rate:remove')}]];
 
-    const productType =    [[${@dict.getType('payTypr')}]];
-
+    const productType = [[${@dict.getType('payTypr')}]];
+    const priority = [[${@dict.getType('priority')}]];
     const prefix = ctx + "alipay/rate";
 
     $(function () {
@@ -154,6 +154,13 @@
                 {
                     field: 'profit',
                     title: '盈利点位'
+                },
+                {
+                    field: 'retain1',
+                    title: '优先级',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(priority, value);
+                    }
                 },
                 {
                     title: '通道状态',

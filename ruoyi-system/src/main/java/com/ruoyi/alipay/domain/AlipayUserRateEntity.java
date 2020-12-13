@@ -46,6 +46,7 @@ public class AlipayUserRateEntity extends BaseEntity {
         this.agentUserId = agentUserId;
     }
 
+
     /**
      * 用户类型,商户1 码商2
      */
@@ -119,13 +120,13 @@ public class AlipayUserRateEntity extends BaseEntity {
     /**
      * 预留，添加业务使用
      */
-    @Excel(name = "预留，添加业务使用")
+    @Excel(name = "优先级")
     private String retain1;
 
     /**
      * 预留，添加业务使用
      */
-    @Excel(name = "预留，添加业务使用")
+    @Excel(name = "优先级金额")
     private String retain2;
 
     /**
