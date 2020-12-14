@@ -184,7 +184,7 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         }
         if (switchs.equals("1")) {
             List<AlipayUserRateEntity> rate = alipayUserRateEntityMapper.clickPriorityOpen(id);
-            if (CollUtil.isNotEmpty(rate) && rate.size() > 1) {
+            if (CollUtil.isNotEmpty(rate) && rate.size() > 0) {
                 throw new BusinessException("相同产品下，不允许开启优先级相同的费率，请调整费率后在重新开启");
             }
         }

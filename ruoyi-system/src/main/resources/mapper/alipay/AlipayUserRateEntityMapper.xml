@@ -90,6 +90,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">createTime = #{createTime},</if>
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
             <if test="status != null ">status = #{status},</if>
+            <if test="retain1 != null and retain1 != ''">retain1 = #{retain1},</if>
+            <if test="retain2 != null and retain2 != '' ">retain2 = #{retain2},</if>
         </trim>
         where id = #{id}
     </update>

@@ -166,6 +166,7 @@ public interface AlipayUserRateEntityMapper {
 
     @Select("select * from alipay_user_rate b , " +
             "(select payTypr,retain1,channelId , userId from alipay_user_rate where id = #{id}) a  " +
-            "where  b.payTypr = a.payTypr and a.retain1 = b.retain1 and a.userId = b.userId")
+            "where  b.payTypr = a.payTypr and a.retain1 = b.retain1 and a.userId = b.userId" +
+            " and    switchs = 1")
     List<AlipayUserRateEntity> clickPriorityOpen(@Param("id") String id);
 }
