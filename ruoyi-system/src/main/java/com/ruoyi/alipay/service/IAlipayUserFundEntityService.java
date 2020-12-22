@@ -101,4 +101,14 @@ public interface IAlipayUserFundEntityService {
     List<AlipayUserInfo> findUserByAgent(String agentUserId);
 
     int updateStatus(String userId, Integer status);
+
+    List<AlipayUserFundEntity> findUserList(List<String> asList, BaseEntity baseEntity);
+
+
+    /**
+     * 查询交易量前15的用户月交易量
+     *
+     * @return
+     */
+    List<String> findDealAfter15();
 }

@@ -98,4 +98,15 @@ public interface AlipayUserFundEntityMapper {
 
     @Update("update alipay_user_fund set status = #{status} where userId = #{userId} ")
     int updateStatus(@Param("userId") String userId, @Param("status") Integer status);
+
+
+    @Select(" SELECT * FROM `alipay_user_fund_bak` WHERE userId   " +
+            "IN (  #{userList} ) " +
+            "           AND createTime > #{baseEntity.params.dayStart}" +
+            "           AND createTime < #{baseEntity.params.dayEnd}  order by createTime ")
+    List<AlipayUserFundEntity> findUserList(@Param("userList") String userList, @Param("baseEntity") BaseEntity baseEntity);
+
+
+    @Select("select userId from alipay_user_fund where userType = 1  order by  todayDealAmount desc limit 15  ")
+    List<String> findDealAfter15();
 }

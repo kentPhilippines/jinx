@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayRunOrderEntity;
+import org.apache.ibatis.annotations.Select;
+
 import java.util.List;
 
 /**
@@ -53,9 +55,13 @@ public interface AlipayRunOrderEntityMapper
 
     /**
      * 批量删除流水订单记录
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
     public int deleteAlipayRunOrderEntityByIds(String[] ids);
+
+
+    @Select("select * from alipay_run_order where associatedId = #{orderId}")
+    List<AlipayRunOrderEntity> findAssocidOrder(String orderId);
 }

@@ -57,4 +57,6 @@ public interface IAlipayDealOrderEntityService {
 
 
     List<AlipayDealOrderEntity> findOneHoursOrderBySuccess(String strTime, String endTime);
+
+    List<AlipayDealOrderEntity> findOrderLimit(String starTime, String endTime, Integer page, Integer size);
 }

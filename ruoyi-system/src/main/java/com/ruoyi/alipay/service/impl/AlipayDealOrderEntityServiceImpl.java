@@ -81,4 +81,10 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
         return null;
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayDealOrderEntity> findOrderLimit(String starTime, String endTime, Integer page, Integer size) {
+        return alipayDealOrderEntityMapper.findOrderLimit(starTime, endTime, page, size);
+    }
+
 }

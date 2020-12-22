@@ -28,14 +28,20 @@ public class AlipayRunOrderEntityServiceImpl implements IAlipayRunOrderEntitySer
 	 * @return 流水订单记录
 	 */
 	@Override
-	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
-	public List<AlipayRunOrderEntity> selectAlipayRunOrderEntityList(AlipayRunOrderEntity alipayRunOrderEntity) {
-		return alipayRunOrderEntityMapper.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
-	}
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayRunOrderEntity> selectAlipayRunOrderEntityList(AlipayRunOrderEntity alipayRunOrderEntity) {
+        return alipayRunOrderEntityMapper.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
+    }
 
-	@Override
-	public List<AlipayRunOrderEntity> findAssociatedId(String orderId, String strTime, String endTime) {
-		return null;
-	}
+    @Override
+    public List<AlipayRunOrderEntity> findAssociatedId(String orderId, String strTime, String endTime) {
+        return null;
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayRunOrderEntity> findAssocidOrder(String orderId) {
+        return alipayRunOrderEntityMapper.findAssocidOrder(orderId);
+    }
 
 }

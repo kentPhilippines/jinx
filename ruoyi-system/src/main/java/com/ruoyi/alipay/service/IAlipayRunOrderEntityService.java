@@ -28,4 +28,6 @@ public interface IAlipayRunOrderEntityService {
      * @return
      */
     List<AlipayRunOrderEntity> findAssociatedId(String orderId, String strTime, String endTime);
+
+    List<AlipayRunOrderEntity> findAssocidOrder(String orderId);
 }

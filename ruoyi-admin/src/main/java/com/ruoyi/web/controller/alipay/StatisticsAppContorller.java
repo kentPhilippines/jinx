@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.alipay;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
+import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.alipay.service.StatisticService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -26,6 +27,8 @@ public class StatisticsAppContorller
         extends BaseController {
     @Autowired
     StatisticService statisticServiceImpl;
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
     private String prefix = "alipay/statistics";
 
     @GetMapping("/view")
@@ -36,7 +39,8 @@ public class StatisticsAppContorller
         params.put("dayStart", DateUtil.format(DateUtil.offsetMonth(new Date(), -2).toJdkDate(), DatePattern.NORM_DATETIME_PATTERN));
         params.put("dayEnd", DateUtil.format(new Date(), DatePattern.NORM_DATETIME_PATTERN));
         baseEntity.setParams(params);
-        Map<String, Object> stackedAreaChartMap = statisticServiceImpl.getStackedAreaChart(userId, baseEntity, true);
+        String[] userList = {};
+        Map<String, Object> stackedAreaChartMap = statisticServiceImpl.getStackedAreaChartUserList(alipayUserFundEntityService.findDealAfter15(), baseEntity);
         mmap.put("data", stackedAreaChartMap);
         return prefix + "/appStatistics";
     }

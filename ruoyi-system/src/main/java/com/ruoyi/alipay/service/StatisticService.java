@@ -2,13 +2,15 @@ package com.ruoyi.alipay.service;
 
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface StatisticService {
     public static  final String DATE = "DATE";
     public static  final String CHART = "CHART";
     public static  final String USERS = "USERS";
-    public static  final String MARK = "-";
+    public static final String MARK = "-";
+
     /**
      * <p>根据自己账号查询自己下线的数据，只查看一个月之类的数据</p>
      *
@@ -18,4 +20,14 @@ public interface StatisticService {
      * @return
      */
     Map<String, Object> getStackedAreaChart(String merchantId, BaseEntity baseEntity, boolean flag);
+
+
+    /**
+     * 更具用户集合查询用户交易数据可视化数据
+     *
+     * @param merchantId
+     * @param baseEntity
+     * @return
+     */
+    Map<String, Object> getStackedAreaChartUserList(List<String> merchantId, BaseEntity baseEntity);
 }

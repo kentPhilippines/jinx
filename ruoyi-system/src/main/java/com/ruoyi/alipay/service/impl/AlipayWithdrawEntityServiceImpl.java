@@ -86,4 +86,11 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
     public void updateWitStatus(Long id) {
         alipayWithdrawEntityMapper.updateWitStatus(id);
     }
+
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayWithdrawEntity> findWitLimit(String starTime, String endTime, Integer page, Integer size) {
+        return alipayWithdrawEntityMapper.findWitLimit(starTime, endTime, page, size);
+    }
 }

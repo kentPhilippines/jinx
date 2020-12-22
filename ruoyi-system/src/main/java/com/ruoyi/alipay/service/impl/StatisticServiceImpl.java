@@ -28,6 +28,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Autowired
     IAlipayUserFundEntityService alipayUserFundEntityServiceImpl;
 
+
     @Override
     public Map getStackedAreaChart(String merchantId, BaseEntity baseEntity, boolean flag) {
         log.info("【 查询 交易数据】");
@@ -43,6 +44,21 @@ public class StatisticServiceImpl implements StatisticService {
             userList = alipayUserFundEntityServiceImpl.findUserBakBy(merchantId, baseEntity);
             myUserList = alipayUserFundEntityServiceImpl.findMyUserBak(merchantId, baseEntity);
         }
+        userList.sort((ord1, ord2) -> ord1.getCreateTime().compareTo(ord2.getCreateTime()));
+        myUserList.sort((ord1, ord2) -> ord1.getCreateTime().compareTo(ord2.getCreateTime()));
+        return getStackedAreaChart(userList, myUserList);
+    }
+
+    @Override
+    public Map<String, Object> getStackedAreaChartUserList(List<String> merchantId, BaseEntity baseEntity) {
+        log.info("【 指定账户查询 交易数据】");
+        /**
+         * 根据时间和账号查询备份数据
+         * 对数据进行分类
+         */
+        List<AlipayUserFundEntity> userList = new ArrayList<>();//防止空指针异常
+        List<AlipayUserFundEntity> myUserList = new ArrayList<>();//防止空指针异常
+        userList = alipayUserFundEntityServiceImpl.findUserList(merchantId, baseEntity);
         userList.sort((ord1, ord2) -> ord1.getCreateTime().compareTo(ord2.getCreateTime()));
         myUserList.sort((ord1, ord2) -> ord1.getCreateTime().compareTo(ord2.getCreateTime()));
         return getStackedAreaChart(userList, myUserList);
@@ -120,6 +136,14 @@ public class StatisticServiceImpl implements StatisticService {
         return result;
     }
 
+
+    /**
+     * 代理商查看自己子账户数据模型
+     *
+     * @param userList   子账户交易数据【根据时间排序】
+     * @param myUserList 自己账户盈利数据【根据时间排序】
+     * @return
+     */
     Map getStackedAreaChart(List<AlipayUserFundEntity> userList, List<AlipayUserFundEntity> myUserList) {
         List<StackedAreaChart> staList = new ArrayList<>();
         Map<String, StackedAreaChart> map = new ConcurrentHashMap<>();//各个子账户的交易情况
@@ -130,10 +154,10 @@ public class StatisticServiceImpl implements StatisticService {
         TreeSet<String> set = new TreeSet<>();
         Set userSet = new HashSet<>();
         for (AlipayUserFundEntity userfund : myUserList) {
-            String format = FORMAT;//DateUtil.format(DateUtil.offsetDay(userfund.getCreateTime(),-1), DatePattern.NORM_DATE_PATTERN);
-            String todayKey = format + TODAY_AGENT_PROFIT;
-            String sumKey = format + SUM_AGENT_PROFIT;
-            String witKey = format + WIT_MONEY;
+            final String format = FORMAT;//DateUtil.format(DateUtil.offsetDay(userfund.getCreateTime(),-1), DatePattern.NORM_DATE_PATTERN);
+            final String todayKey = format + TODAY_AGENT_PROFIT;
+            final String sumKey = format + SUM_AGENT_PROFIT;
+            final String witKey = format + WIT_MONEY;
             if (CollUtil.isNotEmpty(sumMoneyAgentProfitMap.get(todayKey))) {
                 List<Double> doubles = sumMoneyAgentProfitMap.get(todayKey);
                 doubles.add(userfund.getTodayAgentProfit());

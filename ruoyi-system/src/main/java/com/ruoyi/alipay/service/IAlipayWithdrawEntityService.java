@@ -52,4 +52,6 @@ public interface IAlipayWithdrawEntityService {
      * @param id
      */
     void updateWitStatus(Long id);
+
+    List<AlipayWithdrawEntity> findWitLimit(String starTime, String endTime, Integer page, Integer size);
 }
