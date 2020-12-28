@@ -143,6 +143,7 @@
                         }
                     }
                 },
+
                 {
                     field: 'fee',
                     title: '商户费率'
@@ -167,6 +168,15 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         return statusTools(row);
+                    }
+                },
+                {
+                    field: 'test',
+                    title: '测试',
+                    formatter: function (value, row, index) {
+                        if (row.switchs == 1) {
+                            return '<i class=\"btn btn-link btn-xs\" style="cursor:pointer;" title="拉单测试"onclick="payTest(\'' + row.userId + '\',\'' + row.id + '\')"><i class="fa fa-google-wallet"></i> 拉单测试' + '</i> ';
+                        }
                     }
                 },
                 {
@@ -201,16 +211,24 @@
     /* 商户费率-停用 */
     function disable(id, userId, feeType) {
         $.modal.confirm("确认要【停用】该通道费率吗？", function () {
-            $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType" : feeType, "switchs": 0});
+            $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType": feeType, "switchs": 0});
         })
     }
 
     /* 商户费率-开启 */
     function enable(id, userId, feeType) {
         $.modal.confirm("确认要【启用】该通道费率吗？", function () {
-            $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType" : feeType, "switchs": 1});
+            $.operate.post(prefix + "/changeStatus", {"id": id, "userId": userId, "feeType": feeType, "switchs": 1});
         })
     }
+
+    function payTest(userId, id) {
+
+        //   $.operate.get(prefix+"/paytest?userId="+userId+"&Id="+id)
+
+        window.open(prefix + "/paytest?userId=" + userId + "&Id=" + id);
+    }
+
 </script>
 </body>
 </html>

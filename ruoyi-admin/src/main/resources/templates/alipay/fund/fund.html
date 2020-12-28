@@ -173,6 +173,16 @@
                     title: '创建时间'
                 },
                 {
+                    field: 'statistics',
+                    title: '月度数据',
+                    formatter: function (value, row, index) {
+                        if ("所有" == row.userId || "所有" == row.userId) {
+                            return null;
+                        }
+                        return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="detail(\'' + row.userId + '\')"><i class="fa fa-google-wallet"></i> 查看月度数据' + '</a>';
+                    }
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
@@ -192,6 +202,13 @@
         };
         $.table.init(options);
     });
+
+    /*商户月度交易-详细*/
+    function detail(userId) {
+        var url = ctx + "back/app/statistics/view?userId=" + userId;
+        $.modal.openTab("商户月度交易数据", url);
+    }
+
 </script>
 </body>
 </html>

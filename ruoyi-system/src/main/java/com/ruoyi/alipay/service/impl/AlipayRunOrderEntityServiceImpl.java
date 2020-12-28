@@ -44,4 +44,28 @@ public class AlipayRunOrderEntityServiceImpl implements IAlipayRunOrderEntitySer
         return alipayRunOrderEntityMapper.findAssocidOrder(orderId);
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayRunOrderEntity> findUserOrderLimit(String userId, String str, String end) {
+        return alipayRunOrderEntityMapper.findUserOrderLimit(userId, str, end);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public Double sumDealOrderAgentFee(String yesToday, String today) {
+        return alipayRunOrderEntityMapper.sumDealOrderAgentFee(yesToday, today);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public Double sumWitAppFee(String yesToday, String today) {
+        return alipayRunOrderEntityMapper.sumWitAppFee(yesToday, today);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public Double witAgentFee(String yesToday, String today) {
+        return alipayRunOrderEntityMapper.witAgentFee(yesToday, today);
+    }
+
 }

@@ -30,4 +30,33 @@ public interface IAlipayRunOrderEntityService {
     List<AlipayRunOrderEntity> findAssociatedId(String orderId, String strTime, String endTime);
 
     List<AlipayRunOrderEntity> findAssocidOrder(String orderId);
+
+    List<AlipayRunOrderEntity> findUserOrderLimit(String userId, String str, String end);
+
+    /**
+     * 交易代理手续费
+     *
+     * @param yesToday
+     * @param today
+     * @return
+     */
+    Double sumDealOrderAgentFee(String yesToday, String today);
+
+    /**
+     * 商户代付手续费
+     *
+     * @param yesToday
+     * @param today
+     * @return
+     */
+    Double sumWitAppFee(String yesToday, String today);
+
+    /**
+     * 商户代付代理商分润
+     *
+     * @param yesToday
+     * @param today
+     * @return
+     */
+    Double witAgentFee(String yesToday, String today);
 }

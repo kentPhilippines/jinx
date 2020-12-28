@@ -6,9 +6,9 @@ import com.ruoyi.alipay.service.IAlipayDealOrderEntityService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.enums.DataSourceType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Service
 public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityService {
-    @Autowired
+    @Resource
     private AlipayDealOrderEntityMapper alipayDealOrderEntityMapper;
 
     /**

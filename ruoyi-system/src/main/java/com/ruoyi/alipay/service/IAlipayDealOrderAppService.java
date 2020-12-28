@@ -61,4 +61,14 @@ public interface IAlipayDealOrderAppService {
 
 
     List<AlipayDealOrderApp> findOneHoursOrdeBySuccess(String strTime, String endTime);
+
+    /**
+     * 统计但前时间内渠道利润
+     *
+     * @param yesToday
+     * @param today
+     * @return
+     */
+    Double sumDealorderProfit(String yesToday, String today);
+
 }

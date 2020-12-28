@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayRunOrderEntity;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -64,4 +65,20 @@ public interface AlipayRunOrderEntityMapper
 
     @Select("select * from alipay_run_order where associatedId = #{orderId}")
     List<AlipayRunOrderEntity> findAssocidOrder(String orderId);
+
+
+    @Select("select * from alipay_run_order where orderAccount = #{userId}   and " +
+            " createTime between #{str} and #{end} order by id asc")
+    List<AlipayRunOrderEntity> findUserOrderLimit(@Param("userId") String userId, @Param("str") String str, @Param("end") String end);
+
+    @Select("select sum(amount) from alipay_run_order where runOrderType = 13 and  createTime between #{yesToday} and #{today}")
+    Double sumDealOrderAgentFee(@Param("yesToday") String yesToday, @Param("today") String today);
+
+    @Select("select sum(amount) from alipay_run_order where " +
+            "runOrderType = 9 and  createTime between #{yesToday} and #{today}")
+    Double sumWitAppFee(@Param("yesToday") String yesToday, @Param("today") String today);
+
+    @Select("select sum(amount) from alipay_run_order where " +
+            "runOrderType = 26 and  createTime between #{yesToday} and #{today}")
+    Double witAgentFee(@Param("yesToday") String yesToday, @Param("today") String today);
 }

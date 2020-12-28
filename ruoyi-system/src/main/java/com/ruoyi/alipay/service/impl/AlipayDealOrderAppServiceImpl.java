@@ -96,5 +96,11 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
         return null;
     }
 
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public Double sumDealorderProfit(String yesToday, String today) {
+        return alipayDealOrderAppMapper.sumDealorderProfit(yesToday, today);
+    }
+
 
 }

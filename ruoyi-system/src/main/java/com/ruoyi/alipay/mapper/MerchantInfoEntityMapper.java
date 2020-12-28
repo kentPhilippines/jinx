@@ -118,7 +118,9 @@ public interface MerchantInfoEntityMapper {
      */
     @Select("<script>" +
             "select " +
-            " id,userId, userName, userType, switchs, agent, minAmount, maxAmount,totalAmount, timesTotal, startTime, endTime, witip, dealUrl, submitTime ,autoWit " +
+            " id,userId, userName, userType, switchs, " +
+            "agent, minAmount, maxAmount,totalAmount, timesTotal, startTime, " +
+            "endTime, witip, dealUrl, submitTime ,autoWit " +
             " from " +
             " alipay_user_info" +
             " where userType = 1 " +

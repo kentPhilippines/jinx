@@ -85,13 +85,12 @@ public interface AlipayDealOrderEntityMapper {
 
     /**
      * 分页查询条件
-     *
      * @param starTime
      * @param endTime
      * @param page
      * @param size
      * @return
      */
-    @Select("select * form alipay_deal_order where createTime between #{starTime} and #{endTime} limit #{page} , #{size}")
+    @Select("select * from alipay_deal_order where createTime between #{starTime} and #{endTime}  limit #{page} , #{size}")
     List<AlipayDealOrderEntity> findOrderLimit(@Param("starTime") String starTime, @Param("endTime") String endTime, @Param("page") Integer page, @Param("size") Integer size);
 }

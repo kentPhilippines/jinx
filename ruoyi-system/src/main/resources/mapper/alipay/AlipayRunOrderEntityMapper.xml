@@ -26,7 +26,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAlipayRunOrderEntityVo">
-        select id, orderId, associatedId, orderAccount, runOrderType, amount, generationIp, dealDescribe, acountR, accountW, createTime, submitTime, status, runType, amountType, amountNow, retain4, retain5 from alipay_run_order
+        select id, orderId, associatedId, orderAccount, runOrderType, amount, generationIp, dealDescribe, acountR, accountW, createTime, submitTime, status, runType, amountType,
+        amountNow, retain4, retain5 from alipay_run_order
     </sql>
 
     <select id="selectAlipayRunOrderEntityList" parameterType="AlipayRunOrderEntity" resultMap="AlipayRunOrderEntityResult">

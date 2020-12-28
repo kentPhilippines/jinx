@@ -2,8 +2,11 @@ package com.ruoyi.web.controller.alipay;
 
 import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
@@ -12,6 +15,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.RSAUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +23,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -49,6 +56,8 @@ public class AlipayUserRateEntityController extends BaseController {
     IAlipayChanelFeeService alipayChanelFeeServiceImpl;
     @Autowired
     private IAlipayUserInfoService alipayUserInfoService;
+    @Autowired
+    private IMerchantInfoEntityService merchantInfoEntityService;
     /*
      * 查询商户产品费率列表
      */
@@ -277,6 +286,96 @@ public class AlipayUserRateEntityController extends BaseController {
         logger.info("[当前处理费率状态开启或关闭的管理员账号为：" + ShiroUtils.getSysUser().getLoginName() + "]");
         logger.info("[当前处理商户状态的参数为：" + switchs + "]");
         return toAjax(alipayUserRateEntityService.changeStatus(id, userId, feeType, switchs));
+    }
+
+    private static String getKeyedDigestUTF8(String strSrc) {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(strSrc.getBytes("UTF8"));
+            String result = "";
+            byte[] temp;
+            temp = md5.digest("".getBytes("UTF8"));
+            for (int i = 0; i < temp.length; i++)
+                result += Integer.toHexString((0x000000ff & temp[i]) | 0xffffff00).substring(6);
+            return result;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String createParam(Map<String, Object> map) {
+        try {
+            if (map == null || map.isEmpty())
+                return null;
+            Object[] key = map.keySet().toArray();
+            Arrays.sort(key);
+            StringBuffer res = new StringBuffer(128);
+            for (int i = 0; i < key.length; i++)
+                if (ObjectUtil.isNotNull(map.get(key[i])))
+                    res.append(key[i] + "=" + map.get(key[i]) + "&");
+            String rStr = res.substring(0, res.length() - 1);
+            return rStr;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @GetMapping("/paytest")
+    @Log(title = "商户拉单测试", businessType = BusinessType.UPDATE)
+    public void payTest(HttpServletResponse response,
+                        HttpServletRequest request) throws IOException {
+        String userId = request.getParameter("userId");
+        String feeId = request.getParameter("Id");
+        AlipayUserRateEntity rateEntity = alipayUserRateEntityService.selectAlipayUserRateEntityById(Long.valueOf(feeId));
+        Map<String, Object> parMap = new HashMap<>();
+        AlipayUserInfo userInfo = new AlipayUserInfo();
+        userInfo.setUserId(userId);
+        List<AlipayUserInfo> alipayUserInfos = merchantInfoEntityService.selectMerchantInfoEntityList(userInfo);
+        SimpleDateFormat d = new SimpleDateFormat("yyyyMMddHHmmss");
+        String userid = rateEntity.getUserId();
+        String key = alipayUserInfos.get(0).getPayPasword();//交易密钥
+        String publicKey = alipayUserInfos.get(0).getPublicKey();
+        String amount = "1000.00";
+        parMap.put("amount", amount);
+        parMap.put("appId", userId);
+        parMap.put("applyDate", d.format(new Date()));
+        parMap.put("notifyUrl", "http://starpay168.com:5055");
+        parMap.put("pageUrl", "http://starpay168.com:5055");
+        parMap.put("orderId", IdUtil.simpleUUID());
+        parMap.put("passCode", rateEntity.getPayTypr());
+        parMap.put("subject", amount);
+        String createParam = createParam(parMap);
+        logger.info("签名前请求串：" + createParam);
+        String md5 = getKeyedDigestUTF8(createParam + key);
+        logger.info("签名：" + md5);
+        parMap.put("sign", md5);
+        String createParam2 = createParam(parMap);
+        logger.info("加密前字符串：" + createParam2);
+        String publicEncrypt = RSAUtils.publicEncrypt(createParam2, publicKey);
+        logger.info("加密后字符串：" + publicEncrypt);
+        Map<String, Object> postMap = new HashMap<String, Object>();
+        postMap.put("cipherText", publicEncrypt);
+        postMap.put("userId", userid);
+        logger.info("请求参数：" + postMap.toString());
+        String post = HttpUtil.post("http://starpay168.com:5055/api-alipay/deal/pay", postMap);
+        logger.info("相应结果集：" + post);
+        JSONObject json = JSONObject.parseObject(post);
+        String result = json.getString("success");
+        if (StrUtil.isNotEmpty(result) && result.equals("true")) {
+            response.setContentType("text/html; charset=UTF-8");
+            response.sendRedirect(json.getJSONObject("result").getString("returnUrl"));
+
+            //  ().write(json.getJSONObject("result").getString("returnUrl"));
+        } else {
+            String message = json.getString("message");
+            response.setContentType("text/html; charset=UTF-8");
+            response.getWriter().write(message);
+        }
+        return;
     }
 
 }

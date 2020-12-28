@@ -111,4 +111,17 @@ public interface IAlipayUserFundEntityService {
      * @return
      */
     List<String> findDealAfter15();
+
+
+    /**
+     * 查询备份账户数据
+     * <h1><Strong>如果这里的时间是 6号则查询的账号为6-7日凌晨1点之间的账户数据 时间偏移量为  < 当前查询时间</Strong></h1>
+     *
+     * @param starTime 数据库记录时间 < 开始时间
+     * @param userId   账户id
+     * @param page     第几位
+     * @param size     展示数据
+     * @return
+     */
+    AlipayUserFundEntity findFundBak(String starTime, String userId, String endTime);
 }

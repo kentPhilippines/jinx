@@ -13,7 +13,7 @@
                     <ul>
                         <li>
                             <span>商户订单：</span>
-                            <input type="text" name="appOrderId"/>
+                            <input name="orderId" type="text"/>
                         </li>
                         <li>
                             <span>外部订单：</span>
@@ -93,13 +93,7 @@
                         return $.table.selectDictLabel(orderstatusDatas, value);
                     }
                 },
-                {
-                    field: 'statistics',
-                    title: '月度数据',
-                    formatter: function (value, row, index) {
-                        return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="detail(\'' + row.orderAccount + '\')"><i class="fa fa-google-wallet"></i> 查看月度数据' + '</a>';
-                    }
-                },
+
                 {field: 'orderAmount', title: '订单金额 '},
                 {field: 'retain3', title: '交易手续费'},
                 {field: 'orderIp', title: '订单生成IP'},
@@ -125,11 +119,6 @@
         });
     }
 
-    /*商户月度交易-详细*/
-    function detail(userId) {
-        var url = ctx + "back/app/statistics/view?userId=" + userId;
-        $.modal.openTab("商户月度交易数据", url);
-    }
 
     //初始化时间
     layui.use('laydate', function () {
