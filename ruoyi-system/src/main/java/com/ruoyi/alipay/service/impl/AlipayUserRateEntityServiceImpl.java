@@ -244,6 +244,12 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
         return alipayUserRateEntityMapper.findRates(split);
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserRateEntity findRateByType(String userId, String rechange) {
+        return alipayUserRateEntityMapper.findRateByType(userId, rechange);
+    }
+
 
     /**
      * 无限级代理递归检测费率

@@ -56,6 +56,9 @@
             <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="back:withdrawal:apply">
                 <i class="fa fa-plus"></i> 提现申请
             </a>
+            <a class="btn btn-warning" onclick="rechange()" shiro:hasPermission="back:withdrawal:recharge">
+                <i class="fa fa-plus"></i> 代付充值
+            </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="back:withdrawal:export">
                 <i class="fa fa-download"></i> 导出
             </a>
@@ -121,6 +124,11 @@
             isInitValue: true
         });
     });
+
+
+    function rechange() {
+        $.modal.open('商户充值', prefix + "/recharge");
+    }
 </script>
 </body>
 </html>

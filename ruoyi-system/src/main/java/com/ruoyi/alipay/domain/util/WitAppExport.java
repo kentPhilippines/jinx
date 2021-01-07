@@ -43,7 +43,16 @@ public class WitAppExport extends BaseEntity {
     private String witType;
     @Excel(name = "审核意见")
     private String comment;
+    @Excel(name = "是否为自动代付")
+    private String auto;
 
+    public String getAuto() {
+        return auto;
+    }
+
+    public void setAuto(String auto) {
+        this.auto = auto;
+    }
 
     public String getAppOrderId() {
         return appOrderId;

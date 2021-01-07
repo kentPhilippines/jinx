@@ -98,4 +98,14 @@ public interface IAlipayUserRateEntityService {
     Boolean isAgentFee(AlipayUserRateEntity alipayUserRateEntity);
 
     List<AlipayUserRateEntity> findRates(String ids);
+
+
+    /**
+     * 根据商户账号和产品类型查询当前开启的费率
+     *
+     * @param userId   商户账号
+     * @param rechange 产品类型
+     * @return
+     */
+    AlipayUserRateEntity findRateByType(String userId, String rechange);
 }

@@ -169,4 +169,8 @@ public interface AlipayUserRateEntityMapper {
             "where  b.payTypr = a.payTypr and a.retain1 = b.retain1 and a.userId = b.userId" +
             " and    switchs = 1")
     List<AlipayUserRateEntity> clickPriorityOpen(@Param("id") String id);
+
+
+    @Select("select * from alipay_user_rate where switchs = 1 and payTypr = #{payTypr} and userId = #{userId}")
+    AlipayUserRateEntity findRateByType(@Param("userId") String userId, @Param("payTypr") String payTypr);
 }
