@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
@@ -12,6 +13,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.IpUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
@@ -53,6 +55,8 @@ public class AlipayWithdrawEntityController extends BaseController {
     private IAlipayWithdrawEntityService alipayWithdrawEntityService;
     @Autowired
     private DictionaryUtils dictionaryUtils;
+    @Autowired
+    private IAlipayRunOrderEntityService alipayRunOrderEntityService;
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
 
@@ -99,12 +103,15 @@ public class AlipayWithdrawEntityController extends BaseController {
         ConcurrentHashMap<String, AlipayUserFundEntity> channelMap = channel.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         for (AlipayWithdrawEntity order : list) {
             AlipayProductEntity product = prCollect.get(order.getWitType());
-            if (StrUtil.isNotBlank(order.getChannelId()))
+            if (StrUtil.isNotBlank(order.getChannelId())) {
                 order.setChannelId(channelMap.get(order.getChannelId()).getUserName());
-            if (StrUtil.isNotBlank(order.getWitChannel()))
+            }
+            if (StrUtil.isNotBlank(order.getWitChannel())) {
                 order.setWitChannel(channelMap.get(order.getWitChannel()).getUserName());
-            if (ObjectUtil.isNotNull(product))
+            }
+            if (ObjectUtil.isNotNull(product)) {
                 order.setWitType(product.getProductName());
+            }
         }
         return getDataTable(list);
     }
@@ -138,8 +145,9 @@ public class AlipayWithdrawEntityController extends BaseController {
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
         if ("2".equals(alipayWithdrawEntity.getOrderStatus())) {
-            if (StrUtil.isBlank(alipayWithdrawEntity.getChannelId()) && StrUtil.isBlank(alipayWithdrawEntity.getWitType()))
+            if (StrUtil.isBlank(alipayWithdrawEntity.getChannelId()) && StrUtil.isBlank(alipayWithdrawEntity.getWitType())) {
                 return error("实际出款渠道为空");
+            }
             AlipayChanelFee channelBy = alipayChanelFeeService.findChannelBy(alipayWithdrawEntity.getChannelId(), alipayWithdrawEntity.getWitType());
             if (ObjectUtil.isNull(channelBy)) {
                 return error("所选实际出款渠道未配置出款费率，请重新配置");
@@ -157,6 +165,10 @@ public class AlipayWithdrawEntityController extends BaseController {
         mapParam.put("channelId", alipayWithdrawEntity.getChannelId());
         mapParam.put("witType", alipayWithdrawEntity.getWitType());
         if ("3".equals(alipayWithdrawEntity.getOrderStatus())) {
+            List<AlipayRunOrderEntity> associdOrder = alipayRunOrderEntityService.findAssocidOrder(alipayWithdrawEntity.getOrderId());
+            if (CollUtil.isEmpty(associdOrder)) {
+                throw new BusinessException("操作失败，当前账户流水扣款失败");
+            }
             mapParam.put("ip", IpUtils.getHostIp());
         } else if ("100".equals(alipayWithdrawEntity.getOrderStatus())) {//商户后台大夫推送处理，将订单修改为已推送
             alipayWithdrawEntityService.updateWitStatus(alipayWithdrawEntity.getId());

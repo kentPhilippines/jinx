@@ -80,6 +80,101 @@ public class AlipayUserRateEntityController extends BaseController {
     @Autowired
     private IAlipayChanelFeeService alipayChanelFeeService;
 
+    private static String getKeyedDigestUTF8(String strSrc) {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(strSrc.getBytes("UTF8"));
+            String result = "";
+            byte[] temp;
+            temp = md5.digest("".getBytes("UTF8"));
+            for (int i = 0; i < temp.length; i++) {
+                result += Integer.toHexString((0x000000ff & temp[i]) | 0xffffff00).substring(6);
+            }
+            return result;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     * 新增用户产品费率
+     */
+    @Log(title = "新增商户费率", businessType = BusinessType.INSERT)
+    @GetMapping("/add")
+    public String add(ModelMap modelMap) {
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        AlipayUserInfo alipayUserInfo = new AlipayUserInfo();
+        alipayProductEntity.setStatus(1);
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        modelMap.put("productList", list);
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
+        modelMap.put("rateList", rateList);
+        //查询所有的商户
+        alipayUserInfo.setSwitchs(1);
+        alipayUserInfo.setUserType(1);
+        List<AlipayUserInfo> userInfo = alipayUserInfoService.selectAllUserInfoList(alipayUserInfo);
+        modelMap.put("merList", userInfo);
+        return prefix + "/add";
+    }
+
+    private static String createParam(Map<String, Object> map) {
+        try {
+            if (map == null || map.isEmpty()) {
+                return null;
+            }
+            Object[] key = map.keySet().toArray();
+            Arrays.sort(key);
+            StringBuffer res = new StringBuffer(128);
+            for (int i = 0; i < key.length; i++) {
+                if (ObjectUtil.isNotNull(map.get(key[i]))) {
+                    res.append(key[i] + "=" + map.get(key[i]) + "&");
+                }
+            }
+            String rStr = res.substring(0, res.length() - 1);
+            return rStr;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     * 修改用户产品费率
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+        AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityService.selectAlipayUserRateEntityById(id);
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        mmap.put("productList", list);
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
+        mmap.put("rateList", rateList);
+        mmap.put("alipayUserRateEntity", alipayUserRateEntity);
+        return prefix + "/edit";
+    }
+
+    @GetMapping("/edits/{ids}")
+    public String edit(@PathVariable("ids") String ids, ModelMap mmap) {
+        //查询产品类型下拉菜单
+        mmap.put("ids", ids);
+        List<AlipayUserRateEntity> rateEntityList = alipayUserRateEntityService.findRates(ids);
+        StrBuilder strBuilder = StrBuilder.create();
+        for (AlipayUserRateEntity rateEntity : rateEntityList) {
+            strBuilder.append("id:").append(rateEntity.getId()).append(" 账号：").append(rateEntity.getUserId()).append(" ").append("原渠道：").
+                    append(rateEntity.getChannelId()).append(" ").append("原产品：").append(rateEntity.getPayTypr() + " ");
+        }
+        mmap.put("rete", strBuilder.toString());
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
+        mmap.put("rateList", rateList);
+        return prefix + "/edits";
+    }
+
     @RequiresPermissions("merchant:rate:list")
     @PostMapping("/list")
     @ResponseBody
@@ -117,36 +212,15 @@ public class AlipayUserRateEntityController extends BaseController {
                 rate.setChannelFee(channelBy.getChannelDFee());
                 rate.setProfit(String.valueOf(a.subtract(new BigDecimal(channelBy.getChannelDFee()))));
             }
-            if (ObjectUtil.isNotNull(channel))
+            if (ObjectUtil.isNotNull(channel)) {
                 rate.setChannelId(channel.getUserName());
-            if (ObjectUtil.isNotNull(product))
+            }
+            if (ObjectUtil.isNotNull(product)) {
                 rate.setPayTypr(product.getProductName());
+            }
         }
         return getDataTable(list);
     }
-
-    /*
-     * 新增用户产品费率
-     */
-    @Log(title = "新增商户费率", businessType = BusinessType.INSERT)
-    @GetMapping("/add")
-    public String add(ModelMap modelMap) {
-        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
-        AlipayUserInfo alipayUserInfo = new AlipayUserInfo();
-        alipayProductEntity.setStatus(1);
-        //查询产品类型下拉菜单
-        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
-        modelMap.put("productList", list);
-        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
-        modelMap.put("rateList", rateList);
-        //查询所有的商户
-        alipayUserInfo.setSwitchs(1);
-        alipayUserInfo.setUserType(1);
-        List<AlipayUserInfo> userInfo = alipayUserInfoService.selectAllUserInfoList(alipayUserInfo);
-        modelMap.put("merList", userInfo);
-        return prefix + "/add";
-    }
-
 
     /*
      * 新增保存用户产品费率
@@ -157,8 +231,9 @@ public class AlipayUserRateEntityController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(AlipayUserRateEntity alipayUserRateEntity) {
         AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy(alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
-        if (ObjectUtil.isNull(channel))
+        if (ObjectUtil.isNull(channel)) {
             return error("当前渠道未接通，请联系技术人员对接");
+        }
         AlipayUserRateEntity check = alipayUserRateEntityService.checkUniqueRate(alipayUserRateEntity);
         if (null != check) {
             throw new BusinessException("操作失败，商户费率重复");
@@ -167,36 +242,27 @@ public class AlipayUserRateEntityController extends BaseController {
     }
 
     /*
-     * 修改用户产品费率
+     * 删除用户产品费率
      */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-        AlipayUserRateEntity alipayUserRateEntity = alipayUserRateEntityService.selectAlipayUserRateEntityById(id);
-        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
-        alipayProductEntity.setStatus(1);
-        //查询产品类型下拉菜单
-        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
-        mmap.put("productList", list);
-        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
-        mmap.put("rateList", rateList);
-        mmap.put("alipayUserRateEntity", alipayUserRateEntity);
-        return prefix + "/edit";
+    @RequiresPermissions("merchant:rate:remove")
+    @Log(title = "商户费率", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        return toAjax(alipayUserRateEntityService.deleteAlipayUserRateEntityByIds(ids));
     }
 
-    @GetMapping("/edits/{ids}")
-    public String edit(@PathVariable("ids") String ids, ModelMap mmap) {
-        //查询产品类型下拉菜单
-        mmap.put("ids", ids);
-        List<AlipayUserRateEntity> rateEntityList = alipayUserRateEntityService.findRates(ids);
-        StrBuilder strBuilder = StrBuilder.create();
-        for (AlipayUserRateEntity rateEntity : rateEntityList) {
-            strBuilder.append("id:").append(rateEntity.getId()).append(" 账号：").append(rateEntity.getUserId()).append(" ").append("原渠道：").
-                    append(rateEntity.getChannelId()).append(" ").append("原产品：").append(rateEntity.getPayTypr() + " ");
-        }
-        mmap.put("rete", strBuilder.toString());
-        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();
-        mmap.put("rateList", rateList);
-        return prefix + "/edits";
+    /**
+     * 商户费率状态更新
+     */
+    @RequiresPermissions("merchant:rate:status")
+    @Log(title = "商户费率修改", businessType = BusinessType.UPDATE)
+    @PostMapping("/changeStatus")
+    @ResponseBody
+    public AjaxResult updateStatus(String id, String userId, String feeType, String switchs) {
+        logger.info("[当前处理费率状态开启或关闭的管理员账号为：" + ShiroUtils.getSysUser().getLoginName() + "]");
+        logger.info("[当前处理商户状态的参数为：" + switchs + "]");
+        return toAjax(alipayUserRateEntityService.changeStatus(id, userId, feeType, switchs));
     }
 
     @RequiresPermissions("merchant:rate:edit")
@@ -219,8 +285,9 @@ public class AlipayUserRateEntityController extends BaseController {
                 alipayUserRateEntityService.clickFee(rateEntity);
                 alipayUserRateEntityService.isAgentFee(rateEntity);
                 AlipayChanelFee channel1 = alipayChanelFeeServiceImpl.findChannelBy(rateEntity.getChannelId(), rateEntity.getPayTypr());
-                if (ObjectUtil.isNull(channel1))
+                if (ObjectUtil.isNull(channel1)) {
                     throw new BusinessException("当前渠道未接通，请联系技术人员对接");
+                }
                 alipayUserRateEntityService.updateAlipayUserRateEntity(rateEntity);
             } catch (Exception e) {
                 ThreadUtil.execute(() -> {
@@ -259,69 +326,10 @@ public class AlipayUserRateEntityController extends BaseController {
         alipayUserRateEntityService.clickFee(alipayUserRateEntity);
         alipayUserRateEntityService.isAgentFee(alipayUserRateEntity);
         AlipayChanelFee channel = alipayChanelFeeServiceImpl.findChannelBy(alipayUserRateEntity.getChannelId(), alipayUserRateEntity.getPayTypr());
-        if (ObjectUtil.isNull(channel))
+        if (ObjectUtil.isNull(channel)) {
             return error("当前渠道未接通，请联系技术人员对接");
+        }
         return toAjax(alipayUserRateEntityService.updateAlipayUserRateEntity(alipayUserRateEntity));
-    }
-
-    /*
-     * 删除用户产品费率
-     */
-    @RequiresPermissions("merchant:rate:remove")
-    @Log(title = "商户费率", businessType = BusinessType.DELETE)
-    @PostMapping("/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids) {
-        return toAjax(alipayUserRateEntityService.deleteAlipayUserRateEntityByIds(ids));
-    }
-
-    /**
-     * 商户费率状态更新
-     */
-    @RequiresPermissions("merchant:rate:status")
-    @Log(title = "商户费率修改", businessType = BusinessType.UPDATE)
-    @PostMapping("/changeStatus")
-    @ResponseBody
-    public AjaxResult updateStatus(String id, String userId, String feeType, String switchs) {
-        logger.info("[当前处理费率状态开启或关闭的管理员账号为：" + ShiroUtils.getSysUser().getLoginName() + "]");
-        logger.info("[当前处理商户状态的参数为：" + switchs + "]");
-        return toAjax(alipayUserRateEntityService.changeStatus(id, userId, feeType, switchs));
-    }
-
-    private static String getKeyedDigestUTF8(String strSrc) {
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(strSrc.getBytes("UTF8"));
-            String result = "";
-            byte[] temp;
-            temp = md5.digest("".getBytes("UTF8"));
-            for (int i = 0; i < temp.length; i++)
-                result += Integer.toHexString((0x000000ff & temp[i]) | 0xffffff00).substring(6);
-            return result;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static String createParam(Map<String, Object> map) {
-        try {
-            if (map == null || map.isEmpty())
-                return null;
-            Object[] key = map.keySet().toArray();
-            Arrays.sort(key);
-            StringBuffer res = new StringBuffer(128);
-            for (int i = 0; i < key.length; i++)
-                if (ObjectUtil.isNotNull(map.get(key[i])))
-                    res.append(key[i] + "=" + map.get(key[i]) + "&");
-            String rStr = res.substring(0, res.length() - 1);
-            return rStr;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @GetMapping("/paytest")

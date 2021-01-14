@@ -133,10 +133,12 @@ public class AlipayDealOrderAppController extends BaseController {
             }
         }
         for (StatisticsEntity sta : list) {
-            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
+            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId()))) {
                 sta.setUserName(userCollect.get(sta.getUserId()).getUserName());
-            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
+            }
+            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId()))) {
                 sta.setAccountAmount(userCollect.get(sta.getUserId()).getAccountBalance().toString());
+            }
             if ("所有".equals(sta.getUserId())) {
                 sta.setAccountAmount(amount.doubleValue() + "");
             }

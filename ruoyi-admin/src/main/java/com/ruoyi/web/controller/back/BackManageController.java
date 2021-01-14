@@ -83,8 +83,9 @@ public class BackManageController extends BaseController {
     public String detail(ModelMap mmap) {
         SysUser sysUser = ShiroUtils.getSysUser();
         AlipayUserInfo userInfo = merchantInfoEntityService.selectBackUserByUserId(sysUser.getMerchantId());
-        if (userInfo == null)
+        if (userInfo == null) {
             throw new BusinessException("此商户不存在");
+        }
         mmap.put("userInfo", userInfo);
         return prefix + "/detail";
     }
@@ -132,8 +133,9 @@ public class BackManageController extends BaseController {
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         for (AlipayDealOrderApp order : list) {
             AlipayProductEntity product = prCollect.get(order.getRetain1());
-            if (ObjectUtil.isNotNull(product))
+            if (ObjectUtil.isNotNull(product)) {
                 order.setRetain1(product.getProductName());
+            }
         }
         return getDataTable(list);
     }
@@ -248,8 +250,9 @@ public class BackManageController extends BaseController {
             export.setAppOrderId(wit.getAppOrderId());
             export.setOrderStatus(wit.getOrderStatus());
             AlipayProductEntity product = prCollect.get(wit.getWitType());
-            if (ObjectUtil.isNotNull(product))
+            if (ObjectUtil.isNotNull(product)) {
                 wit.setWitType(product.getProductName());
+            }
             export.setWitType(wit.getWitType());
             export.setSubmitTime(wit.getSubmitTime());
             export.setCreateTime(wit.getCreateTime());
@@ -536,19 +539,22 @@ public class BackManageController extends BaseController {
             }
         }
         startPage();
-        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(  list1,alipayDealOrderApp);
+        List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectSubMembersOrderList(list1, alipayDealOrderApp);
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         SysUser user = new SysUser();
         List<SysUser> sysUsers = userService.selectUserList(user);
-        ConcurrentHashMap<String, SysUser> userCollect =  new ConcurrentHashMap<String, SysUser>();
-        for(SysUser   user1 : sysUsers)
-            if(StrUtil.isNotBlank(user1.getMerchantId()))
+        ConcurrentHashMap<String, SysUser> userCollect = new ConcurrentHashMap<String, SysUser>();
+        for (SysUser user1 : sysUsers) {
+            if (StrUtil.isNotBlank(user1.getMerchantId())) {
                 userCollect.put(user1.getMerchantId(), user1);
-        for (AlipayDealOrderApp order : list){
+            }
+        }
+        for (AlipayDealOrderApp order : list) {
             AlipayProductEntity product = prCollect.get(order.getRetain1());
             order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
-            if(ObjectUtil.isNotNull(product))
+            if (ObjectUtil.isNotNull(product)) {
                 order.setRetain1(product.getProductName());
+            }
         }
         prCollect  = null;
         userCollect = null;

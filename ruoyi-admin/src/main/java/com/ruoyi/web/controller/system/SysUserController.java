@@ -179,7 +179,7 @@ public class SysUserController extends BaseController {
         SysUser user1 = userService.selectUserById(user.getUserId());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user1.getSalt()));
         if (userService.resetUserPwd(user) > 0) {
-            if (ShiroUtils.getUserId() == user.getUserId()) {
+            if (ShiroUtils.getUserId().equals(user.getUserId())) {
                 ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
             }
             return success();
@@ -275,8 +275,9 @@ public class SysUserController extends BaseController {
     @Transactional
     public AjaxResult googleBind(HttpServletRequest request, SysUser user) {
         SysUser oUser = userService.selectUserById(user.getUserId());
-        if ("1".equals(oUser.getStatus()))
+        if ("1".equals(oUser.getStatus())) {
             return AjaxResult.error("此用户已被停用，无法操作");
+        }
         if ("1".equals(user.getIsBind())) {//绑定
             //插入记录
             String secretKey = googleUtils.getSecretKey();

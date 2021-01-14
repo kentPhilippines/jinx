@@ -92,20 +92,22 @@ public class XRsa {
 
     private static byte[] rsaSplitCodec(Cipher cipher, int opmode, byte[] datas, int keySize) {
         int maxBlock = 0;
-        if (opmode == Cipher.DECRYPT_MODE)
+        if (opmode == Cipher.DECRYPT_MODE) {
             maxBlock = keySize / 8;
-        else
+        } else {
             maxBlock = keySize / 8 - 11;
+        }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         int offSet = 0;
         byte[] buff;
         int i = 0;
         try {
             while (datas.length > offSet) {
-                if (datas.length - offSet > maxBlock)
+                if (datas.length - offSet > maxBlock) {
                     buff = cipher.doFinal(datas, offSet, maxBlock);
-                else
+                } else {
                     buff = cipher.doFinal(datas, offSet, datas.length - offSet);
+                }
                 out.write(buff, 0, buff.length);
                 i++;
                 offSet = i * maxBlock;

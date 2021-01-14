@@ -1,36 +1,29 @@
 package com.ruoyi.web.controller.alipay;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
+import cn.hutool.core.util.ObjectUtil;
 import com.ruoyi.alipay.domain.AlipayChanelFee;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
-import com.ruoyi.alipay.domain.AlipayUserRateEntity;
 import com.ruoyi.alipay.service.IAlipayChanelFeeService;
 import com.ruoyi.alipay.service.IAlipayProductService;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-
-import cn.hutool.core.util.ObjectUtil;
-
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 渠道费率Controller
@@ -76,10 +69,12 @@ public class AlipayChanelFeeController extends BaseController {
 		for(AlipayChanelFee rate : list) {
 			AlipayUserFundEntity channel = qrCollect.get(rate.getChannelId());
 			AlipayProductEntity product = prCollect.get(rate.getProductId());
-			if(ObjectUtil.isNotNull(channel))
+			if (ObjectUtil.isNotNull(channel)) {
 				rate.setChannelId(channel.getUserName());
-			if(ObjectUtil.isNotNull(product))
-				rate.setProductId(product.getProductName()); 
+			}
+			if (ObjectUtil.isNotNull(product)) {
+				rate.setProductId(product.getProductName());
+			}
 		}
 		return getDataTable(list);
 	}

@@ -49,7 +49,7 @@
             <if test="amountType != null  and amountType != ''">and amountType = #{amountType}</if>
             <if test="amountNow != null ">and amountNow = #{amountNow}</if>
         </where>
-        order by createTime desc
+        order by id desc
     </select>
 
     <select id="selectDealpayRunOrderById" parameterType="Long" resultMap="DealpayRunOrderResult">

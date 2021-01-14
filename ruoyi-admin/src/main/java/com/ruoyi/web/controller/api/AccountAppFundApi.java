@@ -94,8 +94,9 @@ public class AccountAppFundApi extends BaseController {
             do {
                 orderList = dealOrderAppService.findOrderLimit(starTime, endTime, page, size);
                 page += 500;
-                if (orderList.size() < 500)
+                if (orderList.size() < 500) {
                     flag = false;
+                }
                 for (AlipayDealOrderEntity orderEntity : orderList) {
                     /**
                      * 交易订单核对
@@ -109,7 +110,7 @@ public class AccountAppFundApi extends BaseController {
                             logger.info("订单核对成功" + succ + "-------------------------------> 正常");
                         } else if (StrUtil.isNotEmpty(err)) {
                             logger.info("【订单核对失败" + err + "】");
-                            insert(orderEntity.getDealAmount(), orderEntity.getAssociatedId(), err, orderEntity.getCreateTime(), 1, orderEntity.getOrderAccount());
+                            insert(orderEntity.getDealAmount(), orderEntity.getAssociatedId(), err, orderEntity.getCreateTime(), 1, orderEntity.getOrderAccount(), "交易订单核对");
                         }
                     }
                 }
@@ -128,8 +129,9 @@ public class AccountAppFundApi extends BaseController {
             do {
                 witList = alipayWithdrawEntityService.findWitLimit(starTime, endTime, page, size);
                 page += 500;
-                if (witList.size() < 500)
+                if (witList.size() < 500) {
                     flag = false;
+                }
                 for (AlipayWithdrawEntity wit : witList) {
                     /**
                      *  代付订单核对
@@ -144,7 +146,7 @@ public class AccountAppFundApi extends BaseController {
                             logger.info("订单核对成功" + succ + "==========>成功");
                         } else if (StrUtil.isNotEmpty(err)) {
                             logger.info("【订单核对失败" + err + "】");
-                            insert(wit.getAmount(), wit.getOrderId(), err, wit.getCreateTime(), 2, wit.getUserId());
+                            insert(wit.getAmount(), wit.getOrderId(), err, wit.getCreateTime(), 2, wit.getUserId(), "代付订单核对");
 
                         }
                     } else if (wit.getOrderStatus().toString().equals("3")) {//失败
@@ -155,7 +157,7 @@ public class AccountAppFundApi extends BaseController {
                             logger.info("订单核对成功" + succ + "==========>成功");
                         } else if (StrUtil.isNotEmpty(err)) {
                             logger.info("【订单核对失败" + err + "】");
-                            insert(wit.getAmount(), wit.getOrderId(), err, wit.getCreateTime(), 2, wit.getUserId());
+                            insert(wit.getAmount(), wit.getOrderId(), err, wit.getCreateTime(), 2, wit.getUserId(), "代付订单核对");
 
                         }
                     }
@@ -167,10 +169,10 @@ public class AccountAppFundApi extends BaseController {
 
     }
 
-    void insert(Double amount, String orderId, String deal, Date submitTime, Integer type, String account) {
+    void insert(Double amount, String orderId, String deal, Date submitTime, Integer type, String account, String remark) {
         DealpayRunOrderEntity run = new DealpayRunOrderEntity();
         run.setOrderId(IdUtil.objectId());
-        run.setAccountW("对账");
+        run.setAccountW(remark);
         run.setAcountR("对账");
         run.setAmount(amount);
         run.setAssociatedId(orderId);
@@ -181,7 +183,11 @@ public class AccountAppFundApi extends BaseController {
         run.setOrderAccount(account);
         run.setRunType("1");
         run.setSubmitTime(submitTime);
-        dealpayRunOrderServiceImpl.insertDealpayRunOrder(run);
+        try {
+            dealpayRunOrderServiceImpl.insertDealpayRunOrder(run);
+        } catch (Exception ex) {
+
+        }
     }
 
 
@@ -270,7 +276,7 @@ public class AccountAppFundApi extends BaseController {
     void insertFund(String deal, Date submitTime, String account) {
         DealpayRunOrderEntity run = new DealpayRunOrderEntity();
         run.setOrderId(IdUtil.objectId());
-        run.setAccountW("对账");
+        run.setAccountW("账目核对");
         run.setAcountR("对账");
         run.setAmount(0.0);
         run.setAssociatedId(IdUtil.objectId());
@@ -281,7 +287,12 @@ public class AccountAppFundApi extends BaseController {
         run.setOrderAccount(account);
         run.setRunType("1");
         run.setSubmitTime(submitTime);
-        dealpayRunOrderServiceImpl.insertDealpayRunOrder(run);
+        try {
+            dealpayRunOrderServiceImpl.insertDealpayRunOrder(run);
+        } catch (Exception ex) {
+
+        }
+
     }
 
 

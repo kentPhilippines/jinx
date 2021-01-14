@@ -17,8 +17,10 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.constraints.Size;
 import java.util.Collections;
@@ -78,15 +80,17 @@ public class AlipayOrderContorller extends BaseController {
         /**
          * <p>当前订单为成功或者失败的时候禁止修改状态</p>
          */
-        if (StrUtil.isBlank(orderStatus))
+        if (StrUtil.isBlank(orderStatus)) {
             return AjaxResult.error("订单状态出错");
+        }
         String status = order.getOrderStatus();
         SysUser currentUser = ShiroUtils.getSysUser();
         Long userId = currentUser.getUserId();
         @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符") String userName = currentUser.getUserName();
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
-        if ("2".equals(status) || "4".equals(status))
+        if ("2".equals(status) || "4".equals(status)) {
             return AjaxResult.error("当前订单状态不允许修改");
+        }
         mapParam.put("orderId", order.getOrderId());
         mapParam.put("userName", userName);
         if ("SU".equals(orderStatus)) {

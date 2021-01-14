@@ -57,9 +57,11 @@ public class ReconciliationImpl implements Reconciliation {
             if (StrUtil.isNotEmpty(merchantInfoByUserId.getAgent())) {
                 str.append("商代理商分润不存在");
             }
-        } else if (ObjectUtil.isNull(runOrderEntity21)) {
+        }
+        if (ObjectUtil.isNull(runOrderEntity21)) {
             str.append("商户交易手续费扣款流水不存在");
-        } else if (ObjectUtil.isNull(runOrderEntity20)) {
+        }
+        if (ObjectUtil.isNull(runOrderEntity20)) {
             str.append("商户交易加款流水不存在");
         }
         if (StrUtil.isNotEmpty(str.toString())) {
@@ -94,9 +96,11 @@ public class ReconciliationImpl implements Reconciliation {
             AlipayRunOrderEntity runOrderEntity26 = runCollect.get(witSuPro);
             if (ObjectUtil.isNull(runOrderEntity9)) {
                 str.append("商户代付手续费不存在");
-            } else if (ObjectUtil.isNull(runOrderEntity10)) {
+            }
+            if (ObjectUtil.isNull(runOrderEntity10)) {
                 str.append("商户代付扣款不存在");
-            } else if (ObjectUtil.isNull(runOrderEntity26)) {
+            }
+            if (ObjectUtil.isNull(runOrderEntity26)) {
                 AlipayUserInfo merchantInfoByUserId = alipayUserInfoService.findMerchantInfoByUserId(wit.getUserId());
                 if (StrUtil.isNotEmpty(merchantInfoByUserId.getAgent())) {
                     str.append("商户代付代理分润不存在");
@@ -119,16 +123,20 @@ public class ReconciliationImpl implements Reconciliation {
             AlipayRunOrderEntity runOrderEntity22 = runCollect.get(witErFee);
             if (ObjectUtil.isNull(runOrderEntity9)) {
                 str.append("商户代付手续费不存在");
-            } else if (ObjectUtil.isNull(runOrderEntity10)) {
+            }
+            if (ObjectUtil.isNull(runOrderEntity10)) {
                 str.append("商户代付扣款不存在");
-            } else if (ObjectUtil.isNull(runOrderEntity26)) {
+            }
+            if (ObjectUtil.isNull(runOrderEntity26)) {
                 AlipayUserInfo merchantInfoByUserId = alipayUserInfoService.findMerchantInfoByUserId(wit.getUserId());
                 if (StrUtil.isNotEmpty(merchantInfoByUserId.getAgent())) {
                     str.append("商户代付代理分润不存在");
                 }
-            } else if (ObjectUtil.isNull(runOrderEntity8)) {
+            }
+            if (ObjectUtil.isNull(runOrderEntity8)) {
                 str.append("商户代付失败解冻流水不存在");
-            } else if (ObjectUtil.isNull(runOrderEntity22)) {
+            }
+            if (ObjectUtil.isNull(runOrderEntity22)) {
                 str.append("商户代付失败手续费解冻流水不存在");
             }
             if (StrUtil.isNotEmpty(str.toString())) {

@@ -168,9 +168,12 @@ public class SysRoleController extends BaseController {
     public String checkRoleNameUnique(SysRole role) {
         SysUser currentUser = ShiroUtils.getSysUser();
         if (StringUtils.isNotEmpty(currentUser.getMerchantId())) //商户
+        {
             role.setMerchantId(currentUser.getMerchantId());
-        else//平台
+        } else//平台
+        {
             role.setAccountType(0);
+        }
         return roleService.checkRoleNameUnique(role);
     }
 

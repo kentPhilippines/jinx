@@ -91,7 +91,9 @@ public class DealpayRunOrderController extends BaseController {
     @Log(title = "流水订单记录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(DealpayRunOrderEntity dealpayRunOrder) {
+    public AjaxResult editSave(DealpayRunOrderEntity dealpayRunOrder, @PathVariable("id") Long id) {
+        dealpayRunOrder.setAcountR("平账");
+        dealpayRunOrder.setId(id);
         return toAjax(dealpayRunOrderService.updateDealpayRunOrder(dealpayRunOrder));
     }
 

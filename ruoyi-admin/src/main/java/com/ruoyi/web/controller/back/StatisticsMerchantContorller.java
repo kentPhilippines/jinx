@@ -85,9 +85,11 @@ public class StatisticsMerchantContorller extends BaseController {
         List<StatisticsEntity> list = alipayDealOrderEntityService.selectStatisticsDataByHours(statisticsEntity, DateUtils.dayStart(), DateUtils.dayEnd());
         List<AlipayUserFundEntity> listFund = alipayUserFundEntityService.findUserFundAll();
         ConcurrentHashMap<String, AlipayUserFundEntity> userCollect = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
-        for (StatisticsEntity sta : list)
-            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
+        for (StatisticsEntity sta : list) {
+            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId()))) {
                 sta.setUserName(userCollect.get(sta.getUserId()).getUserName());
+            }
+        }
         return getDataTable(list);
     }
 
@@ -100,8 +102,9 @@ public class StatisticsMerchantContorller extends BaseController {
         List<AlipayUserFundEntity> listFund = alipayUserFundEntityService.findUserFundAll();
         ConcurrentHashMap<String, AlipayUserFundEntity> userCollect = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         for (StatisticsEntity sta : list) {
-            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId())))
+            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId()))) {
                 sta.setUserName(userCollect.get(sta.getUserId()).getUserName());
+            }
         }
         return getDataTable(list);
     }

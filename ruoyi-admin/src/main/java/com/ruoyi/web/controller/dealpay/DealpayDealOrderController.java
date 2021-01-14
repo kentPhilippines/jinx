@@ -1,34 +1,28 @@
 package com.ruoyi.web.controller.dealpay;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
-import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
+import com.ruoyi.dealpay.service.IDealpayDealOrderService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.dealpay.domain.DealpayDealOrderEntity;
-import com.ruoyi.dealpay.service.IDealpayDealOrderService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Size;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 交易订单Controller
@@ -151,15 +145,17 @@ public class DealpayDealOrderController extends BaseController {
     @Log(title = "人工补单", businessType = BusinessType.UPDATE)
     public AjaxResult enterOrder(Long id, String orderStatus) {
         DealpayDealOrderEntity order = dealpayDealOrderService.selectDealpayDealOrderById(id);
-        if (StrUtil.isBlank(orderStatus))
+        if (StrUtil.isBlank(orderStatus)) {
             return AjaxResult.error("订单状态出错");
+        }
         String status = order.getOrderStatus();
         SysUser currentUser = ShiroUtils.getSysUser();
         Long userId = currentUser.getUserId();
         @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符") String userName = currentUser.getUserName();
         Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
-        if ("2".equals(status) || "4".equals(status))
+        if ("2".equals(status) || "4".equals(status)) {
             return AjaxResult.error("当前订单状态不允许修改");
+        }
         mapParam.put("orderId", order.getOrderId());
         mapParam.put("userName", userName);
         if ("SU".equals(orderStatus)) {

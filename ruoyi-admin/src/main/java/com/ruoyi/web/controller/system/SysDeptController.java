@@ -75,8 +75,9 @@ public class SysDeptController extends BaseController {
         }
         if (StrUtil.isNotBlank(dept.getMerchantId())) {
             AlipayUserInfo merchantInfoByUserId = alipayUserInfoService.findMerchantInfoByUserId(dept.getMerchantId());
-            if (ObjectUtil.isNull(merchantInfoByUserId))
+            if (ObjectUtil.isNull(merchantInfoByUserId)) {
                 throw new BusinessException("商户交易账号不存在，请重新填写");
+            }
         }
         dept.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(deptService.insertDept(dept));

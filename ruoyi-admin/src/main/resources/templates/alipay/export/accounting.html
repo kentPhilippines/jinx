@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('对账记录表')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+
+                        <li>
+                            <span>关联账户：</span>
+                            <input name="orderAccount" type="text"/>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>流水类型：</label>
+                            <select class="selectpicker" data-none-selected-text="请选择"
+                                    id="runOrderType" name="runOrderType">
+                                <option value="">所有</option>
+                                <option value="1">充值核对</option>
+                                <option value="2">提现核对</option>
+                                <option value="3">账户核对</option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <label>核帐日：</label>
+                            <input class="time-input" id="startTime" name="params[dayStart]" placeholder="开始时间"
+                                   type="text"/>
+                            <span>-</span>
+                            <input class="time-input" id="endTime" name="params[dayEnd]" placeholder="结束时间"
+                                   type="text"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "dealpay/runOrder";
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            modalName: "账目核对记录",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '数据ID',
+                    visible: false
+                },
+                {
+                    field: 'orderId',
+                    title: '平台单号'
+                },
+                {
+                    field: 'associatedId',
+                    title: '关联订单'
+                },
+                {
+                    field: 'orderAccount',
+                    title: '关联账户'
+                },
+                {
+                    field: 'runOrderType',
+                    title: '流水类型',
+                    formatter: function (value, row, index) {
+
+
+                        return value;
+                    }
+                },
+                {
+                    field: 'amount',
+                    title: '金额'
+                },
+                {
+                    field: 'dealDescribe',
+                    title: '流水描述'
+                },
+                {
+                    field: 'acountR',
+                    title: '情况'
+                },
+                {
+                    field: 'accountW',
+                    title: '小项'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if (row.acountR != "平账") {
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.accountting(\'' + row.id + '\')"><i class="fa fa-shower"></i>平账</a> ');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    //初始化时间
+    layui.use('laydate', function () {
+        const laydate = layui.laydate;
+        laydate.render({
+            elem: '#startTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g, "-") + " 00:00:00",
+            isInitValue: true
+        });
+        laydate.render({
+            elem: '#endTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g, "-") + " 23:59:59",
+            isInitValue: true
+        });
+    });
+
+
+    function accountting(id) {
+        $.modal.confirm("确认要【平账】吗？", function () {
+            $.operate.post(prefix + "/edit", {"id": id});
+        })
+    }
+
+
+</script>
+</body>
+</html>
