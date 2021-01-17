@@ -108,4 +108,7 @@ public interface AlipayUserFundEntityMapper {
     @Select("select * from alipay_user_fund_bak where userType = 1 and userId = #{userId} " +
             " and  createTime = #{starTime}  ")
     AlipayUserFundEntity findFundBak(@Param("starTime") String starTime, @Param("userId") String userId, @Param("endTime") String endTime);
+
+
+    List<AlipayUserFundEntity> findFundBakList(AlipayUserFundEntity alipayUserFundEntity);
 }

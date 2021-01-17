@@ -38,10 +38,17 @@
          todayProfit, todayOrderCount, todayAgentProfit, userType, agent, isAgent,
         createTime, submitTime, status, version , currency , quota from alipay_user_fund
     </sql>
+    <sql id="selectAlipayUserFundEntityVoBak">
+        select id, userId, userName, cashBalance, rechargeNumber, freezeBalance, accountBalance,
+         sumDealAmount, sumRechargeAmount, sumProfit, sumAgentProfit, sumOrderCount, todayDealAmount,
+         todayProfit, todayOrderCount, todayAgentProfit, userType, agent, isAgent,
+        createTime, submitTime from alipay_user_fund_Bak
+    </sql>
 
-    <select id="selectAlipayUserFundEntityList" parameterType="AlipayUserFundEntity"
+
+    <select id="findFundBakList" parameterType="AlipayUserFundEntity"
             resultMap="AlipayUserFundEntityResult">
-        <include refid="selectAlipayUserFundEntityVo"/>
+        <include refid="selectAlipayUserFundEntityVoBak"/>
         <where>
             <if test="userId != null  and userId != ''">and userId = #{userId}</if>
             <if test="userName != null  and userName != ''">and userName like concat('%', #{userName}, '%')</if>
@@ -61,8 +68,37 @@
             <if test="userType != null  and userType != ''">and userType = #{userType}</if>
             <if test="agent != null  and agent != ''">and agent = #{agent}</if>
             <if test="isAgent != null  and isAgent != ''">and isAgent = #{isAgent}</if>
-            <!--            <if test="createTime != null "> and createTime = #{createTime}</if>
-                        <if test="submitTime != null "> and submitTime = #{submitTime}</if>-->
+            <if test="createTime != null ">and createTime = #{createTime}</if>
+            <if test="submitTime != null ">and submitTime = #{submitTime}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="version != null ">and version = #{version}</if>
+            <if test="currency != null ">and currency = #{currency}</if>
+        </where>
+        order by id desc
+    </select>
+
+
+    <select id="selectAlipayUserFundEntityList" parameterType="AlipayUserFundEntity"
+            resultMap="AlipayUserFundEntityResult">
+        <include refid="selectAlipayUserFundEntityVo"/>
+        <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
+            <if test="userId != null  and userId != ''">and userId = #{userId}</if>
+            <if test="userName != null  and userName != ''">and userName like concat('%', #{userName}, '%')</if>
+            <if test="cashBalance != null ">and cashBalance = #{cashBalance}</if>
+            <if test="rechargeNumber != null ">and rechargeNumber = #{rechargeNumber}</if>
+            <if test="freezeBalance != null ">and freezeBalance = #{freezeBalance}</if>
+            <if test="accountBalance != null ">and accountBalance = #{accountBalance}</if>
+            <if test="sumDealAmount != null ">and sumDealAmount = #{sumDealAmount}</if>
+            <if test="sumRechargeAmount != null ">and sumRechargeAmount = #{sumRechargeAmount}</if>
+            <if test="sumProfit != null ">and sumProfit = #{sumProfit}</if>
+            <if test="sumAgentProfit != null ">and sumAgentProfit = #{sumAgentProfit}</if>
+            <if test="sumOrderCount != null ">and sumOrderCount = #{sumOrderCount}</if>
+            <if test="todayDealAmount != null ">and todayDealAmount = #{todayDealAmount}</if>
+            <if test="todayProfit != null ">and todayProfit = #{todayProfit}</if>
+            <if test="todayOrderCount != null ">and todayOrderCount = #{todayOrderCount}</if>
+            <if test="todayAgentProfit != null ">and todayAgentProfit = #{todayAgentProfit}</if>
+            <if test="userType != null  and userType != ''">and userType = #{userType}</if>
             <if test="status != null ">and status = #{status}</if>
             <if test="version != null ">and version = #{version}</if>
             <if test="currency != null ">and currency = #{currency}</if>

@@ -124,4 +124,6 @@ public interface IAlipayUserFundEntityService {
      * @return
      */
     AlipayUserFundEntity findFundBak(String starTime, String userId, String endTime);
+
+    List<AlipayUserFundEntity> findFundBakList(AlipayUserFundEntity alipayUserFundEntity);
 }

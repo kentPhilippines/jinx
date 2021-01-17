@@ -144,14 +144,20 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    public List<String> findDealAfter15() {
-        List<String> userList = alipayUserFundEntityMapper.findDealAfter15();
-        return userList;
-    }
+	public List<String> findDealAfter15() {
+		List<String> userList = alipayUserFundEntityMapper.findDealAfter15();
+		return userList;
+	}
 
-    @Override
-    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    public AlipayUserFundEntity findFundBak(String starTime, String userId, String endTime) {
-        return alipayUserFundEntityMapper.findFundBak(starTime, userId, endTime);
-    }
+	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
+	public AlipayUserFundEntity findFundBak(String starTime, String userId, String endTime) {
+		return alipayUserFundEntityMapper.findFundBak(starTime, userId, endTime);
+	}
+
+	@Override
+	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
+	public List<AlipayUserFundEntity> findFundBakList(AlipayUserFundEntity alipayUserFundEntity) {
+		return alipayUserFundEntityMapper.findFundBakList(alipayUserFundEntity);
+	}
 }

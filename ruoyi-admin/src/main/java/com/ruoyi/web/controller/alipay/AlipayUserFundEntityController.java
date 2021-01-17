@@ -55,6 +55,11 @@ public class AlipayUserFundEntityController extends BaseController {
         return prefix + "/fund";
     }
 
+    @GetMapping("/bak")
+    public String fundBak() {
+        return prefix + "/fundBak";
+    }
+
     /**
      * 查询用户资金账户列表
      */
@@ -70,6 +75,18 @@ public class AlipayUserFundEntityController extends BaseController {
     }
 
     /**
+     * 查询用户资金账户列表
+     */
+    @PostMapping("/listBak")
+    @ResponseBody
+    public TableDataInfo listBak(AlipayUserFundEntity alipayUserFundEntity) {
+        startPage1();
+        List<AlipayUserFundEntity> list = alipayUserFundEntityService
+                .findFundBakList(alipayUserFundEntity);
+        return getDataTable(list);
+    }
+
+    /**
      * 导出用户资金账户列表
      */
     @Log(title = "用户资金账户", businessType = BusinessType.EXPORT)
@@ -80,6 +97,19 @@ public class AlipayUserFundEntityController extends BaseController {
                 .selectAlipayUserFundEntityList(alipayUserFundEntity);
         ExcelUtil<AlipayUserFundEntity> util = new ExcelUtil<AlipayUserFundEntity>(AlipayUserFundEntity.class);
         return util.exportExcel(list, "fund");
+    }
+
+    /**
+     * 导出用户资金账户列表
+     */
+    @Log(title = "备份资金账户", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportBak")
+    @ResponseBody
+    public AjaxResult exportBak(AlipayUserFundEntity alipayUserFundEntity) {
+        List<AlipayUserFundEntity> list = alipayUserFundEntityService
+                .findFundBakList(alipayUserFundEntity);
+        ExcelUtil<AlipayUserFundEntity> util = new ExcelUtil<AlipayUserFundEntity>(AlipayUserFundEntity.class);
+        return util.exportExcel(list, "bak");
     }
 
     /*最新的资金账户处理逻辑*/
