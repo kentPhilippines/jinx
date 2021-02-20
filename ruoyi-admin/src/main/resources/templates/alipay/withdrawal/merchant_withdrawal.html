@@ -46,6 +46,15 @@
                             </select>
                         </li>
                         <li class="select-selectpicker">
+                            <label>货币类型： </label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="currency"
+                                    name="currency" th:with="type=${@dict.getType('currency')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
                             <label>配置出款渠道：</label>
                             <select class="selectpicker" data-none-selected-text="请选择" id="witChannel"
                                     name="witChannel">
@@ -148,7 +157,11 @@
                     title: '银行信息',
                     formatter: function (value, row, index) {
                         var table = '<ul>'
-                        table += '<li>' + '银行卡号：' + row.bankNo + '</li>'
+                        if (row.orderStatus == 1 && row.currency != 'CNY') {
+                            table += '<li>' + '<i class=\"btn btn-link btn-xs\" style="cursor:pointer;" title="地址"onclick="openScan(\'' + row.bankNo + '\')"><i class="fa fa-google-wallet"></i> 支付地址：' + row.bankNo + '</i> ' + '</li>';
+                        } else {
+                            table += '<li>' + '银行卡号：' + row.bankNo + '</li>'
+                        }
                         table += '<li>' + '开户人：' + row.accname + '</li>'
                         table += '<li>' + '开户行：' + row.bankName + '</li>'
                         table += '</ul>'
@@ -242,6 +255,11 @@
         });
     });
 
+    function openScan(context) {
+        // ethereum:0x28250971cF8bB17eDB2fD31e72C7fD352ae0eFCB?contractAddress=0xdac17f958d2ee523a2206206994597c13d831ec7&decimal=6&value=0
+        var qr = 'ethereum:' + context + '?decimal=6&value=0'
+        $.modal.openCode("请扫码付款", qr, "400px", "400px", null);
+    }
 
 </script>
 </body>

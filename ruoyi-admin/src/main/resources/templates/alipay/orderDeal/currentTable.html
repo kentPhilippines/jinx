@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('当天统计数据')"/>
+	<th:block th:include="include :: header('当天统计数据')"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
-    <div class="row">
+	<div class="row">
 		<div class="col-sm-12 search-collapse">
 			<form id="formId">
 				<div class="select-list">
@@ -13,6 +13,15 @@
 						<li>
 							<span>渠道账户：</span>
 							<input type="text" id="userId" name="userId"/>
+						</li>
+						<li class="select-selectpicker">
+							<label>货币类型： </label>
+							<select class="selectpicker" data-none-selected-text="请选择" id="currency"
+									name="currency" th:with="type=${@dict.getType('currency')}">
+								<option value="">所有</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
 						</li>
 						<li class="select-time">
 							<span>创建时间：</span>

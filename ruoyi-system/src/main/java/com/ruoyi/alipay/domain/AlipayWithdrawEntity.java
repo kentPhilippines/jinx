@@ -165,6 +165,18 @@ public class AlipayWithdrawEntity extends BaseEntity {
         this.witType = witType;
     }
 
+    @Excel(name = "货币类型")
+    private String currency;
+
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     /**
      * 审核意见
      */

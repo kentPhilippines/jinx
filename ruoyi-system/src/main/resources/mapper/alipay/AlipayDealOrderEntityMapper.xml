@@ -30,10 +30,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="retain2"    column="retain2"    />
         <result property="retain3"    column="retain3"    />
         <result property="retain4"    column="retain4"    />
+        <result property="currency" column="currency"/>
     </resultMap>
 
     <sql id="selectAlipayDealOrderEntityVo">
-        select id, orderId, associatedId, orderStatus, dealAmount, dealFee, actualAmount, orderType, orderAccount, orderQrUser, orderQr, externalOrderId, generationIp, dealDescribe, notify, back, isNotify, createTime, submitTime, feeId, status, retain1, retain2, retain3, retain4 from alipay_deal_order
+        select id, orderId,currency, associatedId, orderStatus, dealAmount, dealFee, actualAmount, orderType, orderAccount, orderQrUser, orderQr, externalOrderId, generationIp, dealDescribe, notify, back, isNotify, createTime, submitTime, feeId, status, retain1, retain2, retain3, retain4 from alipay_deal_order
     </sql>
     <select id="selectAlipayDealOrderEntityList" parameterType="AlipayDealOrderEntity" resultMap="AlipayDealOrderEntityResult">
         <include refid="selectAlipayDealOrderEntityVo"/>
@@ -55,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isNotify != null  and isNotify != ''"> and isNotify = #{isNotify}</if>
             <if test="status != null "> and status = #{status}</if>
             <if test="retain1 != null and retain1 != '' ">and retain1 = #{retain1}</if>
+            <if test="currency != null and currency != '' ">and currency = #{currency}</if>
         </where>
         order by id desc
     </select>

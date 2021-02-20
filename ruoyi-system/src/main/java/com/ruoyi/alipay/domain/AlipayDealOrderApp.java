@@ -97,6 +97,19 @@ public class AlipayDealOrderApp extends BaseEntity {
     @Excel(name = "订单结算手续费")
     private String retain3;
 
+
+    @Excel(name = "货币类型")
+    private String currency;
+
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     public String getUserName() {
         return this.userName;
     }

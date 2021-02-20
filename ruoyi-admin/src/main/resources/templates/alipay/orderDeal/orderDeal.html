@@ -27,6 +27,15 @@
                             <span>商户账号：</span>
                             <input type="text" name="orderAccount"/>
                         </li>
+                        <li class="select-selectpicker">
+                            <label>货币类型： </label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="currency"
+                                    name="currency" th:with="type=${@dict.getType('currency')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
                         <!--<li>
                             <span>渠道账户：</span>
                             <input type="text" name="orderQrUser"/>
@@ -117,12 +126,37 @@
                 checkbox: true
             },
                 {field: 'id', title: '数据ID', visible: false},
-                {field: 'orderId', title: '平台订单'},
-                {field: 'associatedId', title: '关联订单'},
-                {field: 'orderAccount', title: '商户账号'},
-                {field: 'userName', title: '商户昵称'},
-                {field: 'orderQrUser', title: '渠道账户'},
-                {field: 'channelName', title: '渠道昵称'},
+                {
+                    field: 'orderId', title: '平台订单', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '主订单：' + row.orderId + '</li>'
+                        table += '<li>' + '关联订单：' + row.associatedId + '</li>'
+                        table += '<li>' + '外部订单：' + row.externalOrderId + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
+                },
+                // {field: 'associatedId', title: '关联订单'},
+                {
+                    field: 'orderAccount', title: '商户账号', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '商户账号：' + row.orderAccount + '</li>'
+                        table += '<li>' + '商户昵称：' + row.userName + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
+                },
+                // {field: 'userName', title: '商户昵称'},
+                {
+                    field: 'orderQrUser', title: '渠道账户', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '渠道账号：' + row.orderQrUser + '</li>'
+                        table += '<li>' + '渠道昵称：' + row.channelName + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
+                },
+                // {field: 'channelName', title: '渠道昵称'},
                 {field: 'retain1', title: '产品类型'},
                 {
                     field: 'orderStatus', title: '订单状态',
@@ -130,9 +164,10 @@
                         return $.table.selectDictLabel(orderstatusDatas, value);
                     }
                 },
-                {field: 'externalOrderId',   title: '外部订单号'},
+                // {field: 'externalOrderId',   title: '外部订单号'},
                 {field: 'dealAmount', title: '交易金额'},
-                /*  {   field: 'dealFee',       title: '手续费'    },*/
+                {field: 'currency', title: '货币类型'},
+                {field: 'orderQr', title: '交易媒介'},
                 /*                {   field: 'orderQr',       title: '关联二维码'  },*/
                 /*
                 {   field: 'isNotify',      title: '发送通知'   },*/

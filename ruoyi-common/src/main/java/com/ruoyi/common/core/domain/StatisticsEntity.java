@@ -1,5 +1,6 @@
 package com.ruoyi.common.core.domain;
 
+import com.ruoyi.common.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -12,6 +13,19 @@ public class StatisticsEntity extends BaseEntity implements Serializable {
     private String time;
     private String agentAmount;
     private String userAgent;
+
+    @Excel(name = "货币类型")
+    private String currency;
+
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
 
     public String getAgentAmount() {
         return agentAmount;

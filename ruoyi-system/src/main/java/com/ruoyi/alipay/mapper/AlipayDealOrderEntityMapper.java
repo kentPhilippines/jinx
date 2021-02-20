@@ -60,6 +60,9 @@ public interface AlipayDealOrderEntityMapper {
             "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
             "and o.orderQrUser = #{statisticsEntity.userId} " +
             "</if>" +
+            "<if test = \"statisticsEntity.currency != null and statisticsEntity.currency != ''\">" +
+            "and o.currency = #{statisticsEntity.currency} " +
+            "</if>" +
             "group by o.orderQrUser, o.retain1 " +
             "</script>")
     List<StatisticsEntity> selectStatDateByDay(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
@@ -77,6 +80,9 @@ public interface AlipayDealOrderEntityMapper {
             "where o.createTime between #{statisticsEntity.params.dayStart} and #{statisticsEntity.params.dayEnd} and orderType = 1 " +
             "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
             "and o.orderQrUser = #{statisticsEntity.userId} " +
+            "</if>" +
+            "<if test = \"statisticsEntity.currency != null and statisticsEntity.currency != ''\">" +
+            "and o.currency = #{statisticsEntity.currency} " +
             "</if>" +
             "group by o.orderQrUser, o.retain1 , time" +
             "</script>")

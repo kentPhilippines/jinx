@@ -153,6 +153,17 @@ public class AlipayDealOrderEntity extends BaseEntity {
 
     private String channelName;
 
+    @Excel(name = "货币类型")
+    private String currency;
+
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
     public String getChannelName() {
         return channelName;

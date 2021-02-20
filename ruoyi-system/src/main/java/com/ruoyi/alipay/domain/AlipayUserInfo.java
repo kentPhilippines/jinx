@@ -211,12 +211,28 @@ public class AlipayUserInfo extends BaseEntity {
 
     private String queueList;
 
+
+    @Excel(name = "货币类型")
+    private String currency;
+
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+
     public String getQueueList() {
         return queueList;
     }
-    public void setQueueList(String queueList){
+
+    public void setQueueList(String queueList) {
         this.queueList = queueList;
     }
+
     public void setId(Long id) {
         this.id = id;
     }

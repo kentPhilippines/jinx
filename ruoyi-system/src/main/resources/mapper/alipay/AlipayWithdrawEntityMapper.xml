@@ -30,13 +30,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="witType"    column="witType"    />
         <result property="channelId" column="channelId"/>
         <result property="appOrderId" column="appOrderId"/>
+        <result property="currency" column="currency"/>
     </resultMap>
 
     <sql id="selectAlipayWithdrawEntityVo">
         select id, orderId, userId, withdrawType, bankNo, accname,
          orderStatus, bankName, amount, fee, actualAmount, mobile,
          notify, createTime, submitTime, status, retain1, retain2, apply, comment, approval,witChannel,witType,
-        channelId,appOrderId
+        channelId,appOrderId,currency
           from alipay_withdraw
     </sql>
 
@@ -57,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="channelId != null  and channelId != ''">and channelId = #{channelId}</if>
             <if test="appOrderId != null  and appOrderId != ''">and appOrderId = #{appOrderId}</if>
             <if test="witChannel != null  and witChannel != ''">and witChannel = #{witChannel}</if>
+            <if test="currency != null  and currency != ''">and currency = #{currency}</if>
         </where>
         order by id desc
     </select>

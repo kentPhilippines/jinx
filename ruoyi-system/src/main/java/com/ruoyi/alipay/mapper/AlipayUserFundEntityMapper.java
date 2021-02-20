@@ -49,7 +49,7 @@ public interface AlipayUserFundEntityMapper {
      */
     int updateAlipayUserFundEntity(AlipayUserFundEntity alipayUserFundEntity);
 
-    @Insert("insert into alipay_user_fund (userId,userName,userType,isAgent) values(#{userId},#{userName},#{userType},#{isAgent})")
+    @Insert("insert into alipay_user_fund (userId,userName,userType,isAgent,currency) values(#{userId},#{userName},#{userType},#{isAgent},#{currency})")
     int insertAlipayUserFundInfo(AlipayUserInfo merchantInfoEntity);
 
     @Select("select cashBalance, accountBalance, rechargeNumber  ,freezeBalance from alipay_user_fund where userId = #{merchantId}")

@@ -23,10 +23,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="retain1"    column="retain1"    />
         <result property="retain2"    column="retain2"    />
         <result property="retain3"    column="retain3"    />
+        <result property="currency" column="currency"/>
     </resultMap>
 
     <sql id="selectAlipayDealOrderAppVo">
-        select id, orderId, orderType, orderAccount, orderStatus, dealDescribe, orderAmount, orderIp, appOrderId, feeId, notify, back, submitTime, createTime, status, retain1, retain2, retain3 from alipay_deal_order_app
+        select id, orderId, currency , orderType, orderAccount, orderStatus, dealDescribe, orderAmount, orderIp, appOrderId, feeId, notify, back, submitTime, createTime, status, retain1, retain2, retain3 from alipay_deal_order_app
     </sql>
 
     <select id="selectAlipayDealOrderAppList" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">
@@ -49,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
             <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
             <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
+            <if test="currency != null  and currency != ''">and currency = #{currency}</if>
         </where>
         order by id desc
     </select>

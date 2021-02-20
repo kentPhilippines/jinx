@@ -64,6 +64,9 @@ public interface AlipayDealOrderAppMapper {
             "<if test = \"statisticsEntity.userAgent != null and statisticsEntity.userAgent != ''\">" +
             "and orderAccount in (select userId from alipay_user_info where agent = #{statisticsEntity.userAgent})" +
             "</if>" +
+            "<if test = \"statisticsEntity.currency != null and statisticsEntity.currency != ''\">" +
+            "and currency = #{statisticsEntity.currency} " +
+            "</if>" +
             "group by orderAccount , time " +
             "</script>")
     List<StatisticsEntity> selectOrderAppStatDateByHours(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
@@ -79,6 +82,9 @@ public interface AlipayDealOrderAppMapper {
             "from alipay_deal_order_app app " +
             "where " +
             "  app.createTime between #{statisticsEntity.params.dayStart} " +
+            "<if test = \"statisticsEntity.currency != null and statisticsEntity.currency != ''\">" +
+            "and app.currency = #{statisticsEntity.currency} " +
+            "</if>" +
             " and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
             " union all " +
             "select app.orderAccount userId, " +
@@ -97,6 +103,9 @@ public interface AlipayDealOrderAppMapper {
             "</if>" +
             "<if test = \"statisticsEntity.userAgent != null and statisticsEntity.userAgent != ''\">" +
             "and app.orderAccount in (select userId from alipay_user_info where agent = #{statisticsEntity.userAgent}) " +
+            "</if>" +
+            "<if test = \"statisticsEntity.currency != null and statisticsEntity.currency != ''\">" +
+            "and app.currency = #{statisticsEntity.currency} " +
             "</if>" +
             "group by app.orderAccount " +
             "</script>")

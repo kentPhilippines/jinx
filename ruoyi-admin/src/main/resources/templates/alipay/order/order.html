@@ -20,23 +20,22 @@
                         </li>
                         <li>
                             <span>订单状态：</span>
-                            <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}">
+                            <select id="orderStatus" name="orderStatus">
                                 <option value="7">人工处理</option>
                                 <option value="2">成功</option>
-                                ${dict.dictValue}"></option>
                             </select>
                         </li>
                         <li>
-                            <span>码商账户：</span>
+                            <span>渠道账户：</span>
                             <input type="text" name="orderQrUser"/>
                         </li>
                         <li class="select-time">
                             <span>创建时间：</span>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                   name="params[beginCreateTime]"/>
+                                   name="params[dayStart]"/>
                             <span>-</span>
                             <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                   name="params[endCreateTime]"/>
+                                   name="params[dayEnd]"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -77,7 +76,8 @@
                 {field: 'id', title: '数据id', visible: false},
                 {field: 'orderId', title: '订单号'},
                 {field: 'associatedId', title: '关联订单号'},
-                {field: 'orderQrUser', title: '码商账户'},
+                {field: 'orderQrUser', title: '渠道账户'},
+                {field: 'orderAccount', title: '商户账号'},
                 {
                     field: 'orderStatus', title: '订单状态',
                     formatter: function (value, row, index) {
@@ -86,6 +86,7 @@
                 },
                 {field: 'dealAmount', title: '交易金额'},
                 {field: 'createTime', title: '数据生成时间'},
+                {field: 'dealDescribe', title: '备注'},
                 {
                     title: '操作',
                     align: 'center',

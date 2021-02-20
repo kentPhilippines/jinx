@@ -18,6 +18,15 @@
                             <span>代理商：</span>
                             <input id="userAgent" name="userAgent" type="text"/>
                         </li>
+                        <li class="select-selectpicker">
+                            <label>货币类型： </label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="currency"
+                                    name="currency" th:with="type=${@dict.getType('currency')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
                         <li class="select-time">
                             <span>创建时间：</span>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间"
@@ -27,7 +36,7 @@
                                    name="params[dayEnd]"/>
                         </li>
                         <li>
-							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
 									class="fa fa-search"></i>&nbsp;搜索</a>
 							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
 									class="fa fa-refresh"></i>&nbsp;重置</a>
