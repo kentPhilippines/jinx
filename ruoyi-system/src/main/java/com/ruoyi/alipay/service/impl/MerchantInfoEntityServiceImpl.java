@@ -2,6 +2,7 @@ package com.ruoyi.alipay.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.google.common.collect.Lists;
+import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
 import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
@@ -88,7 +89,10 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         merchantInfoEntity.setIsAgent(String.valueOf(1));
         merchantInfoEntity.setPublicKey(keys.get(0));
         merchantInfoEntity.setPrivateKey(keys.get(1));
-      //  merchantInfoEntity.setCurrency(merchantInfoEntity.getCurrency());
+        // merchantInfoEntityMapper.findBackUserByUserId(merchantInfoEntity.getAgent())
+        AlipayUserFundEntity fund = alipayUserFundEntityMapper.findUserFundCurrencyById(merchantInfoEntity.getAgent());
+        merchantInfoEntity.setCurrency(fund.getCurrency());
+        //  merchantInfoEntity.setCurrency(merchantInfoEntity.getCurrency());
         //新增商户用户
         int i = merchantInfoEntityMapper.insertMerchantInfoEntity(merchantInfoEntity);
         if (i > 0) {//成功后增加资金信息

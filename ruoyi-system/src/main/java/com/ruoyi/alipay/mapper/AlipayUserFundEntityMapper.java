@@ -111,4 +111,7 @@ public interface AlipayUserFundEntityMapper {
 
 
     List<AlipayUserFundEntity> findFundBakList(AlipayUserFundEntity alipayUserFundEntity);
+
+    @Select("select userId ,currency  from alipay_user_fund where   userId = #{userId}")
+    AlipayUserFundEntity findUserFundCurrencyById(@Param("userId") String userId);
 }

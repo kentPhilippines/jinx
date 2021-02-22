@@ -257,7 +257,7 @@
 
     function openScan(context) {
         // ethereum:0x28250971cF8bB17eDB2fD31e72C7fD352ae0eFCB?contractAddress=0xdac17f958d2ee523a2206206994597c13d831ec7&decimal=6&value=0
-        var qr = 'ethereum:' + context + '?decimal=6&value=0'
+        var qr = 'https://cli.im/api/qrcode/code?text=' + 'ethereum:' + context + '?decimal=6&value=0'
         $.modal.openCode("请扫码付款", qr, "400px", "400px", null);
     }
 

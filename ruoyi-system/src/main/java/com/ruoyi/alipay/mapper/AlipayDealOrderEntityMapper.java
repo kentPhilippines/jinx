@@ -41,13 +41,25 @@ public interface AlipayDealOrderEntityMapper {
     int updateAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity);
 
     @Select("<script>" +
-            "select '所有' userId, '所有' productName, " +
+            "select '所有' userId, 'USDT' productName, " +
             "coalesce(sum(dealAmount),0) totalAmount," +
             "coalesce(sum(case orderStatus when 2 then dealAmount else 0 end),0) successAmount," +
             "coalesce(sum(case orderStatus when 2 then retain3 else 0 end),0) profit," +
             "count(*) totalCount," +
             "count(case orderStatus when 2 then id else null end) successCount " +
-            "from alipay_deal_order where createTime between #{statisticsEntity.params.dayStart} and #{statisticsEntity.params.dayEnd} and orderType = 1 " +
+            "from alipay_deal_order where createTime between #{statisticsEntity.params.dayStart}" +
+            " and #{statisticsEntity.params.dayEnd} and orderType = 1 " +
+            "and currency = 'USDT' " +
+            " union all " +
+            "select '所有' userId, 'CNY' productName, " +
+            "coalesce(sum(dealAmount),0) totalAmount," +
+            "coalesce(sum(case orderStatus when 2 then dealAmount else 0 end),0) successAmount," +
+            "coalesce(sum(case orderStatus when 2 then retain3 else 0 end),0) profit," +
+            "count(*) totalCount," +
+            "count(case orderStatus when 2 then id else null end) successCount " +
+            "from alipay_deal_order where createTime between #{statisticsEntity.params.dayStart}" +
+            " and #{statisticsEntity.params.dayEnd} and orderType = 1 " +
+            "and currency = 'CNY' " +
             " union all " +
             "select o.orderQrUser userId, p.productName ," +
             "coalesce(sum(dealAmount),0.00) totalAmount," +
