@@ -149,6 +149,16 @@ public class AlipayDealOrderEntity extends BaseEntity {
      * 备用字段添加业务使用
      */
     private String retain2;
+    @Excel(name = "USDT-hash")
+    private String txhash;
+
+    public String getTxhash() {
+        return txhash;
+    }
+
+    public void setTxhash(String txhash) {
+        this.txhash = txhash;
+    }
 
 
     private String channelName;

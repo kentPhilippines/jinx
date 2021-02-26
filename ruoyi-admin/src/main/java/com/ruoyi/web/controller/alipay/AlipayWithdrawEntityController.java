@@ -138,7 +138,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 财务审核会员提现记录
      */
-    @Log(title = "财务管理", businessType = BusinessType.UPDATE)
+    @Log(title = "代付订单确认", businessType = BusinessType.UPDATE)
     @PostMapping("/merchant/approval")
     @ResponseBody
     public AjaxResult apporval(AlipayWithdrawEntity alipayWithdrawEntity) {
@@ -177,6 +177,34 @@ public class AlipayWithdrawEntityController extends BaseController {
         return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
     }
 
+    @Log(title = "结算eth矿工手续费", businessType = BusinessType.UPDATE)
+    @PostMapping("/merchant/ethFeePost")
+    @ResponseBody
+    public AjaxResult ethFeePost(AlipayWithdrawEntity alipayWithdrawEntity) {
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        //获取alipay处理接口URL
+        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_7);
+        Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+        mapParam.put("orderId", alipayWithdrawEntity.getOrderId());//订单号
+
+         /* BigDecimal usdt ,   //花费usdt
+            price  ,    //汽油价格
+            used,       //使用汽油数
+            eth,        //花费eth
+            priceUsdt;  //eth - usdt 汇率
+    String hash;        //订单hash* */
+        mapParam.put("usdt", alipayWithdrawEntity.getUsdt());
+        mapParam.put("price", alipayWithdrawEntity.getPrice());
+        mapParam.put("approval", currentUser.getLoginName());
+        mapParam.put("used", alipayWithdrawEntity.getUsed());
+        mapParam.put("eth", alipayWithdrawEntity.getEth());
+        mapParam.put("priceUsdt", alipayWithdrawEntity.getPriceUsdt());
+        mapParam.put("hash", alipayWithdrawEntity.getHash());
+        return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath + "USDT");
+    }
+
 
     /**
      * 导出码商提现记录列表
@@ -207,7 +235,7 @@ public class AlipayWithdrawEntityController extends BaseController {
     /**
      * 显示商户提现详情页
      */
-    @Log(title = "商户详情", businessType = BusinessType.OTHER)
+    @Log(title = "代付订单详情", businessType = BusinessType.OTHER)
     @GetMapping("/merchant/detail/{id}")
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayWithdrawEntity alipayWithdrawEntity = alipayWithdrawEntityService.selectAlipayWithdrawEntityById(id);
@@ -215,8 +243,17 @@ public class AlipayWithdrawEntityController extends BaseController {
         return prefix + "/detail";
     }
 
+    @Log(title = "结算代付eth矿工费", businessType = BusinessType.OTHER)
+    @GetMapping("/merchant/ethFee/{id}")
+    public String ethFee(@PathVariable("id") Long id, ModelMap mmap) {
+        AlipayWithdrawEntity alipayWithdrawEntity = alipayWithdrawEntityService.selectAlipayWithdrawEntityById(id);
+        mmap.put("alipayWithdrawEntity", alipayWithdrawEntity);
+        return prefix + "/ethFee";
+    }
+
     /**
      * 商户提现统计当天数据
+     *
      * @param mmap
      * @return
      */

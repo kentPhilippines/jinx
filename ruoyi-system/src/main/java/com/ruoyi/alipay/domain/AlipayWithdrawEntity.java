@@ -16,6 +16,63 @@ import java.util.Date;
  * @date 2020-03-17
  */
 public class AlipayWithdrawEntity extends BaseEntity {
+    /* BigDecimal usdt ,   //花费usdt
+           price  ,    //汽油价格
+           used,       //使用汽油数
+           eth,        //花费eth
+           priceUsdt;  //eth - usdt 汇率
+   String hash;        //订单hash* */
+    private String usdt;
+    private String price;
+    private String used;
+    private String eth;
+    private String priceUsdt;
+    private String hash;
+    @Excel(name = "是否结算eth手续费", readConverterExp = "0=未结算,1=已结算")
+    private Integer ethFee;
+    @Excel(name = "USDT-hash")
+    private String txhash;
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public String getPriceUsdt() {
+        return priceUsdt;
+    }
+
+    public void setPriceUsdt(String priceUsdt) {
+        this.priceUsdt = priceUsdt;
+    }
+
+    public String getEth() {
+        return eth;
+    }
+
+    public void setEth(String eth) {
+        this.eth = eth;
+    }
+
+    public String getUsed() {
+        return used;
+    }
+
+    public void setUsed(String used) {
+        this.used = used;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     private static final long serialVersionUID = 1L;
     private String bankcode;
     private String appOrderId;
@@ -168,6 +225,17 @@ public class AlipayWithdrawEntity extends BaseEntity {
     @Excel(name = "货币类型")
     private String currency;
 
+    public String getUsdt() {
+        return usdt;
+    }
+
+    public void setUsdt(String usdt) {
+        this.usdt = usdt;
+    }
+
+    public Integer getEthFee() {
+        return ethFee;
+    }
 
     public String getCurrency() {
         return currency;
@@ -175,6 +243,18 @@ public class AlipayWithdrawEntity extends BaseEntity {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public void setEthFee(Integer ethFee) {
+        this.ethFee = ethFee;
+    }
+
+    public String getTxhash() {
+        return txhash;
+    }
+
+    public void setTxhash(String txhash) {
+        this.txhash = txhash;
     }
 
     /**

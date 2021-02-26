@@ -100,7 +100,16 @@ public class AlipayDealOrderApp extends BaseEntity {
 
     @Excel(name = "货币类型")
     private String currency;
+    @Excel(name = "USDT-hash")
+    private String txhash;
 
+    public String getTxhash() {
+        return txhash;
+    }
+
+    public void setTxhash(String txhash) {
+        this.txhash = txhash;
+    }
 
     public String getCurrency() {
         return currency;

@@ -24,10 +24,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="retain2"    column="retain2"    />
         <result property="retain3"    column="retain3"    />
         <result property="currency" column="currency"/>
+        <result property="txhash" column="txhash"/>
     </resultMap>
 
     <sql id="selectAlipayDealOrderAppVo">
-        select id, orderId, currency , orderType, orderAccount, orderStatus, dealDescribe, orderAmount, orderIp, appOrderId, feeId, notify, back, submitTime, createTime, status, retain1, retain2, retain3 from alipay_deal_order_app
+        select id, orderId, currency , orderType, orderAccount, orderStatus, dealDescribe, orderAmount, orderIp, appOrderId, feeId, notify, back, submitTime, createTime, status, retain1, retain2, retain3 , txhash from alipay_deal_order_app
     </sql>
 
     <select id="selectAlipayDealOrderAppList" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">

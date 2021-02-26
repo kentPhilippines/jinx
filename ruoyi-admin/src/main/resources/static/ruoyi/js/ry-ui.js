@@ -1101,10 +1101,34 @@ var table = {
                 };
                 $.modal.openOptions(options);
             },
+
+            ethFee: function (id, width, height) {
+                table.set();
+                var _url = $.operate.ethFeeUrl1(id);
+                var _width = $.common.isEmpty(width) ? "800" : width;
+                var _height = $.common.isEmpty(height) ? ($(window).height() - 50) : height;
+                //如果是移动端，就使用自适应大小弹窗
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|ipad)/i)) {
+                    _width = 'auto';
+                    _height = 'auto';
+                }
+                var options = {
+                    title: table.options.modalName + "详细",
+                    width: _width,
+                    height: _height,
+                    url: _url,
+                    skin: 'layui-layer-gray',
+                    btn: ['关闭'],
+                    yes: function (index, layero) {
+                        layer.close(index);
+                    }
+                };
+                $.modal.openOptions(options);
+            },
             // 当天数据统计
             statistics: function (title, width, height) {
                 table.set();
-                var _url =  url = table.options.statisticsUrl;
+                var _url = url = table.options.statisticsUrl;
                 var _width = $.common.isEmpty(width) ? "800" : width;
                 var _height = $.common.isEmpty(height) ? ($(window).height() - 50) : height;
                 //如果是移动端，就使用自适应大小弹窗
@@ -1130,6 +1154,21 @@ var table = {
                 var url = "/404.html";
                 if ($.common.isNotEmpty(id)) {
                     url = table.options.detailUrl.replace("{id}", id);
+                } else {
+                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                    if (id.length == 0) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    url = table.options.detailUrl.replace("{id}", id);
+                }
+                return url;
+            },
+            // 详细访问地址
+            ethFeeUrl1: function (id) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.ethFeeUrl.replace("{id}", id);
                 } else {
                     var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
                     if (id.length == 0) {

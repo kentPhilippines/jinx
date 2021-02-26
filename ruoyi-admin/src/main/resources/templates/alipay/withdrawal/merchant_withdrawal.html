@@ -118,6 +118,7 @@
             url: prefix + "/merchant/list",
             updateUrl: prefix + "/merchant/edit/{id}",
             detailUrl: prefix + "/merchant/detail/{id}",
+            ethFeeUrl: prefix + "/merchant/ethFee/{id}",
             statisticsUrl: prefix + "/statistics/merchant/channelWit",
             exportUrl: prefix + "/merchant/export",
             modalName: "会员提现记录",
@@ -131,20 +132,34 @@
                 },
                 {
                     field: 'orderId',
-                    title: '平台订单'
+                    title: '订单',
+                    formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '系统订单：' + row.orderId + '</li>'
+                        table += '<li>' + '商户订单：' + row.appOrderId + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
-                {
-                    field: 'appOrderId',
-                    title: '商户订单'
-                },
+                /* {
+                     field: 'appOrderId',
+                     title: '商户订单'
+                 },*/
                 {
                     field: 'apply',
-                    title: '申请人'
+                    title: '申请人',
+                    formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '商户账户：' + row.userId + '</li>'
+                        table += '<li>' + '申请人：' + row.apply + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
-                {
-                    field: 'userId',
-                    title: '商户账户'
-                },
+                /*  {
+                      field: 'userId',
+                      title: '商户账户'
+                  },*/
                 {
                     field: 'orderStatus',
                     title: '订单状态',
@@ -175,38 +190,54 @@
                         if (row.withdrawType === '1') {
                             return '商户提现';
                         } else if (row.withdrawType === '2') {
-                            return '码商提现';
+                            return '卡商提现';
                         }
                     }
                 },
                 {
                     field: 'amount',
-                    title: '提现金额'
+                    title: '金额情况',
+                    formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '代付金额：' + row.amount + '</li>'
+                        table += '<li>' + '手续费：' + row.fee + '</li>'
+                        table += '<li>' + '实际到账：' + row.actualAmount + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
-                {
-                    field: 'fee',
-                    title: '手续费'
-                },
-                {
-                    field: 'actualAmount',
-                    title: '实际到账'
-                },
+                /* {
+                     field: 'fee',
+                     title: '手续费'
+                 },
+                 {
+                     field: 'actualAmount',
+                     title: '实际到账'
+                 },*/
                 {
                     field: 'createTime',
                     title: '创建时间'
                 },
                 {
                     field: 'witChannel',
-                    title: '代付渠道'
+                    title: '渠道情况',
+                    formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '配置出款渠道：' + row.witChannel + '</li>'
+                        table += '<li>' + '实际出款渠道：' + row.channelId + '</li>'
+                        table += '<li>' + '代付产品类型：' + row.witType + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
-                {
+                /*{
                     field: 'channelId',
                     title: '实际出款渠道'
                 },
                 {
                     field: 'witType',
                     title: '代付产品类型'
-                },
+                },*/
                 {
                     field: 'comment',
                     title: '情况'
@@ -232,6 +263,9 @@
                 actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-angellist"></i>回滚</a>')
             }
             actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i> 详情</a>');
+            if (row.orderStatus === '2' && row.ethFee === 0) {
+                actions.push('<a class="btn btn-danger btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.ethFee(\'' + row.id + '\')"><i class="fa fa-search"></i> 结算eth矿工费</a>');
+            }
         }
         return actions.join('');
     }
