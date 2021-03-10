@@ -6,28 +6,28 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://rm-3nss9b6z93e4rk299.mysql.rds.aliyuncs.com:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: kent_admin
         password: L!f2e#e_h3CNgVD
       # alipay从库数据源
       alipay:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://rm-3nss9b6z93e4rk299.mysql.rds.aliyuncs.com:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: kent_admin
         password: L!f2e#e_h3CNgVD
       # pay从库数据源
       pay:
         # 从数据源开关/默认关闭
         enabled: false
-        url: jdbc:mysql://rm-3nss9b6z93e4rk299.mysql.rds.aliyuncs.com:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: kent_admin
         password: L!f2e#e_h3CNgVD
       # dealpay从库数据源
       dealpay:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://rm-3nss9b6z93e4rk299.mysql.rds.aliyuncs.com:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: kent_admin
         password: L!f2e#e_h3CNgVD
       # 初始连接数
@@ -102,3 +102,5 @@ shiro:
     maxSession: 1
     # 踢出之前登录的/之后登录的用户，默认踢出之前登录的用户
     kickoutAfter: false
+    #是否限制内部管理员登陆
+    filter: 1

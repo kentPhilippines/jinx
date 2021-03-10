@@ -22,6 +22,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -49,7 +50,9 @@ public class AlipayDealOrderEntityController extends BaseController {
     @Autowired private IAlipayDealOrderEntityService alipayDealOrderEntityService;
     @Autowired private ISysUserService userService;
     @Autowired IAlipayProductService iAlipayProductService;
+
     @GetMapping()
+    @RequiresPermissions("orderDeal:qr:view")
     public String orderDeal(ModelMap mmap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
@@ -66,6 +69,7 @@ public class AlipayDealOrderEntityController extends BaseController {
      * 查询交易订单列表
      */
     @PostMapping("/list")
+    @RequiresPermissions("orderDeal:qr:list")
     @ResponseBody
     public TableDataInfo list(AlipayDealOrderEntity alipayDealOrderEntity) {
         startPage();
@@ -101,6 +105,7 @@ public class AlipayDealOrderEntityController extends BaseController {
      * 交由财务处理
      */
     @PostMapping("/updataOrder")
+    @RequiresPermissions("orderDeal:qr:status")
     @ResponseBody
     public AjaxResult updataOrder(String id) {
         AlipayDealOrderEntity order = alipayDealOrderEntityService.selectAlipayDealOrderEntityById(Long.valueOf(id));
@@ -113,6 +118,7 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 导出交易订单列表
      */
+    @RequiresPermissions("orderDeal:qr:export")
     @Log(title = "码商交易订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -122,8 +128,6 @@ public class AlipayDealOrderEntityController extends BaseController {
         ExcelUtil<AlipayDealOrderEntity> util = new ExcelUtil<AlipayDealOrderEntity>(AlipayDealOrderEntity.class);
         return util.exportExcel(list, "orderDeal");
     }
-
-
     /**
      * 显示交易订单详情
      */
@@ -133,7 +137,6 @@ public class AlipayDealOrderEntityController extends BaseController {
         mmap.put("alipayDealOrderEntity", alipayDealOrderEntity);
         return prefix + "/edit";
     }
-
     /**
      * 显示二维码
      *
@@ -163,7 +166,6 @@ public class AlipayDealOrderEntityController extends BaseController {
         mapParam.put("orderId", alipayDealOrderEntity.getOrderId());
         return HttpUtils.adminGet2Gateway(mapParam, ipPort + urlPath);
     }
-
     /**
      * 显示统计table
      */
@@ -176,6 +178,7 @@ public class AlipayDealOrderEntityController extends BaseController {
      * 显示具体统计内容
      */
     @PostMapping("/statistics/qr/order")
+    @RequiresPermissions("orderDeal:qr:statistics")
     @ResponseBody
     public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {
         startPage();

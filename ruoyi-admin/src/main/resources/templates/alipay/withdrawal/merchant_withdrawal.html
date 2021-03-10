@@ -263,7 +263,7 @@
                 actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-angellist"></i>回滚</a>')
             }
             actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i> 详情</a>');
-            if (row.orderStatus === '2' && row.ethFee === 0) {
+            if (row.orderStatus === '2' && row.ethFee === 0 && row.currency === "USDT") {
                 actions.push('<a class="btn btn-danger btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.ethFee(\'' + row.id + '\')"><i class="fa fa-search"></i> 结算eth矿工费</a>');
             }
         }

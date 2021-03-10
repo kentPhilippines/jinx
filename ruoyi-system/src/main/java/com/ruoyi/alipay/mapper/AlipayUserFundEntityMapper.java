@@ -92,6 +92,16 @@ public interface AlipayUserFundEntityMapper {
             "alipay_user_fund where userType = 1 ")
     AlipayUserFundEntity findSumFundM();
 
+    @Select("select '所有' as userId , '上游卡商总余额' as userName ," +
+            " sum(freezeBalance) as freezeBalance , " +
+            "sum(accountBalance) as accountBalance ," +
+            "sum(quota) as quota , " +
+            "sum(todayDealAmount) , " +
+            "sum(todayAgentProfit) " +
+            " from " +
+            "alipay_user_fund where userType = 2 ")
+    AlipayUserFundEntity findSumFundC();
+
 
     @Select("select * from alipay_user_info where agent = #{agentUserId}")
     List<AlipayUserInfo> findUserByAgent(@Param("agentUserId") String agentUserId);

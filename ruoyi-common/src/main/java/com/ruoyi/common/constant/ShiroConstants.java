@@ -2,11 +2,10 @@ package com.ruoyi.common.constant;
 
 /**
  * Shiro通用常量
- * 
+ *
  * @author ruoyi
  */
-public interface ShiroConstants
-{
+public interface ShiroConstants {
     /**
      * 当前登录的用户
      */
@@ -81,4 +80,21 @@ public interface ShiroConstants
      * 未绑定异常
      */
     public static final String USER_UNBIND = "googleBind";
+
+
+    /**
+     * IP拦截
+     */
+    public static final String IP_BLOCK_ENABLED = "ipBlockEnabled";
+
+    /**
+     * ip拦截
+     */
+    public static final String IP_BLOCK_ERROR = "ipBlockError";
+
+    /**
+     * ip拦截
+     */
+    public static final String USER_IP_BLOCK = "userIpBlock";
+
 }

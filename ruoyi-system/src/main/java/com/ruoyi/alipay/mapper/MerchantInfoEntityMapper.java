@@ -32,7 +32,7 @@ public interface MerchantInfoEntityMapper {
             "SELECT " +
             " id,userId, userName, `password`, payPasword, salt, userType, switchs," +
             " userNode, email, agent, isAgent, credit, receiveOrderState, remitOrderState," +
-            " QQ, telegram, skype, createTime, submitTime, `status`, privateKey, publicKey " +
+            " QQ, telegram, skype, createTime, submitTime, `status`, privateKey, publicKey  ,dealUrl  " +
             " FROM " +
             " alipay_user_info" +
             " where userType = 1 " +
@@ -86,7 +86,8 @@ public interface MerchantInfoEntityMapper {
             "witip = #{witip}," +
             "dealUrl = #{dealUrl}," +
             "timesTotal = #{timesTotal}," +
-            "submitTime = #{submitTime} " +
+            "submitTime = #{submitTime} ," +
+            "interFace = #{interFace} " +
             "where id = #{id} ")
     int updateMerchantInfoEntity(AlipayUserInfo merchantInfoEntity);
 
@@ -120,7 +121,7 @@ public interface MerchantInfoEntityMapper {
             "select " +
             " id,userId, userName, userType, switchs, " +
             "agent, minAmount, maxAmount,totalAmount, timesTotal, startTime, " +
-            "endTime, witip, dealUrl, submitTime ,autoWit " +
+            "endTime, witip, dealUrl, submitTime ,autoWit  , enterWitOpen , interFace" +
             " from " +
             " alipay_user_info" +
             " where userType = 1 " +

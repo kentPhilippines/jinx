@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增ip白名单')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-ip-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">IP地址：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="ipAddree" placeholder="请输入合法的IP地址（XXX.XXX.XXX.XXX）不足三位的不要补0" required
+                       type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" id="remark" maxlength="100" name="remark"
+                          placeholder="可备注登陆对象，如：XX商户后台登陆IP" rows="4"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/ip"
+    $("#form-ip-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-ip-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

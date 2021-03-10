@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysIpWhiteMapper">
+
+    <resultMap type="SysIpWhite" id="SysIpWhiteResult">
+        <result property="id" column="id"/>
+        <result property="ipType" column="ip_type"/>
+        <result property="ipAddree" column="ip_addree"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectSysIpWhiteVo">
+        select id, ip_type, ip_addree, create_by, create_time, update_by, update_time, remark from sys_ip_white
+    </sql>
+
+    <select id="selectSysIpWhiteList" parameterType="SysIpWhite" resultMap="SysIpWhiteResult">
+        <include refid="selectSysIpWhiteVo"/>
+        <where>
+            <if test="ipType != null ">and ip_type = #{ipType}</if>
+            <if test="ipAddree != null  and ipAddree != ''">and ip_addree = #{ipAddree}</if>
+            <if test="remark != null  and remark != ''">and remark = #{remark}</if>
+        </where>
+    </select>
+
+    <select id="selectSysIpWhiteById" parameterType="Long" resultMap="SysIpWhiteResult">
+        <include refid="selectSysIpWhiteVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysIpWhite" parameterType="SysIpWhite" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_ip_white
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ipType != null ">ip_type,</if>
+            <if test="ipAddree != null  and ipAddree != ''">ip_addree,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ipType != null ">#{ipType},</if>
+            <if test="ipAddree != null  and ipAddree != ''">#{ipAddree},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysIpWhite" parameterType="SysIpWhite">
+        update sys_ip_white
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ipType != null ">ip_type = #{ipType},</if>
+            <if test="ipAddree != null  and ipAddree != ''">ip_addree = #{ipAddree},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysIpWhiteById" parameterType="Long">
+        delete from sys_ip_white where id = #{id}
+    </delete>
+
+    <delete id="deleteSysIpWhiteByIds" parameterType="String">
+        delete from sys_ip_white where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

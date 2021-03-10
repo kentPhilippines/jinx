@@ -20,6 +20,7 @@ import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -51,11 +52,13 @@ public class AlipayUserFundEntityController extends BaseController {
 
 
     @GetMapping()
+    @RequiresPermissions("alipay:fund:view")
     public String fund() {
         return prefix + "/fund";
     }
 
     @GetMapping("/bak")
+    @RequiresPermissions("alipay:fund:view")
     public String fundBak() {
         return prefix + "/fundBak";
     }
@@ -64,11 +67,19 @@ public class AlipayUserFundEntityController extends BaseController {
      * 查询用户资金账户列表
      */
     @PostMapping("/list")
+    @RequiresPermissions("fund:alipay:list")
     @ResponseBody
     public TableDataInfo list(AlipayUserFundEntity alipayUserFundEntity) {
         startPage1();
         List<AlipayUserFundEntity> list = alipayUserFundEntityService
                 .selectAlipayUserFundEntityList(alipayUserFundEntity);
+        AlipayUserFundEntity userFundCardEntity = null;
+
+
+        if (null != alipayUserFundEntity.getUserType() && "2".equals(alipayUserFundEntity.getUserType().toString())) {
+            userFundCardEntity = alipayUserFundEntityService.findSumFundC();
+            list.add(0, userFundCardEntity);
+        }
         AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.findSumFundM();
         list.add(0, userFundEntity);
         return getDataTable(list);
@@ -78,6 +89,7 @@ public class AlipayUserFundEntityController extends BaseController {
      * 查询用户资金账户列表
      */
     @PostMapping("/listBak")
+    @RequiresPermissions("fund:alipay:list")
     @ResponseBody
     public TableDataInfo listBak(AlipayUserFundEntity alipayUserFundEntity) {
         startPage1();
@@ -90,6 +102,7 @@ public class AlipayUserFundEntityController extends BaseController {
      * 导出用户资金账户列表
      */
     @Log(title = "用户资金账户", businessType = BusinessType.EXPORT)
+    @RequiresPermissions("alipay:fund:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(AlipayUserFundEntity alipayUserFundEntity) {
@@ -104,6 +117,7 @@ public class AlipayUserFundEntityController extends BaseController {
      */
     @Log(title = "备份资金账户", businessType = BusinessType.EXPORT)
     @PostMapping("/exportBak")
+    @RequiresPermissions("alipay:fund:export")
     @ResponseBody
     public AjaxResult exportBak(AlipayUserFundEntity alipayUserFundEntity) {
         List<AlipayUserFundEntity> list = alipayUserFundEntityService
@@ -118,6 +132,7 @@ public class AlipayUserFundEntityController extends BaseController {
      * 新增加款页面显示
      */
     @GetMapping("/refund/{userId}")
+    @RequiresPermissions("fund:refund:add")
     public String refund(@PathVariable("userId") String userId, ModelMap mmap) {
         AlipayUserFundEntity userFundEntity = new AlipayUserFundEntity();
         userFundEntity.setUserId(userId);
@@ -129,6 +144,7 @@ public class AlipayUserFundEntityController extends BaseController {
      * 新增加款页面显示
      */
     @GetMapping("/addFreezeUrl/{userId}")
+    @RequiresPermissions("fund:refund:add")
     public String addFreezeUrl(@PathVariable("userId") String userId, ModelMap mmap) {
         AlipayUserFundEntity userFundEntity = new AlipayUserFundEntity();
         userFundEntity.setUserId(userId);
@@ -138,6 +154,7 @@ public class AlipayUserFundEntityController extends BaseController {
     }
 
     @GetMapping("/deleteFreezeUrl/{userId}")
+    @RequiresPermissions("fund:refund:deduct")
     public String deleteFreezeUrl(@PathVariable("userId") String userId, ModelMap mmap) {
         AlipayUserFundEntity userFundEntity = new AlipayUserFundEntity();
         userFundEntity.setUserId(userId);
@@ -165,6 +182,7 @@ public class AlipayUserFundEntityController extends BaseController {
      * @return
      */
     @GetMapping("/deleteQuotaUrl/{userId}")
+    @RequiresPermissions("fund:refund:deduct")
     public String deleteQuotaUrl(@PathVariable("userId") String userId, ModelMap mmap) {
         AlipayUserFundEntity userFundEntity = new AlipayUserFundEntity();
         userFundEntity.setUserId(userId);
@@ -196,6 +214,7 @@ public class AlipayUserFundEntityController extends BaseController {
      */
     @Log(title = "用户资金账户解冻", businessType = BusinessType.UPDATE)
     @PostMapping("/addFreeze")
+    @RequiresPermissions("fund:refund:deleteFreezeFlag")
     @ResponseBody
     public AjaxResult addFreeze(AlipayAmountEntity alipayAmountEntity) {
         // 获取当前的用户

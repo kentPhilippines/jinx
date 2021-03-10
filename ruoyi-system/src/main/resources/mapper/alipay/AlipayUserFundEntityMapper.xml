@@ -82,6 +82,7 @@
             resultMap="AlipayUserFundEntityResult">
         <include refid="selectAlipayUserFundEntityVo"/>
         <where>
+          1=1
             <if test="userId != null  and userId != ''">and userId = #{userId}</if>
             <if test="userName != null  and userName != ''">and userName like concat('%', #{userName}, '%')</if>
             <if test="cashBalance != null ">and cashBalance = #{cashBalance}</if>
@@ -101,7 +102,7 @@
             <if test="status != null ">and status = #{status}</if>
             <if test="version != null ">and version = #{version}</if>
             <if test="currency != null and currency != ''">and currency = #{currency}</if>
-            and (userType != '3' and userType != '2')
+            /* and (userType != '3' and userType != '2')*/
         </where>
         order by accountBalance desc , freezeBalance desc , quota desc
     </select>

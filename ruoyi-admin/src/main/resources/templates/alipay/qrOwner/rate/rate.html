@@ -101,7 +101,7 @@
                     field: 'payTypr',
                     title: '产品类型',
                     formatter: function (value, row, index) {
-                        return $.table.showProductLabel(productType,'该产品已停用或不存在', value);
+                        return $.table.showProductLabel(productType, '该产品已停用或不存在', row.payTypr);
                     }
                 },
                 {

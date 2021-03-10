@@ -91,7 +91,9 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         merchantInfoEntity.setPrivateKey(keys.get(1));
         // merchantInfoEntityMapper.findBackUserByUserId(merchantInfoEntity.getAgent())
         AlipayUserFundEntity fund = alipayUserFundEntityMapper.findUserFundCurrencyById(merchantInfoEntity.getAgent());
-        merchantInfoEntity.setCurrency(fund.getCurrency());
+        if (null != fund) {
+            merchantInfoEntity.setCurrency(fund.getCurrency());
+        }
         //  merchantInfoEntity.setCurrency(merchantInfoEntity.getCurrency());
         //新增商户用户
         int i = merchantInfoEntityMapper.insertMerchantInfoEntity(merchantInfoEntity);

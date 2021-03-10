@@ -50,8 +50,9 @@
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     const editFlag = [[${@permission.hasPermi('control:account:merchant:edit')}]];
+    const editFlagAdmin = [[${@permission.hasPermi('control:account:merchant:admin')}]];
     const prefix = ctx + "control/account";
-
+    const prefix1 = ctx + "alipay/merchant";
     $(function () {
         var options = {
             url: prefix + "/merchant/list",
@@ -73,6 +74,14 @@
                         } else if (row.switchs == '2') {
                             return '<span style="color: #cc0000">关闭</span>';
                         }
+                    }
+                },
+                {
+                    visible: editFlagAdmin == 'hidden' ? false : true,
+                    title: '代付反查',
+                    align: 'enterWitOpen',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 'enterWitOpen');
                     }
                 },
                 {field: 'minAmount', title: '最小金额'},
@@ -139,6 +148,42 @@
         })
     }
 
+    /* 商户状态显示 */
+    function statusTools(row, param) {
+        if (param === 'enterWitOpen') {
+            if (row.enterWitOpen == 0) {
+                let msg = "确认要【启用】此商户的【代付反查状态】吗？";
+                let val = 1;
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            } else {
+                let msg = "确认要【停用】此商户【代付反查状态】吗？";
+                let val = 0;
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            }
+        }
+    }
+
+    /* 商户管理-停用 */
+    function disable(userId, param, msg, val) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefix1 + "/changeStatus", {
+                "userId": userId,
+                "params[paramKey]": param,
+                "params[paramValue]": val
+            });
+        })
+    }
+
+    /* 商户管理-启用 */
+    function enable(userId, param, msg, val) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefix1 + "/changeStatus", {
+                "userId": userId,
+                "params[paramKey]": param,
+                "params[paramValue]": val
+            });
+        })
+    }
 
 </script>
 </body>

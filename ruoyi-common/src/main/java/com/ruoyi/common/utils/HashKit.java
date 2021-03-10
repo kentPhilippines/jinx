@@ -22,9 +22,9 @@ public class HashKit {
     }
 
     public static String encodePassword(String username, String password, String salt) {
-        if (StringUtils.isBlank(username) || StringUtils.isBlank(password) || StringUtils.isBlank(salt))
-            throw
-                    new BusinessException("必传参数为空");
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password) || StringUtils.isBlank(salt)) {
+            throw new BusinessException("必传参数为空");
+        }
         return forE(number(username), username + password, salt);
     }
 
@@ -35,12 +35,15 @@ public class HashKit {
         int o = a - d;
         int p = (o < 0) ? -o : o;
         boolean flag = true;
-        if (p > 15)
+        if (p > 15) {
             while (flag) {
                 p -= 2;
-                if (p < 15)
+                if (p < 15) {
                     flag = false;
+                }
             }
+            return p;
+        }
         return p;
     }
 
@@ -55,8 +58,9 @@ public class HashKit {
     static String forE(int c, String a, String b) {
         c--;
         String createPassword = createPassword(a, b);
-        if (c == 0)
+        if (c <= 0) {
             return createPassword;
+        }
         return forE(c, createPassword, b);
     }
 
@@ -75,8 +79,10 @@ public class HashKit {
             md5.update(a.getBytes(UTF_8));
             byte[] temp;
             temp = md5.digest(c.getBytes(UTF_8));
-            for (int i = 0; i < temp.length; i++)
+            for (int i = 0; i < temp.length; i++) {
                 result += Integer.toHexString((0x000000ff & temp[i]) | 0xffffff00).substring(6);
+            }
+            ;
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             log.info("获取秘钥失败");
         }
@@ -109,9 +115,10 @@ public class HashKit {
             md5 = MessageDigest.getInstance(ENCODE_TYPE);
             md5.update(str.getBytes(UTF_8));
             byte[] temp;
-            temp=md5.digest(c.getBytes(UTF_8));
-            for (int i=0; i<temp.length; i++)
-                result+=Integer.toHexString((0x000000ff & temp[i]) | 0xffffff00).substring(6);
+            temp = md5.digest(c.getBytes(UTF_8));
+            for (int i = 0; i < temp.length; i++) {
+                result += Integer.toHexString((0x000000ff & temp[i]) | 0xffffff00).substring(6);
+            }
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             log.info("获取秘钥失败");
         }

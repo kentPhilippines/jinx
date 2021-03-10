@@ -18,6 +18,24 @@ public class AlipayUserInfo extends BaseEntity {
     private String findUserId;
     private String todayDealAmount;
     private Integer autoWit;
+    private String enterWitOpen;
+    private String interFace;
+
+    public String getInterFace() {
+        return interFace;
+    }
+
+    public void setInterFace(String interFace) {
+        this.interFace = interFace;
+    }
+
+    public String getEnterWitOpen() {
+        return enterWitOpen;
+    }
+
+    public void setEnterWitOpen(String enterWitOpen) {
+        this.enterWitOpen = enterWitOpen;
+    }
 
     public Integer getAutoWit() {
         return autoWit;

@@ -38,13 +38,15 @@
         <result property="queueList" column="queueList"/>
         <result property="qrRechargeList" column="qrRechargeList"/>
         <result property="autoWit" column="autoWit"/>
+        <result property="enterWitOpen" column="enterWitOpen"/>
+        <result property="interFace" column="interFace"/>
     </resultMap>
 
     <sql id="selectAlipayUserInfoVo">
         select id, userId, userName, password, payPasword, salt, userType, switchs, userNode, email, agent,
         isAgent, credit, receiveOrderState, remitOrderState, QQ, telegram, skype, createTime, submitTime, status,queueList,
         privateKey, publicKey, minAmount, maxAmount, timesTotal, startTime, endTime, witip, dealUrl
-        , qrRechargeList,autoWit from alipay_user_info
+        , qrRechargeList,autoWit,interFace,enterWitOpen  from alipay_user_info
     </sql>
 
     <select id="selectAlipayUserInfoList" parameterType="AlipayUserInfo" resultMap="AlipayUserInfoResult">
@@ -67,6 +69,8 @@
             <if test="startTime != null  and startTime != ''">and startTime = #{startTime}</if>
             <if test="endTime != null  and endTime != ''">and endTime = #{endTime}</if>
             <if test="witip != null  and witip != ''">and witip = #{witip}</if>
+            <if test="interFace != null  and interFace != ''">and interFace = #{interFace}</if>
+            <if test="enterWitOpen != null  and enterWitOpen != ''">and enterWitOpen = #{enterWitOpen}</if>
             <if test="autoWit != null  and autoWit != ''">and autoWit = #{autoWit}</if>
         </where>
     </select>
@@ -179,6 +183,8 @@
             <if test="qrRechargeList != null  and qrRechargeList != ''">qrRechargeList = #{qrRechargeList},</if>
             <if test="queueList != null  and queueList != ''">queueList = #{queueList},</if>
             <if test="autoWit != null  and autoWit != ''">autoWit = #{autoWit},</if>
+            <if test="interFace != null  and interFace != ''">interFace = #{interFace},</if>
+            <if test="enterWitOpen != null  and enterWitOpen != ''">enterWitOpen = #{enterWitOpen},</if>
         </trim>
         where id = #{id}
     </update>

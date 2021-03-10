@@ -67,10 +67,23 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">交易IP白名单：</label>
             <div class="col-xs-8">
-                <textarea id="dealUrl" name="dealUrl" maxlength="500" class="form-control" rows="5">[[*{dealUrl}]]</textarea>
+                <textarea id="dealUrl" name="dealUrl" maxlength="500" class="form-control"
+                          rows="5">[[*{dealUrl}]]</textarea>
                 <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>多个ip之间用英文逗号(,)隔开</span>
             </div>
         </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">代付反查询接口：</label>
+            <div class="col-xs-8">
+                <textarea class="form-control" id="interFace" maxlength="500" name="interFace"
+                          rows="5">[[*{interFace}]]</textarea>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>多个接口之间用英文逗号(,)隔开</span>
+            </div>
+        </div>
+
+
     </form>
 </div>
 <th:block th:include="include :: footer"/>

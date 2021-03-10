@@ -19,6 +19,7 @@ import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -53,6 +54,7 @@ public class MerchantInfoEntityController extends BaseController {
      * 查询商户信息列表
      */
     @PostMapping("/list")
+    @RequiresPermissions("alipay:merchant:list")
     @ResponseBody
     public TableDataInfo list(AlipayUserInfo merchantInfoEntity) {
         startPage();
@@ -104,6 +106,7 @@ public class MerchantInfoEntityController extends BaseController {
      */
     @Log(title = "商户信息", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
+    @RequiresPermissions("alipay:merchant:edit")
     @ResponseBody
     public AjaxResult editSave(AlipayUserInfo merchantInfoEntity) {
             return toAjax(merchantInfoEntityService.updateMerchantInfoById(merchantInfoEntity));

@@ -21,6 +21,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -78,6 +79,7 @@ public class AlipayWithdrawEntityController extends BaseController {
         return getDataTable(list);
     }
 
+    @RequiresPermissions("merchant:withdrawal:view")
     @GetMapping("/merchant")
     public String merchant_withdrawal(ModelMap modelMap) {
         List<AlipayUserFundEntity> channelId = alipayUserFundEntityService.findUserFundRate();
@@ -89,6 +91,7 @@ public class AlipayWithdrawEntityController extends BaseController {
      * 查询商户提现记录列表
      */
     @PostMapping("/merchant/list")
+    @RequiresPermissions("withdrawal:alipay:merchant:list")
     @ResponseBody
     public TableDataInfo merchant_list(AlipayWithdrawEntity alipayWithdrawEntity) {
         startPage();

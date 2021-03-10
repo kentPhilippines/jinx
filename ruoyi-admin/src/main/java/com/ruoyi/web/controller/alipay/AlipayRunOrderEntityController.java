@@ -8,6 +8,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ public class AlipayRunOrderEntityController extends BaseController {
 	private IAlipayRunOrderEntityService alipayRunOrderEntityService;
 
 	@GetMapping
+	@RequiresPermissions("alipay:running:view")
 	public String running() {
 		return prefix + "/running";
 	}
@@ -39,6 +41,7 @@ public class AlipayRunOrderEntityController extends BaseController {
 	 * 查询流水订单记录列表
 	 */
 	@PostMapping("/list")
+	@RequiresPermissions("running:alipay:list")
 	@ResponseBody
 	public TableDataInfo list(AlipayRunOrderEntity alipayRunOrderEntity) {
 		startPage();
@@ -53,6 +56,7 @@ public class AlipayRunOrderEntityController extends BaseController {
 	 */
 	@Log(title = "资金流水", businessType = BusinessType.EXPORT)
 	@PostMapping("/export")
+	@RequiresPermissions("alipay:running:export")
 	@ResponseBody
 	public AjaxResult export(AlipayRunOrderEntity alipayRunOrderEntity) {
 		List<AlipayRunOrderEntity> list = alipayRunOrderEntityService
