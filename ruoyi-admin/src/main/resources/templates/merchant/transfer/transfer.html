@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('商户转账申请')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <span>平台订单：</span>
+                            <input name="orderId" type="text"/>
+                        </li>
+                        <li>
+                            <span>收款人：</span>
+                            <input name="transferUserId" type="text"/>
+                        </li>
+                        <li>
+                            <span>订单状态：</span>
+                            <select id="orderStatus" name="orderStatus">
+                                <option value=''>所有</option>
+                                <option value="2">审核中</option>
+                                <option value="3">成功</option>
+                                <option value="4">失败</option>
+                            </select>
+                        </li>
+                        <li class="select-time">
+                            <span>创建时间：</span>
+                            <input class="time-input" id="startTime" name="params[dayStart]" placeholder="开始时间"
+                                   type="text"/>
+                            <span>-</span>
+                            <input class="time-input" id="endTime" name="params[dayEnd]" placeholder="结束时间"
+                                   type="text"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="back:amount:transfer">
+                <i class="fa fa-plus"></i> 转账
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="back:amount:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    let orderStatus = [[${@dict.getType('orderStatusAmount')}]];
+    var prefix = ctx + "appManage";
+
+    $(function () {
+        var options = {
+            url: prefix + "/amount/transferList",   //转账列表
+            createUrl: prefix + "/transfer/apply",
+            modalName: "商户转账",
+            columns: [{
+                checkbox: true
+            },
+                {field: 'orderId', title: '平台订单'},
+                {field: 'userId', title: '转账账户'},
+                {field: 'transferUserId', title: '入款账户'},
+                {field: 'accname', title: '申请人【后台】'},
+                {
+                    field: 'orderStatus', title: '状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(orderStatus, value);
+                    }
+                },
+                {field: 'amount', title: '提现金额'},
+                {field: 'fee', title: '费率'},
+                {field: 'actualAmount', title: '实际到账'},
+                {field: 'dealDescribe', title: '备注信息'},
+                {field: 'createTime', title: '创建时间'}
+            ]
+        };
+        $.table.init(options);
+    });
+    //初始化时间
+    layui.use('laydate', function () {
+        const laydate = layui.laydate;
+        laydate.render({
+            elem: '#startTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g, "-") + " 00:00:00",
+            isInitValue: true
+        });
+        laydate.render({
+            elem: '#endTime',
+            format: 'yyyy-MM-dd HH:mm:ss',
+            type: 'datetime',
+            value: new Date().toLocaleDateString().replace(/\//g, "-") + " 23:59:59",
+            isInitValue: true
+        });
+    });
+
+</script>
+</body>
+</html>

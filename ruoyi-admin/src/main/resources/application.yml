@@ -58,7 +58,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     #发布到运营时候修改该配置 online
   profiles:
-    active: online
+    active: druid
   # 文件上传
   servlet:
     multipart:

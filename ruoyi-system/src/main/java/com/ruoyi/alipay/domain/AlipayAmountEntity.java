@@ -17,6 +17,16 @@ public class AlipayAmountEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
     private String merchantId;
     private String loginName;
+    private String transferUserId;//转账入款人
+
+    public String getTransferUserId() {
+        return transferUserId;
+    }
+
+    public void setTransferUserId(String transferUserId) {
+        this.transferUserId = transferUserId;
+    }
+
     /**
      * 数据id(主键索引)
      */

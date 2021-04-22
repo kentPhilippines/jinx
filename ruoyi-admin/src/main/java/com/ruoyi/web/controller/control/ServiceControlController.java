@@ -1,7 +1,5 @@
 package com.ruoyi.web.controller.control;
 
-import com.beust.jcommander.internal.Lists;
-import com.ruoyi.alipay.domain.AlipayBankListEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayUserInfoService;
 import com.ruoyi.common.annotation.Log;
@@ -112,12 +110,12 @@ public class ServiceControlController extends BaseController {
     public String merchantEdit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayUserInfo userInfo = alipayUserInfoService.selectAlipayUserInfoById(id);
         DealpayUserInfoEntity dealpayUserInfoEntity = new DealpayUserInfoEntity();
-        List<DealpayUserInfoEntity> list = dealpayUserInfoService.selectdealpayUserInfoByAgent(dealpayUserInfoEntity);
+       // List<DealpayUserInfoEntity> list = dealpayUserInfoService.selectdealpayUserInfoByAgent(dealpayUserInfoEntity);
         List<AlipayUserInfo> arlist = alipayUserInfoService.selectdealpayUserInfoByAgent();
         if (userInfo == null) {
             throw new BusinessException("此用户不存在");
         }
-        if (StringUtils.isEmpty(userInfo.getQrRechargeList())) {//为空直接返回全部列表
+       /* if (StringUtils.isEmpty(userInfo.getQrRechargeList())) {//为空直接返回全部列表
             mmap.put("cardInfo", list);
         } else {//不为空判断选中状态
             String[] str = userInfo.getQrRechargeList().split(",");
@@ -128,7 +126,7 @@ public class ServiceControlController extends BaseController {
                 }
             }
             mmap.put("cardInfo",list);
-        }
+        }*/
 
         if(StringUtils.isEmpty(userInfo.getQueueList())){
             mmap.put("qrInfo",arlist);

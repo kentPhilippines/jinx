@@ -3,16 +3,25 @@ package com.ruoyi.web.controller.back;
 import cn.hutool.core.util.ObjectUtil;
 import com.ruoyi.alipay.domain.AlipayAmountEntity;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
+import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserRateEntity;
 import com.ruoyi.alipay.service.IAlipayAmountEntityService;
 import com.ruoyi.alipay.service.IAlipayProductService;
+import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.annotation.RepeatSubmit;
+import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.GenerateOrderNo;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.GoogleUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +44,7 @@ public class AppManageContorller extends BaseController {
     private static final String AMOUNT_TYPE_APP = "3";//商户主动申请补单订单类型
     private String prefix = "merchant/other";
     private String prefixRate = "merchant/rate";
+    private String prefixFransfer = "merchant/transfer";
     @Autowired
     private IAlipayAmountEntityService alipayAmountEntityService;
     @Autowired
@@ -167,4 +177,80 @@ public class AppManageContorller extends BaseController {
         }
         return getDataTable(alipayUserRateEntities);
     }
+
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
+
+    @GetMapping("/transfer")
+    public String transfer(ModelMap modelMap) {
+        return prefixFransfer + "/transfer";
+    }
+
+    @PostMapping("/amount/transferList")
+    @ResponseBody
+    public TableDataInfo transferList(AlipayAmountEntity amount) {
+        SysUser currentUser = ShiroUtils.getSysUser();
+        String merchantId = currentUser.getMerchantId();
+        amount.setUserId(merchantId);
+        List<AlipayAmountEntity> alipayAmountEntities = alipayAmountEntityService.selectTransferList(amount);
+        return getDataTable(alipayAmountEntities);
+    }
+
+    @GetMapping("/transfer/apply")
+    public String apply(ModelMap modelMap) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        AlipayUserFundEntity alipayUserFundEntity = alipayUserFundEntityService.findAlipayUserFundByUserId(sysUser.getMerchantId());
+        modelMap.put("userFund", alipayUserFundEntity);
+        return prefixFransfer + "/apply";
+    }
+
+    /**
+     * 保存提现提案
+     */
+    @Log(title = "保存转账申请", businessType = BusinessType.INSERT)
+    @PostMapping("/transfer/save")
+    @ResponseBody
+    @RepeatSubmit
+    public AjaxResult witSave(AlipayAmountEntity amountEntity) {
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        String payPassword = (String) amountEntity.getParams().get("payPassword");
+        String verify = passwordService.encryptPassword(currentUser.getLoginName(), payPassword, currentUser.getSalt());
+        if (!currentUser.getFundPassword().equals(verify)) {
+            return AjaxResult.error("密码验证失败");
+        }
+        SysDictData dictData = new SysDictData();
+        dictData.setDictType("system_bankcode");
+        //正式环境解注
+        //验证谷歌验证码
+        String googleCode = amountEntity.getParams().get("googleCode").toString();
+        int is = googleUtils.verifyGoogleCode(currentUser.getLoginName(), googleCode);
+        if (is == 0) {
+            //  return AjaxResult.error("未绑定谷歌验证器");
+        } else if (is - 1 > 0) {
+            //   return AjaxResult.error("谷歌验证码验证失败");
+        }
+        AlipayAmountEntity amount = new AlipayAmountEntity();
+        amount.setAmountType("7");//订单类型
+        amount.setUserId(currentUser.getMerchantId());//转账人
+
+        AlipayUserFundEntity alipayUserFundByUserId = alipayUserFundEntityService.findAlipayUserFundByUserId(amountEntity.getTransferUserId());
+        if (null == alipayUserFundByUserId) {
+            return AjaxResult.error("入款账户有误");
+        }
+        amount.setTransferUserId(amountEntity.getTransferUserId());//收款人
+        amount.setAmount(amountEntity.getAmount());//金额
+        amount.setActualAmount(amountEntity.getAmount());//实际到账金额
+        amount.setFee(0.0);//手续费
+        amount.setAccname(currentUser.getLoginName());
+
+        amount.setOrderStatus("2");
+        amount.setDealDescribe(amountEntity.getDealDescribe());
+        amount.setCreateTime(DateUtils.getNowDate());
+        amount.setOrderId(GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_TRANSFER));
+        int i = alipayAmountEntityService.addTransfer(amount);
+        return toAjax(i);
+    }
+
+
 }

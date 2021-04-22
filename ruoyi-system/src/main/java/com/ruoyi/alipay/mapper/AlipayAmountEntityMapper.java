@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayAmountEntity;
+
 import java.util.List;
 
 /**
@@ -21,12 +22,14 @@ public interface AlipayAmountEntityMapper
 
     /**
      * 查询手动加扣款记录列表
-     * 
+     *
      * @param alipayAmountEntity 手动加扣款记录
      * @return 手动加扣款记录集合
      */
 
     List<AlipayAmountEntity> selectAlipayAmountEntityList(AlipayAmountEntity alipayAmountEntity);
+
+    List<AlipayAmountEntity> selectTransferList(AlipayAmountEntity alipayAmountEntity);
 
     /**
      * 新增手动加扣款记录

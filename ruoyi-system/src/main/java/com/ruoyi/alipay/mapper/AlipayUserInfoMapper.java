@@ -137,14 +137,19 @@ public interface AlipayUserInfoMapper {
 
     AlipayUserInfo selectAlipayUserInfoById(Long id);
 
-    @Select("select * from alipay_user_info  where agent is null")
+    /**
+     * 查询马商顶代
+     *
+     * @return
+     */
+    @Select("select * from alipay_user_info  where agent is null and userType = 2 ")
     List<AlipayUserInfo> selectdealpayUserInfoByAgent();
 
     @Update("update alipay_user_info set qrRechargeList = #{qrRechargeList}, queueList = #{queueList}, submitTime = sysdate() where id = #{id}")
     int updateAlipayUserInfo2Control(AlipayUserInfo alipayUserInfo);
-    @Update("update alipay_user_info set payPasword = #{payPasword} where userId = #{userId}")
-	int updatePaypassword(@Param("userId") String userId,@Param("payPasword") String payPasword);
 
+    @Update("update alipay_user_info set payPasword = #{payPasword} where userId = #{userId}")
+    int updatePaypassword(@Param("userId") String userId, @Param("payPasword") String payPasword);
 
 
     /**

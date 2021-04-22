@@ -27,6 +27,8 @@ public interface IAlipayAmountEntityService {
      */
     public List<AlipayAmountEntity> selectAlipayAmountEntityList(AlipayAmountEntity alipayAmountEntity);
 
+    public List<AlipayAmountEntity> selectTransferList(AlipayAmountEntity alipayAmountEntity);
+
     /**
      * 新增手动加扣款记录
      *
@@ -79,4 +81,6 @@ public interface IAlipayAmountEntityService {
     int additionaEditEnter(AlipayAmountEntity amountEntity);
 
     int insertAlipayAmountQuota(AlipayAmountEntity alipayAmountEntity);
+
+    int addTransfer(AlipayAmountEntity amount);
 }

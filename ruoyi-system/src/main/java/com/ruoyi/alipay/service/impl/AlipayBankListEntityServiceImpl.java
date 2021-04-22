@@ -61,8 +61,6 @@ public class AlipayBankListEntityServiceImpl implements IAlipayBankListEntitySer
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int insertAlipayBankListEntity(AlipayBankListEntity alipayBankListEntity) {
         alipayBankListEntity.setBankcardId(GenerateOrderNo.getInstance().Generate(StaticConstants.BANK_CARD_ID));
-        alipayBankListEntity.setBankcode("R");
-        alipayBankListEntity.setCardType(2);
         alipayBankListEntity.setSysTYpe(2);
         return alipayBankListEntityMapper.insertAlipayBankListEntity(alipayBankListEntity);
     }

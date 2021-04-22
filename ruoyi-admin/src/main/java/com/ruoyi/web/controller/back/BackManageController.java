@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -357,6 +358,16 @@ public class BackManageController extends BaseController {
         return prefix + "/recharge";
     }
 
+
+    @Log(title = "获取USDT汇率转换", businessType = BusinessType.INSERT)
+    @PostMapping("/withdrawal/getRateUsdtFee")
+    @ResponseBody
+    @RepeatSubmit
+    public AjaxResult getRateUsdtFee(HttpServletRequest request) {
+        String amountCNY = request.getParameter("amountCNY");//人民币充值金额
+
+        return AjaxResult.success("6.837");
+    }
 
     /**
      * 保存提现提案

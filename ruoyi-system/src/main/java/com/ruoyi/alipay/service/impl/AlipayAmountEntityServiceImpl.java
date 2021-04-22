@@ -49,6 +49,12 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
         return alipayAmountEntityMapper.selectAlipayAmountEntityList(alipayAmountEntity);
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayAmountEntity> selectTransferList(AlipayAmountEntity alipayAmountEntity) {
+        return alipayAmountEntityMapper.selectTransferList(alipayAmountEntity);
+    }
+
     /**
      * 新增手动加扣款记录
      *
@@ -150,5 +156,11 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
         alipayAmountEntity.setOrderStatus("2");
         alipayAmountEntity.setActualAmount(alipayAmountEntity.getAmount());
         return alipayAmountEntityMapper.insertAlipayAmountEntity(alipayAmountEntity);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int addTransfer(AlipayAmountEntity amount) {
+        return alipayAmountEntityMapper.insertAlipayAmountEntity(amount);
     }
 }

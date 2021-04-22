@@ -130,7 +130,7 @@ public class AlipayAmountEntityController extends BaseController {
     /**
      * 财务审核加减款记录
      */
-    @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
+    @Log(title = "确认加款订单", businessType = BusinessType.UPDATE)
     @PostMapping("/alipay/approval")
     @ResponseBody
     public AjaxResult apporval(AlipayAmountEntity alipayAmountEntity) {
@@ -153,7 +153,7 @@ public class AlipayAmountEntityController extends BaseController {
     /**
      * 财务审核加减款记录
      */
-    @Log(title = "加减款记录", businessType = BusinessType.UPDATE)
+    @Log(title = "确认减款订单", businessType = BusinessType.UPDATE)
     @PostMapping("/alipay/reject")
     @ResponseBody
     public AjaxResult reject(AlipayAmountEntity alipayAmountEntity) {

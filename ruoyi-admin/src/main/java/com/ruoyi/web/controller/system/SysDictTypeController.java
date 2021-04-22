@@ -1,17 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.List;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -23,6 +11,14 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDictType;
 import com.ruoyi.system.service.ISysDictTypeService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 数据字典信息
@@ -69,6 +65,7 @@ public class SysDictTypeController extends BaseController {
     public String add() {
         return prefix + "/add";
     }
+
 
     /**
      * 新增保存字典类型
@@ -130,6 +127,13 @@ public class SysDictTypeController extends BaseController {
         mmap.put("dict", dictTypeService.selectDictTypeById(dictId));
         mmap.put("dictList", dictTypeService.selectDictTypeAll());
         return "system/dict/data/data";
+    }
+
+    @GetMapping("/detailManage/{dictId}")
+    public String detailManage(@PathVariable("dictId") Long dictId, ModelMap mmap) {
+        mmap.put("dict", dictTypeService.selectDictTypeById(dictId));
+        mmap.put("dictList", dictTypeService.selectDictTypeAll());
+        return "system/dict/data/dataManage";
     }
 
     /**

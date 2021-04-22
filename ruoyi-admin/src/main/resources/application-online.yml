@@ -1,3 +1,7 @@
+jasypt:
+  encryptor:
+    password: EWRREWRERWECCCXC
+    algorithm: PBEWithMD5AndDES
 # 数据源配置
 spring:
   datasource:
@@ -7,29 +11,29 @@ spring:
       # 主库数据源
       master:
         url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: kent_admin
-        password: L!f2e#e_h3CNgVD
+        username: ENC(ASbHtWW7AAWLrEAtUBJmigSYYPvhLY/4)
+        password: ENC(rvJeIhYegm9BPhEIm+LZYu2FHMW/iRvP)
       # alipay从库数据源
       alipay:
         # 从数据源开关/默认关闭
         enabled: true
         url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: kent_admin
-        password: L!f2e#e_h3CNgVD
+        username: ENC(ASbHtWW7AAWLrEAtUBJmigSYYPvhLY/4)
+        password: ENC(rvJeIhYegm9BPhEIm+LZYu2FHMW/iRvP)
       # pay从库数据源
       pay:
         # 从数据源开关/默认关闭
         enabled: false
         url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: kent_admin
-        password: L!f2e#e_h3CNgVD
+        username: ENC(ASbHtWW7AAWLrEAtUBJmigSYYPvhLY/4)
+        password: ENC(rvJeIhYegm9BPhEIm+LZYu2FHMW/iRvP)
       # dealpay从库数据源
       dealpay:
         # 从数据源开关/默认关闭
         enabled: true
         url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: kent_admin
-        password: L!f2e#e_h3CNgVD
+        username: ENC(ASbHtWW7AAWLrEAtUBJmigSYYPvhLY/4)
+        password: ENC(rvJeIhYegm9BPhEIm+LZYu2FHMW/iRvP)
       # 初始连接数
       initialSize: 5
       # 最小连接池数量
@@ -90,7 +94,7 @@ shiro:
     # 设置HttpOnly属性
     httpOnly: true
     # 设置Cookie的过期时间，天为单位
-    maxAge: 30
+    maxAge: 1
   session:
     # Session超时时间，-1代表永不过期（默认30分钟）
     expireTime: 30
