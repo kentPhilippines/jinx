@@ -4,6 +4,7 @@ import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -103,6 +104,7 @@ public interface AlipayDealOrderEntityMapper {
 
     /**
      * 分页查询条件
+     *
      * @param starTime
      * @param endTime
      * @param page
@@ -111,4 +113,14 @@ public interface AlipayDealOrderEntityMapper {
      */
     @Select("select * from alipay_deal_order where createTime between #{starTime} and #{endTime}  limit #{page} , #{size}")
     List<AlipayDealOrderEntity> findOrderLimit(@Param("starTime") String starTime, @Param("endTime") String endTime, @Param("page") Integer page, @Param("size") Integer size);
+
+
+    @Update("update alipay_deal_order set orderQrUser = #{userId} ,orderQr = '' , " +
+            "retain2 = #{fee} , feeId =#{feeId}  ,retain3 = #{profit} where orderId = #{orderId} ")
+    int updateOrderQr(@Param("orderId") String orderId, @Param("userId") String userId,
+                      @Param("orderQr") String orderQr, @Param("feeId") Long feeId,
+                      @Param("fee") Double fee, @Param("profit") Double profit);
+
+    @Select("select * from alipay_deal_order where orderId = #{order}")
+    AlipayDealOrderEntity findOrderByOrderId(@Param("order") String order);
 }

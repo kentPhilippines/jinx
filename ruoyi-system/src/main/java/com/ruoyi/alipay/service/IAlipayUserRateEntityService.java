@@ -108,4 +108,13 @@ public interface IAlipayUserRateEntityService {
      * @return
      */
     AlipayUserRateEntity findRateByType(String userId, String rechange);
+
+
+    /**
+     * 查询当前卡商唯一开启的   支出费率
+     *
+     * @param userId
+     * @return
+     */
+    AlipayUserRateEntity findWitRate(String userId);
 }

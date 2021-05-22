@@ -1046,6 +1046,23 @@ var table = {
                 };
                 $.ajax(config)
             },
+            notBackSubmit: function (url, type, dataType, data, callback) {
+                var config = {
+                    url: url,
+                    type: type,
+                    dataType: dataType,
+                    data: data,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                    },
+                    success: function (result) {
+                        if (typeof callback == "function") {
+                            callback(result);
+                        }
+                    }
+                };
+                $.ajax(config)
+            },
             ajaxSubmit: function (url, type, dataType, data) {
                 var config = {
                     url: url,
@@ -1077,6 +1094,9 @@ var table = {
             // get请求传输
             get: function (url, callback) {
                 $.operate.submit(url, "get", "json", "", callback);
+            },
+            commonGet: function (url, callback) {
+                $.operate.notBackSubmit(url, "get", "json", "", callback);
             },
             // 详细信息
             detail: function (id, width, height) {
@@ -1545,6 +1565,18 @@ var table = {
                     $.table.refresh();
                 } else if (result.code == web_status.SUCCESS && table.options.type == table_type.bootstrapTreeTable) {
                     $.modal.msgSuccess(result.msg);
+                    $.treeTable.refresh();
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            },
+            notAjaxSuccess: function (result) {
+                if (result.code == web_status.SUCCESS && table.options.type == table_type.bootstrapTable) {
+                    $.table.refresh();
+                } else if (result.code == web_status.SUCCESS && table.options.type == table_type.bootstrapTreeTable) {
                     $.treeTable.refresh();
                 } else if (result.code == web_status.WARNING) {
                     $.modal.alertWarning(result.msg)

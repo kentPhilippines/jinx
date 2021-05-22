@@ -7,20 +7,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="AlipayMediumEntity" id="AlipayMediumEntityResult">
         <result property="id"    column="id"    />
         <result property="mediumId"    column="mediumId"    />
-        <result property="mediumNumber"    column="mediumNumber"    />
-        <result property="mediumHolder"    column="mediumHolder"    />
-        <result property="mediumNote"    column="mediumNote"    />
-        <result property="mediumPhone"    column="mediumPhone"    />
-        <result property="qrcodeId"    column="qrcodeId"    />
-        <result property="code"    column="code"    />
-        <result property="createTime"    column="createTime"    />
-        <result property="submitTime"    column="submitTime"    />
-        <result property="status"    column="status"    />
-        <result property="isDeal"    column="isDeal"    />
+        <result property="mediumNumber" column="mediumNumber"/>
+        <result property="mediumHolder" column="mediumHolder"/>
+        <result property="mediumNote" column="mediumNote"/>
+        <result property="mediumPhone" column="mediumPhone"/>
+        <result property="qrcodeId" column="qrcodeId"/>
+        <result property="code" column="code"/>
+        <result property="createTime" column="createTime"/>
+        <result property="submitTime" column="submitTime"/>
+        <result property="status" column="status"/>
+        <result property="isDeal" column="isDeal"/>
+
+        <result column="attr" property="attr" jdbcType="VARCHAR"/>
+        <result column="notfiyMask" property="notfiyMask" jdbcType="VARCHAR"/>
+        <result column="bankcode" property="bankcode" jdbcType="CHAR"/>
+        <result column="account" property="account" jdbcType="VARCHAR"/>
+        <result column="mountNow" property="mountNow" jdbcType="DECIMAL"/>
+        <result column="mountSystem" property="mountSystem" jdbcType="DECIMAL"/>
+        <result column="mountLimit" property="mountLimit" jdbcType="DECIMAL"/>
+
     </resultMap>
 
     <sql id="selectAlipayMediumEntityVo">
-        select id, mediumId, mediumNumber, mediumHolder, mediumNote, mediumPhone, qrcodeId, code, createTime, submitTime, status, isDeal from alipay_medium
+        select id, mediumId, mediumNumber, mediumHolder, mediumNote, mediumPhone, qrcodeId, code, createTime, submitTime, status, isDeal,
+
+         attr,bankcode,account,mountNow,mountSystem,mountLimit,notfiyMask
+
+
+         from alipay_medium
     </sql>
 
     <select id="selectAlipayMediumEntityList" parameterType="AlipayMediumEntity" resultMap="AlipayMediumEntityResult">
@@ -88,6 +102,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
             <if test="status != null ">status = #{status},</if>
             <if test="isDeal != null  and isDeal != ''">isDeal = #{isDeal},</if>
+            <if test="attr != null  and attr != ''">attr = #{attr},</if>
+            <if test="mountNow != null  and mountNow != ''">mountNow = #{mountNow},</if>
+            <if test="mountSystem != null  and mountSystem != ''">mountSystem = #{mountSystem},</if>
+            <if test="mountLimit != null  and mountLimit != ''">mountLimit = #{mountLimit},</if>
         </trim>
         where id = #{id}
     </update>

@@ -156,14 +156,25 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 	}
 
 	@Override
-	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
-	public AlipayUserFundEntity findFundBak(String starTime, String userId, String endTime) {
-		return alipayUserFundEntityMapper.findFundBak(starTime, userId, endTime);
-	}
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserFundEntity findFundBak(String starTime, String userId, String endTime) {
+        return alipayUserFundEntityMapper.findFundBak(starTime, userId, endTime);
+    }
 
-	@Override
-	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
-	public List<AlipayUserFundEntity> findFundBakList(AlipayUserFundEntity alipayUserFundEntity) {
-		return alipayUserFundEntityMapper.findFundBakList(alipayUserFundEntity);
-	}
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserFundEntity> findFundBakList(AlipayUserFundEntity alipayUserFundEntity) {
+        return alipayUserFundEntityMapper.findFundBakList(alipayUserFundEntity);
+    }
+
+    /**
+     * 查询所有卡商
+     *
+     * @return
+     */
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserFundEntity> findUserFundAllToBank() {
+        return alipayUserFundEntityMapper.findUserFundAllToBank();
+    }
 }

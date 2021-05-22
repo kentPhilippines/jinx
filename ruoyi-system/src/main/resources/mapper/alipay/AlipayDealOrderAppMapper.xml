@@ -36,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="orderType != null "> and orderType = #{orderType}</if>
+            <if test="orderId != null ">and orderId = #{orderId}</if>
             <if test="orderAccount != null  and orderAccount != ''"> and orderAccount = #{orderAccount}</if>
             <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
             <if test="dealDescribe != null  and dealDescribe != ''"> and dealDescribe = #{dealDescribe}</if>

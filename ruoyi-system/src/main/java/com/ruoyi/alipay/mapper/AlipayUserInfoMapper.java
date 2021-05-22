@@ -181,4 +181,7 @@ public interface AlipayUserInfoMapper {
 
     @Update("update alipay_user_info set status = #{status} where userId = #{userId}")
     int updateStatus(@Param("userId") String userId, @Param("status") Integer status);
+
+    @Select("select queryChildAgents(#{userId})")
+    List<String> findSonUser(@Param("userId") String userId);
 }

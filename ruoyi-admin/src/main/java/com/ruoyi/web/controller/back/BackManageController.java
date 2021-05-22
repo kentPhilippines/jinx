@@ -1,7 +1,8 @@
 package com.ruoyi.web.controller.back;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
@@ -358,21 +359,43 @@ public class BackManageController extends BaseController {
         return prefix + "/recharge";
     }
 
-
     @Log(title = "获取USDT汇率转换", businessType = BusinessType.INSERT)
-    @PostMapping("/withdrawal/getRateUsdtFee")
+    @GetMapping("/withdrawal/getRateUsdtFee")
     @ResponseBody
-    @RepeatSubmit
     public AjaxResult getRateUsdtFee(HttpServletRequest request) {
         String amountCNY = request.getParameter("amountCNY");//人民币充值金额
-
-        return AjaxResult.success("6.837");
+        if (StrUtil.isEmpty(amountCNY)) {
+            return AjaxResult.error("数据错误");
+        }
+        SysDictData dictData = new SysDictData();
+        dictData.setDictType("CNY_USDT");//usdt 汇率字典 type
+        List<SysDictData> list = dictDataService.selectDictDataList(dictData);
+        Integer aDouble = Integer.valueOf(amountCNY);
+        for (SysDictData date : list) {
+            String dictLabel = date.getDictLabel();
+            String[] split = dictLabel.split("-");
+            Double min = Double.valueOf(split[0]);//兑换区间最小
+            Double max = Double.valueOf(split[1]);//兑换区间最大  包括
+            if (aDouble > min) {
+                if (aDouble <= max) {
+                    Random ram = new Random();
+                    int i = ram.nextInt(5);
+                    while (i == 0) {
+                        i = ram.nextInt(5);
+                    }
+                    aDouble = aDouble + i;
+                    double div = Arith.div(aDouble, Double.valueOf(date.getDictValue()), 2);//当前需要转入的 usdt 个数
+                    return AjaxResult.success(div);
+                }
+            }
+        }
+        return AjaxResult.error("汇率错误");
     }
 
     /**
      * 保存提现提案
      */
-    @Log(title = "充值申请", businessType = BusinessType.INSERT)
+    @Log(title = "内充申请", businessType = BusinessType.INSERT)
     @PostMapping("/withdrawal/recharge")
     @ResponseBody
     @RepeatSubmit
@@ -384,10 +407,8 @@ public class BackManageController extends BaseController {
         if (!currentUser.getFundPassword().equals(verify)) {
             return AjaxResult.error("密码验证失败");
         }
-
         String userId = currentUser.getMerchantId();
         AlipayUserRateEntity rateEntity = alipayUserRateEntityService.findRateByType(userId, "RECHARGE");
-        Map<String, Object> parMap = new HashMap<>();
         AlipayUserInfo userInfo = new AlipayUserInfo();
         userInfo.setUserId(userId);
         List<AlipayUserInfo> alipayUserInfos = merchantInfoEntityService.selectMerchantInfoEntityList(userInfo);
@@ -396,13 +417,44 @@ public class BackManageController extends BaseController {
         String key = alipayUserInfos.get(0).getPayPasword();//交易密钥
         String publicKey = alipayUserInfos.get(0).getPublicKey();
         String amount = alipayWithdrawEntity.getAmount().toString();
+        String orderId = GenerateOrderNo.getInstance().Generate("USDT");
+        String post = postWit(amount, userid, rateEntity.getPayTypr(), orderId, key, publicKey);
+        JSONObject json = JSONObject.parseObject(post);
+        String result = json.getString("success");
+        if (StrUtil.isNotEmpty(result) && result.equals("true")) {
+            //新建常规订单已经成功
+            //下面新建usdt充值订单   使用固定usdt  转人民币内充账号
+            String usdTamount = alipayWithdrawEntity.getUSDTamount();//usdt充值金额
+            AlipayUserInfo userInfokent = new AlipayUserInfo();
+            userInfokent.setUserId("KENTUSDTMANAGE");
+            List<AlipayUserInfo> alipayUserInfokent = merchantInfoEntityService.selectMerchantInfoEntityList(userInfokent);
+            String keykent = alipayUserInfokent.get(0).getPayPasword();//交易密钥
+            String publicKeykent = alipayUserInfokent.get(0).getPublicKey();
+            AlipayUserRateEntity usdt = alipayUserRateEntityService.findRateByType("KENTUSDTMANAGE", "USDT");
+            String kentusdtmanage = postWit(usdTamount, "KENTUSDTMANAGE", usdt.getPayTypr(), orderId, keykent, publicKeykent);
+            JSONObject json1 = JSONObject.parseObject(kentusdtmanage);
+            String result1 = json1.getString("success");
+            if (StrUtil.isNotEmpty(result1) && result1.equals("true")) {
+                String result2 = json1.getString("result");
+                JSONObject json2 = JSONObject.parseObject(result2);
+                return AjaxResult.success(json2.getString("returnUrl"));
+            }
+            return AjaxResult.error();
+        } else {
+            String message = json.getString("message");
+            return AjaxResult.error(message);
+        }
+    }
+
+    String postWit(String amount, String userId, String payType, String orderId, String key, String publicKey) {
+        Map<String, Object> parMap = new HashMap<>();
         parMap.put("amount", amount);
         parMap.put("appId", userId);
-        parMap.put("applyDate", d.format(new Date()));
+        parMap.put("applyDate", DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN));
         parMap.put("notifyUrl", "http://starpay168.com:5055");
         parMap.put("pageUrl", "http://starpay168.com:5055");
-        parMap.put("orderId", IdUtil.simpleUUID().toUpperCase());
-        parMap.put("passCode", rateEntity.getPayTypr());
+        parMap.put("orderId", orderId);
+        parMap.put("passCode", payType);
         parMap.put("subject", amount);
         String createParam = MapDataUtil.createParam(parMap);
         logger.info("签名前请求串：" + createParam);
@@ -415,21 +467,13 @@ public class BackManageController extends BaseController {
         logger.info("加密后字符串：" + publicEncrypt);
         Map<String, Object> postMap = new HashMap<String, Object>();
         postMap.put("cipherText", publicEncrypt);
-        postMap.put("userId", userid);
+        postMap.put("userId", userId);
         logger.info("请求参数：" + postMap.toString());
         String post = HttpUtil.post("http://starpay888.org:35426/deal/pay", postMap);
         logger.info("相应结果集：" + post);
-        JSONObject json = JSONObject.parseObject(post);
-        String result = json.getString("success");
-        if (StrUtil.isNotEmpty(result) && result.equals("true")) {
-
-            return AjaxResult.success(json.getString("message"));
-            //  ().write(json.getJSONObject("result").getString("returnUrl"));
-        } else {
-            String message = json.getString("message");
-            return AjaxResult.error(message);
-        }
+        return post;
     }
+
 
     //商户查询银行卡
     @GetMapping("/bank/view")

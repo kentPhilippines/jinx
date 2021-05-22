@@ -133,4 +133,12 @@ public interface IAlipayUserFundEntityService {
     AlipayUserFundEntity findFundBak(String starTime, String userId, String endTime);
 
     List<AlipayUserFundEntity> findFundBakList(AlipayUserFundEntity alipayUserFundEntity);
+
+    /**
+     * 查询所有卡商
+     *
+     * @return
+     */
+    List<AlipayUserFundEntity> findUserFundAllToBank();
+
 }

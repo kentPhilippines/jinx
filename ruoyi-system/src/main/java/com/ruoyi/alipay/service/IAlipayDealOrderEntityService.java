@@ -59,4 +59,21 @@ public interface IAlipayDealOrderEntityService {
     List<AlipayDealOrderEntity> findOneHoursOrderBySuccess(String strTime, String endTime);
 
     List<AlipayDealOrderEntity> findOrderLimit(String starTime, String endTime, Integer page, Integer size);
+
+
+    /**
+     * 修改订单渠道方，并将当前渠道方结算方式做出修改
+     *
+     * @param orderId
+     * @param userId
+     * @param orderQr
+     * @param id
+     * @param fee
+     * @param profit
+     * @return
+     */
+    int updateOrderQr(String orderId, String userId, String orderQr, Long id, Double fee, Double profit);
+
+
+    AlipayDealOrderEntity findOrderByOrderId(String order);
 }

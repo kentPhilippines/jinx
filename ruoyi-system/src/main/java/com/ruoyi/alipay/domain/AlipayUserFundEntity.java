@@ -62,6 +62,26 @@ public class AlipayUserFundEntity extends BaseEntity {
      */
     @Excel(name = "可取现账户金额【码商账户余额=冻结金额+现金账户+充值点数】")
     private Double accountBalance;
+    @Excel(name = "历史代付")
+    private Double sumWitAmount;
+    @Excel(name = "当日代付")
+    private Double todayWitAmount;
+
+    public Double getTodayWitAmount() {
+        return todayWitAmount;
+    }
+
+    public void setTodayWitAmount(Double todayWitAmount) {
+        this.todayWitAmount = todayWitAmount;
+    }
+
+    public Double getSumWitAmount() {
+        return sumWitAmount;
+    }
+
+    public void setSumWitAmount(Double sumWitAmount) {
+        this.sumWitAmount = sumWitAmount;
+    }
 
     /**
      * 累计交易额

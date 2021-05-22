@@ -87,4 +87,27 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
         return alipayDealOrderEntityMapper.findOrderLimit(starTime, endTime, page, size);
     }
 
+    /**
+     * 临时修改订单渠道方，以及渠道方结算
+     *
+     * @param orderId
+     * @param userId
+     * @param orderQr
+     * @param id
+     * @param fee
+     * @param profit
+     * @return
+     */
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int updateOrderQr(String orderId, String userId, String orderQr, Long feeId, Double fee, Double profit) {
+        return alipayDealOrderEntityMapper.updateOrderQr(orderId, userId, orderQr, feeId, fee, profit);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayDealOrderEntity findOrderByOrderId(String order) {
+        return alipayDealOrderEntityMapper.findOrderByOrderId(order);
+    }
+
 }

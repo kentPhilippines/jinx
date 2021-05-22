@@ -295,6 +295,14 @@
         $.modal.openCode("请扫码付款", qr, "400px", "400px", null);
     }
 
+    $(function () {
+        setInterval(function () {
+            $('#bootstrap-table').bootstrapTable('refresh', {pageSize: 10});
+        }, 3000);
+    })
+
+
+
 </script>
 </body>
 </html>

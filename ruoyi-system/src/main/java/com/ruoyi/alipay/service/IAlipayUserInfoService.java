@@ -135,4 +135,21 @@ public interface IAlipayUserInfoService {
     int updateAutoWit(String id, String autoWitStatus);
 
     int updateStatus(String userId, Integer status);
+
+    /**
+     * 查询当前账号的下面所有子账户
+     *
+     * @param userId
+     * @return
+     */
+    List<String> findSonUser(String userId);
+
+
+    /**
+     * 查询自己是否存在代理下级
+     *
+     * @param userId
+     * @return
+     */
+    List<AlipayUserInfo> findAgenByUser(String userId);
 }

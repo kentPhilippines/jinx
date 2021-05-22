@@ -169,12 +169,12 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int changeStatus(String id, String userId, String feeType, String switchs) {
-        if ("2".equals(feeType) && "1".equals(switchs)) {
+        /*if ("2".equals(feeType) && "1".equals(switchs)) {
             List<AlipayUserRateEntity> list = alipayUserRateEntityMapper.selectListObjectEntityByUserId(userId, feeType);
             if (list.size() > 0) {
                 throw new BusinessException("操作失败，用户不能同时开启两种代付费率");
             }
-        }
+        }*/
         AlipayUserInfo result = alipayUserInfoMapper.checkAlipayUserIdUnique(userId);
         if (result == null) {
             throw new BusinessException("用户不存在");
@@ -248,6 +248,14 @@ public class AlipayUserRateEntityServiceImpl implements IAlipayUserRateEntitySer
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayUserRateEntity findRateByType(String userId, String rechange) {
         return alipayUserRateEntityMapper.findRateByType(userId, rechange);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserRateEntity findWitRate(String userId) {
+
+        //  "select * from alipay_user_rate where feeType = 2 and `switchs` = 1 and userId = #{userId} "
+        return alipayUserRateEntityMapper.findWitRate(userId);
     }
 
 

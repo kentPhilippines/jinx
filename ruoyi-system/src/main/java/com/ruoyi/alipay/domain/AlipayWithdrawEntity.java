@@ -32,6 +32,16 @@ public class AlipayWithdrawEntity extends BaseEntity {
     private Integer ethFee;
     @Excel(name = "USDT-hash")
     private String txhash;
+    private String USDTamount;//usdt 充值金额
+
+
+    public String getUSDTamount() {
+        return USDTamount;
+    }
+
+    public void setUSDTamount(String USDTamount) {
+        this.USDTamount = USDTamount;
+    }
 
     public String getHash() {
         return hash;

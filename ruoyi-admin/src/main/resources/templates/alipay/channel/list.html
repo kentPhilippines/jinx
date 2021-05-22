@@ -61,6 +61,7 @@
     var userType = [[${@dict.getType('userType')}]];
     var prefix = ctx + "alipay/channel";
     var prefix1 = ctx + "alipay/fund";
+    const prefixChannel = ctx + "alipay/userInfo";
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -85,6 +86,22 @@
                         } else if (row.status == 1) {
                             return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.userId + '\')"><i class="fa fa-edit"></i>点击切换为冷门类型</a> '
                         }
+                    }
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '交易状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 'receiveOrderState');
+                    }
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '代付状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 'remitOrderState');
                     }
                 },
                 {
@@ -119,6 +136,63 @@
             $.operate.post(prefix + "/updateStatus", {
                 "userId": id,
                 "status": status
+            });
+        })
+    }
+
+    /* 用户状态显示 */
+    function statusTools(row, param) {
+        if (param === 'switchs') {
+            if (row.switchs === 0) {
+                let msg = "确认要【启用】此渠道的【用户状态】吗？";
+                let val = 1;
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            } else {
+                let msg = "确认要【停用】此渠道的【用户状态】吗？";
+                let val = 0;
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            }
+        } else if (param === 'receiveOrderState') {
+            if (row.receiveOrderState === 2) {
+                let msg = "确认要【开启】此渠道的【交易状态】吗？";
+                let val = 1;
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            } else {
+                let msg = "确认要【关闭】此渠道的【交易状态】吗？";
+                let val = 2;
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            }
+        } else if (param === 'remitOrderState') {
+            if (row.remitOrderState === 2) {
+                let msg = "确认要【开启】此渠道的【代付状态】吗？";
+                let val = 1;
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            } else {
+                let msg = "确认要【关闭】此渠道的【代付状态】吗？";
+                let val = 2;
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            }
+        }
+    }
+
+    /* 此渠道的管理-停用 */
+    function disable(userId, param, msg, val) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefixChannel + "/changeStatus", {
+                "userId": userId,
+                "params[paramKey]": param,
+                "params[paramValue]": val
+            });
+        })
+    }
+
+    /* 此渠道的管理-启用 */
+    function enable(userId, param, msg, val) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefixChannel + "/changeStatus", {
+                "userId": userId,
+                "params[paramKey]": param,
+                "params[paramValue]": val
             });
         })
     }

@@ -161,9 +161,9 @@
         }
     }*/
     function googleBind(status) {
-        $.modal.confirm("确定要为此订单进行回滚操作吗？", function () {
+       /* $.modal.confirm("确定要为此订单进行回滚操作吗？", function () {
             layer.prompt({title: "请输入谷歌验证码", fromType: 1, maxLength: 6}, function (googleCode, index) {
-                layer.close(index);
+                layer.close(index);*/
                 $.ajax({
                     type: "get",
                     url: prefix_ver + "/google",
@@ -178,8 +178,8 @@
                         }
                     }
                 });
-            });
-        })
+        /*   });
+       })*/
     }
 
 </script>

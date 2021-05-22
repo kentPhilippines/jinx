@@ -49,6 +49,16 @@
                             </select>
                         </li>
                         <li class="select-selectpicker">
+                            <label>订单类型：</label>
+                            <select class="selectpicker" data-none-selected-text="请选择" id="orderType" name="orderType">
+                                <option value="">所有</option>
+                                <option value="1">商户渠道主交易订单</option>
+                                <option value="4">商户代付渠道主交易订单</option>
+                                <option value="3">卡商充值渠道主交易订单</option>
+
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
                             <label>渠道类型：</label>
                             <select class="selectpicker" data-none-selected-text="请选择" id="orderQrUser"
                                     name="orderQrUser">
@@ -121,6 +131,7 @@
             detailUrl: prefix + "/edit/{id}",
             statisticsUrl: prefix + "/statistics/qr/table",
             exportUrl: prefix + "/export",
+            openUrl: prefix + "/updateBankCardShow/{userId}",
             modalName: "主交易订单",
             columns: [{
                 checkbox: true
@@ -152,12 +163,24 @@
                         var table = '<ul>'
                         table += '<li>' + '渠道账号：' + row.orderQrUser + '</li>'
                         table += '<li>' + '渠道昵称：' + row.channelName + '</li>'
+                        table += '<li>' + '产品类型：' + row.retain1 + '</li>'
                         table += '</ul>'
                         return table;
                     }
                 },
                 // {field: 'channelName', title: '渠道昵称'},
-                {field: 'retain1', title: '产品类型'},
+                {
+                    field: 'orderType', title: '订单类型', formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '<span class="badge badge-primary">商户充值->渠道主交易订单</span>'
+                        } else if (value == 4) {
+                            return '<span class="badge badge-danger">商户代付->渠道出款主交易订单</span>'
+                        } else if (value == 3) {
+                            return '<span class="badge badge-info">卡商充值->渠道主交易订单</span>'
+
+                        }
+                    }
+                },
                 {
                     field: 'orderStatus', title: '订单状态',
                     formatter: function (value, row, index) {
@@ -184,6 +207,9 @@
                         if (row.orderStatus != 7 && row.orderStatus != '2') {
                             actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
                         }
+                        if (row.orderStatus === '1' && row.orderType == 4) {
+                            actions.push('<a class="btn btn-warning btn-xs ' + notifyFlag + '" href="javascript:void(0)" onclick="updateBankCard(\'' + row.orderId + '\')"><i class="fa fa-bell-o"></i>修改出款卡商</a> ');
+                        }
                         return actions.join('');
                     }
                 }]
@@ -203,14 +229,19 @@
             $.operate.post(prefix + "/renotify", {"orderId": orderId});
         });
     }
+
+    function updateBankCard(orderId) {
+        $.modal.open("修改渠道", $.operate.openUrl(orderId));
+    }
+
     //初始化时间
-    layui.use('laydate', function(){
+    layui.use('laydate', function () {
         const laydate = layui.laydate;
         laydate.render({
             elem: '#startTime',
             format: 'yyyy-MM-dd HH:mm:ss',
             type: 'datetime',
-            value: new Date().toLocaleDateString().replace(/\//g,"-") + " 00:00:00",
+            value: new Date().toLocaleDateString().replace(/\//g, "-") + " 00:00:00",
             isInitValue: true
         });
         laydate.render({

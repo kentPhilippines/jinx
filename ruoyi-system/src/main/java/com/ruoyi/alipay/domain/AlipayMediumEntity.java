@@ -1,9 +1,10 @@
 package com.ruoyi.alipay.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.Date;
 
 /**
@@ -49,25 +50,93 @@ public class AlipayMediumEntity extends BaseEntity
     @Excel(name = "数据修改时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date submitTime;
 
-    /** 状态:1可使用；0不可使用 */
+    /**
+     * 状态:1可使用；0不可使用
+     */
     @Excel(name = "状态:1可使用；0不可使用")
     private Integer status;
 
-    /** 是否逻辑删除：1删除2可用 */
+    /**
+     * 是否逻辑删除：1删除2可用
+     */
     @Excel(name = "是否逻辑删除：1删除2可用")
     private String isDeal;
 
-    public void setId(Long id) 
-    {
+
+    private String bankcode;                    //R 为 入款    W  为出款
+    private String account;                     //银行账户    如中国工商银行
+    private String mountNow;                    // 当前媒介实际金额
+    private String mountSystem;                 //当前媒介系统金额
+    private String mountLimit;                  //当前媒介限制金额   系统默认一万
+    private String attr;                        //收款媒介供应链标识
+    private String notfiyMask;                  //回调标识
+
+
+    public String getNotfiyMask() {
+        return notfiyMask;
+    }
+
+    public void setNotfiyMask(String notfiyMask) {
+        this.notfiyMask = notfiyMask;
+    }
+
+    public String getAttr() {
+        return attr;
+    }
+
+    public void setAttr(String attr) {
+        this.attr = attr;
+    }
+
+    public String getMountLimit() {
+        return mountLimit;
+    }
+
+    public void setMountLimit(String mountLimit) {
+        this.mountLimit = mountLimit;
+    }
+
+    public String getMountSystem() {
+        return mountSystem;
+    }
+
+    public void setMountSystem(String mountSystem) {
+        this.mountSystem = mountSystem;
+    }
+
+    public String getMountNow() {
+        return mountNow;
+    }
+
+    public void setMountNow(String mountNow) {
+        this.mountNow = mountNow;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getBankcode() {
+        return bankcode;
+    }
+
+    public void setBankcode(String bankcode) {
+        this.bankcode = bankcode;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() 
-    {
+    public Long getId() {
         return id;
     }
-    public void setMediumId(String mediumId) 
-    {
+
+    public void setMediumId(String mediumId) {
         this.mediumId = mediumId;
     }
 

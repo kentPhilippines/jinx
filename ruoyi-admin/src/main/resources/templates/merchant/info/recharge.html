@@ -69,21 +69,41 @@
 
     function fromChange() {
         var amount = $("#amount").val();
-        $.operate.get(prefix + "/withdrawal/getRateUsdtFee?amountCNY=" + $("#amount").val(), function (date) {
-            debugger;
-            amount = date;
+        $.ajax({
+            type: "GET",
+            url: prefix + "/withdrawal/getRateUsdtFee?amountCNY=" + $("#amount").val(),
+            data: "",
+            dataType: "json",
+            success: function (data) {
+                amount = data.data;
+                $("#USDTamount").val(amount)
+                var value = '当前需要付款USDT 【' + amount + '】 ，请点击下方确认按钮【进行支付】';
+                $("#usdt").val(value)
+            }
         });
-        $("#USDTamount").val(amount)
 
-
-        var value = '当前需要付款USDT ' + amount + ' ，请点击下方确认按钮唤起支付页面，进行支付';
-        $("#usdt").val(value)
     }
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/withdrawal/recharge", $('#form-withdrawal-apply').serialize(), function (date) {
-
+            var url = prefix + "/withdrawal/recharge";
+            var data = $('#form-withdrawal-apply').serialize();
+            $.modal.confirm("确定要保存此编辑信息吗？", function () {
+                var config = {
+                    url: url,
+                    type: "post",
+                    dataType: "json",
+                    data: data,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                        $.modal.disable();
+                    },
+                    success: function (result) {
+                        debugger;
+                        window.location.href = result.msg;
+                    }
+                };
+                $.ajax(config)
             });
         }
     }

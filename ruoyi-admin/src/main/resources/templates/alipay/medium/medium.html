@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('收款媒介列列表')"/>
     <th:block th:include="include :: bootstrap-select-css"/>
@@ -12,7 +12,7 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            <span>码商账户：</span>
+                            <span>卡商账户：</span>
                             <input type="text" name="qrcodeId"/>
                         </li>
                         <li>
@@ -86,11 +86,11 @@
                 },
                 {
                     field: 'mediumNumber',
-                    title: '媒介账号',
+                    title: '银行账号',
                 },
                 {
                     field: 'mediumHolder',
-                    title: '所属人'
+                    title: '开户人'
                 },
                 {
                     field: 'mediumPhone',
@@ -98,12 +98,29 @@
                 },
                 {
                     field: 'qrcodeId',
-                    title: '码商账户'
+                    title: '卡商账户'
                 },
+                {
+                    field: 'account',
+                    title: '开户行'
+                },
+                {
+                    field: 'mountLimit',
+                    title: '收款限制金额'
+                },
+                {
+                    field: 'mountSystem',
+                    title: '系统收款'
+                },
+                {
+                    field: 'mountNow',
+                    title: '实际余额'
+                },
+
                 {
                     field: 'code',
                     title: '媒介类型',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         return $.table.selectDictLabel(mediumType, value);
                     }
                 },

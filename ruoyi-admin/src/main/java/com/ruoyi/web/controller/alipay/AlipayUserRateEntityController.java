@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.IdUtil;
@@ -279,6 +280,10 @@ public class AlipayUserRateEntityController extends BaseController {
             throw new BusinessException("当前批量修改中存在多个渠道，请选择相同渠道完成批量修改");
         }
         for (AlipayUserRateEntity rateEntity : rateEntityList) {
+            List<AlipayUserInfo> users = alipayUserInfoService.findAgenByUser(rateEntity.getUserId());
+            if (CollUtil.isNotEmpty(users) || users.size() > 0) {
+                continue;// 凡是存在下级代理商户的商户费率一律不允许批量切换，代理商费率批量结算容易造成业务bug
+            }
             String channelId = rateEntity.getChannelId();
             rateEntity.setChannelId(channel);
             try {

@@ -16,6 +16,7 @@ import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,7 +79,7 @@ public class AlipayUserInfoController extends BaseController {
     public AjaxResult addSave(AlipayUserInfo alipayUserInfo) {
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_2);
         //获取数据库内请求路径
 //        String url1 = "http://10.14.180.64:5055/api-alipay/account-api/add-account";
         Map<String, Object> mapParam = Maps.newHashMap();
@@ -188,11 +189,13 @@ public class AlipayUserInfoController extends BaseController {
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(AlipayUserInfo user) {
-        //获取alipay处理接口URL
+        logger.info("[当前处理商户关闭或者开启的管理员账号为：" + ShiroUtils.getSysUser().getLoginName() + "]");
+        logger.info("[当前处理商户状态的参数为：" + user.getParams().toString() + "]");
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_2);
         Map<String, Object> mapParam = Maps.newHashMap();
-        mapParam.put("switchs", user.getSwitchs());
+        mapParam.put("paramKey", user.getParams().get("paramKey").toString());
+        mapParam.put("paramValue", user.getParams().get("paramValue").toString());
         mapParam.put("userId", user.getUserId());
         String flag = HttpUtils.sendPost(ipPort + urlPath, MapDataUtil.createParam(mapParam));
         if ("ConnectException".equals(flag)) {

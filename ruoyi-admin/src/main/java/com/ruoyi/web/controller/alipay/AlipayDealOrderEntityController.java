@@ -6,9 +6,11 @@ import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.domain.AlipayUserRateEntity;
 import com.ruoyi.alipay.service.IAlipayDealOrderEntityService;
 import com.ruoyi.alipay.service.IAlipayProductService;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
+import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -46,10 +48,16 @@ import java.util.stream.Collectors;
 public class AlipayDealOrderEntityController extends BaseController {
     private String prefix = "alipay/orderDeal";
     private String code_prefix = "alipay/file";
-    @Autowired private DictionaryUtils dictionaryUtils;
-    @Autowired private IAlipayDealOrderEntityService alipayDealOrderEntityService;
-    @Autowired private ISysUserService userService;
-    @Autowired IAlipayProductService iAlipayProductService;
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
+    @Autowired
+    private IAlipayDealOrderEntityService alipayDealOrderEntityService;
+    @Autowired
+    private ISysUserService userService;
+    @Autowired
+    private IAlipayProductService iAlipayProductService;
+    @Autowired
+    private IAlipayUserRateEntityService iAlipayUserRateEntityService;
 
     @GetMapping()
     @RequiresPermissions("orderDeal:qr:view")
@@ -96,6 +104,7 @@ public class AlipayDealOrderEntityController extends BaseController {
                 order.setRetain1(product.getProductName());
             }
             order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
+
         }
         userCollect = null;
         return getDataTable(list);
@@ -112,6 +121,40 @@ public class AlipayDealOrderEntityController extends BaseController {
         order.setOrderStatus("7");//人工处理
         int i = alipayDealOrderEntityService.updateAlipayDealOrderEntity(order);
         return toAjax(i);
+    }
+
+
+    /**
+     * 代付主交易订单修改卡商账户
+     *
+     * @param userId 这里其实为 订单号
+     * @return
+     */
+    @GetMapping("/updateBankCardShow/{userId}")
+    @RequiresPermissions("orderDeal:qr:status:updateBankCardShow")
+    public String updateBankCardShow(ModelMap mmap, @PathVariable("userId") String orderId) {
+        List<AlipayUserFundEntity> listFund = alipayUserFundEntityService.findUserFundAllToBank();
+        mmap.put("listFund", listFund);
+        mmap.put("orderId", orderId);
+        return prefix + "/updateBankCardEdit";
+    }
+
+
+    /**
+     * 代付主交易订单修改卡商账户
+     */
+    @PostMapping("/updateBankCard")
+    @RequiresPermissions("orderDeal:qr:status:updateBankCard")
+    @ResponseBody
+    public AjaxResult updateBankCard(String orderId, String userId) {
+        AlipayDealOrderEntity orderEntityList = alipayDealOrderEntityService.findOrderByOrderId(orderId);
+        AlipayUserRateEntity rate = iAlipayUserRateEntityService.findWitRate(userId);
+        Double fee = rate.getFee();
+        Double dealAmount = orderEntityList.getDealAmount();
+        fee = fee * dealAmount;
+        Double profit = Double.valueOf(orderEntityList.getRetain3());
+        profit = Double.valueOf(orderEntityList.getDealFee()) - fee;
+        return toAjax(alipayDealOrderEntityService.updateOrderQr(orderId, userId, "", rate.getId(), fee, profit));
     }
 
 

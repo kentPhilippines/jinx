@@ -33,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="orderId != null  and orderId != ''">and orderId = #{orderId}</if>
             <if test="amountType != null  and amountType != ''">and amountType = #{amountType}</if>
+            <if test="userId != null  and userId != ''">and userId = #{userId}</if>
             <if test="accname != null  and accname != ''">and accname like concat('%', #{accname}, '%')</if>
             <if test="orderStatus != null  and orderStatus != ''">and orderStatus = #{orderStatus}</if>
             <if test="amount != null ">and amount = #{amount}</if>

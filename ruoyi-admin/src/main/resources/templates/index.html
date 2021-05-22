@@ -252,18 +252,18 @@
 <script th:src="@{/js/jquery.contextMenu.min.js}"></script>
 <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
 <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
-<script th:src="@{/ruoyi/js/ry-ui.js?v=4.1.0}"></script>
-<script th:src="@{/ruoyi/js/common.js?v=4.1.0}"></script>
+<script th:src="@{/ruoyi/js/ry-ui.js?v=4.1.2}"></script>
+<script th:src="@{/ruoyi/js/common.js?v=4.1.2}"></script>
 <script th:src="@{/ruoyi/index.js}"></script>
 <script th:src="@{/ajax/libs/fullscreen/jquery.fullscreen.js}"></script>
 <script th:inline="javascript">
-var ctx = [[@{/}]];
-// 皮肤缓存
-var skin = storage.get("skin");
-// history（表示去掉地址的#）否则地址以"#"形式展示
-var mode = "history";
-// 历史访问路径缓存
-var historyPath = storage.get("historyPath");
+    var ctx = [[@{/}]];
+    // 皮肤缓存
+    var skin = storage.get("skin");
+    // history（表示去掉地址的#）否则地址以"#"形式展示
+    var mode = "history";
+    // 历史访问路径缓存
+    var historyPath = storage.get("historyPath");
 // 排除非左侧菜单链接
 var excludesUrl = ["/system/user/profile"];
 

@@ -219,4 +219,19 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     public int updateStatus(String userId, Integer status) {
         return alipayUserInfoMapper.updateStatus(userId, status);
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<String> findSonUser(String userId) {
+        return alipayUserInfoMapper.findSonUser(userId);
+
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserInfo> findAgenByUser(String userId) {
+        AlipayUserInfo alipayUserInfo = new AlipayUserInfo();
+        alipayUserInfo.setAgent(userId);
+        return alipayUserInfoMapper.selectAliaUserInfoList(alipayUserInfo);
+    }
 }

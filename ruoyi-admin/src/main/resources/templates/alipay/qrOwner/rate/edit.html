@@ -74,15 +74,15 @@
     });
 
     /*监听事件*/
-    $('#feeType').on('select2:select', function (e) {
-        let feeType = $('#feeType').select2('val');
-        if (feeType == 2) {
-            $("#payTypr").select2("val", [""]);
-            $('#payTypr').prop('disabled', true);
-        }else if(feeType == 1){
-            $('#payTypr').prop('disabled', false);
-        }
-    });
+    /*  $('#feeType').on('select2:select', function (e) {
+          let feeType = $('#feeType').select2('val');
+          if (feeType == 2) {
+              $("#payTypr").select2("val", [""]);
+              $('#payTypr').prop('disabled', true);
+          }else if(feeType == 1){
+              $('#payTypr').prop('disabled', false);
+          }
+      });*/
 </script>
 </body>
 </html>

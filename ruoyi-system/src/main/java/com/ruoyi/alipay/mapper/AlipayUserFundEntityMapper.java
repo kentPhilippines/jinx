@@ -124,4 +124,8 @@ public interface AlipayUserFundEntityMapper {
 
     @Select("select userId ,currency  from alipay_user_fund where   userId = #{userId}")
     AlipayUserFundEntity findUserFundCurrencyById(@Param("userId") String userId);
+
+
+    @Select("select userId  ,userName, accountBalance, rechargeNumber , freezeBalance ,userType from alipay_user_fund where userType = 2  ")
+    List<AlipayUserFundEntity> findUserFundAllToBank();
 }
