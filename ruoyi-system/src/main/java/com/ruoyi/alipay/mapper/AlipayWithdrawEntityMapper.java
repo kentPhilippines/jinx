@@ -68,4 +68,6 @@ public interface AlipayWithdrawEntityMapper {
 
     @Select("select * from alipay_withdraw where  createTime between #{starTime} and #{endTime} limit #{page} , #{size} ")
     List<AlipayWithdrawEntity> findWitLimit(@Param("starTime") String starTime, @Param("endTime") String endTime, @Param("page") Integer page, @Param("size") Integer size);
+
+    AlipayWithdrawEntity selectAlipayWithdrawEntityListSum(AlipayWithdrawEntity alipayWithdrawEntity);
 }

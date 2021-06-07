@@ -123,4 +123,6 @@ public interface AlipayDealOrderEntityMapper {
 
     @Select("select * from alipay_deal_order where orderId = #{order}")
     AlipayDealOrderEntity findOrderByOrderId(@Param("order") String order);
+
+    AlipayDealOrderEntity selectAlipayDealOrderEntityListSum(AlipayDealOrderEntity alipayDealOrderEntity);
 }

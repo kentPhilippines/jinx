@@ -5,6 +5,11 @@
     <th:block th:include="include :: select2-css"/>
 </head>
 <body class="gray-bg">
+<style>
+    .container-div .row {
+        height: 50%;
+    }
+</style>
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse" hidden>
@@ -29,7 +34,7 @@
             </form>
         </div>
         <div class="row">
-            <div class="btn-group-sm" id="toolbar" role="group">
+            <div class="btn-group-sm" id="toolbar1" role="group">
                 <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:dict:add">
                     <i class="fa fa-plus"></i> 新增
                 </a>
@@ -45,11 +50,21 @@
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>
-
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
         </div>
+        <div class="row">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table2"></table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table1"></table>
+            </div>
+        </div>
+
     </div>
     <th:block th:include="include :: footer"/>
     <th:block th:include="include :: select2-js"/>
@@ -61,11 +76,13 @@
 
         $(function () {
             var options = {
+                id: "bootstrap-table",
                 url: prefix + "/list",
                 createUrl: prefix + "/addManage/{id}",
                 updateUrl: prefix + "/editManage/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                toolbar: "toolbar1",
                 queryParams: queryParams,
                 sortName: "createTime",
                 sortOrder: "desc",
@@ -85,7 +102,11 @@
                     },
                     {
                         field: 'dictValue',
-                        title: '汇率'
+                        title: '加减汇率'
+                    },
+                    {
+                        field: 'dictValueTime',
+                        title: '实时汇率'
                     },
                     {
                         field: 'dictSort',
@@ -109,17 +130,70 @@
                         field: 'createTime',
                         title: '创建时间',
                         sortable: true
-                    },
-                    {
-                        title: '操作',
-                        align: 'center',
-                        formatter: function (value, row, index) {
-                            var actions = [];
-                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dictCode + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dictCode + '\')"><i class="fa fa-remove"></i>删除</a>');
-                            return actions.join('');
+                    }
+                ]
+            };
+            $.table.init(options);
+        });
+
+
+        let prefixProduct = ctx + "alipay/product";
+
+
+        $(function () {
+            var options = {
+                id: "bootstrap-table2",
+                url: prefix + "/listRateInHUOBI",
+                modalName: "【火币网实时汇率】",
+                queryParams: queryParamsProduct,
+                columns: [{checkbox: true},
+                    {field: 'id', title: '数据ID', visible: false},
+                    {field: 'rateType', title: '费率类型'},
+                    {field: 'price', title: '实时价格'},
+                    {field: 'caeateTime', title: '时间'}]
+            };
+            $.table.init(options);
+        });
+        $(function () {
+            var options = {
+                id: "bootstrap-table1",
+                url: prefixProduct + "/list",
+                modalName: "【产品列表】",
+                queryParams: queryParamsProduct,
+                columns: [{
+                    checkbox: true
+                }, {
+                    field: 'id',
+                    title: '数据ID',
+                    visible: false
+                }, {
+                    field: 'productId',
+                    title: '产品ID'
+                }, {
+                    field: 'productCode',
+                    title: '产品code',
+                    formatter: function (value, row, index) {
+                        if (value == 2 || value == '2') {
+                            return '交易类型';
+                        } else {
+                            return '代付类型';
                         }
-                    }]
+                        ;
+                    }
+
+                }, {
+                    field: 'productName', title: '产品名称'
+                }, {
+                    field: 'status', title: '自动回调开关', formatter: function (value, row, index) {
+                        if (row.status == 0) {
+                            return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击开启内充</a> '
+                        } else if (row.status == 1) {
+                            return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击开启内充</a> '
+                        }
+                    }
+                }, {field: 'describe', title: '备注'}, {field: 'createTime', title: '创建时间'}, {
+                    field: 'submitTime', title: '更新时间'
+                }]
             };
             $.table.init(options);
         });
@@ -127,6 +201,12 @@
         function queryParams(params) {
             var search = $.table.queryParams(params);
             search.dictType = $("#dictType").val();
+            return search;
+        }
+
+        function queryParamsProduct(params) {
+            var search = $.table.queryParams(params);
+            search.productId = "RECHARGE"
             return search;
         }
 
@@ -139,6 +219,40 @@
         function resetPre() {
             $.form.reset();
             $("#dictType").val($("#dictType").val()).trigger("change");
+        }
+
+
+        function hut(id) {
+            let msg = "确认要开启自动回调内充吗？";
+            let val = 1;
+            return auto(id, msg, val);
+        }
+
+        function cood(id) {
+            let msg = "确认要关闭自动回调内充吗？";
+            let val = 0;
+            return auto(id, msg, val);
+        }
+
+        function auto(id, msg, status) {
+            $.modal.confirm(msg, function () {
+                $.operate.post(prefixProduct + "/updateStatus", {
+                    "id": id,
+                    "status": status
+                });
+            })
+        }
+
+        function getRate() {
+            var rate = "";
+            $.ajax({
+                type: "GET",
+                url: prefix + "/getHUOBIRateFee",
+                dataType: "json",
+                success: function (data) {
+                    return "<span>" + data.msg + "</span>";
+                }
+            });
         }
     </script>
 </body>

@@ -70,6 +70,10 @@ public interface ShiroConstants {
      * 系统活跃用户缓存
      */
     public static final String SYS_USERCACHE = "sys-userCache";
+    /**
+     * 系统活跃用户缓存
+     */
+    public static final String HUOBI_USDT_RATE = "huobi-usdt-rate";
 
     /**
      * 未绑定异常

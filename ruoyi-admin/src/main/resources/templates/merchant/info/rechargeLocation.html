@@ -21,8 +21,6 @@
             <div class="col-sm-8">
                 <input class="form-control" id="amount" min="0" name="amount" placeholder="请输入充值金额" required
                        type="number">
-                <input class="form-control" id="USDTamount" min="0" name="USDTamount" placeholder="" type="hidden">
-                <input class="form-control" id="USDTRate" min="0" name="USDTRate" placeholder="" type="hidden">
             </div>
         </div>
 
@@ -45,16 +43,6 @@
                            type="text" value="提交订单前请核准信息，一旦生成订单将不能再次修改！">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label glyphicon glyphicon-exclamation-sign"
-                       style="color: red;font-size: 15px;">温馨提示：</label>
-                <div class="col-sm-8">
-                    <input class="form-control" readonly
-                           style="border-width: 0;background-color:white; color: red;font-size: 15px;"
-                           id="usdt" type="text"
-                           value="">
-                </div>
-            </div>
     </form>
 </div>
 <th:block th:include="include :: footer"/>
@@ -64,31 +52,10 @@
     $("#form-withdrawal-apply").validate({
         focusCleanup: true
     });
-    $(document).on('input', '#amount', function () {
-        fromChange();
-    });
-
-    function fromChange() {
-        var amount = $("#amount").val();
-        $.ajax({
-            type: "GET",
-            url: prefix + "/withdrawal/getRateUsdtFee?amountCNY=" + $("#amount").val(),
-            data: "",
-            dataType: "json",
-            success: function (data) {
-                amount = data.data.amount;
-                $("#USDTamount").val(amount);
-                $("#USDTRate").val(data.data.rate);
-                var value = '当前需要付款USDT 【' + amount + '】 ，请点击下方确认按钮【进行支付】';
-                $("#usdt").val(value);
-            }
-        });
-
-    }
 
     function submitHandler() {
         if ($.validate.form()) {
-            var url = prefix + "/withdrawal/recharge";
+            var url = prefix + "/withdrawal/rechargeLocation";
             var data = $('#form-withdrawal-apply').serialize();
             $.modal.confirm("确定要保存此编辑信息吗？", function () {
                 var config = {
@@ -99,10 +66,6 @@
                     beforeSend: function () {
                         $.modal.loading("正在处理中，请稍后...");
                         $.modal.disable();
-                    },
-                    success: function (result) {
-                        debugger;
-                        window.location.href = result.msg;
                     }
                 };
                 $.ajax(config)

@@ -50,7 +50,8 @@
                             <select class="selectpicker" data-none-selected-text="请选择" id="currency"
                                     name="currency" th:with="type=${@dict.getType('currency')}">
                                 <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                <option th:each="dict : ${type}" th:selected="${dict.dictLabel}=='CNY'? 'selected':''"
+                                        th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
@@ -121,6 +122,7 @@
             ethFeeUrl: prefix + "/merchant/ethFee/{id}",
             statisticsUrl: prefix + "/statistics/merchant/channelWit",
             exportUrl: prefix + "/merchant/export",
+            showFooter: true,
             modalName: "会员提现记录",
             columns: [{
                 checkbox: true
@@ -204,6 +206,28 @@
                         table += '<li>' + '实际到账：' + row.actualAmount + '</li>'
                         table += '</ul>'
                         return table;
+                    },
+                    footerFormatter: function (rows) {
+                        var sumAmount = 0;
+                        var sumFee = 0;
+                        var sumActualAmount = 0;
+                        var sunCountAmount = 0;//数据总计代付金额
+                        var sunCountAmountFee = 0;//数据总计收取手续费
+                        var sunCountActualAmount = 0;//数据总计实际到账
+                        for (var i in rows) {
+                            sumAmount += parseFloat(rows[i].amount);
+                            sumFee += parseFloat(rows[i].fee);
+                            sumActualAmount += parseFloat(rows[i].actualAmount);
+                            sunCountAmount += parseFloat(rows[i].sunCountAmount);
+                            sunCountAmountFee += parseFloat(rows[i].sunCountAmountFee);
+                            sunCountActualAmount += parseFloat(rows[i].sunCountActualAmount);
+                        }
+                        var table = '<ul>'
+                        table += '<li><span style="color: green"><strong>' + '当页代付金额：' + sumAmount + '</strong></span><span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;<strong>当日总代付金额 ： ' + sunCountAmount + '</strong></span></li>'
+                        table += '<li><span style="color: green"><strong>' + '当页手续费：' + sumFee + '</strong></span><span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;<strong>当日总代付手续费 ： ' + sunCountAmountFee + '</strong></span></li>'
+                        table += '<li><span style="color: green"><strong>' + '当页实际到账：' + sumActualAmount + '</strong></span><span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;<strong>当日总代付实际到账 ： ' + sunCountActualAmount + '</strong></span></li>'
+                        table += '</ul>'
+                        return table;
                     }
                 },
                 /* {
@@ -256,7 +280,7 @@
     /* 状态显示 */
     function check(row) {
         var actions = [];
-        if (row.orderStatus === '1') {
+        if (row.orderStatus === '4' || row.orderStatus === '1') {
             actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>')
         } else if (row.orderStatus === '2' || row.orderStatus === '3') {
             if (row.orderStatus === '2') {
@@ -295,12 +319,15 @@
         $.modal.openCode("请扫码付款", qr, "400px", "400px", null);
     }
 
-    $(function () {
-        setInterval(function () {
-            $('#bootstrap-table').bootstrapTable('refresh', {pageSize: 10});
-        }, 3000);
-    })
+    /*
 
+        $(function () {
+            setInterval(function () {
+                $('#bootstrap-table').bootstrapTable('refresh', {pageSize: 10});
+            }, 3000);
+        })
+
+    */
 
 
 </script>

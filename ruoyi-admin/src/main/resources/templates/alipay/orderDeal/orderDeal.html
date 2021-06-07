@@ -32,7 +32,8 @@
                             <select class="selectpicker" data-none-selected-text="请选择" id="currency"
                                     name="currency" th:with="type=${@dict.getType('currency')}">
                                 <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                <option th:each="dict : ${type}" th:selected="${dict.dictLabel}=='CNY'? 'selected':''"
+                                        th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
@@ -133,6 +134,7 @@
             exportUrl: prefix + "/export",
             openUrl: prefix + "/updateBankCardShow/{userId}",
             modalName: "主交易订单",
+            showFooter: true,
             columns: [{
                 checkbox: true
             },
@@ -188,7 +190,31 @@
                     }
                 },
                 // {field: 'externalOrderId',   title: '外部订单号'},
-                {field: 'dealAmount', title: '交易金额'},
+                {
+                    field: 'dealAmount', title: '交易金额',
+                    footerFormatter: function (rows) {
+                        var sumAmount = 0;
+                        var sumFee = 0;
+                        var sumActualAmount = 0;
+                        var sunCountAmount = 0;//数据总计代付金额
+                        var sunCountAmountFee = 0;//数据总计收取手续费
+                        var sunCountActualAmount = 0;//数据总计实际到账
+                        for (var i in rows) {
+                            sumAmount += parseFloat(rows[i].dealAmount);
+                            sumFee += parseFloat(rows[i].dealFee);
+                            sumActualAmount += parseFloat(rows[i].actualAmount);
+                            sunCountAmount += parseFloat(rows[i].sunCountAmount);
+                            sunCountAmountFee += parseFloat(rows[i].sunCountAmountFee);
+                            sunCountActualAmount += parseFloat(rows[i].sunCountActualAmount);
+                        }
+                        var table = '<ul>'
+                        table += '<li><span style="color: green"><strong>' + '当页充值金额：' + sumAmount + '</strong></span><span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;<strong>当日总充值金额 ： ' + sunCountAmount + '</strong></span></li>'
+                        table += '<li><span style="color: green"><strong>' + '当页充值手续费：' + sumFee + '</strong></span><span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;<strong>当日总充值手续费 ： ' + sunCountAmountFee + '</strong></span></li>'
+                        table += '<li><span style="color: green"><strong>' + '当页充值实际到账：' + sumActualAmount + '</strong></span><span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;<strong>当日总充值实际到账 ： ' + sunCountActualAmount + '</strong></span></li>'
+                        table += '</ul>'
+                        return table;
+                    }
+                },
                 {field: 'currency', title: '货币类型'},
                 {field: 'orderQr', title: '交易媒介'},
                 /*                {   field: 'orderQr',       title: '关联二维码'  },*/

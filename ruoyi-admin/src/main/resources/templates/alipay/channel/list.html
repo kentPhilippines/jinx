@@ -90,6 +90,14 @@
                 },
                 {
                     visible: editFlag == 'hidden' ? false : true,
+                    title: '渠道总状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 'switchs');
+                    }
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
                     title: '交易状态',
                     align: 'center',
                     formatter: function (value, row, index) {
@@ -143,7 +151,7 @@
     /* 用户状态显示 */
     function statusTools(row, param) {
         if (param === 'switchs') {
-            if (row.switchs === 0) {
+            if (row.switchs == 0) {
                 let msg = "确认要【启用】此渠道的【用户状态】吗？";
                 let val = 1;
                 return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
@@ -153,7 +161,7 @@
                 return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
             }
         } else if (param === 'receiveOrderState') {
-            if (row.receiveOrderState === 2) {
+            if (row.receiveOrderState == 2) {
                 let msg = "确认要【开启】此渠道的【交易状态】吗？";
                 let val = 1;
                 return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
@@ -163,7 +171,7 @@
                 return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
             }
         } else if (param === 'remitOrderState') {
-            if (row.remitOrderState === 2) {
+            if (row.remitOrderState == 2) {
                 let msg = "确认要【开启】此渠道的【代付状态】吗？";
                 let val = 1;
                 return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';

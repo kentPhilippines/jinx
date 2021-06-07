@@ -33,7 +33,42 @@ public class AlipayWithdrawEntity extends BaseEntity {
     @Excel(name = "USDT-hash")
     private String txhash;
     private String USDTamount;//usdt 充值金额
+    private String USDTRate;//usdt 充值金额
+    private String sunCountAmount = "0";
+    private String sunCountAmountFee = "0";
+    private String sunCountActualAmount = "0";
 
+    public String getSunCountActualAmount() {
+        return sunCountActualAmount;
+    }
+
+    public void setSunCountActualAmount(String sunCountActualAmount) {
+        this.sunCountActualAmount = sunCountActualAmount;
+    }
+
+    public String getSunCountAmountFee() {
+        return sunCountAmountFee;
+    }
+
+    public void setSunCountAmountFee(String sunCountAmountFee) {
+        this.sunCountAmountFee = sunCountAmountFee;
+    }
+
+    public String getSunCountAmount() {
+        return sunCountAmount;
+    }
+
+    public void setSunCountAmount(String sunCountAmount) {
+        this.sunCountAmount = sunCountAmount;
+    }
+
+    public String getUSDTRate() {
+        return USDTRate;
+    }
+
+    public void setUSDTRate(String USDTRate) {
+        this.USDTRate = USDTRate;
+    }
 
     public String getUSDTamount() {
         return USDTamount;

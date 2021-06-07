@@ -17,6 +17,33 @@ import java.util.Date;
  */
 public class AlipayDealOrderEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
+    private String sunCountAmount = "0";
+    private String sunCountAmountFee = "0";
+    private String sunCountActualAmount = "0";
+
+    public String getSunCountActualAmount() {
+        return sunCountActualAmount;
+    }
+
+    public void setSunCountActualAmount(String sunCountActualAmount) {
+        this.sunCountActualAmount = sunCountActualAmount;
+    }
+
+    public String getSunCountAmountFee() {
+        return sunCountAmountFee;
+    }
+
+    public void setSunCountAmountFee(String sunCountAmountFee) {
+        this.sunCountAmountFee = sunCountAmountFee;
+    }
+
+    public String getSunCountAmount() {
+        return sunCountAmount;
+    }
+
+    public void setSunCountAmount(String sunCountAmount) {
+        this.sunCountAmount = sunCountAmount;
+    }
 
     /**
      * 数据id

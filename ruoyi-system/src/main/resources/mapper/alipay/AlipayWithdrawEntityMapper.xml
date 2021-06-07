@@ -33,6 +33,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="currency" column="currency"/>
         <result property="ethFee" column="ethFee"/>
         <result property="txhash" column="txhash"/>
+        <result property="sunCountAmount" column="sunCountAmount"/>
+        <result property="sunCountAmountFee" column="sunCountAmountFee"/>
+        <result property="sunCountActualAmount" column="sunCountActualAmount"/>
     </resultMap>
 
     <sql id="selectAlipayWithdrawEntityVo">
@@ -69,5 +72,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectAlipayWithdrawEntityVo"/>
         where id = #{id}
     </select>
+
+
+    <select id="selectAlipayWithdrawEntityListSum" parameterType="AlipayWithdrawEntity"
+            resultMap="AlipayWithdrawEntityResult">
+        select sum(s.amount) as sunCountAmount ,
+        sum(s.fee) as sunCountAmountFee,
+        sum(s.actualAmount) as sunCountActualAmount
+        from (
+        select
+        amount, fee, actualAmount
+        from alipay_withdraw
+        <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
+            <if test="orderId != null  and orderId != ''">and orderId = #{orderId}</if>
+            <if test="userId != null  and userId != ''">and userId = #{userId}</if>
+            <if test="withdrawType != null  and withdrawType != ''">and withdrawType = #{withdrawType}</if>
+            <if test="bankNo != null  and bankNo != ''">and bankNo = #{bankNo}</if>
+            <if test="accname != null  and accname != ''">and accname like concat('%', #{accname}, '%')</if>
+            <if test="orderStatus != null  and orderStatus != ''">and orderStatus = #{orderStatus}</if>
+            <if test="bankName != null  and bankName != ''">and bankName like concat('%', #{bankName}, '%')</if>
+            <if test="mobile != null  and mobile != ''">and mobile = #{mobile}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="retain1 != null and retain1 != '' ">and retain1 = #{retain1}</if>
+            <if test="channelId != null  and channelId != ''">and channelId = #{channelId}</if>
+            <if test="appOrderId != null  and appOrderId != ''">and appOrderId = #{appOrderId}</if>
+            <if test="witChannel != null  and witChannel != ''">and witChannel = #{witChannel}</if>
+            <if test="currency != null  and currency != ''">and currency = #{currency}</if>
+        </where>
+        ) as s ;
+
+
+    </select>
+
 
 </mapper>

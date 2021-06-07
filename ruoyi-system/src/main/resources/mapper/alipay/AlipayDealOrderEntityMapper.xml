@@ -22,16 +22,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="notify"    column="notify"    />
         <result property="back"    column="back"    />
         <result property="isNotify"    column="isNotify"    />
-        <result property="createTime"    column="createTime"    />
-        <result property="submitTime"    column="submitTime"    />
-        <result property="feeId"    column="feeId"    />
-        <result property="status"    column="status"    />
-        <result property="retain1"    column="retain1"    />
-        <result property="retain2"    column="retain2"    />
-        <result property="retain3"    column="retain3"    />
-        <result property="retain4"    column="retain4"    />
+        <result property="createTime" column="createTime"/>
+        <result property="submitTime" column="submitTime"/>
+        <result property="feeId" column="feeId"/>
+        <result property="status" column="status"/>
+        <result property="retain1" column="retain1"/>
+        <result property="retain2" column="retain2"/>
+        <result property="retain3" column="retain3"/>
+        <result property="retain4" column="retain4"/>
         <result property="currency" column="currency"/>
         <result property="txhash" column="txhash"/>
+        <result property="sunCountAmount" column="sunCountAmount"/>
+        <result property="sunCountAmountFee" column="sunCountAmountFee"/>
+        <result property="sunCountActualAmount" column="sunCountActualAmount"/>
     </resultMap>
 
     <sql id="selectAlipayDealOrderEntityVo">
@@ -189,5 +192,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+
+    <select id="selectAlipayDealOrderEntityListSum" parameterType="AlipayDealOrderEntity"
+            resultMap="AlipayDealOrderEntityResult">
+        select sum(s.dealAmount) as sunCountAmount ,
+        sum(s.dealFee) as sunCountAmountFee,
+        sum(s.actualAmount) as sunCountActualAmount
+        from (
+        select dealAmount, dealFee, actualAmount from alipay_deal_order
+        <where>
+            createTime between #{params.dayStart} and #{params.dayEnd}
+            <if test="orderId != null  and orderId != ''">and
+                orderId = #{orderId}
+            </if>
+            <if test="associatedId != null  and associatedId != ''">and associatedId = #{associatedId}</if>
+            <if test="orderStatus != null  and orderStatus != ''">and orderStatus = #{orderStatus}</if>
+            <if test="dealAmount != null ">and dealAmount = #{dealAmount}</if>
+            <if test="dealFee != null ">and dealFee = #{dealFee}</if>
+            <if test="actualAmount != null ">and actualAmount = #{actualAmount}</if>
+            <if test="orderType != null  and orderType != ''">and orderType = #{orderType}</if>
+            <if test="orderAccount != null  and orderAccount != ''">and orderAccount = #{orderAccount}</if>
+            <if test="orderQrUser != null  and orderQrUser != ''">and orderQrUser = #{orderQrUser}</if>
+            <if test="orderQr != null  and orderQr != ''">and orderQr = #{orderQr}</if>
+            <if test="externalOrderId != null  and externalOrderId != ''">and externalOrderId = #{externalOrderId}</if>
+            <if test="generationIp != null  and generationIp != ''">and generationIp = #{generationIp}</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">and dealDescribe = #{dealDescribe}</if>
+            <if test="isNotify != null  and isNotify != ''">and isNotify= #{isNotify}</if>
+            <if test="status != null ">and status =#{status}</if>
+            <if test="retain1 != null and retain1 != '' ">and retain1 = #{retain1}</if>
+            <if test="currency != null and currency != '' ">and currency = #{currency}</if>
+        </where>
+        ) as s
+    </select>
+
 
 </mapper>

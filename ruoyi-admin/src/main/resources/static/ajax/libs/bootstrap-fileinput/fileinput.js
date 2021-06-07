@@ -796,7 +796,6 @@
                 },
                 total: function () {
                     var fm = self.fileManager;
-                    if (!fm.totalFiles) {
                         fm.totalFiles = fm.count();
                     }
                     return fm.totalFiles;

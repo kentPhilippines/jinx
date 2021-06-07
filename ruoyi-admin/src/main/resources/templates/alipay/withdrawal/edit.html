@@ -125,11 +125,11 @@
 <div style="text-align: center;margin-bottom: 5px;">
     <div style="text-align: center;">
         <a name="approval" class="btn btn-w-m btn-primary" href="javascript:void(0)"
-           th:if="${  alipayWithdrawEntity.orderStatus == 1 ||  alipayWithdrawEntity.orderStatus == '1'}"
+           th:if="${  alipayWithdrawEntity.orderStatus == 4 ||  alipayWithdrawEntity.orderStatus == '4'}"
            onclick="approval('2');">成功 </a>
         <a name="reject" class="btn btn-w-m btn-danger" href="javascript:void(0)"
            onclick="googleBind('3');"
-           th:if="${  (alipayWithdrawEntity.orderStatus == 1 ||  alipayWithdrawEntity.orderStatus == '1' )
+           th:if="${  (alipayWithdrawEntity.orderStatus == 4 ||  alipayWithdrawEntity.orderStatus == '4' )
            || (alipayWithdrawEntity.orderStatus == '2' || alipayWithdrawEntity.orderStatus == 2)}">
             置为失败</a>
         <a class="btn btn-w-m btn-danger" href="javascript:void(0)" name="reject"
@@ -161,25 +161,27 @@
         }
     }*/
     function googleBind(status) {
-       /* $.modal.confirm("确定要为此订单进行回滚操作吗？", function () {
-            layer.prompt({title: "请输入谷歌验证码", fromType: 1, maxLength: 6}, function (googleCode, index) {
-                layer.close(index);*/
-                $.ajax({
-                    type: "get",
-                    url: prefix_ver + "/google",
-                    data: {"googleCode": googleCode},
-                    dataType: "json",
-                    success: function (data) {
-                        if (0 == data.code) {
-                            $("#orderStatus").val(status);
-                            $.operate.save(prefix + "/merchant/approval", $('#form-withdrawal-edit').serialize());
-                        } else {
-                            layer.msg(data.msg, {icon: 2, time: 2000});
-                        }
-                    }
-                });
-        /*   });
-       })*/
+        /* $.modal.confirm("确定要为此订单进行回滚操作吗？", function () {
+             layer.prompt({title: "请输入谷歌验证码", fromType: 1, maxLength: 6}, function (googleCode, index) {
+                 layer.close(index);
+                 $.ajax({
+                     type: "get",
+                     url: prefix_ver + "/google",
+                     data: {"googleCode": googleCode},
+                     dataType: "json",
+                     success: function (data) {
+                         if (0 == data.code) {*/
+        $.modal.confirm("确定要为此订单进行回滚操作吗？", function () {
+            $("#orderStatus").val(status);
+            $.operate.save(prefix + "/merchant/approval", $('#form-withdrawal-edit').serialize());
+        });
+        /*       } else {
+                   layer.msg(data.msg, {icon: 2, time: 2000});
+               }
+           }
+       });
+  });
+})*/
     }
 
 </script>

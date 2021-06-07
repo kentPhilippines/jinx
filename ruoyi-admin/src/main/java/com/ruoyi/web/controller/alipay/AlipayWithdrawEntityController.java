@@ -104,6 +104,7 @@ public class AlipayWithdrawEntityController extends BaseController {
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         List<AlipayUserFundEntity> channel = alipayUserFundEntityService.findUserFundRate();
         ConcurrentHashMap<String, AlipayUserFundEntity> channelMap = channel.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        AlipayWithdrawEntity witSum = alipayWithdrawEntityService.selectAlipayWithdrawEntityListSum(alipayWithdrawEntity);
         for (AlipayWithdrawEntity order : list) {
             AlipayProductEntity product = prCollect.get(order.getWitType());
             if (StrUtil.isNotBlank(order.getChannelId())) {
@@ -114,6 +115,14 @@ public class AlipayWithdrawEntityController extends BaseController {
             }
             if (ObjectUtil.isNotNull(product)) {
                 order.setWitType(product.getProductName());
+            }
+        }
+        if (null != witSum && CollUtil.isNotEmpty(list)) {
+            for (int mark = 0; mark < 1; mark++) {
+                list.get(mark).setSunCountAmountFee(witSum.getSunCountAmountFee());
+                list.get(mark).setSunCountAmount(witSum.getSunCountAmount());
+                list.get(mark).setSunCountActualAmount(witSum.getSunCountActualAmount());
+
             }
         }
         return getDataTable(list);
@@ -286,6 +295,8 @@ public class AlipayWithdrawEntityController extends BaseController {
         List<StatisticsEntity> staList = new ArrayList<>();
         startPage();
         staList = alipayWithdrawEntityService.statisticsWit(statisticsEntity);
+
+
         return getDataTable(staList);
     }
 

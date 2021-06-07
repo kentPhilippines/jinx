@@ -3,6 +3,7 @@ package com.ruoyi.alipay.service.impl;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.mapper.AlipayUserFundEntityMapper;
+import com.ruoyi.alipay.mapper.AlipayUserInfoMapper;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -68,20 +69,30 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int updateAlipayUserFundEntity(AlipayUserFundEntity alipayUserFundEntity) {
-		return alipayUserFundEntityMapper.updateAlipayUserFundEntity(alipayUserFundEntity);
-	}
-
-    @Override
-	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    public AlipayUserFundEntity findAlipayUserFundByUserId(String merchantId) {
-		return alipayUserFundEntityMapper.selectAlipayUserFundByUserId(merchantId);
+        return alipayUserFundEntityMapper.updateAlipayUserFundEntity(alipayUserFundEntity);
     }
 
-	@Override
-	@DataSource(value = DataSourceType.ALIPAY_SLAVE)
-	public List<AlipayUserFundEntity> findChannelAccount(AlipayUserFundEntity alipayUserFundEntity) {
-		return alipayUserFundEntityMapper.findChannelAccount(alipayUserFundEntity);
-	}
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserFundEntity findAlipayUserFundByUserId(String merchantId) {
+        return alipayUserFundEntityMapper.selectAlipayUserFundByUserId(merchantId);
+    }
+
+    @Resource
+    private AlipayUserInfoMapper alipayUserInfoMapper;
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserFundEntity> findChannelAccount(AlipayUserFundEntity alipayUserFundEntity) {
+        List<AlipayUserFundEntity> channelAccount = alipayUserFundEntityMapper.findChannelAccount(alipayUserFundEntity);
+        for (AlipayUserFundEntity channel : channelAccount) {
+            AlipayUserInfo userInfo = alipayUserInfoMapper.selectMerhantInfoByUserId(channel.getUserId());
+            channel.setReceiveOrderState(userInfo.getReceiveOrderState());
+            channel.setSwitchs(userInfo.getSwitchs());
+            channel.setRemitOrderState(userInfo.getRemitOrderState());
+        }
+        return channelAccount;
+    }
 
 	@Override
 	@DataSource(value = DataSourceType.ALIPAY_SLAVE)

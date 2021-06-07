@@ -17,10 +17,42 @@ import java.util.Date;
 public class AlipayUserFundEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
     private String userNode;
-     public String getUserNode(){
-         return this.userNode;
-     }
-     public  void setUserNode(String userNode){this.userNode = userNode;}
+
+    public String getUserNode() {
+        return this.userNode;
+    }
+
+    public void setUserNode(String userNode) {
+        this.userNode = userNode;
+    }
+
+    private Integer receiveOrderState;
+    private Integer remitOrderState;
+    private Integer switchs;
+
+    public Integer getSwitchs() {
+        return switchs;
+    }
+
+    public void setSwitchs(Integer switchs) {
+        this.switchs = switchs;
+    }
+
+    public Integer getRemitOrderState() {
+        return remitOrderState;
+    }
+
+    public void setRemitOrderState(Integer remitOrderState) {
+        this.remitOrderState = remitOrderState;
+    }
+
+    public Integer getReceiveOrderState() {
+        return receiveOrderState;
+    }
+
+    public void setReceiveOrderState(Integer receiveOrderState) {
+        this.receiveOrderState = receiveOrderState;
+    }
 
     /**
      * 数据id

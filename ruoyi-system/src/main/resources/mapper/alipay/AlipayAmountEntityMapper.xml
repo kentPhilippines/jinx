@@ -39,9 +39,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amount != null ">and amount = #{amount}</if>
             <if test="fee != null ">and fee = #{fee}</if>
             <if test="actualAmount != null ">and actualAmount = #{actualAmount}</if>
-            <if test="dealDescribe != null  and dealDescribe != ''">and dealDescribe = #{dealDescribe}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="approval != null "> and approval = #{approval}</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">and dealDescribe
+                like concat('%', #{dealDescribe}, '%')
+            </if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="approval != null ">and approval = #{approval}</if>
             <if test="transferUserId != null ">and transferUserId = #{transferUserId}</if>
         </where>
         order by id desc

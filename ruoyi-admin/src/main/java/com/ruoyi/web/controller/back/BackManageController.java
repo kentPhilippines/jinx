@@ -6,6 +6,8 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.*;
@@ -50,7 +52,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/back/merchant/admin")
 @Controller
 public class BackManageController extends BaseController {
-    private String prefix = "merchant/info";
+    private final String prefix = "merchant/info";
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
     @Autowired
@@ -191,7 +193,7 @@ public class BackManageController extends BaseController {
         startPage();
         List<AlipayRunOrderEntity> list = alipayRunOrderEntityService
                 .selectAlipayRunOrderEntityList(alipayRunOrderEntity);
-        for(AlipayRunOrderEntity runorder : list) {
+        for (AlipayRunOrderEntity runorder : list) {
             runorder.setAccountW(null);
             runorder.setAcountR(null);
         }
@@ -199,11 +201,19 @@ public class BackManageController extends BaseController {
         return util.exportExcel(list, "running");
     }
 
-
+    @Autowired
+    IAlipayProductService iAlipayProductService;
 
     //商户提现申请
     @GetMapping("/withdrawal/view")
-    public String withdrawalShow() {
+    public String withdrawalShow(ModelMap modelMap) {
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setProductId("RECHARGE");
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        if (CollUtil.isNotEmpty(list)) {
+            AlipayProductEntity first = CollUtil.getFirst(list);
+            modelMap.put("isLocation", first.getStatus());
+        }
         return prefix + "/withdrawal";
     }
 
@@ -356,10 +366,17 @@ public class BackManageController extends BaseController {
         SysUser sysUser = ShiroUtils.getSysUser();
         AlipayUserFundEntity alipayUserFundEntity = alipayUserFundEntityService.findAlipayUserFundByUserId(sysUser.getMerchantId());
         mmap.put("userFund", alipayUserFundEntity);
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setProductId("RECHARGE");
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        if (CollUtil.isNotEmpty(list)) {
+            AlipayProductEntity first = CollUtil.getFirst(list);
+            if (1 == first.getStatus()) {
+                return prefix + "/rechargeLocation";
+            }
+        }
         return prefix + "/recharge";
     }
-
-    @Log(title = "获取USDT汇率转换", businessType = BusinessType.INSERT)
     @GetMapping("/withdrawal/getRateUsdtFee")
     @ResponseBody
     public AjaxResult getRateUsdtFee(HttpServletRequest request) {
@@ -384,8 +401,21 @@ public class BackManageController extends BaseController {
                         i = ram.nextInt(5);
                     }
                     aDouble = aDouble + i;
-                    double div = Arith.div(aDouble, Double.valueOf(date.getDictValue()), 2);//当前需要转入的 usdt 个数
-                    return AjaxResult.success(div);
+                    double v = 0;
+                    try {
+                        Double locatuonRate = Double.valueOf(date.getDictValue());
+                        String urlbuy = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=buy&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=block&online=1&range=0&amount=";
+                        String rate = getRate(urlbuy);
+                        Double onlineRate = Double.valueOf(rate);
+                        v = locatuonRate + onlineRate;
+                    } catch (Exception e) {
+                        return AjaxResult.error("汇率错误");
+                    }
+                    double div = Arith.div(aDouble, v, 2);//当前需要转入的 usdt 个数
+                    Map map = new HashMap();
+                    map.put("amount", div);
+                    map.put("rate", v);
+                    return AjaxResult.success(map);
                 }
             }
         }
@@ -395,7 +425,7 @@ public class BackManageController extends BaseController {
     /**
      * 保存提现提案
      */
-    @Log(title = "内充申请", businessType = BusinessType.INSERT)
+    @Log(title = "内充申请-自动回调", businessType = BusinessType.INSERT)
     @PostMapping("/withdrawal/recharge")
     @ResponseBody
     @RepeatSubmit
@@ -418,7 +448,7 @@ public class BackManageController extends BaseController {
         String publicKey = alipayUserInfos.get(0).getPublicKey();
         String amount = alipayWithdrawEntity.getAmount().toString();
         String orderId = GenerateOrderNo.getInstance().Generate("USDT");
-        String post = postWit(amount, userid, rateEntity.getPayTypr(), orderId, key, publicKey);
+        String post = postWit(amount, userid, rateEntity.getPayTypr(), orderId, key, publicKey, alipayWithdrawEntity.getUSDTRate());
         JSONObject json = JSONObject.parseObject(post);
         String result = json.getString("success");
         if (StrUtil.isNotEmpty(result) && result.equals("true")) {
@@ -431,7 +461,7 @@ public class BackManageController extends BaseController {
             String keykent = alipayUserInfokent.get(0).getPayPasword();//交易密钥
             String publicKeykent = alipayUserInfokent.get(0).getPublicKey();
             AlipayUserRateEntity usdt = alipayUserRateEntityService.findRateByType("KENTUSDTMANAGE", "USDT");
-            String kentusdtmanage = postWit(usdTamount, "KENTUSDTMANAGE", usdt.getPayTypr(), orderId, keykent, publicKeykent);
+            String kentusdtmanage = postWit(usdTamount, "KENTUSDTMANAGE", usdt.getPayTypr(), orderId, keykent, publicKeykent, alipayWithdrawEntity.getUSDTRate());
             JSONObject json1 = JSONObject.parseObject(kentusdtmanage);
             String result1 = json1.getString("success");
             if (StrUtil.isNotEmpty(result1) && result1.equals("true")) {
@@ -446,12 +476,50 @@ public class BackManageController extends BaseController {
         }
     }
 
+    @Log(title = "内充申请-不走自动回调", businessType = BusinessType.INSERT)
+    @PostMapping("/withdrawal/rechargeLocation")
+    @ResponseBody
+    @RepeatSubmit
+    public AjaxResult rechargeLocation(AlipayWithdrawEntity alipayWithdrawEntity) {
+        // 获取当前的用户
+        SysUser currentUser = ShiroUtils.getSysUser();
+        String payPassword = (String) alipayWithdrawEntity.getParams().get("payPassword");
+        String verify = passwordService.encryptPassword(currentUser.getLoginName(), payPassword, currentUser.getSalt());
+        if (!currentUser.getFundPassword().equals(verify)) {
+            return AjaxResult.error("密码验证失败");
+        }
+        String userId = currentUser.getMerchantId();
+        AlipayUserRateEntity rateEntity = alipayUserRateEntityService.findRateByType(userId, "RECHARGE");
+        AlipayUserInfo userInfo = new AlipayUserInfo();
+        userInfo.setUserId(userId);
+        List<AlipayUserInfo> alipayUserInfos = merchantInfoEntityService.selectMerchantInfoEntityList(userInfo);
+        SimpleDateFormat d = new SimpleDateFormat("yyyyMMddHHmmss");
+        String userid = rateEntity.getUserId();
+        String key = alipayUserInfos.get(0).getPayPasword();//交易密钥
+        String publicKey = alipayUserInfos.get(0).getPublicKey();
+        String amount = alipayWithdrawEntity.getAmount().toString();
+        String orderId = GenerateOrderNo.getInstance().Generate("USDT");
+        String post = postWit(amount, userid, rateEntity.getPayTypr(), orderId, key, publicKey);
+        JSONObject json = JSONObject.parseObject(post);
+        String result = json.getString("success");
+        String message = json.getString("message");
+        return AjaxResult.error(message);
+    }
+
+
     String postWit(String amount, String userId, String payType, String orderId, String key, String publicKey) {
+        return postWit(amount, userId, payType, orderId, key, publicKey, null);
+    }
+
+    String postWit(String amount, String userId, String payType, String orderId, String key, String publicKey, String url) {
         Map<String, Object> parMap = new HashMap<>();
         parMap.put("amount", amount);
         parMap.put("appId", userId);
         parMap.put("applyDate", DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN));
         parMap.put("notifyUrl", "http://starpay168.com:5055");
+        if (StrUtil.isNotEmpty(url)) {
+            parMap.put("notifyUrl", url);
+        }
         parMap.put("pageUrl", "http://starpay168.com:5055");
         parMap.put("orderId", orderId);
         parMap.put("passCode", payType);
@@ -569,7 +637,6 @@ public class BackManageController extends BaseController {
      * 查询商户订单
      */
     @Autowired IMerchantInfoEntityService merchantInfoEntityServiceImpl;
-    @Autowired IAlipayProductService iAlipayProductService;
     @PostMapping("/agent/order/list")
     @ResponseBody
     public TableDataInfo agentOrder(AlipayDealOrderApp alipayDealOrderApp) {
@@ -637,13 +704,32 @@ public class BackManageController extends BaseController {
         startPage();
         List<StatisticsEntity> list = alipayDealOrderAppService.selectMerchantStatisticsDataByDay(statisticsEntity, DateUtils.dayStart(), DateUtils.dayEnd());
         List<StatisticsEntity> dataList = new ArrayList();
-        for(StatisticsEntity statis :list){
-            if(!statis.getUserId().equals("所有")){
+        for (StatisticsEntity statis : list) {
+            if (!statis.getUserId().equals("所有")) {
                 dataList.add(statis);
             }
         }
         return getDataTable(dataList);
     }
 
+    String getRate(String url) {
+        try {
+            String sell = HttpUtil.get(url);
+            cn.hutool.json.JSONObject jsonObjectsell = JSONUtil.parseObj(sell);
+            String codesell = jsonObjectsell.getStr("code");
+            if ("200".contains(codesell)) {
+                String date1sell = jsonObjectsell.getStr("data");
+                JSONArray datesell = JSONUtil.parseArray(date1sell);
+                Object[] objectssell = datesell.stream().toArray();
+                Object objectsell = objectssell[0];
+                cn.hutool.json.JSONObject jsonObject1sell = JSONUtil.parseObj(objectsell);
+                String pricesell = jsonObject1sell.getStr("price");
+                return pricesell;
+            }
+        } catch (Exception e) {
+            return "获取错误";
+        }
+        return "获取失败";
+    }
 }
 

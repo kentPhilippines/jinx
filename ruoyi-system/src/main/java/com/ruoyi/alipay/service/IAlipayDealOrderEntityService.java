@@ -76,4 +76,6 @@ public interface IAlipayDealOrderEntityService {
 
 
     AlipayDealOrderEntity findOrderByOrderId(String order);
+
+    AlipayDealOrderEntity selectAlipayDealOrderEntityListSum(AlipayDealOrderEntity alipayDealOrderEntity);
 }

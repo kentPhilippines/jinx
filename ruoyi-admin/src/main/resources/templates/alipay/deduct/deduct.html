@@ -23,6 +23,10 @@
                             <span>申请人(后台)：</span>
                             <input type="text" name="accname"/>
                         </li>
+                        <li>
+                            <span>描述：</span>
+                            <input name="dealDescribe" type="text"/>
+                        </li>
                         <li class="select-selectpicker">
                             <label>操作类型：</label>
                             <select name="amountType" th:with="type=${@dict.getType('amountType')}" class="selectpicker"

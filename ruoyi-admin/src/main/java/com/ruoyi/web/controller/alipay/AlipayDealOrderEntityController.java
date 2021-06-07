@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
@@ -107,6 +108,15 @@ public class AlipayDealOrderEntityController extends BaseController {
 
         }
         userCollect = null;
+        AlipayDealOrderEntity deal = alipayDealOrderEntityService.selectAlipayDealOrderEntityListSum(alipayDealOrderEntity);
+        if (null != deal && CollUtil.isNotEmpty(list)) {
+            for (int mark = 0; mark < 1; mark++) {
+                list.get(mark).setSunCountAmountFee(deal.getSunCountAmountFee());
+                list.get(mark).setSunCountAmount(deal.getSunCountAmount());
+                list.get(mark).setSunCountActualAmount(deal.getSunCountActualAmount());
+
+            }
+        }
         return getDataTable(list);
     }
 

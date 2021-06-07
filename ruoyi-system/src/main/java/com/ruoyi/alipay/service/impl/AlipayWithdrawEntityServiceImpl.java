@@ -93,4 +93,10 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
     public List<AlipayWithdrawEntity> findWitLimit(String starTime, String endTime, Integer page, Integer size) {
         return alipayWithdrawEntityMapper.findWitLimit(starTime, endTime, page, size);
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayWithdrawEntity selectAlipayWithdrawEntityListSum(AlipayWithdrawEntity alipayWithdrawEntity) {
+        return alipayWithdrawEntityMapper.selectAlipayWithdrawEntityListSum(alipayWithdrawEntity);
+    }
 }

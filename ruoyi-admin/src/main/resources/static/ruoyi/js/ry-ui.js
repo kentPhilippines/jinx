@@ -71,6 +71,7 @@ var table = {
                 var options = $.extend(defaults, options);
                 table.options = options;
                 table.config[options.id] = options;
+                table.config[options.toolbar] = options;//指定头部工作栏
                 $.table.initEvent();
                 $('#' + options.id).bootstrapTable({
                     id: options.id,
