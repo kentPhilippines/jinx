@@ -79,7 +79,7 @@ public class AlipayUserInfoController extends BaseController {
     public AjaxResult addSave(AlipayUserInfo alipayUserInfo) {
         //获取alipay处理接口URL
         String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
-        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_2);
+        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
         //获取数据库内请求路径
 //        String url1 = "http://10.14.180.64:5055/api-alipay/account-api/add-account";
         Map<String, Object> mapParam = Maps.newHashMap();
@@ -227,7 +227,7 @@ public class AlipayUserInfoController extends BaseController {
     /**
      * 重置用戶的登陸密碼
      */
-    @Log(title = "码商查询", businessType = BusinessType.RESET)
+    @Log(title = "卡商重置登录密码", businessType = BusinessType.RESET)
     @PostMapping("resetLoginPwd")
     @ResponseBody
     public AjaxResult resetLoginPwd(Long id) {
@@ -242,7 +242,7 @@ public class AlipayUserInfoController extends BaseController {
     /**
      * 重置用戶的提現密碼
      */
-    @Log(title = "码商查询", businessType = BusinessType.RESET)
+    @Log(title = "卡商重置资金密码", businessType = BusinessType.RESET)
     @PostMapping("resetWithdrawalPwd")
     @RequiresPermissions("alipay:merchant:edit:resetWithdrawalPwd")
     @ResponseBody
@@ -255,7 +255,13 @@ public class AlipayUserInfoController extends BaseController {
     }
 
 
-
+    @Log(title = "卡商升级代理商", businessType = BusinessType.RESET)
+    @PostMapping("upUserAgents")
+    @RequiresPermissions("alipay:merchant:edit:upUserAgents")
+    @ResponseBody
+    public AjaxResult upUserAgents(Long id) {
+        return toAjax(alipayUserInfoService.upUserAgents(id));
+    }
 
 
 }

@@ -152,4 +152,13 @@ public interface IAlipayUserInfoService {
      * @return
      */
     List<AlipayUserInfo> findAgenByUser(String userId);
+
+
+    /**
+     * 卡商升级代理商
+     *
+     * @param id 卡商id 号
+     * @return
+     */
+    int upUserAgents(Long id);
 }

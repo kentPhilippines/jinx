@@ -116,14 +116,17 @@ public interface AlipayUserRateEntityMapper {
 	List<AlipayUserRateEntity> selectListObjectEntityByUserId(@Param("userId") String userId,@Param("feeType") String feeType);
 
     @Select("<script>" +
-            "select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where userId = #{agent} and feeType = #{feeType} and channelId =#{channel}" +
+            "select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where userId = #{agent} and feeType = #{feeType}  " +
             "<if test=\"payTypr != null and payTypr != ''\">" +
             " and payTypr = #{payTypr}" +
+            "</if>" +
+            "<if test=\"channelId != null and channelId != ''\">" +
+            " and channelId = #{channelId}" +
             "</if>" +
             " and status = 1" +
             " and switchs = 1 " +
             "</script> ")
-    AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType, @Param("channel") String channel, @Param("payTypr") String payTypr);
+    AlipayUserRateEntity findRateByUserIdAndType(@Param("agent") String agent, @Param("feeType") Integer feeType, @Param("channelId") String channel, @Param("payTypr") String payTypr);
 
     @Select("select id, userId, fee, feeType, switchs, payTypr from alipay_user_rate where " +
             "userId = #{alipayUserRateEntity.userId}   and payTypr = #{alipayUserRateEntity.payTypr} and status = 1 and channelId = #{alipayUserRateEntity.channelId}")

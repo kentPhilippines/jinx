@@ -186,9 +186,9 @@
                 }, {
                     field: 'status', title: '自动回调开关', formatter: function (value, row, index) {
                         if (row.status == 0) {
-                            return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击开启内充</a> '
+                            return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\')"><i class="fa fa-edit"></i>开启自动回调</a> '
                         } else if (row.status == 1) {
-                            return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\')"><i class="fa fa-edit"></i>点击开启内充</a> '
+                            return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\')"><i class="fa fa-edit"></i>关闭自动回调</a> '
                         }
                     }
                 }, {field: 'describe', title: '备注'}, {field: 'createTime', title: '创建时间'}, {
