@@ -239,8 +239,13 @@
                      title: '实际到账'
                  },*/
                 {
-                    field: 'createTime',
-                    title: '创建时间'
+                    field: 'createTime', title: '时间', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + '创建时间：' + row.createTime + '</li>'
+                        table += '<li>' + '修改时间：' + row.submitTime + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
                 },
                 {
                     field: 'witChannel',
