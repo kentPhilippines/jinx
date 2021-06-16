@@ -184,4 +184,7 @@ public interface AlipayUserInfoMapper {
 
     @Select("select queryChildAgents(#{userId})")
     List<String> findSonUser(@Param("userId") String userId);
+
+    @Update("update alipay_user_info set  isAgent  = 1 where id = #{id}")
+    int upUserAgents(Long id);
 }

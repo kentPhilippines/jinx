@@ -115,7 +115,7 @@
                         if (item.isAgent == '1') {
                             return '<span>是</span>';
                         } else if (item.isAgent == '2') {
-                            return '<span>否</span>';
+                            return '<span>否</span> ' + '<a class="btn btn-info btn-xs ' + resetWithdrawalFlag + '" href="javascript:void(0)" onclick="upUserAgents(\'' + item.id + '\')"><i class="fa fa-key"></i>点击升级代理商</a> ';
                         }
                     }
                 },
@@ -232,6 +232,13 @@
             $.operate.fixPost(prefix + "/resetWithdrawalPwd", {"id": id});
         })
     }
+
+    function upUserAgents(id) {
+        $.modal.confirm("确定要将该卡商升级为代理商？", function () {
+            $.operate.fixPost(prefix + "/upUserAgents", {"id": id});
+        })
+    }
+
 
     /* 商户管理-停用 */
     function disable(userId, param, msg, val) {

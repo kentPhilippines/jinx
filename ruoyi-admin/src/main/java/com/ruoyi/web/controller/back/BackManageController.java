@@ -469,10 +469,9 @@ public class BackManageController extends BaseController {
                 JSONObject json2 = JSONObject.parseObject(result2);
                 return AjaxResult.success(json2.getString("returnUrl"));
             }
-            return AjaxResult.error();
+            return AjaxResult.success();
         } else {
-            String message = json.getString("message");
-            return AjaxResult.error(message);
+            return AjaxResult.success();
         }
     }
 
@@ -500,10 +499,7 @@ public class BackManageController extends BaseController {
         String amount = alipayWithdrawEntity.getAmount().toString();
         String orderId = GenerateOrderNo.getInstance().Generate("USDT");
         String post = postWit(amount, userid, rateEntity.getPayTypr(), orderId, key, publicKey);
-        JSONObject json = JSONObject.parseObject(post);
-        String result = json.getString("success");
-        String message = json.getString("message");
-        return AjaxResult.error(message);
+        return AjaxResult.success();
     }
 
 

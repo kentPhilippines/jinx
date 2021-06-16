@@ -234,4 +234,10 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
         alipayUserInfo.setAgent(userId);
         return alipayUserInfoMapper.selectAliaUserInfoList(alipayUserInfo);
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int upUserAgents(Long id) {
+        return alipayUserInfoMapper.upUserAgents(id);
+    }
 }
