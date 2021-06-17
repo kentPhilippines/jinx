@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改收款媒介列')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <div>
+        <input name="code" th:value="${code}" type="hidden">
+    </div>
+    <div>
+        <label class="col-sm-3 control-label is-required">限制金额:</label>
+        <input name="mountLimit" type="text" required maxlength="20"><button onclick="save()"/>保存
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var url = ctx + "alipay/medium/editByCode";
+
+    function save() {
+        var code = $("input[name='code']").val();
+        var mountLimit = $("input[name='mountLimit']").val();
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: url,
+            data: {
+                "code": code,
+                "mountLimit": mountLimit
+            },
+            async: false,
+            error: function (request) {
+                $.modal.alertError("系统错误");
+            },
+            success: function (data) {
+                $.operate.successCallback(data);
+                window.location.href(ctx + "/alipay/medium");
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -76,6 +76,25 @@ public class AlipayMediumEntityController extends BaseController {
     }
 
     /**
+     * 单个媒介修改金额页面
+     */
+    @GetMapping("/editAmount/{id}")
+    public String editAmount(@PathVariable("id") Long id, ModelMap mmap) {
+        mmap.put("id", id);
+        return prefix + "/editAmount" ;
+    }
+
+    /**
+     * 同种媒介修改金额页面
+     */
+    @GetMapping("/editAmountByCode/{code}")
+    public String editAmountByCode(@PathVariable("code") String code, ModelMap mmap) {
+        mmap.put("code", code);
+        return prefix + "/editAmountByCode" ;
+    }
+
+
+    /**
      * 新增保存收款媒介列
      */
     @Log(title = "收款媒介列", businessType = BusinessType.INSERT)
@@ -95,29 +114,6 @@ public class AlipayMediumEntityController extends BaseController {
         return prefix + "/edit" ;
     }
 
-    /**
-     * 修改单个媒介限制金额
-     */
-    @PostMapping("/edit/{id}/{mountLimit}")
-    @ResponseBody
-    public AjaxResult modify(@PathVariable("id") Long id, @PathVariable("mountLimit") String mountLimit) {
-        AlipayMediumEntity alipayMediumEntity = new AlipayMediumEntity();
-        alipayMediumEntity.setId(id);
-        alipayMediumEntity.setMountLimit(mountLimit);
-        return toAjax(alipayMediumEntityService.updateAlipayMediumEntity(alipayMediumEntity));
-    }
-
-    /**
-     * 根据媒介类型更新限制金额
-     */
-    @PostMapping("/edit/{code}/{mountLimit}")
-    @ResponseBody
-    public AjaxResult modify(@PathVariable("code") String code, @PathVariable("mountLimit") String mountLimit) {
-        AlipayMediumEntity alipayMediumEntity = new AlipayMediumEntity();
-        alipayMediumEntity.setCode(code);
-        alipayMediumEntity.setMountLimit(mountLimit);
-        return toAjax(alipayMediumEntityService.updateAlipayMediumEntity(alipayMediumEntity));
-    }
 
     /**
      * 修改保存收款媒介列
@@ -127,6 +123,16 @@ public class AlipayMediumEntityController extends BaseController {
     @ResponseBody
     public AjaxResult editSave(AlipayMediumEntity alipayMediumEntity) {
         return toAjax(alipayMediumEntityService.updateAlipayMediumEntity(alipayMediumEntity));
+    }
+
+    /**
+     * 修改保存收款媒介列
+     */
+    @Log(title = "收款媒介列", businessType = BusinessType.UPDATE)
+    @PostMapping("/editByCode")
+    @ResponseBody
+    public AjaxResult editSaveByCode(AlipayMediumEntity alipayMediumEntity) {
+        return toAjax(alipayMediumEntityService.updateAlipayMediumEntityByCode(alipayMediumEntity));
     }
 
     /**
