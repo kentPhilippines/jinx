@@ -65,6 +65,7 @@
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     let orderStatus = [[${@dict.getType('withdrawal_status')}]];
+    const approvalFlag = [[${@permission.hasPermi('qr:withdrawal:approval')}]];//代付审核权限
     var prefix = ctx + "alipay/withdrawal";
 
     $(function () {
@@ -121,7 +122,7 @@
                         if (row.withdrawType === '1') {
                             return '商户提现';
                         } else if (row.withdrawType === '2') {
-                            return '码商提现';
+                            return '卡商提现';
                         }
                     }
                 },
@@ -153,6 +154,7 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>')
                         return actions.join('');
                     }
                 }]

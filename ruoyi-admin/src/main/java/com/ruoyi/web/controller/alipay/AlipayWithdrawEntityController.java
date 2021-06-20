@@ -147,6 +147,13 @@ public class AlipayWithdrawEntityController extends BaseController {
         return prefix + "/edit";
     }
 
+    @GetMapping("/qr/edit/{id}")
+    public String qrEdit(@PathVariable("id") Long id, ModelMap mmap) {
+        AlipayWithdrawEntity alipayWithdrawEntity = alipayWithdrawEntityService.selectAlipayWithdrawEntityById(id);
+        mmap.put("alipayWithdrawEntity", alipayWithdrawEntity);
+        return prefix + "/edit";
+    }
+
     /**
      * 财务审核会员提现记录
      */
