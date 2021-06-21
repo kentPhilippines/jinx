@@ -7,14 +7,14 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-medium-edit" th:object="${alipayMediumEntity}">
-        <div class="form-group" title="慎重操作，当选择所有选项时，会更新所有媒介上限金额">
+        <div class="form-group" title="慎重操作，当选择所有选项时，会更新所有账户上限金额">
             <label class="col-sm-3 control-label is-required">媒介类型：</label>
-            &nbsp;&nbsp;&nbsp;&nbsp;<select id="code" name="code" th:with="type=${@dict.getDictDatas(codeList)}"
+            &nbsp;&nbsp;&nbsp;&nbsp;<select id="account" name="account"
                                             class="selectpicker"
                                             data-none-selected-text="请选择">
             <option value="">所有</option>
-            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                    th:value="${dict.dictValue}"></option>
+            <option th:each="accounts : ${accountList}" th:text="${accounts}"
+                    th:value="${accounts}"></option>
         </select>
         </div>
         <div class="form-group">
@@ -45,7 +45,7 @@
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/editAmount/code", $('#form-medium-edit').serialize());
+            $.operate.save(prefix + "/editAmount/account", $('#form-medium-edit').serialize());
         }
     }
 

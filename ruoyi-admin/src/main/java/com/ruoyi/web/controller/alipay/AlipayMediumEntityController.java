@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.ruoyi.alipay.domain.AlipayFileListEntity;
 import com.ruoyi.alipay.service.IAlipayFileListEntityService;
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -59,6 +61,7 @@ public class AlipayMediumEntityController extends BaseController {
     /**
      * 导出收款媒介列列表
      */
+    @RequiresPermissions("alipay:medium:export")
     @Log(title = "收款媒介列", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -99,6 +102,7 @@ public class AlipayMediumEntityController extends BaseController {
     /**
      * 修改单个媒介金额
      */
+    @RequiresPermissions("alipay:medium:editAmountById")
     @GetMapping("/editAmount/id/{id}")
     public String editAmountById(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayMediumEntity alipayMediumEntity = alipayMediumEntityService.selectAlipayMediumEntityById(id);
@@ -107,14 +111,15 @@ public class AlipayMediumEntityController extends BaseController {
     }
 
     /**
-     * 同种媒介修改金额
+     * 同种账户修改金额
      */
-    @GetMapping("/editAmount/code")
-    public String editAmountByCode(ModelMap mmap) {
-        List<String> codeList = alipayMediumEntityService.selectCodeByAlipayMediumEntity();
+    @RequiresPermissions("alipay:medium:editAmountByAccount")
+    @GetMapping("/editAmount/account")
+    public String editAmountByAccount(ModelMap mmap) {
+        List<String> accountList = alipayMediumEntityService.selectCodeByAlipayMediumEntity();
         mmap.put("alipayMediumEntity", new AlipayMediumEntity());
-        mmap.put("codeList", codeList);
-        return prefix + "/editAmountByCode";
+        mmap.put("accountList", accountList);
+        return prefix + "/editAmountByAccount";
     }
 
 
@@ -130,8 +135,9 @@ public class AlipayMediumEntityController extends BaseController {
 
 
     /**
-     * 编辑保存单个媒介上限金额
+     * 编辑保存单个账户上限金额
      */
+    @RequiresPermissions("alipay:medium:editAmountById")
     @Log(title = "收款媒介列", businessType = BusinessType.UPDATE)
     @PostMapping("/editAmount")
     @ResponseBody
@@ -140,13 +146,14 @@ public class AlipayMediumEntityController extends BaseController {
     }
 
     /**
-     * 编辑保存同种媒介上限金额
+     * 编辑保存同种开户渠道上限金额
      */
+    @RequiresPermissions("alipay:medium:editAmountByAccount")
     @Log(title = "收款媒介列", businessType = BusinessType.UPDATE)
-    @PostMapping("/editAmount/code")
+    @PostMapping("/editAmount/account")
     @ResponseBody
-    public AjaxResult editSaveByCode(AlipayMediumEntity alipayMediumEntity) {
-        return toAjax(alipayMediumEntityService.updateAlipayMediumEntityByCode(alipayMediumEntity));
+    public AjaxResult editSaveByAccount(AlipayMediumEntity alipayMediumEntity) {
+        return toAjax(alipayMediumEntityService.updateAlipayMediumEntityByAccount(alipayMediumEntity));
     }
 
 

@@ -85,8 +85,8 @@ public class AlipayMediumEntityServiceImpl implements IAlipayMediumEntityService
      */
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     @Override
-    public int updateAlipayMediumEntityByCode(AlipayMediumEntity alipayMediumEntity) {
-        return alipayMediumEntityMapper.updateAlipayMediumEntityByCode(alipayMediumEntity);
+    public int updateAlipayMediumEntityByAccount(AlipayMediumEntity alipayMediumEntity) {
+        return alipayMediumEntityMapper.updateAlipayMediumEntityByAccount(alipayMediumEntity);
     }
 
     /**

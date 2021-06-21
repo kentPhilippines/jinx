@@ -1299,8 +1299,8 @@ var table = {
                 table.set();
                 if (flag == 'amountByIdUrl') {
                     $.modal.open(title, $.operate.editAmountUrlById(id));
-                } else if (flag == 'amountByCodeUrl') {
-                    $.modal.open(title, $.operate.editAmountUrlByCode(null));
+                } else if (flag == 'amountByAccountUrl') {
+                    $.modal.open(title, $.operate.editAmountUrlByAccount(null));
                 }
             },
             // 二维码详细列表
@@ -1470,10 +1470,10 @@ var table = {
                 return url;
             },
 
-            editAmountUrlByCode: function (id) {
+            editAmountUrlByAccount: function (id) {
                 var url = "/404.html";
                 if ($.common.isEmpty(id)) {
-                    url = table.options.updateAmountByCodeUrl;
+                    url = table.options.updateAmountByAccountUrl;
                 }
                 return url;
             },
