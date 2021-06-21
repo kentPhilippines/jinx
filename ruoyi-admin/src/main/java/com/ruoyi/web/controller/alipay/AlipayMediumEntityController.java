@@ -30,8 +30,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @Controller
 @RequestMapping("/alipay/medium")
 public class AlipayMediumEntityController extends BaseController {
-    private String prefix = "alipay/medium" ;
-    private String code_prefix = "alipay/file" ;
+    private String prefix = "alipay/medium";
+    private String code_prefix = "alipay/file";
 
     @Autowired
     private IAlipayMediumEntityService alipayMediumEntityService;
@@ -41,7 +41,8 @@ public class AlipayMediumEntityController extends BaseController {
 
     @GetMapping()
     public String medium() {
-        return prefix + "/medium" ;
+
+        return prefix + "/medium";
     }
 
     /**
@@ -72,27 +73,8 @@ public class AlipayMediumEntityController extends BaseController {
      */
     @GetMapping("/add")
     public String add() {
-        return prefix + "/add" ;
+        return prefix + "/add";
     }
-
-    /**
-     * 单个媒介修改金额页面
-     */
-    @GetMapping("/editAmount/{id}")
-    public String editAmount(@PathVariable("id") Long id, ModelMap mmap) {
-        mmap.put("id", id);
-        return prefix + "/editAmount" ;
-    }
-
-    /**
-     * 同种媒介修改金额页面
-     */
-    @GetMapping("/editAmountByCode/{code}")
-    public String editAmountByCode(@PathVariable("code") String code, ModelMap mmap) {
-        mmap.put("code", code);
-        return prefix + "/editAmountByCode" ;
-    }
-
 
     /**
      * 新增保存收款媒介列
@@ -111,7 +93,28 @@ public class AlipayMediumEntityController extends BaseController {
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayMediumEntity alipayMediumEntity = alipayMediumEntityService.selectAlipayMediumEntityById(id);
         mmap.put("alipayMediumEntity", alipayMediumEntity);
-        return prefix + "/edit" ;
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改单个媒介金额
+     */
+    @GetMapping("/editAmount/id/{id}")
+    public String editAmountById(@PathVariable("id") Long id, ModelMap mmap) {
+        AlipayMediumEntity alipayMediumEntity = alipayMediumEntityService.selectAlipayMediumEntityById(id);
+        mmap.put("alipayMediumEntity", alipayMediumEntity);
+        return prefix + "/editAmount";
+    }
+
+    /**
+     * 同种媒介修改金额
+     */
+    @GetMapping("/editAmount/code")
+    public String editAmountByCode(ModelMap mmap) {
+        List<String> codeList = alipayMediumEntityService.selectCodeByAlipayMediumEntity();
+        mmap.put("alipayMediumEntity", new AlipayMediumEntity());
+        mmap.put("codeList", codeList);
+        return prefix + "/editAmountByCode";
     }
 
 
@@ -125,15 +128,27 @@ public class AlipayMediumEntityController extends BaseController {
         return toAjax(alipayMediumEntityService.updateAlipayMediumEntity(alipayMediumEntity));
     }
 
+
     /**
-     * 修改保存收款媒介列
+     * 编辑保存单个媒介上限金额
      */
     @Log(title = "收款媒介列", businessType = BusinessType.UPDATE)
-    @PostMapping("/editByCode")
+    @PostMapping("/editAmount")
+    @ResponseBody
+    public AjaxResult editSaveById(AlipayMediumEntity alipayMediumEntity) {
+        return toAjax(alipayMediumEntityService.updateAlipayMediumEntity(alipayMediumEntity));
+    }
+
+    /**
+     * 编辑保存同种媒介上限金额
+     */
+    @Log(title = "收款媒介列", businessType = BusinessType.UPDATE)
+    @PostMapping("/editAmount/code")
     @ResponseBody
     public AjaxResult editSaveByCode(AlipayMediumEntity alipayMediumEntity) {
         return toAjax(alipayMediumEntityService.updateAlipayMediumEntityByCode(alipayMediumEntity));
     }
+
 
     /**
      * 删除收款媒介列
@@ -156,7 +171,7 @@ public class AlipayMediumEntityController extends BaseController {
         alipayFileListEntity.setIsDeal("2");
         List<AlipayFileListEntity> list = alipayFileListEntityService.selectAlipayFileListEntityList(alipayFileListEntity);
         mmap.put("codeList", list);
-        return code_prefix + "/group_code_list" ;
+        return code_prefix + "/group_code_list";
     }
 
 

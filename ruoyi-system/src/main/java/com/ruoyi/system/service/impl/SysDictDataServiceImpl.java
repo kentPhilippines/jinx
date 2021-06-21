@@ -41,6 +41,11 @@ public class SysDictDataServiceImpl implements ISysDictDataService {
         return dictDataMapper.selectDictDataByType(dictType);
     }
 
+    @Override
+    public List<SysDictData> selectDictDataByCodes(List<String> codeList) {
+        return dictDataMapper.selectDictDataByCodes(codeList);
+    }
+
     /**
      * 根据字典类型和字典键值查询字典数据信息
      *

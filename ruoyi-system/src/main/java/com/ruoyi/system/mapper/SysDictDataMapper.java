@@ -29,6 +29,14 @@ public interface SysDictDataMapper {
     public List<SysDictData> selectDictDataByType(String dictType);
 
     /**
+     * 根据字典code集合查询字典数据
+     *
+     * @param codeList code集合
+     * @return 字典数据集合信息
+     */
+    public List<SysDictData> selectDictDataByCodes(List<String> codeList);
+
+    /**
      * 根据字典类型和字典键值查询字典数据信息
      *
      * @param dictType  字典类型

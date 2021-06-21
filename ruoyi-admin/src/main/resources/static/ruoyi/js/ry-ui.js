@@ -493,12 +493,12 @@ var table = {
                 var actions = [];
                 $.each(datas, function (index, dict) {
                     if (dict.productId == ('' + value)) {
-                        actions.push("<span>"+dict.productName+"</span>");
+                        actions.push("<span>" + dict.productName + "</span>");
                         return actions.join('');
-                    }else if(value == null || value == ''){
+                    } else if (value == null || value == '') {
                         actions.push("<span>-</span>");
                         return actions.join('');
-                    }else{
+                    } else {
                         /* actions.push("<span title=\'"+ tilte +"\'>"+ value +"</span>");*/
                     }
                 });
@@ -789,7 +789,7 @@ var table = {
                     shade: 0.3,
                     title: title,
                     content: url,
-                    btn: ['成功', '失败','关闭'],
+                    btn: ['成功', '失败', '关闭'],
                     // 弹层外区域关闭
                     shadeClose: true,
                     btn1: function (index, layero) {
@@ -869,7 +869,7 @@ var table = {
                     title: title,
                     shade: 0.3,
                     closeBtn: 0,
-                    content: [url,'yes'],
+                    content: [url, 'yes'],
                     // 弹层外区域关闭
                     shadeClose: true,
                     skin: 'layui-layer-nobg'
@@ -1276,11 +1276,11 @@ var table = {
                 $.modal.open("添加" + table.options.modalName, $.operate.addUrl(id));
             },
             // 商户下级开户
-            openAccount: function (id,title,flag) {
+            openAccount: function (id, title, flag) {
                 table.set();
-                if (flag == 'openUrl'){
+                if (flag == 'openUrl') {
                     $.modal.open(title, $.operate.openUrl(id));
-                }else if (flag == 'updateUrl') {
+                } else if (flag == 'updateUrl') {
                     $.modal.open(title, $.operate.editUrl(id))
                 } else if (flag == 'otherUrl') {
                     $.modal.open(title, $.operate.otherUrl(id))
@@ -1294,32 +1294,46 @@ var table = {
                     $.modal.open(title, $.operate.addQuotaUrlM(id))
                 }
             },
+            //修改媒介上限金额
+            editMediumAmount: function (id, title, flag) {
+                table.set();
+                if (flag == 'amountByIdUrl') {
+                    $.modal.open(title, $.operate.editAmountUrlById(id));
+                } else if (flag == 'amountByCodeUrl') {
+                    $.modal.open(title, $.operate.editAmountUrlByCode(null));
+                }
+            },
             // 二维码详细列表
             codeList: function (id) {
                 table.set();
                 $.modal.openDetail("二维码列表", $.operate.openUrl(id));
-            },
+            }
+            ,
             // 添加信息，以tab页展现
             addTab: function (id) {
                 table.set();
                 $.modal.openTab("添加" + table.options.modalName, $.operate.addUrl(id));
-            },
+            }
+            ,
             // 添加信息，以tab页展现
             showTab: function (title, url) {
                 table.set();
                 $.modal.openTab(title, url);
-            },
+            }
+            ,
             // 添加信息 全屏
             addFull: function (id) {
                 table.set();
                 var url = $.common.isEmpty(id) ? table.options.createUrl : table.options.createUrl.replace("{id}", id);
                 $.modal.openFull("添加" + table.options.modalName, url);
-            },
+            }
+            ,
             // 添加访问地址
             addUrl: function (id) {
                 var url = $.common.isEmpty(id) ? table.options.createUrl.replace("{id}", "") : table.options.createUrl.replace("{id}", id);
                 return url;
-            },
+            }
+            ,
             // 添加下级开户地址
             openUrl: function (id) {
                 var url = "/404.html";
@@ -1333,7 +1347,8 @@ var table = {
                     url = table.options.openUrl.replace("{userId}", id);
                 }
                 return url;
-            },
+            }
+            ,
             // 修改信息
             edit: function (id) {
                 table.set();
@@ -1348,7 +1363,8 @@ var table = {
                 } else {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
-            },
+            }
+            ,
             // 显示详情
             showDetail: function (id) {
                 table.set();
@@ -1363,7 +1379,8 @@ var table = {
                 } else {
                     $.modal.open("显示" + table.options.modalName + "详情", $.operate.editUrl(id));
                 }
-            },
+            }
+            ,
             // 显示详情
             detailWithoutBtn: function (id) {
                 table.set();
@@ -1378,7 +1395,8 @@ var table = {
                 } else {
                     $.modal.openWithoutBtn("显示" + table.options.modalName + "详情", $.operate.editUrl(id));
                 }
-            },
+            }
+            ,
             // 修改信息
             approval: function (id) {
                 table.set();
@@ -1393,12 +1411,14 @@ var table = {
                 } else {
                     $.modal.approvalOpen("审核" + table.options.modalName, $.operate.editUrl(id));
                 }
-            },
+            }
+            ,
             // 修改信息，以tab页展现
             editTab: function (id) {
                 table.set();
                 $.modal.openTab("修改" + table.options.modalName, $.operate.editUrl(id));
-            },
+            }
+            ,
             // 修改信息 全屏
             editFull: function (id) {
                 table.set();
@@ -1410,7 +1430,8 @@ var table = {
                     url = table.options.updateUrl.replace("{id}", row);
                 }
                 $.modal.openFull("修改" + table.options.modalName, url);
-            },
+            }
+            ,
             // 修改访问地址
             editUrl: function (id) {
                 var url = "/404.html";
@@ -1439,6 +1460,22 @@ var table = {
                     url = table.options.otherUrl.replace("{id}", id);
                 }
                 return url;
+            }
+            ,
+            editAmountUrlById: function (id) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.updateAmountByIdUrl.replace("{id}", id);
+                }
+                return url;
+            },
+
+            editAmountUrlByCode: function (id) {
+                var url = "/404.html";
+                if ($.common.isEmpty(id)) {
+                    url = table.options.updateAmountByCodeUrl;
+                }
+                return url;
             },
 
             addFreezeUrlM: function (id) {
@@ -1447,13 +1484,16 @@ var table = {
                     url = table.options.addFreezeUrl.replace("{userId}", id);
                 }
                 return url;
-            }, addQuotaUrlM: function (id) {
+            }
+            ,
+            addQuotaUrlM: function (id) {
                 var url = "/404.html";
                 if ($.common.isNotEmpty(id)) {
                     url = table.options.addQuotaUrl.replace("{userId}", id);
                 }
                 return url;
-            },
+            }
+            ,
 
             deleteFreezeUrlM: function (id) {
                 var url = "/404.html";
@@ -1461,13 +1501,16 @@ var table = {
                     url = table.options.deleteFreezeUrl.replace("{userId}", id);
                 }
                 return url;
-            }, deleteQuotaUrlM: function (id) {
+            }
+            ,
+            deleteQuotaUrlM: function (id) {
                 var url = "/404.html";
                 if ($.common.isNotEmpty(id)) {
                     url = table.options.deleteQuotaUrl.replace("{userId}", id);
                 }
                 return url;
-            },
+            }
+            ,
 
 
             // 保存信息 刷新表格
@@ -1491,10 +1534,11 @@ var table = {
                     };
                     $.ajax(config)
                 });
-            },
+            }
+            ,
             // 保存信息 刷新表格
             msgSave: function (url, data, msg, callback) {
-                $.modal.confirm(msg,function () {
+                $.modal.confirm(msg, function () {
                     var config = {
                         url: url,
                         type: "post",
@@ -1513,7 +1557,8 @@ var table = {
                     };
                     $.ajax(config)
                 });
-            },
+            }
+            ,
             // 保存信息 弹出提示框
             saveModal: function (url, data, callback) {
                 var config = {
@@ -1539,7 +1584,8 @@ var table = {
                     }
                 };
                 $.ajax(config)
-            },
+            }
+            ,
             // 保存选项卡信息
             saveTab: function (url, data, callback) {
                 var config = {
@@ -1558,7 +1604,8 @@ var table = {
                     }
                 };
                 $.ajax(config)
-            },
+            }
+            ,
             // 保存结果弹出msg刷新table表格
             ajaxSuccess: function (result) {
                 if (result.code == web_status.SUCCESS && table.options.type == table_type.bootstrapTable) {
@@ -1573,7 +1620,8 @@ var table = {
                     $.modal.alertError(result.msg);
                 }
                 $.modal.closeLoading();
-            },
+            }
+            ,
             notAjaxSuccess: function (result) {
                 if (result.code == web_status.SUCCESS && table.options.type == table_type.bootstrapTable) {
                     $.table.refresh();
@@ -1585,7 +1633,8 @@ var table = {
                     $.modal.alertError(result.msg);
                 }
                 $.modal.closeLoading();
-            },
+            }
+            ,
             // 成功结果提示msg（父窗体全局更新）
             saveSuccess: function (result) {
                 if (result.code == web_status.SUCCESS) {
@@ -1596,7 +1645,8 @@ var table = {
                     $.modal.alertError(result.msg);
                 }
                 $.modal.closeLoading();
-            },
+            }
+            ,
             // 成功回调执行事件（父窗体静默更新）
             successCallback: function (result) {
                 if (result.code == web_status.SUCCESS) {
@@ -1619,7 +1669,8 @@ var table = {
                 }
                 $.modal.closeLoading();
                 $.modal.enable();
-            },
+            }
+            ,
             // 选项卡成功回调执行事件（父窗体静默更新）
             successTabCallback: function (result) {
                 if (result.code == web_status.SUCCESS) {
@@ -1651,22 +1702,27 @@ var table = {
                     return true;
                 }
                 return false;
-            },
+            }
+            ,
             // 表单验证
             form: function (formId) {
                 var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
                 return $("#" + currentId).validate().form();
-            },
+            }
+            ,
             // 重置表单验证（清除提示信息）
             reset: function (formId) {
                 var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
                 return $("#" + currentId).validate().resetForm();
             }
-        },
+        }
+        ,
         // 树插件封装处理
         tree: {
-            _option: {},
-            _lastValue: {},
+            _option: {}
+            ,
+            _lastValue: {}
+            ,
             // 初始化树结构
             init: function (options) {
                 var defaults = {
@@ -1713,7 +1769,8 @@ var table = {
                     var node = tree.getNodesByParam("id", treeId, null)[0];
                     $.tree.selectByIdName(treeId, node);
                 });
-            },
+            }
+            ,
             // 搜索节点
             searchNode: function () {
                 // 取得输入的关键字的值
@@ -1732,13 +1789,15 @@ var table = {
                 $.tree.hideAllNode(nodes);
                 // 根据搜索值模糊匹配
                 $.tree.updateNodes($._tree.getNodesByParamFuzzy("name", value));
-            },
+            }
+            ,
             // 根据Id和Name选中指定节点
             selectByIdName: function (treeId, node) {
                 if ($.common.isNotEmpty(treeId) && treeId == node.id) {
                     $._tree.selectNode(node, true);
                 }
-            },
+            }
+            ,
             // 显示所有节点
             showAllNode: function (nodes) {
                 nodes = $._tree.transformToArray(nodes);
@@ -1751,7 +1810,8 @@ var table = {
                     $._tree.showNode(nodes[i]);
                     $.tree.showAllNode(nodes[i].children);
                 }
-            },
+            }
+            ,
             // 隐藏所有节点
             hideAllNode: function (nodes) {
                 var tree = $.fn.zTree.getZTreeObj("tree");
@@ -1759,7 +1819,8 @@ var table = {
                 for (var i = nodes.length - 1; i >= 0; i--) {
                     $._tree.hideNode(nodes[i]);
                 }
-            },
+            }
+            ,
             // 显示所有父节点
             showParent: function (treeNode) {
                 var parentNode;
@@ -1768,7 +1829,8 @@ var table = {
                     $._tree.expandNode(parentNode, true, false, false);
                     treeNode = parentNode;
                 }
-            },
+            }
+            ,
             // 显示所有孩子节点
             showChildren: function (treeNode) {
                 if (treeNode.isParent) {
@@ -1778,7 +1840,8 @@ var table = {
                         $.tree.showChildren(node);
                     }
                 }
-            },
+            }
+            ,
             // 更新节点状态
             updateNodes: function (nodeList) {
                 $._tree.showNodes(nodeList);
@@ -1787,7 +1850,8 @@ var table = {
                     $.tree.showChildren(treeNode);
                     $.tree.showParent(treeNode)
                 }
-            },
+            }
+            ,
             // 获取当前被勾选集合
             getCheckedNodes: function (column) {
                 var _column = $.common.isEmpty(column) ? "id" : column;
@@ -1795,7 +1859,8 @@ var table = {
                 return $.map(nodes, function (row) {
                     return row[_column];
                 }).join();
-            },
+            }
+            ,
             // 不允许根父节点选择
             notAllowParents: function (_tree) {
                 var nodes = _tree.getSelectedNodes();
@@ -1814,7 +1879,8 @@ var table = {
                     }
                 }
                 return true;
-            },
+            }
+            ,
             // 不允许最后层级节点选择
             notAllowLastLevel: function (_tree) {
                 var nodes = _tree.getSelectedNodes();
@@ -1825,23 +1891,27 @@ var table = {
                     }
                 }
                 return true;
-            },
+            }
+            ,
             // 隐藏/显示搜索栏
             toggleSearch: function () {
                 $('#search').slideToggle(200);
                 $('#btnShow').toggle();
                 $('#btnHide').toggle();
                 $('#keyword').focus();
-            },
+            }
+            ,
             // 折叠
             collapse: function () {
                 $._tree.expandAll(false);
-            },
+            }
+            ,
             // 展开
             expand: function () {
                 $._tree.expandAll(true);
             }
-        },
+        }
+        ,
         // 通用方法封装处理
         common: {
             getPreMonthDay: function (date) {
@@ -1874,47 +1944,55 @@ var table = {
                 }
                 var pre_month_day = pre_year + '-' + pre_month + '-' + pre_day;
                 return pre_month_day;
-            },
+            }
+            ,
             // 判断字符串是否为空
             isEmpty: function (value) {
                 if (value == null || this.trim(value) == "") {
                     return true;
                 }
                 return false;
-            },
+            }
+            ,
             // 判断一个字符串是否为非空串
             isNotEmpty: function (value) {
                 return !$.common.isEmpty(value);
-            },
+            }
+            ,
             // 空对象转字符串
             nullToStr: function (value) {
                 if ($.common.isEmpty(value)) {
                     return "-";
                 }
                 return value;
-            },
+            }
+            ,
             // 是否显示数据 为空默认为显示
             visible: function (value) {
                 if ($.common.isEmpty(value) || value == true) {
                     return true;
                 }
                 return false;
-            },
+            }
+            ,
             // 空格截取
             trim: function (value) {
                 if (value == null) {
                     return "";
                 }
                 return value.toString().replace(/(^\s*)|(\s*$)|\r|\n/g, "");
-            },
+            }
+            ,
             // 比较两个字符串（大小写敏感）
             equals: function (str, that) {
                 return str == that;
-            },
+            }
+            ,
             // 比较两个字符串（大小写不敏感）
             equalsIgnoreCase: function (str, that) {
                 return String(str).toUpperCase() === String(that).toUpperCase();
-            },
+            }
+            ,
             // 将字符串按指定字符分割
             split: function (str, sep, maxLen) {
                 if ($.common.isEmpty(str)) {
@@ -1922,7 +2000,8 @@ var table = {
                 }
                 var value = String(str).split(sep);
                 return maxLen ? value.slice(0, maxLen - 1) : value;
-            },
+            }
+            ,
             // 字符串格式化(%s )
             sprintf: function (str) {
                 var args = arguments, flag = true, i = 1;
@@ -1935,21 +2014,25 @@ var table = {
                     return arg;
                 });
                 return flag ? str : '';
-            },
+            }
+            ,
             // 指定随机数返回
             random: function (min, max) {
                 return Math.floor((Math.random() * max) + min);
-            },
+            }
+            ,
             // 判断字符串是否是以start开头
             startWith: function (value, start) {
                 var reg = new RegExp("^" + start);
                 return reg.test(value)
-            },
+            }
+            ,
             // 判断字符串是否是以end结尾
             endWith: function (value, end) {
                 var reg = new RegExp(end + "$");
                 return reg.test(value)
-            },
+            }
+            ,
             // 数组去重
             uniqueFn: function (array) {
                 var result = [];
@@ -1961,14 +2044,16 @@ var table = {
                     }
                 }
                 return result;
-            },
+            }
+            ,
             // 数组中的所有元素放入一个字符串
             join: function (array, separator) {
                 if ($.common.isEmpty(array)) {
                     return null;
                 }
                 return array.join(separator);
-            },
+            }
+            ,
             // 获取form下所有的字段并转换为json对象
             formToJSON: function (formId) {
                 var json = {};
@@ -1980,7 +2065,8 @@ var table = {
                     }
                 });
                 return json;
-            },
+            }
+            ,
             // 获取obj对象长度
             getLength: function (obj) {
                 var count = 0;
@@ -1992,7 +2078,8 @@ var table = {
                 return count;
             }
         }
-    });
+    })
+    ;
 })(jQuery);
 
 /** 表格类型 */

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('收款媒介列列表')"/>
     <th:block th:include="include :: bootstrap-select-css"/>
@@ -43,6 +43,11 @@
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
+                        <li shiro:hasPermission="alipay:medium:editAmountByCode">
+                            <a class="btn btn-success btn-xs" href="javascript:void(0)"
+                               onclick="$.operate.editMediumAmount(null,'同种媒介上限金额编辑','amountByCodeUrl')"><i
+                                    class="fa fa-plus"></i>同种媒介上限金额编辑</a>
+                        </li>
                     </ul>
                 </div>
             </form>
@@ -59,9 +64,7 @@
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     const codeFlag = [[${@permission.hasPermi('alipay:medium:showCode')}]];
-    const removeFlag = [[${@permission.hasPermi('alipay:medium:remove')}]];
-    const editAmountById = [[${@permission.hasPermi('alipay:medium:editAmountById')}]];
-    const editAmountByCode = [[${@permission.hasPermi('alipay:medium:editAmountByCode')}]];
+    const editAmountByIdFlag = [[${@permission.hasPermi('alipay:medium:editAmountById')}]];
     const mediumType = [[${@dict.getType('medium_type')}]];
     const prefix = ctx + "alipay/medium";
 
@@ -70,6 +73,8 @@
             url: prefix + "/list",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
+            updateAmountByIdUrl: prefix + "/editAmount/id/{id}",
+            updateAmountByCodeUrl: prefix + "/editAmount/code",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             openUrl: prefix + "/show/{userId}",
@@ -153,8 +158,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-info btn-xs ' + codeFlag + '" href="javascript:void(0)" onclick="$.operate.codeList(\'' + row.mediumId + '\')"><i class="fa fa-search-plus"></i>二维码</a> ');
-                        actions.push('<a class="btn btn-primary btn-xs ' + editAmountById + '" href="/alipay/medium/editAmount/' + row.id + '")"><i class="fa fa-play-circle-o"></i>修改收款限制金额</a> ');
-                        actions.push('<a class="btn btn-primary btn-xs ' + editAmountByCode + '" href="/alipay/medium/editAmountByCode/' + row.code + '")"><i class="fa fa-play-circle-o"></i>修改同种媒介收款限制金额</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editAmountByIdFlag + '" href="javascript:void(0)" onclick="$.operate.editMediumAmount(\'' + row.id + '\',\'单个媒介上限金额编辑\',\'amountByIdUrl\')"><i class="fa fa-search-plus"></i>单个媒介上限金额编辑</a> ');
                         return actions.join('');
                     }
                 }]

@@ -33,6 +33,16 @@ public class DictService {
     }
 
     /**
+     * 根据字典类型查询字典数据信息
+     *
+     * @param codeList code集合
+     * @return 参数键值
+     */
+    public List<SysDictData> getDictDatas(List<String> codeList) {
+        return dictDataService.selectDictDataByCodes(codeList);
+    }
+
+    /**
      * 根据字典类型和字典键值查询字典数据信息
      *
      * @param dictType  字典类型
@@ -45,6 +55,7 @@ public class DictService {
 
     /**
      * 查询产品类型
+     *
      * @return
      */
     public List<AlipayProductEntity> getProductType() {

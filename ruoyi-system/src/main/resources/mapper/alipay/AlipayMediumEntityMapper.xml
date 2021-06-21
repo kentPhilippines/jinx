@@ -57,6 +57,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectAlipayMediumEntityVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectCodeByAlipayMediumEntity" resultType="java.lang.String">
+        select code
+        from alipay_medium
+        group by code;
+    </select>
         
     <insert id="insertAlipayMediumEntity" parameterType="AlipayMediumEntity" useGeneratedKeys="true" keyProperty="id">
         insert into alipay_medium
@@ -119,7 +125,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mediumNote != null  and mediumNote != ''">mediumNote = #{mediumNote},</if>
             <if test="mediumPhone != null  and mediumPhone != ''">mediumPhone = #{mediumPhone},</if>
             <if test="qrcodeId != null  and qrcodeId != ''">qrcodeId = #{qrcodeId},</if>
-            <if test="code != null  and code != ''">code = #{code},</if>
             <if test="createTime != null ">createTime = #{createTime},</if>
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
             <if test="status != null ">status = #{status},</if>
@@ -129,7 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mountSystem != null  and mountSystem != ''">mountSystem = #{mountSystem},</if>
             <if test="mountLimit != null  and mountLimit != ''">mountLimit = #{mountLimit},</if>
         </trim>
-        where code = #{code}
+        <if test="code != null  and code != ''">where code = #{code}</if>
     </update>
 
     <delete id="deleteAlipayMediumEntityById" parameterType="Long">

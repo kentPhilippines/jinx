@@ -1,16 +1,16 @@
 package com.ruoyi.alipay.service.impl;
 
-import java.util.List;
-
-import com.ruoyi.common.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.ruoyi.alipay.mapper.AlipayMediumEntityMapper;
 import com.ruoyi.alipay.domain.AlipayMediumEntity;
+import com.ruoyi.alipay.mapper.AlipayMediumEntityMapper;
 import com.ruoyi.alipay.service.IAlipayMediumEntityService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.DataSourceType;
+import com.ruoyi.common.utils.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 收款媒介列Service业务层处理
@@ -30,8 +30,15 @@ public class AlipayMediumEntityServiceImpl implements IAlipayMediumEntityService
      * @return 收款媒介列
      */
     @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayMediumEntity selectAlipayMediumEntityById(Long id) {
         return alipayMediumEntityMapper.selectAlipayMediumEntityById(id);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<String> selectCodeByAlipayMediumEntity() {
+        return alipayMediumEntityMapper.selectCodeByAlipayMediumEntity();
     }
 
     /**
