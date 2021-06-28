@@ -27,6 +27,14 @@ public interface IAlipayMediumEntityService {
     public List<String> selectCodeByAlipayMediumEntity();
 
     /**
+     * 查询收款媒介种类
+     *
+     * @return 收款媒介列
+     */
+    public int updateAlipayMediumEntityByCondition(AlipayMediumEntity alipayMediumEntity);
+
+
+    /**
      * 查询收款媒介列列表
      *
      * @param alipayMediumEntity 收款媒介列

@@ -41,6 +41,11 @@ public class AlipayMediumEntityServiceImpl implements IAlipayMediumEntityService
         return alipayMediumEntityMapper.selectCodeByAlipayMediumEntity();
     }
 
+    @Override
+    public int updateAlipayMediumEntityByCondition(AlipayMediumEntity alipayMediumEntity) {
+        return alipayMediumEntityMapper.updateAlipayMediumEntityBycondition(alipayMediumEntity);
+    }
+
     /**
      * 查询收款媒介列列表
      *

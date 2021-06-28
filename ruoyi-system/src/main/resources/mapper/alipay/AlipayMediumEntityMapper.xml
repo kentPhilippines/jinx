@@ -133,6 +133,14 @@
         where id = #{id}
     </update>
 
+    <update id="updateAlipayMediumEntityBycondition" parameterType="AlipayMediumEntity">
+        update alipay_medium
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mountNow != null  and mountNow != ''">mountNow = #{mountNow},</if>
+        </trim>
+        where mediumPhone = #{mediumPhone} and account=#{account} and notfiyMask=#{notfiyMask}
+    </update>
+
     <update id="updateAlipayMediumEntityByAccount" parameterType="AlipayMediumEntity">
         update alipay_medium
         <trim prefix="SET" suffixOverrides=",">

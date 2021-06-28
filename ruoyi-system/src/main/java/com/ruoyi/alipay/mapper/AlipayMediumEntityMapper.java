@@ -18,6 +18,15 @@ public interface AlipayMediumEntityMapper {
      * @return 收款媒介列
      */
     public AlipayMediumEntity selectAlipayMediumEntityById(Long id);
+
+    /**
+     * 查询收款媒介列
+     *
+     * @param
+     * @return 收款媒介列
+     *
+     */
+    public AlipayMediumEntity selectAlipayMediumEntityById(AlipayMediumEntity alipayMediumEntity);
     /**
      * 查询收款媒介种类
      *
@@ -48,6 +57,14 @@ public interface AlipayMediumEntityMapper {
      * @return 结果
      */
     public int updateAlipayMediumEntity(AlipayMediumEntity alipayMediumEntity);
+
+    /**
+     * 修改收款媒介列
+     *
+     * @param alipayMediumEntity 收款媒介列
+     * @return 结果
+     */
+    public int updateAlipayMediumEntityBycondition(AlipayMediumEntity alipayMediumEntity);
 
     /**
      * 根据code修改上限金额

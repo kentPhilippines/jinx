@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.BankInfoSplitEntityMapper">
+
+    <resultMap type="BankInfoSplitEntity" id="BankInfoSplitResult">
+        <result property="id" column="id"/>
+        <result property="originText" column="origin_text"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="typeDetail" column="type_detail"/>
+        <result property="balance" column="balance"/>
+        <result property="transactionDate" column="transaction_date"/>
+        <result property="transactionAmount" column="transaction_amount"/>
+        <result property="myselfTailNumber" column="myself_tail_number"/>
+        <result property="counterpartyTailNumber" column="counterparty_tail_number"/>
+        <result property="checkKey" column="check_key"/>
+        <result property="orderNo" column="orderNo"/>
+        <result property="counterpartyAccountName" column="counterparty_account_name"/>
+        <result property="transactionType" column="transaction_type"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="resultText" column="result_text"/>
+    </resultMap>
+
+    <insert id="insertBankInfoSplitEntity" parameterType="BankInfoSplitEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into bankInfo_split_entity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="originText != null  and originText != ''">origin_text,</if>
+            <if test="bankName != null  and bankName != ''">bank_name,</if>
+            <if test="typeDetail != null  and typeDetail != ''">type_detail,</if>
+            <if test="balance != null  and balance != ''">balance,</if>
+            <if test="transactionDate != null  and transactionDate != ''">transaction_date,</if>
+            <if test="transactionAmount != null ">transaction_amount,</if>
+            <if test="myselfTailNumber != null ">myself_tail_number,</if>
+            <if test="counterpartyTailNumber != null ">counterparty_tail_number,</if>
+            <if test="checkKey != null  and checkKey != ''">check_key,</if>
+            <if test="orderNo != null ">orderNo,</if>
+            <if test="counterpartyAccountName != null ">counterparty_account_name,</if>
+            <if test="transactionType != null ">transaction_type,</if>
+            <if test="phoneNumber != null  and phoneNumber != ''">phone_number,</if>
+            <if test="resultText != null  and resultText != ''">result_text,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="originText != null  and originText != ''">#{originText},</if>
+            <if test="bankName != null  and bankName != ''">#{bankName},</if>
+            <if test="typeDetail != null  and typeDetail != ''">#{typeDetail},</if>
+            <if test="balance != null  and balance != ''">#{balance},</if>
+            <if test="transactionDate != null  and transactionDate != ''">#{transactionDate},</if>
+            <if test="transactionAmount != null ">#{transactionAmount},</if>
+            <if test="myselfTailNumber != null ">#{myselfTailNumber},</if>
+            <if test="counterpartyTailNumber != null ">#{counterpartyTailNumber},</if>
+            <if test="checkKey != null  and checkKey != ''">#{checkKey},</if>
+            <if test="orderNo != null ">#{orderNo},</if>
+            <if test="counterpartyAccountName != null ">#{counterpartyAccountName},</if>
+            <if test="transactionType != null ">#{transactionType},</if>
+            <if test="phoneNumber != null  and phoneNumber != ''">#{phoneNumber},</if>
+            <if test="resultText != null  and resultText != ''">#{resultText},</if>
+        </trim>
+    </insert>
+</mapper>
