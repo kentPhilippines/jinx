@@ -32,19 +32,20 @@
         <result property="quota" column="quota"/>
         <result column="sumWitAmount" property="sumWitAmount"/>
         <result column="todayWitAmount" property="todayWitAmount"/>
+        <result column="todayOtherWitAmount" property="todayOtherWitAmount"/>
     </resultMap>
 
     <sql id="selectAlipayUserFundEntityVo">
         select id, userId, userName, cashBalance, rechargeNumber, freezeBalance, accountBalance,
          sumDealAmount, sumRechargeAmount, sumProfit, sumAgentProfit, sumOrderCount, todayDealAmount,
          todayProfit, todayOrderCount, todayAgentProfit, userType, agent, isAgent,sumWitAmount,todayWitAmount,
-        createTime, submitTime, status, version , currency , quota    from alipay_user_fund
+        createTime, submitTime, status, version , currency , quota ,todayOtherWitAmount    from alipay_user_fund
     </sql>
     <sql id="selectAlipayUserFundEntityVoBak">
         select id, userId, userName, cashBalance, rechargeNumber, freezeBalance, accountBalance,
          sumDealAmount, sumRechargeAmount, sumProfit, sumAgentProfit, sumOrderCount, todayDealAmount,
          todayProfit, todayOrderCount, todayAgentProfit, userType, agent, isAgent,sumWitAmount,todayWitAmount,
-        createTime, submitTime from alipay_user_fund_Bak
+        createTime, submitTime ,todayOtherWitAmount from alipay_user_fund_Bak
     </sql>
 
 

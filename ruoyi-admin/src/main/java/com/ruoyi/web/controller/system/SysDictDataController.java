@@ -24,6 +24,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -149,10 +150,19 @@ public class SysDictDataController extends BaseController {
         }
         Object o = this.cache.get(RATE_KEY + DateUtils.getTime());
         if (null == o) {
-            String urlbuy = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=buy&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=block&online=1&range=0&amount=";
-            String rate = getRate(urlbuy);
-            this.cache.put(RATE_KEY + DateUtils.getTime(), rate);
-            return rate;
+            String smallbull = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=buy&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=general&online=1&range=0&amount=";
+            String rateBull = getRate(smallbull);
+            String smallSell = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=sell&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=general&online=1&range=0&amount=";
+            String rateSell = getRate(smallSell);
+            BigDecimal bigDecimal = new BigDecimal(rateBull);
+            BigDecimal bigDecimal1 = new BigDecimal(rateSell);
+            if (bigDecimal.compareTo(bigDecimal1) == -1) {
+                this.cache.put(RATE_KEY + DateUtils.getTime(), rateBull);
+                return rateBull;
+            } else {
+                this.cache.put(RATE_KEY + DateUtils.getTime(), rateSell);
+                return rateSell;
+            }
         } else {
             return "" + o;
         }
@@ -165,20 +175,6 @@ public class SysDictDataController extends BaseController {
          * 获取火币网费率作为最低和最高的 费率交易标准
          */
         List<HUOBI> list = new ArrayList<HUOBI>();
-        HUOBI bigsell = new HUOBI();
-        String urlsell = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=sell&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=block&online=1&range=0&amount=";
-        bigsell.setId("1");
-        bigsell.setRateType("大宗买入价格");
-        bigsell.setPrice(getRate(urlsell));
-        bigsell.setCaeateTime(DateUtils.getTime());
-        list.add(bigsell);
-        HUOBI bigbuy = new HUOBI();
-        String urlbuy = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=buy&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=block&online=1&range=0&amount=";
-        bigbuy.setId("2");
-        bigbuy.setRateType("大宗出售价格");
-        bigbuy.setPrice(getRate(urlbuy));
-        bigbuy.setCaeateTime(DateUtils.getTime());
-        list.add(bigbuy);
         HUOBI smalls = new HUOBI();
         String smallSell = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=sell&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=general&online=1&range=0&amount=";
         smalls.setId("3");

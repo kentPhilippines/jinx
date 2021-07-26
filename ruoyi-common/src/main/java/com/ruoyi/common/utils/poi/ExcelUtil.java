@@ -14,6 +14,8 @@ import com.ruoyi.common.utils.reflect.ReflectUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.slf4j.Logger;
@@ -314,9 +316,44 @@ public class ExcelUtil<T> {
             String filename = encodingFilename(sheetName);
             out = new FileOutputStream(getAbsoluteFile(filename));
             wb.write(out);
+
+
+            long curr_time = System.currentTimeMillis();
+
+            int rowaccess = 100;//内存中缓存记录行数
+            /*keep 100 rowsin memory,exceeding rows will be flushed to disk*/
+            SXSSFWorkbook wb = new SXSSFWorkbook(rowaccess);
+            int sheet_num = 3;//生成3个SHEET
+
+            for (int i = 0; i < sheet_num; i++) {
+                Sheet sh = wb.createSheet();
+                //每个SHEET有60000ROW
+                for (int rownum = 0; rownum < 60000; rownum++) {
+                    Row row = sh.createRow(rownum);
+                    //每行有10个CELL
+                    for (int cellnum = 0; cellnum < 10; cellnum++) {
+                        Cell cell = row.createCell(cellnum);
+                        String address = new CellReference(cell).formatAsString();
+                        cell.setCellValue(address);
+                    }
+                    //每当行数达到设置的值就刷新数据到硬盘,以清理内存
+                    if (rownum % rowaccess == 0) {
+                        ((SXSSFSheet) sh).flushRows();
+                    }
+                }
+            }
+
+            /*写数据到文件中*/
+            FileOutputStream os = new FileOutputStream("d:/data/poi/biggrid.xlsx");
+            wb.write(os);
+            os.close();
+            /*计算耗时*/
+            System.out.println("耗时:" + (System.currentTimeMillis() - curr_time) / 1000);
+
+
             return AjaxResult.success(filename);
-        } catch (Exception e) {
-            log.error("导出Excel异常{}", e.getMessage());
+        } catch (Throwable e) {
+            log.error("导出Excel异常{}", e);
             throw new BusinessException("导出Excel失败，请联系网站管理员！");
         } finally {
             if (wb != null) {

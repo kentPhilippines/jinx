@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.domain;
 
 import cn.hutool.core.date.DatePattern;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.ruoyi.alipay.domain.util.RunOrderType;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -11,9 +13,10 @@ import java.util.Date;
 /**
  * 流水订单记录对象 alipay_run_order
  *
- * @author kiwi
+ * @author kent
  * @date 2020-03-18
  */
+
 public class AlipayRunOrderEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -26,23 +29,27 @@ public class AlipayRunOrderEntity extends BaseEntity {
      * 流水订单id(全局唯一索引)
      */
     @Excel(name = "流水订单id")
+    @ExcelProperty(value = "流水订单id", index = 3)
     private String orderId;
 
     /**
      * 关联订单号(普通索引)
      */
     @Excel(name = "关联订单号")
+    @ExcelProperty(value = "关联订单号", index = 3)
     private String associatedId;
 
     /**
      * 关联账户
      */
     @Excel(name = "关联账户")
+    @ExcelProperty(value = "关联账户", index = 3)
     private String orderAccount;
 
     /**
      * 流水类型(1充值交易,2系统加款,3交易手续费,4系统扣款,5代付,6代付手续费,7冻结,8解冻,9代付手手续费冻结,10代付冻结,11增加交易点数,12点数扣除,13代理商分润，14码商分润，17人工加点数，18人工减点数，19 卡商交易加钱)
      */
+
     @Excel(name = "流水类型", readConverterExp = "1=充值交易,2=系统加款," +
             "3=交易手续费,4=系统扣款,5=代付,6=代付手续费,7=冻结,8=解冻," +
             "9=代付手手续费冻结,10=代付冻结,11=增加交易点数," +
@@ -50,65 +57,75 @@ public class AlipayRunOrderEntity extends BaseEntity {
             "14=码商分润，17=人工加点数,18=人工减点数," +
             "19=卡商交易加钱,22=代付失败手续费解冻,20=商户交易加款,21=商户交易手续费扣款,26=代付代理分润")
     private Integer runOrderType;
-
+    @ExcelProperty(value = "流水类型", index = 3)
+    private String runOrderTypeCN;
     /**
      * 流水金额
      */
     @Excel(name = "流水金额")
+    @ExcelProperty(value = "流水金额", index = 3)
     private Double amount;
-
     /**
      * 流水关联ip
      */
     @Excel(name = "流水关联ip")
+    @ExcelProperty(value = "流水关联ip", index = 3)
     private String generationIp;
-
     /**
      * 流水描述
      */
     @Excel(name = "流水描述")
+    @ExcelProperty(value = "流水描述", index = 3)
     private String dealDescribe;
-
     /**
      * 入款记录账户
      */
     @Excel(name = "入款记录账户")
+    @ExcelProperty(value = "入款记录账户", index = 3)
     private String acountR;
-
     /**
      * 出款记录账户
      */
     @Excel(name = "出款记录账户")
+    @ExcelProperty(value = "出款记录账户", index = 3)
     private String accountW;
-
     /**
      * 数据最近一次修改时间
      */
     @Excel(name = "数据最近一次修改时间", width = 30, dateFormat = DatePattern.NORM_DATETIME_PATTERN)
+    @ExcelProperty(value = "数据最后修改时间", index = 3)
     private Date submitTime;
+    /**
+     * 流水状态  1.自然状态 2.人工操作
+     */
+    @Excel(name = "流水状态", readConverterExp = " 1=自然状态,2=人工操作")
+    @ExcelProperty(value = "流水状态", index = 3)
+    private String runType;
+    /**
+     * 1支出0收入
+     */
+    @Excel(name = "财务类型", readConverterExp = "1=支出,0=收入")
+    @ExcelProperty(value = "财务类型", index = 3)
+    private String amountType;
 
     /**
      * 状态:1可使用；0不可使用
      */
     private Integer status;
-
-    /**
-     * 流水状态  1.自然状态 2.人工操作
-     */
-    @Excel(name = "流水状态", readConverterExp = " 1=自然状态,2=人工操作")
-    private String runType;
-
-    /**
-     * 1支出0收入
-     */
-    @Excel(name = "财务类型", readConverterExp = "1=支出,0=收入")
-    private String amountType;
-
     /**
      * 当前账户余额
      */
     @Excel(name = "当前账户余额")
+    @ExcelProperty(value = "当前账户余额", index = 3)
     private Double amountNow;
+
+    public String getRunOrderTypeCN() {
+        return runOrderTypeCN;
+    }
+
+    public void setRunOrderTypeCN(String runOrderTypeCN) {
+        this.runOrderTypeCN = runOrderTypeCN;
+    }
 
     /**
      * 备用字段添加业务使用
@@ -280,4 +297,26 @@ public class AlipayRunOrderEntity extends BaseEntity {
                 .append("retain5", getRetain5())
                 .toString();
     }
+
+    public void buildSysUser(AlipayRunOrderEntity run, AlipayRunOrderEntity x) {
+        //1=自然状态,2=人工操作
+        String runType = x.getRunType();
+        if ("1".equals(runType)) {
+            runType = "自然状态";
+        } else {
+            runType = "人工操作";
+        }
+        String amountType = x.getAmountType();
+        //  1=支出,0=收入
+        if ("1".equals(amountType)) {
+            amountType = "支出";
+        } else {
+            amountType = "收入";
+        }
+        run.setAmountType(amountType);
+        Integer runOrderType = x.getRunOrderType();
+        run.setRunOrderTypeCN(RunOrderType.getType(runOrderType));
+    }
+
+
 }

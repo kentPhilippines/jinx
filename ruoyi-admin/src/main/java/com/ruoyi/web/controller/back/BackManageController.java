@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -403,10 +404,19 @@ public class BackManageController extends BaseController {
                     aDouble = aDouble + i;
                     double v = 0;
                     try {
+                        Double onlineRate = 0.0;
                         Double locatuonRate = Double.valueOf(date.getDictValue());
-                        String urlbuy = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=buy&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=block&online=1&range=0&amount=";
-                        String rate = getRate(urlbuy);
-                        Double onlineRate = Double.valueOf(rate);
+                        String smallbull = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=buy&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=general&online=1&range=0&amount=";
+                        String rateBull = getRate(smallbull);
+                        String smallSell = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=sell&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=general&online=1&range=0&amount=";
+                        String rateSell = getRate(smallSell);
+                        BigDecimal bigDecimal = new BigDecimal(rateBull);
+                        BigDecimal bigDecimal1 = new BigDecimal(rateSell);
+                        if (bigDecimal.compareTo(bigDecimal1) == -1) {
+                            onlineRate = Double.valueOf(rateBull);
+                        } else {
+                            onlineRate = Double.valueOf(rateSell);
+                        }
                         v = locatuonRate + onlineRate;
                     } catch (Exception e) {
                         return AjaxResult.error("汇率错误");
@@ -415,6 +425,7 @@ public class BackManageController extends BaseController {
                     Map map = new HashMap();
                     map.put("amount", div);
                     map.put("rate", v);
+                    logger.info("【当前取汇率为：" + map.toString() + "】");
                     return AjaxResult.success(map);
                 }
             }

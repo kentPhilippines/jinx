@@ -166,6 +166,15 @@ public class AlipayUserFundEntity extends BaseEntity {
      */
     @Excel(name = "当日接单利润【代理利润+接单利润=当日利润】")
     private Double todayProfit;
+    private Double todayOtherWitAmount;
+
+    public Double getTodayOtherWitAmount() {
+        return todayOtherWitAmount;
+    }
+
+    public void setTodayOtherWitAmount(Double todayOtherWitAmount) {
+        this.todayOtherWitAmount = todayOtherWitAmount;
+    }
 
     /**
      * 当日接单笔数

@@ -1,5 +1,6 @@
 package com.ruoyi.common.core.domain;
 
+import com.alibaba.excel.metadata.BaseRowModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.utils.DateUtils;
 
@@ -14,7 +15,7 @@ import java.util.Optional;
  *
  * @author ruoyi
  */
-public class BaseEntity implements Serializable {
+public class BaseEntity extends BaseRowModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

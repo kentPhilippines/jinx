@@ -215,6 +215,8 @@ public enum BankInfoAnalysisAlgorithmTool {
         objects.add(s);
         for (String object : objects) {
             BankInfoSplitResult bankInfoSplitEntity = BankInfoAnalysisAlgorithmTool.runAlgorithm(object);
+            System.out.println(bankInfoSplitEntity.toString());
+
         }
     }
 }
