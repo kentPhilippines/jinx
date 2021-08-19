@@ -372,7 +372,7 @@ public class BackManageController extends BaseController {
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         if (CollUtil.isNotEmpty(list)) {
             AlipayProductEntity first = CollUtil.getFirst(list);
-            if (1 == first.getStatus()) {
+            if ("0".equals(first.getRetain1())) {
                 return prefix + "/rechargeLocation";
             }
         }
@@ -738,5 +738,29 @@ public class BackManageController extends BaseController {
         }
         return "获取失败";
     }
+
+
+    /**
+     * 产品状态修改（调用api）
+     */
+    @Log(title = "产品热冷修改", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateStatus")
+    @ResponseBody
+    public AjaxResult updateStatus(AlipayProductEntity alipayProductEntity) {
+        return toAjax(iAlipayProductService.updateProductStatusNotifyById(alipayProductEntity));
+    }
+
+    /**
+     * 查询产品列表列表
+     */
+    @PostMapping("/listProduct")
+    @ResponseBody
+    public TableDataInfo list(AlipayProductEntity alipayProductEntity) {
+        startPage();
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        return getDataTable(list);
+    }
+
+
 }
 

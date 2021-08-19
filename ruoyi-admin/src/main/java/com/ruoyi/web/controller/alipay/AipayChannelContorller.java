@@ -15,6 +15,7 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -89,15 +90,17 @@ public class AipayChannelContorller extends BaseController {
 
     @GetMapping("/edit/{userId}")
     public String edit(@PathVariable("userId") String userId, ModelMap mmap) {
+        String loginName = ShiroUtils.getLoginName();
         AlipayUserInfo channelInfo = alipayUserInfoService.findMerchantInfoByUserId(userId);
         mmap.put("channelInfo", channelInfo);
+        mmap.put("userId", loginName);
         return prefix + "/edit";
     }
 
     /**
      * 转发财务
      */
-    @Log(title = "商户交易订单", businessType = BusinessType.INSERT)
+    @Log(title = "渠道修改", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editChannelIfo(AlipayUserInfo channelInfo) {

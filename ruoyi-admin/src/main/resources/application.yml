@@ -58,17 +58,17 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     #发布到运营时候修改该配置 online
   profiles:
-    # active: google-online
-    active: druid
+    active: google-online
+    # active: druid
     #  active: google-test
     #active: druid-huifutong
   # 文件上传
   servlet:
     multipart:
       # 单个文件大小
-      max-file-size:  10MB
+      max-file-size: 1000MB
       # 设置总上传的文件大小
-      max-request-size:  20MB
+      max-request-size: 1000MB
   # 服务模块
   devtools:
     restart:

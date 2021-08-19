@@ -77,10 +77,10 @@ public class AlipayUserFundEntityController extends BaseController {
 
 
         if (null != alipayUserFundEntity.getUserType() && "2".equals(alipayUserFundEntity.getUserType().toString())) {
-            userFundCardEntity = alipayUserFundEntityService.findSumFundC();
+            userFundCardEntity = alipayUserFundEntityService.findSumFundC(alipayUserFundEntity.getCurrency());
             list.add(0, userFundCardEntity);
         }
-        AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.findSumFundM();
+        AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.findSumFundM(alipayUserFundEntity.getCurrency());
         list.add(0, userFundEntity);
         return getDataTable(list);
     }

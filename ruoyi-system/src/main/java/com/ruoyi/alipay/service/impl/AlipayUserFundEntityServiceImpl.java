@@ -90,6 +90,8 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
             channel.setReceiveOrderState(userInfo.getReceiveOrderState());
             channel.setSwitchs(userInfo.getSwitchs());
             channel.setRemitOrderState(userInfo.getRemitOrderState());
+            channel.setMaxAmount(userInfo.getMaxAmount());
+            channel.setMinAmount(userInfo.getMinAmount());
         }
         return channelAccount;
     }
@@ -131,14 +133,14 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    public AlipayUserFundEntity findSumFundM() {
-        return alipayUserFundEntityMapper.findSumFundM();
+    public AlipayUserFundEntity findSumFundM(String currency) {
+        return alipayUserFundEntityMapper.findSumFundM(currency);
     }
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    public AlipayUserFundEntity findSumFundC() {
-        return alipayUserFundEntityMapper.findSumFundC();
+    public AlipayUserFundEntity findSumFundC(String currency) {
+        return alipayUserFundEntityMapper.findSumFundC(currency);
     }
 
     @Override

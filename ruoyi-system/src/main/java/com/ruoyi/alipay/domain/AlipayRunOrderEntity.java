@@ -51,11 +51,25 @@ public class AlipayRunOrderEntity extends BaseEntity {
      */
 
     @Excel(name = "流水类型", readConverterExp = "1=充值交易,2=系统加款," +
-            "3=交易手续费,4=系统扣款,5=代付,6=代付手续费,7=冻结,8=解冻," +
-            "9=代付手手续费冻结,10=代付冻结,11=增加交易点数," +
-            "12=点数扣除,13=代理商分润," +
-            "14=码商分润，17=人工加点数,18=人工减点数," +
-            "19=卡商交易加钱,22=代付失败手续费解冻,20=商户交易加款,21=商户交易手续费扣款,26=代付代理分润")
+            "3=交易手续费," +
+            "4=系统扣款," +
+            "5=代付,6=代付手续费," +
+            "7=冻结,8=解冻," +
+            "9=代付手手续费冻结," +
+            "10=代付冻结," +
+            "11=增加交易点数," +
+            "12=点数扣除," +
+            "13=代理商分润," +
+            "14=码商分润," +
+            "17=人工加点数," +
+            "18=人工减点数," +
+            "25=渠道代付手续费," +
+            "19=卡商交易加钱," +
+            "23=渠道代付加款," +
+            "22=代付失败手续费解冻," +
+            "20=商户交易加款," +
+            "21=商户交易手续费扣款," +
+            "26=代付代理分润")
     private Integer runOrderType;
     @ExcelProperty(value = "流水类型", index = 3)
     private String runOrderTypeCN;
@@ -98,7 +112,7 @@ public class AlipayRunOrderEntity extends BaseEntity {
     /**
      * 流水状态  1.自然状态 2.人工操作
      */
-    @Excel(name = "流水状态", readConverterExp = " 1=自然状态,2=人工操作")
+    @Excel(name = "流水状态", readConverterExp = "1=自然状态,2=人工操作")
     @ExcelProperty(value = "流水状态", index = 3)
     private String runType;
     /**

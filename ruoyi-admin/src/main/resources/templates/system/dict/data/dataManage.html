@@ -137,7 +137,7 @@
         });
 
 
-        let prefixProduct = ctx + "alipay/product";
+        let prefixProduct = ctx + "back/merchant/admin";
 
 
         $(function () {
@@ -157,7 +157,7 @@
         $(function () {
             var options = {
                 id: "bootstrap-table1",
-                url: prefixProduct + "/list",
+                url: prefixProduct + "/listProduct",
                 modalName: "【产品列表】",
                 queryParams: queryParamsProduct,
                 columns: [{
@@ -184,10 +184,10 @@
                 }, {
                     field: 'productName', title: '产品名称'
                 }, {
-                    field: 'status', title: '自动回调开关', formatter: function (value, row, index) {
-                        if (row.status == 0) {
+                    field: 'retain1', title: '自动回调开关', formatter: function (value, row, index) {
+                        if (row.retain1 == '1' || null == row.retain1) {
                             return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\')"><i class="fa fa-edit"></i>关闭自动回调</a> '
-                        } else if (row.status == 1) {
+                        } else if (row.retain1 == '0') {
                             return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\')"><i class="fa fa-edit"></i>开启自动回调</a> '
                         }
                     }
@@ -234,11 +234,11 @@
             return auto(id, msg, val);
         }
 
-        function auto(id, msg, status) {
+        function auto(id, msg, retain1) {
             $.modal.confirm(msg, function () {
                 $.operate.post(prefixProduct + "/updateStatus", {
                     "id": id,
-                    "status": status
+                    "retain1": retain1
                 });
             })
         }

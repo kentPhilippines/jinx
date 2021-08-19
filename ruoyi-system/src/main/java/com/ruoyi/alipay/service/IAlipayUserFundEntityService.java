@@ -94,16 +94,18 @@ public interface IAlipayUserFundEntityService {
     /**
      * 统计当前商户冻结账户和余额账户
      *
+     * @param currency
      * @return
      */
-    AlipayUserFundEntity findSumFundM();
+    AlipayUserFundEntity findSumFundM(String currency);
 
     /**
      * 卡商总余额
      *
+     * @param currency
      * @return
      */
-    AlipayUserFundEntity findSumFundC();
+    AlipayUserFundEntity findSumFundC(String currency);
 
     List<AlipayUserInfo> findUserByAgent(String agentUserId);
 

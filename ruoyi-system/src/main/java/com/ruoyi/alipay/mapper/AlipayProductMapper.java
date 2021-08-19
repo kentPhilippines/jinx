@@ -63,9 +63,20 @@ public interface AlipayProductMapper {
 
     /**
      * <p>查询添加产品是否存在</p>
+     *
      * @param productId
      * @return
      */
     @Select("select * from alipay_product where productId = #{productId}")
     AlipayProductEntity checkAlipayProductIdUnique(String productId);
+
+    /**
+     * 挂壁产品其他状态
+     *
+     * @param alipayProductEntity retain1  0   关闭   1  开启
+     * @return
+     */
+
+    @Update("update alipay_product set retain1 = #{retain1} where id = #{id} ")
+    int updateProductStatusNotifyById(AlipayProductEntity alipayProductEntity);
 }

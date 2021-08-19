@@ -217,7 +217,19 @@ public class ReconciliationImpl implements Reconciliation {
         dealProfit = NumberUtil.sub(sumProfit, sumDealAgentFee);//交易利润
         Double witProfit = 0.0;
         Double sumWitAppFee = alipayRunOrderEntityService.sumWitAppFee(yesToday, today);//商户代付利润汇总
+        if (sumProfit < 0) {
+            sumProfit *= -1;
+        }
+        if (sumDealAgentFee < 0) {
+            sumDealAgentFee *= -1;
+        }
+        if (sumWitAppFee < 0) {
+            sumWitAppFee *= -1;
+        }
         Double witAgentFee = alipayRunOrderEntityService.witAgentFee(yesToday, today);//商户代付代理商抽成汇总
+        if (witAgentFee < 0) {
+            witAgentFee *= -1;
+        }
         witProfit = NumberUtil.sub(sumWitAppFee, witAgentFee);//代付利润
         Double profit = 0.0;
         profit = dealProfit + witProfit;

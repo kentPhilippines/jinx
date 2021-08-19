@@ -17,6 +17,27 @@ import java.util.Date;
 public class AlipayUserFundEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
     private String userNode;
+    private Double minAmount;
+    /**
+     * 最大金额
+     */
+    private Double maxAmount;
+
+    public Double getMaxAmount() {
+        return maxAmount;
+    }
+
+    public void setMaxAmount(Double maxAmount) {
+        this.maxAmount = maxAmount;
+    }
+
+    public Double getMinAmount() {
+        return minAmount;
+    }
+
+    public void setMinAmount(Double minAmount) {
+        this.minAmount = minAmount;
+    }
 
     public String getUserNode() {
         return this.userNode;
