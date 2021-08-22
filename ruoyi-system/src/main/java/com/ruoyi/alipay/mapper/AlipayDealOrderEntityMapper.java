@@ -125,4 +125,7 @@ public interface AlipayDealOrderEntityMapper {
     AlipayDealOrderEntity findOrderByOrderId(@Param("order") String order);
 
     AlipayDealOrderEntity selectAlipayDealOrderEntityListSum(AlipayDealOrderEntity alipayDealOrderEntity);
+
+    int insertAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity);
+
 }

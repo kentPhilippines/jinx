@@ -168,4 +168,12 @@ public interface AlipayDealOrderAppMapper {
             " and createTime between #{yesToday}  and #{today} ")
     Double sumDealorderProfit(@Param("yesToday") String yesToday, @Param("today") String today);
 
+    /**
+     * 查询商户订单登记列表
+     *
+     * @param alipayDealOrderApp 商户订单登记
+     * @return 商户订单登记集合
+     */
+    AlipayDealOrderApp selectAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
+
 }

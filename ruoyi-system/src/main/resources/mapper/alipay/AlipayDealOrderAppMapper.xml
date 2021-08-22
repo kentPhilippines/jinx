@@ -62,6 +62,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
+    <select id="selectAlipayDealOrderApp" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">
+        <include refid="selectAlipayDealOrderAppVo"/>
+        <if test="orderId != null and orderId != ''"> where orderId = #{orderId}</if>
+    </select>
+
+
     <insert id="insertAlipayDealOrderApp" parameterType="AlipayDealOrderApp" useGeneratedKeys="true" keyProperty="id">
         insert into alipay_deal_order_app
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -1,12 +1,15 @@
 package com.ruoyi.alipay.service.impl;
 
+import com.ruoyi.alipay.domain.AlipayDealOrderApp;
 import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
+import com.ruoyi.alipay.mapper.AlipayDealOrderAppMapper;
 import com.ruoyi.alipay.mapper.AlipayDealOrderEntityMapper;
 import com.ruoyi.alipay.service.IAlipayDealOrderEntityService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 import com.ruoyi.common.enums.DataSourceType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,6 +24,8 @@ import java.util.List;
 public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityService {
     @Resource
     private AlipayDealOrderEntityMapper alipayDealOrderEntityMapper;
+    @Resource
+    private AlipayDealOrderAppMapper alipayDealOrderAppMapper;
 
     /**
      * 查询交易订单
@@ -115,5 +120,22 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
     public AlipayDealOrderEntity selectAlipayDealOrderEntityListSum(AlipayDealOrderEntity alipayDealOrderEntity) {
         return alipayDealOrderEntityMapper.selectAlipayDealOrderEntityListSum(alipayDealOrderEntity);
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    @Transactional
+    public int insertAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity, AlipayDealOrderApp alipayDealOrderApp) {
+        int i = alipayDealOrderAppMapper.insertAlipayDealOrderApp(alipayDealOrderApp);
+        if (i < 1) {
+            throw new RuntimeException("商户数据插入失败");
+        }
+        int i1 = alipayDealOrderEntityMapper.insertAlipayDealOrderEntity(alipayDealOrderEntity);
+        if (i < 1) {
+            throw new RuntimeException("主订单数据插入失败");
+        }
+        return i1;
+    }
+
+
 
 }

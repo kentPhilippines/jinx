@@ -1280,7 +1280,9 @@ var table = {
                 table.set();
                 if (flag == 'openUrl') {
                     $.modal.open(title, $.operate.openUrl(id));
-                } else if (flag == 'updateUrl') {
+                } if (flag == 'backOrderUrl'){
+                    $.modal.open(title, $.operate.backOrderUrl(id));
+                }else if (flag == 'updateUrl') {
                     $.modal.open(title, $.operate.editUrl(id))
                 } else if (flag == 'otherUrl') {
                     $.modal.open(title, $.operate.otherUrl(id))
@@ -1349,6 +1351,20 @@ var table = {
                 return url;
             }
             ,
+            // 添加下级开户地址
+            backOrderUrl: function (id) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.backOrderUrl.replace("{id}", id);
+                } else {
+                    if (id.length == 0) {
+                        $.modal.alertWarning("未获取到参数值");
+                        return;
+                    }
+                    url = table.options.backOrderUrl.replace("{id}", id);
+                }
+                return url;
+            },
             // 修改信息
             edit: function (id) {
                 table.set();

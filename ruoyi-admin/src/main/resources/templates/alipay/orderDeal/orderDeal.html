@@ -119,6 +119,7 @@
 <script th:inline="javascript">
     //权限
     const detailFlag = [[${@permission.hasPermi('orderDeal:qr:detail')}]];
+    const backOrderFlag = [[${@permission.hasPermi('orderDeal:qr:backOrder')}]];
     const notifyFlag = [[${@permission.hasPermi('orderDeal:qr:renotify')}]];
     const updataOrder = [[${@permission.hasPermi('orderDeal:qr:status')}]];
     //数据
@@ -133,6 +134,7 @@
             statisticsUrl: prefix + "/statistics/qr/table",
             exportUrl: prefix + "/export",
             openUrl: prefix + "/updateBankCardShow/{userId}",
+            backOrderUrl: prefix + "/backOrder/{id}",
             modalName: "主交易订单",
             showFooter: true,
             columns: [{
@@ -235,6 +237,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs ' + backOrderFlag + '" onclick="$.operate.openAccount(\'' + row.id + '\',\'补单\',\'backOrderUrl\')"><i class="fa fa-plus"></i>补单</a> ');
                         if (row.orderStatus === '2') {
                             actions.push('<a class="btn btn-warning btn-xs ' + notifyFlag + '" href="javascript:void(0)" onclick="renotify(\'' + row.orderId + '\')"><i class="fa fa-bell-o"></i>重新通知</a> ');
                         }

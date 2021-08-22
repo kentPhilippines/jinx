@@ -102,5 +102,25 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
         return alipayDealOrderAppMapper.sumDealorderProfit(yesToday, today);
     }
 
+    /**
+     * 查询商户订单登记
+     *
+     * @param alipayDealOrderApp 商户订单登记
+     * @return 商户订单
+     */
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayDealOrderApp selectAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp) {
+        return alipayDealOrderAppMapper.selectAlipayDealOrderApp(alipayDealOrderApp);
+    }
+
+
+    @Override
+    public int insertAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp) {
+        return alipayDealOrderAppMapper.insertAlipayDealOrderApp(alipayDealOrderApp);
+    }
+
+
+
 
 }

@@ -1,5 +1,6 @@
 package com.ruoyi.alipay.service;
 
+import com.ruoyi.alipay.domain.AlipayDealOrderApp;
 import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
 import com.ruoyi.common.core.domain.StatisticsEntity;
 
@@ -78,4 +79,8 @@ public interface IAlipayDealOrderEntityService {
     AlipayDealOrderEntity findOrderByOrderId(String order);
 
     AlipayDealOrderEntity selectAlipayDealOrderEntityListSum(AlipayDealOrderEntity alipayDealOrderEntity);
+
+    int  insertAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity, AlipayDealOrderApp alipayDealOrderApp);
+
+
 }

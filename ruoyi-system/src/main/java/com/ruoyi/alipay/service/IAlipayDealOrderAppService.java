@@ -71,4 +71,19 @@ public interface IAlipayDealOrderAppService {
      */
     Double sumDealorderProfit(String yesToday, String today);
 
+    /**
+     * 查询商户订单登记列表
+     *
+     * @param alipayDealOrderApp 商户订单登记
+     * @return 商户订单登记
+     */
+    AlipayDealOrderApp selectAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
+
+    /**
+     * 新增
+     * @param alipayDealOrderApp
+     * @return
+     */
+    int insertAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
+
 }

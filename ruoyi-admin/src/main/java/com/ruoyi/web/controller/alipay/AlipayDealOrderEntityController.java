@@ -4,14 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
-import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
-import com.ruoyi.alipay.domain.AlipayProductEntity;
-import com.ruoyi.alipay.domain.AlipayUserFundEntity;
-import com.ruoyi.alipay.domain.AlipayUserRateEntity;
-import com.ruoyi.alipay.service.IAlipayDealOrderEntityService;
-import com.ruoyi.alipay.service.IAlipayProductService;
-import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
-import com.ruoyi.alipay.service.IAlipayUserRateEntityService;
+import com.ruoyi.alipay.domain.*;
+import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -32,6 +26,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,6 +46,8 @@ public class AlipayDealOrderEntityController extends BaseController {
     private String code_prefix = "alipay/file";
     @Autowired
     private DictionaryUtils dictionaryUtils;
+    @Autowired
+    private IAlipayDealOrderAppService alipayDealOrderAppService;
     @Autowired
     private IAlipayDealOrderEntityService alipayDealOrderEntityService;
     @Autowired
@@ -72,8 +69,10 @@ public class AlipayDealOrderEntityController extends BaseController {
         mmap.put("rateList", rateList);
         return prefix + "/orderDeal";
     }
+
     @Autowired
     private IAlipayUserFundEntityService alipayUserFundEntityService;
+
     /**
      * 查询交易订单列表
      */
@@ -181,6 +180,7 @@ public class AlipayDealOrderEntityController extends BaseController {
         ExcelUtil<AlipayDealOrderEntity> util = new ExcelUtil<AlipayDealOrderEntity>(AlipayDealOrderEntity.class);
         return util.exportExcel(list, "orderDeal");
     }
+
     /**
      * 显示交易订单详情
      */
@@ -190,6 +190,7 @@ public class AlipayDealOrderEntityController extends BaseController {
         mmap.put("alipayDealOrderEntity", alipayDealOrderEntity);
         return prefix + "/edit";
     }
+
     /**
      * 显示二维码
      *
@@ -219,6 +220,7 @@ public class AlipayDealOrderEntityController extends BaseController {
         mapParam.put("orderId", alipayDealOrderEntity.getOrderId());
         return HttpUtils.adminGet2Gateway(mapParam, ipPort + urlPath);
     }
+
     /**
      * 显示统计table
      */
@@ -244,6 +246,53 @@ public class AlipayDealOrderEntityController extends BaseController {
             }
         }
         return getDataTable(list);
+    }
+
+    /**
+     * 显示补单编辑页
+     */
+    @GetMapping("/backOrder/{id}")
+    public String backOrder(@PathVariable("id") Long id, ModelMap mmap) {
+        AlipayDealOrderEntity alipayDealOrderEntity = alipayDealOrderEntityService.selectAlipayDealOrderEntityById(id);
+        mmap.put("alipayDealOrderEntity", alipayDealOrderEntity);
+        return prefix + "/backOrder";
+    }
+
+    /**
+     * 补单数据保存
+     */
+    @PostMapping("/backOrder")
+    public AjaxResult backOrderSave(AlipayDealOrderEntity alipayDealOrderEntity) {
+        int i = 0;
+        try {
+            AlipayDealOrderEntity dataOrigin = alipayDealOrderEntityService.selectAlipayDealOrderEntityById(alipayDealOrderEntity.getId());
+            if (dataOrigin == null) {
+                AjaxResult.error();
+            }
+            AlipayDealOrderApp alipayDealOrderApp = new AlipayDealOrderApp();
+            alipayDealOrderApp.setOrderId(dataOrigin.getAssociatedId());
+            AlipayDealOrderApp data = alipayDealOrderAppService.selectAlipayDealOrderApp(alipayDealOrderApp);
+            if (data == null) {
+                AjaxResult.error();
+            }
+            data.setSubmitTime(new Date());
+            data.setCreateTime(new Date());
+            data.setOrderId(data.getOrderId() + "_1");
+            data.setStatus(7);
+            dataOrigin.setExternalOrderId(dataOrigin.getOrderId());
+            data.setAppOrderId(data.getAppOrderId() + "_1");
+            dataOrigin.setOrderId(dataOrigin.getOrderId() + "_1");
+            dataOrigin.setAssociatedId(dataOrigin.getAssociatedId() + "_1");
+            dataOrigin.setStatus(7);
+            dataOrigin.setSubmitTime(new Date());
+            dataOrigin.setCreateTime(new Date());
+            i = alipayDealOrderEntityService.insertAlipayDealOrderEntity(dataOrigin, data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            i = -1;
+        }
+
+        return i == 1 ? AjaxResult.success() : AjaxResult.error();
     }
 
 
