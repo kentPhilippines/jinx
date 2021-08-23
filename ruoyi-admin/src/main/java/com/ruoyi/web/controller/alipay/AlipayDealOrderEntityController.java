@@ -261,7 +261,9 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 补单数据保存
      */
-    @PostMapping("/backOrder")
+    @Log(title = "补单信息", businessType = BusinessType.INSERT)
+    @PostMapping("/backOrderSave")
+    @ResponseBody
     public AjaxResult backOrderSave(AlipayDealOrderEntity alipayDealOrderEntity) {
         int i = 0;
         try {
@@ -286,14 +288,11 @@ public class AlipayDealOrderEntityController extends BaseController {
             dataOrigin.setStatus(7);
             dataOrigin.setSubmitTime(new Date());
             dataOrigin.setCreateTime(new Date());
-            i = alipayDealOrderEntityService.insertAlipayDealOrderEntity(dataOrigin, data);
+            return toAjax(alipayDealOrderEntityService.insertAlipayDealOrderEntity(dataOrigin, data));
         } catch (Exception e) {
             e.printStackTrace();
-            i = -1;
+            return AjaxResult.error();
         }
-
-        return i == 1 ? AjaxResult.success() : AjaxResult.error();
     }
-
 
 }

@@ -31,14 +31,14 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: datetimepicker-js"/>
 <script type="text/javascript">
-    var prefix = ctx + "alipay/orderDeal"
+    let prefix = ctx + "alipay/orderDeal"
     $("#form-orderDeal-add").validate({
         focusCleanup: true
     });
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/backOrder", $('#form-orderDeal-back-order').serialize());
+            $.operate.save(prefix + "/backOrderSave", $('#form-orderDeal-back-order').serialize());
         }
     }
 
