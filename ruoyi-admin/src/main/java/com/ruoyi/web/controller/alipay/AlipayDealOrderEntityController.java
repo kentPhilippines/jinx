@@ -286,12 +286,12 @@ public class AlipayDealOrderEntityController extends BaseController {
             data.setSubmitTime(new Date());
             data.setCreateTime(new Date());
             data.setOrderId(data.getOrderId() + "_1");
-            //更新交易订单金额
-            data.setOrderAmount(alipayDealOrderEntity.getDealAmount());
+            data.setStatus(1);
             dataOrigin.setExternalOrderId(dataOrigin.getOrderId());
             data.setAppOrderId(data.getAppOrderId() + "_1");
             dataOrigin.setOrderId(dataOrigin.getOrderId() + "_1");
             dataOrigin.setAssociatedId(dataOrigin.getAssociatedId() + "_1");
+            dataOrigin.setStatus(7);
             dataOrigin.setSubmitTime(new Date());
             dataOrigin.setCreateTime(new Date());
             //更新金额
