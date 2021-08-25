@@ -271,6 +271,7 @@ public class AlipayDealOrderEntityController extends BaseController {
             if (dataOrigin == null) {
                 AjaxResult.error();
             }
+            logger.info("【当前操作为补单操作，操作备注为：" + alipayDealOrderEntity.getDealDescribe() + "，操作订单号为：" + dataOrigin.getOrderId() + "】");
             AlipayDealOrderApp alipayDealOrderApp = new AlipayDealOrderApp();
             alipayDealOrderApp.setOrderId(dataOrigin.getAssociatedId());
             AlipayDealOrderApp data = alipayDealOrderAppService.selectAlipayDealOrderApp(alipayDealOrderApp);
@@ -280,7 +281,7 @@ public class AlipayDealOrderEntityController extends BaseController {
             data.setSubmitTime(new Date());
             data.setCreateTime(new Date());
             data.setOrderId(data.getOrderId() + "_1");
-            data.setStatus(7);
+            data.setStatus(1);
             dataOrigin.setExternalOrderId(dataOrigin.getOrderId());
             data.setAppOrderId(data.getAppOrderId() + "_1");
             dataOrigin.setOrderId(dataOrigin.getOrderId() + "_1");
@@ -288,6 +289,7 @@ public class AlipayDealOrderEntityController extends BaseController {
             dataOrigin.setStatus(7);
             dataOrigin.setSubmitTime(new Date());
             dataOrigin.setCreateTime(new Date());
+            dataOrigin.setOrderQr(dataOrigin.getOrderQr() + "【操作备注：】" + alipayDealOrderEntity.getDealDescribe());
             return toAjax(alipayDealOrderEntityService.insertAlipayDealOrderEntity(dataOrigin, data));
         } catch (Exception e) {
             e.printStackTrace();
