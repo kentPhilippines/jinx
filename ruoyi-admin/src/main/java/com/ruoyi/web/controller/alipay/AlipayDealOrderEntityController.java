@@ -56,6 +56,11 @@ public class AlipayDealOrderEntityController extends BaseController {
     private IAlipayProductService iAlipayProductService;
     @Autowired
     private IAlipayUserRateEntityService iAlipayUserRateEntityService;
+    @Autowired
+    private IAlipayChanelFeeService alipayChanelFeeService;
+    @Autowired
+    private IAlipayUserRateEntityService alipayUserRateEntityService;
+
 
     @GetMapping()
     @RequiresPermissions("orderDeal:qr:view")
@@ -281,15 +286,38 @@ public class AlipayDealOrderEntityController extends BaseController {
             data.setSubmitTime(new Date());
             data.setCreateTime(new Date());
             data.setOrderId(data.getOrderId() + "_1");
-            data.setStatus(1);
+            //更新交易订单金额
+            data.setOrderAmount(alipayDealOrderEntity.getDealAmount());
             dataOrigin.setExternalOrderId(dataOrigin.getOrderId());
             data.setAppOrderId(data.getAppOrderId() + "_1");
             dataOrigin.setOrderId(dataOrigin.getOrderId() + "_1");
             dataOrigin.setAssociatedId(dataOrigin.getAssociatedId() + "_1");
-            dataOrigin.setStatus(7);
             dataOrigin.setSubmitTime(new Date());
             dataOrigin.setCreateTime(new Date());
-            dataOrigin.setOrderQr(dataOrigin.getOrderQr() + "【操作备注：】" + alipayDealOrderEntity.getDealDescribe());
+            //更新金额
+            dataOrigin.setDealAmount(alipayDealOrderEntity.getDealAmount());
+            dataOrigin.setActualAmount(alipayDealOrderEntity.getDealAmount());
+            //获取费率
+            String product = dataOrigin.getRetain1();//产品类型
+            String orderQrUser = dataOrigin.getOrderQrUser();//渠道类型
+            AlipayUserRateEntity userRate = alipayUserRateEntityService.findUserByChannel(dataOrigin.getOrderAccount(), product, orderQrUser);
+            AlipayChanelFee channelFee = alipayChanelFeeService.findChannelBy(orderQrUser, product);
+            String channel = channelFee.getChannelRFee();
+            Double channelDFee = Double.valueOf(channel);
+            Double fee = userRate.getFee();//当前用户交易费率
+            //用户当前手续费为
+            double dealFee = fee * dataOrigin.getDealAmount();
+            double feec = channelDFee * dataOrigin.getDealAmount();
+            dataOrigin.setDealFee(dealFee);
+            dataOrigin.setRetain3(feec + "");
+            data.setRetain3(dealFee + "");
+            String orderQr = dataOrigin.getOrderQr();
+            if (StrUtil.isEmpty(orderQr)) {
+                orderQr = "";
+            }
+            dataOrigin.setStatus(7);
+            data.setStatus(1);
+            dataOrigin.setOrderQr(orderQr + "【操作备注：】" + alipayDealOrderEntity.getDealDescribe());
             return toAjax(alipayDealOrderEntityService.insertAlipayDealOrderEntity(dataOrigin, data));
         } catch (Exception e) {
             e.printStackTrace();

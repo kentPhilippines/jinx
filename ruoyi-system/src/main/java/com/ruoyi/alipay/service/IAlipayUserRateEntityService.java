@@ -117,4 +117,14 @@ public interface IAlipayUserRateEntityService {
      * @return
      */
     AlipayUserRateEntity findWitRate(String userId);
+
+    /**
+     * 根据渠道id，产品id，账户id查询用户费率
+     *
+     * @param orderAccount
+     * @param product
+     * @param orderQrUser
+     * @return
+     */
+    AlipayUserRateEntity findUserByChannel(String orderAccount, String product, String orderQrUser);
 }
