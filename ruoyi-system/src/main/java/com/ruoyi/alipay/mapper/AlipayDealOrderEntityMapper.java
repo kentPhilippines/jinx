@@ -2,6 +2,7 @@ package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
 import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.core.domain.StatisticsMerchantEntity;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -40,6 +41,38 @@ public interface AlipayDealOrderEntityMapper {
      * @return 结果
      */
     int updateAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity);
+
+    @Select("<script>select *, (b.income - b.expenditure) as totalIncome\n" +
+            "from (select a.channel\n" +
+            "              ,\n" +
+            "             a.findDay,\n" +
+            "             SUM(CASE `type` WHEN 'in' THEN amount ELSE 0 END)  AS income,\n" +
+            "             SUM(CASE `type` WHEN 'out' THEN amount ELSE 0 END) AS expenditure\n" +
+            "      from (select orderQrUser                  AS channel,\n" +
+            "                   date(createTime)             AS findDay,\n" +
+            "                   'in'                         AS type,\n" +
+            "                   coalesce(sum(dealAmount), 0) AS amount\n" +
+            "            from alipay_deal_order\n" +
+            "            where createTime between #{statisticsMerchantEntity.params.dayStart} and #{statisticsMerchantEntity.params.dayEnd}\n" +
+            "<if test = \"statisticsMerchantEntity.channel != null and statisticsMerchantEntity.channel != ''\">" +
+            "and orderQrUser = #{statisticsMerchantEntity.channel} " +
+            "</if>" +
+            "              and orderStatus = '2'\n" +
+            "            group by channel, findDay\n" +
+            "            union all\n" +
+            "            select * from(select (case when channelId is not null then channelId else witChannel end) AS channel,\n" +
+            "                   date(createTime)                                                     AS findDay,\n" +
+            "                   'out'                                                                AS type,\n" +
+            "                   coalesce(sum(alipay_withdraw.actualAmount), 0)                       AS amount\n" +
+            "            from alipay_withdraw\n" +
+            "            where createTime between #{statisticsMerchantEntity.params.dayStart} and #{statisticsMerchantEntity.params.dayEnd}\n" +
+            "              and orderStatus = '2'\n" +
+            "            group by channel, findDay) as c) as a" +
+            "<if test = \"statisticsMerchantEntity.channel != null and statisticsMerchantEntity.channel != ''\">" +
+            "where a.channel = #{statisticsMerchantEntity.channel} " +
+            "</if>" +
+            "      group by a.channel, a.findDay) AS b</script>")
+    List<StatisticsMerchantEntity> selectStatMerchantDateByDay(@Param("statisticsMerchantEntity") StatisticsMerchantEntity statisticsMerchantEntity);
 
     @Select("<script>" +
             "select '所有' userId, 'USDT' productName, " +

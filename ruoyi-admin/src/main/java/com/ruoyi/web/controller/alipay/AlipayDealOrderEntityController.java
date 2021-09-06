@@ -11,6 +11,7 @@ import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.core.domain.StatisticsMerchantEntity;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
@@ -235,6 +236,14 @@ public class AlipayDealOrderEntityController extends BaseController {
     }
 
     /**
+     * 显示统计table
+     */
+    @GetMapping("/statistics/merchant/table")
+    public String showMerchantTable() {
+        return prefix + "/merchant";
+    }
+
+    /**
      * 显示具体统计内容
      */
     @PostMapping("/statistics/qr/order")
@@ -251,6 +260,19 @@ public class AlipayDealOrderEntityController extends BaseController {
             }
         }
         return getDataTable(list);
+    }
+
+
+    /**
+     * 显示具体统计内容
+     */
+    @PostMapping("/statistics/merchant/order")
+    @RequiresPermissions("orderDeal:merchant:statistics")
+    @ResponseBody
+    public TableDataInfo merchantdayStat(StatisticsMerchantEntity statisticsMerchantEntity) {
+        startPage();
+        List<StatisticsMerchantEntity> statisticsMerchantEntities = alipayDealOrderEntityService.selectStatisticsMerchantDataByDate(statisticsMerchantEntity);
+        return getDataTable(statisticsMerchantEntities);
     }
 
     /**
