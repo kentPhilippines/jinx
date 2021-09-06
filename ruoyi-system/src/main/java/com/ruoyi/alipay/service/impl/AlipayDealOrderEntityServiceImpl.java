@@ -7,6 +7,7 @@ import com.ruoyi.alipay.mapper.AlipayDealOrderEntityMapper;
 import com.ruoyi.alipay.service.IAlipayDealOrderEntityService;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.core.domain.StatisticsMerchantEntity;
 import com.ruoyi.common.enums.DataSourceType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +74,12 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<StatisticsEntity> selectStatisticsDataByDate(StatisticsEntity statisticsEntity, String dayStart, String dayEnd) {
         return alipayDealOrderEntityMapper.selectStatDateByDay(statisticsEntity, dayStart, dayEnd);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<StatisticsMerchantEntity> selectStatisticsMerchantDataByDate(StatisticsMerchantEntity statisticsMerchantEntity) {
+        return alipayDealOrderEntityMapper.selectStatMerchantDateByDay(statisticsMerchantEntity);
     }
 
     @Override

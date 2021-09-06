@@ -37,6 +37,7 @@ public class AlipayWithdrawEntity extends BaseEntity {
     private String sunCountAmount = "0";
     private String sunCountAmountFee = "0";
     private String sunCountActualAmount = "0";
+    private String addressType;
 
     public String getSunCountActualAmount() {
         return sunCountActualAmount;

@@ -3,6 +3,7 @@ package com.ruoyi.alipay.service;
 import com.ruoyi.alipay.domain.AlipayDealOrderApp;
 import com.ruoyi.alipay.domain.AlipayDealOrderEntity;
 import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.core.domain.StatisticsMerchantEntity;
 
 import java.util.List;
 
@@ -53,6 +54,12 @@ public interface IAlipayDealOrderEntityService {
      * @return 返回结果
      */
     List<StatisticsEntity> selectStatisticsDataByDate(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
+    /**
+     * 根据时间查询商户统计数据
+     *
+     * @return 返回结果
+     */
+    List<StatisticsMerchantEntity> selectStatisticsMerchantDataByDate(StatisticsMerchantEntity statisticsMerchantEntity);
 
     List<StatisticsEntity> selectStatisticsDataByHours(StatisticsEntity statisticsEntity, String dayStart, String dayEnd);
 
