@@ -98,6 +98,7 @@ public class BackManageController extends BaseController {
 
     /**
      * 商户保存修改信息
+     *
      * @param alipayUserInfo
      * @return
      */
@@ -156,7 +157,7 @@ public class BackManageController extends BaseController {
         alipayDealOrderApp.setOrderAccount(sysUser.getMerchantId());
         startPage();
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
-        for(AlipayDealOrderApp orderApp : list) {
+        for (AlipayDealOrderApp orderApp : list) {
             orderApp.setFeeId(null);
         }
         ExcelUtil<AlipayDealOrderApp> util = new ExcelUtil<AlipayDealOrderApp>(AlipayDealOrderApp.class);
@@ -182,6 +183,7 @@ public class BackManageController extends BaseController {
         List<AlipayRunOrderEntity> list = alipayRunOrderEntityService.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
         return getDataTable(list);
     }
+
     /**
      * 导出流水订单记录列表
      */
@@ -344,8 +346,8 @@ public class BackManageController extends BaseController {
         mapParam.put("acctname", alipayWithdrawEntity.getAccname());
         mapParam.put("apply", currentUser.getLoginName());
         mapParam.put("mobile", alipayWithdrawEntity.getMobile());
-        mapParam.put("bankcode",alipayWithdrawEntity.getBankcode());//后台代付
-        mapParam.put("bankName",sysDictData.getDictLabel());//后台代付
+        mapParam.put("bankcode", alipayWithdrawEntity.getBankcode());//后台代付
+        mapParam.put("bankName", sysDictData.getDictLabel());//后台代付
         mapParam.put("dpaytype", "Bankcard");//银行卡代付类型
         mapParam.put("orderStatus", WithdrawalStatusEnum.WITHDRAWAL_STATUS_PROCESS.getCode());
         mapParam.put("notifyurl", "http://localhost/iiiii");
@@ -378,6 +380,7 @@ public class BackManageController extends BaseController {
         }
         return prefix + "/recharge";
     }
+
     @GetMapping("/withdrawal/getRateUsdtFee")
     @ResponseBody
     public AjaxResult getRateUsdtFee(HttpServletRequest request) {
@@ -621,8 +624,8 @@ public class BackManageController extends BaseController {
             list1.remove(0);
             list1.remove(0);
         }
-        if(StrUtil.isNotBlank(alipayUserInfo.getUserId())) {
-            if(list1.contains(alipayUserInfo.getUserId())) {
+        if (StrUtil.isNotBlank(alipayUserInfo.getUserId())) {
+            if (list1.contains(alipayUserInfo.getUserId())) {
                 list1.clear();
                 list1 = new ArrayList();
                 list1.add(alipayUserInfo.getUserId());
@@ -639,11 +642,14 @@ public class BackManageController extends BaseController {
         return prefix + "/agent_order";
     }
 
-    @Autowired private ISysUserService userService;
+    @Autowired
+    private ISysUserService userService;
     /**
      * 查询商户订单
      */
-    @Autowired IMerchantInfoEntityService merchantInfoEntityServiceImpl;
+    @Autowired
+    IMerchantInfoEntityService merchantInfoEntityServiceImpl;
+
     @PostMapping("/agent/order/list")
     @ResponseBody
     public TableDataInfo agentOrder(AlipayDealOrderApp alipayDealOrderApp) {
@@ -660,8 +666,8 @@ public class BackManageController extends BaseController {
             list1.remove(0);
             list1.remove(0);
         }
-        if(StrUtil.isNotBlank(alipayDealOrderApp.getUserName())) {
-            if(list1.contains(alipayDealOrderApp.getUserName())) {
+        if (StrUtil.isNotBlank(alipayDealOrderApp.getUserName())) {
+            if (list1.contains(alipayDealOrderApp.getUserName())) {
                 list1.clear();
                 list1 = new ArrayList();
                 list1.add(alipayDealOrderApp.getUserName());
@@ -685,7 +691,7 @@ public class BackManageController extends BaseController {
                 order.setRetain1(product.getProductName());
             }
         }
-        prCollect  = null;
+        prCollect = null;
         userCollect = null;
         return getDataTable(list);
     }
@@ -697,6 +703,7 @@ public class BackManageController extends BaseController {
     public String showTable() {
         return prefix + "/currentTable";
     }
+
     /**
      * 后台管理员商户交易订单统计（仅当天数据）
      */
@@ -704,7 +711,7 @@ public class BackManageController extends BaseController {
     @ResponseBody
     public TableDataInfo dayStat(StatisticsEntity statisticsEntity) {
         SysUser sysUser = ShiroUtils.getSysUser();
-        if(StringUtils.isEmpty(sysUser.getMerchantId())){
+        if (StringUtils.isEmpty(sysUser.getMerchantId())) {
             throw new BusinessException("获取商户账户异常，请联系管理员");
         }
         statisticsEntity.setUserId(sysUser.getMerchantId());
@@ -747,6 +754,14 @@ public class BackManageController extends BaseController {
     @PostMapping("/updateStatus")
     @ResponseBody
     public AjaxResult updateStatus(AlipayProductEntity alipayProductEntity) {
+        String retain1 = alipayProductEntity.getRetain1();
+        if (retain1.contains("trc")||retain1.contains("erc")){
+            SysDictData sysDictData = new SysDictData();
+            sysDictData.setDictCode(alipayProductEntity.getId().longValue());
+            sysDictData.setStatus(String.valueOf(alipayProductEntity.getRetain1()
+                    .replace("trc","").replace("erc","")));
+            return toAjax(dictDataService.updateDictData(sysDictData));
+        }
         return toAjax(iAlipayProductService.updateProductStatusNotifyById(alipayProductEntity));
     }
 
@@ -757,7 +772,32 @@ public class BackManageController extends BaseController {
     @ResponseBody
     public TableDataInfo list(AlipayProductEntity alipayProductEntity) {
         startPage();
+        SysDictData dictData = new SysDictData();
+        dictData.setDictType("virtual_address_switch");
+        List<SysDictData> sysDictData = dictDataService.selectDictDataList(dictData);
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        for (SysDictData sys : sysDictData) {
+            AlipayProductEntity data = new AlipayProductEntity();
+            data.setCreateTime(sys.getCreateTime());
+            data.setStatus(Integer.valueOf(sys.getStatus()));
+            data.setId(sys.getDictCode().intValue());
+            if ("erc_switch".equals(sys.getDictValue())) {
+                data.setRetain1("0".equals(sys.getStatus())?"3":"4");
+                data.setProductCode("3");
+                data.setProductId(sys.getDictValue());
+                data.setProductName("erc开关");
+                data.setDescribe(sys.getRemark());
+            }
+            if ("trc_switch".equals(sys.getDictValue())) {
+                data.setRetain1("0".equals(sys.getStatus())?"5":"6");
+                data.setProductCode("4");
+                data.setProductId(sys.getDictValue());
+                data.setProductName("trc开关");
+                data.setDescribe(sys.getRemark());
+            }
+            data.setUpdateTime(sys.getUpdateTime());
+            list.add(data);
+        }
         return getDataTable(list);
     }
 
