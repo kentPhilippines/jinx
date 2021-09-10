@@ -195,15 +195,15 @@
                 }, {
                     field: 'retain1', title: '自动回调开关', formatter: function (value, row, index) {
                         if (row.retain1 == '0') {
-                            return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\',\''+"确定关闭自动回调吗"+'\',\''+"1"+'\')"><i class="fa fa-edit"></i>关闭自动回调</a> '
+                            return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\',\''+"确定关闭自动回调吗"+'\',\''+"1"+'\')"><i class="fa fa-edit"></i>关闭自动回调</a> '
                         } else if (row.retain1 == '1') {
-                            return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\',\''+"确定开启自动回调吗"+'\',\''+"0"+'\')"><i class="fa fa-edit"></i>开启自动回调</a> '
+                            return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\',\''+"确定开启自动回调吗"+'\',\''+"0"+'\')"><i class="fa fa-edit"></i>开启自动回调</a> '
                         } else if (row.retain1 == '3') {
-                            return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\',\''+"确定关闭erc吗"+'\',\''+"erc1"+'\')"><i class="fa fa-edit">关闭erc</i></a> '
+                            return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\',\''+"确定关闭erc吗"+'\',\''+"erc1"+'\')"><i class="fa fa-edit">关闭erc</i></a> '
                         } else if (row.retain1 == '4') {
                             return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\',\''+"确定开启erc吗"+'\',\''+"erc0"+'\')"><i class="fa fa-edit">开启erc</i></a> '
                         } else if (row.retain1 == '5') {
-                            return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\',\''+"确定关闭trc吗"+'\',\''+"trc1"+'\')"><i class="fa fa-edit">关闭trc</i></a> '
+                            return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="hut(\'' + row.id + '\',\''+"确定关闭trc吗"+'\',\''+"trc1"+'\')"><i class="fa fa-edit">关闭trc</i></a> '
                         } else if (row.retain1 == '6') {
                             return '<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cood(\'' + row.id + '\',\''+"确定开启trc吗"+'\',\''+"trc0"+'\')"><i class="fa fa-edit">开启trc</i></a> '
                         }
