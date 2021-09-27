@@ -224,6 +224,7 @@ public class AlipayUserInfo extends BaseEntity {
      * 交易IP地址
      */
     private String dealUrl;
+    private String balanceUrl;
 
     private String qrRechargeList;
 
@@ -497,6 +498,14 @@ public class AlipayUserInfo extends BaseEntity {
 
     public void setQrRechargeList(String qrRechargeList) {
         this.qrRechargeList = qrRechargeList;
+    }
+
+    public String getBalanceUrl() {
+        return balanceUrl;
+    }
+
+    public void setBalanceUrl(String balanceUrl) {
+        this.balanceUrl = balanceUrl;
     }
 
     @Override
