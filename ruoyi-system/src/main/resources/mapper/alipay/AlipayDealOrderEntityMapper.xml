@@ -44,7 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectAlipayDealOrderEntityVo"/>
         <where>
             createTime between #{params.dayStart} and #{params.dayEnd}
-            <if test="orderId != null  and orderId != ''"> and orderId = #{orderId}</if>
+            <if test="orderId != null  and orderId != ''">and (orderId = #{orderId} or externalOrderId = #{orderId} )
+            </if>
             <if test="associatedId != null  and associatedId != ''"> and associatedId = #{associatedId}</if>
             <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
             <if test="dealAmount != null "> and dealAmount = #{dealAmount}</if>

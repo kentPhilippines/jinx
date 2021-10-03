@@ -362,6 +362,7 @@ public class AlipayUserRateEntityController extends BaseController {
         parMap.put("orderId", IdUtil.simpleUUID());
         parMap.put("passCode", rateEntity.getPayTypr());
         parMap.put("subject", amount);
+        parMap.put("userid", "王富贵");
         String createParam = createParam(parMap);
         logger.info("签名前请求串：" + createParam);
         String md5 = getKeyedDigestUTF8(createParam + key);

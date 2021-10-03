@@ -135,6 +135,22 @@
         <a class="btn btn-w-m btn-danger" href="javascript:void(0)" name="reject"
            th:if="${  (alipayWithdrawEntity.orderStatus == 1 ||  alipayWithdrawEntity.orderStatus == '1' ) && (autoWit == 0 || autoWit == '0')}"
            onclick="approval('100');"> 确认出款</a>
+
+        <a class="btn btn-w-m btn-danger" href="javascript:void(0)" name="reject"
+           onclick="approval('100');"
+           th:if="${  (alipayWithdrawEntity.orderStatus == 4 ||  alipayWithdrawEntity.orderStatus == '4' ) && (alipayWithdrawEntity.pushOrder == 3 || alipayWithdrawEntity.pushOrder == '3')}">
+            再次推送</a>
+        <div class="form-group"
+             th:if="${  (alipayWithdrawEntity.orderStatus == 4 ||  alipayWithdrawEntity.orderStatus == '4' ) && (alipayWithdrawEntity.pushOrder == 3 || alipayWithdrawEntity.pushOrder == '3')}">
+            <label class="col-sm-3 control-label glyphicon glyphicon-exclamation-sign"
+                   style="color: red;font-size: 15px;">温馨提示：</label>
+            <div class="col-sm-8">
+                <input class="form-control" readonly
+                       style="border-width: 0;background-color:white; color:green;font-size: 22px;"
+                       type="text" value="当前订单为上游驳回订单，请仔细核实后再次点击出款，避免重复出款">
+            </div>
+        </div>
+    </div>
     </div>
 </div>
 <th:block th:include="include :: footer"/>

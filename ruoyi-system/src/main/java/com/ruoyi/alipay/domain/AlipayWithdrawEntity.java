@@ -37,7 +37,16 @@ public class AlipayWithdrawEntity extends BaseEntity {
     private String sunCountAmount = "0";
     private String sunCountAmountFee = "0";
     private String sunCountActualAmount = "0";
-    private String addressType;
+    private String pushOrder;//推送字段  1 默认       3 上游驳回
+
+
+    public String getPushOrder() {
+        return pushOrder;
+    }
+
+    public void setPushOrder(String pushOrder) {
+        this.pushOrder = pushOrder;
+    }
 
     public String getSunCountActualAmount() {
         return sunCountActualAmount;

@@ -308,12 +308,10 @@ public class AlipayDealOrderEntityController extends BaseController {
             data.setSubmitTime(new Date());
             data.setCreateTime(new Date());
             data.setOrderId(data.getOrderId() + "_1");
-            data.setStatus(1);
             dataOrigin.setExternalOrderId(dataOrigin.getOrderId());
             data.setAppOrderId(data.getAppOrderId() + "_1");
             dataOrigin.setOrderId(dataOrigin.getOrderId() + "_1");
             dataOrigin.setAssociatedId(dataOrigin.getAssociatedId() + "_1");
-            dataOrigin.setStatus(7);
             dataOrigin.setSubmitTime(new Date());
             dataOrigin.setCreateTime(new Date());
             //更新金额
@@ -337,8 +335,11 @@ public class AlipayDealOrderEntityController extends BaseController {
             if (StrUtil.isEmpty(orderQr)) {
                 orderQr = "";
             }
-            dataOrigin.setStatus(7);
-            data.setStatus(1);
+            dataOrigin.setOrderStatus("7");
+            data.setOrderStatus("1");
+            dataOrigin.setRetain4("1");//结算标记
+            data.setOrderAmount(dataOrigin.getDealAmount());
+            dataOrigin.setActualAmount(dataOrigin.getDealAmount() - dataOrigin.getDealFee());
             dataOrigin.setOrderQr(orderQr + "【操作备注：】" + alipayDealOrderEntity.getDealDescribe());
             return toAjax(alipayDealOrderEntityService.insertAlipayDealOrderEntity(dataOrigin, data));
         } catch (Exception e) {

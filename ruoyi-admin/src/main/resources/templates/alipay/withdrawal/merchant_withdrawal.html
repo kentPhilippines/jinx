@@ -124,6 +124,12 @@
             exportUrl: prefix + "/merchant/export",
             showFooter: true,
             modalName: "会员提现记录",
+            rowStyle: function (row, index) {
+                if (row.pushOrder === 3 || row.pushOrder === '3') {
+                    return {css: {'background-color': '#49d098'}};
+                }
+                return "";
+            },
             columns: [{
                 checkbox: true
             },
@@ -270,6 +276,7 @@
                 {
                     field: 'comment',
                     title: '情况'
+
                 },
                 {
                     title: '操作',
@@ -324,6 +331,9 @@
         $.modal.openCode("请扫码付款", qr, "400px", "400px", null);
     }
 
+    function rowStyle(row) {
+
+    }
     /*
 
         $(function () {

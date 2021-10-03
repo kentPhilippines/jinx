@@ -36,13 +36,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sunCountAmount" column="sunCountAmount"/>
         <result property="sunCountAmountFee" column="sunCountAmountFee"/>
         <result property="sunCountActualAmount" column="sunCountActualAmount"/>
+        <result property="pushOrder" column="pushOrder"/>
     </resultMap>
 
     <sql id="selectAlipayWithdrawEntityVo">
         select id, orderId, userId, withdrawType, bankNo, accname,
          orderStatus, bankName, amount, fee, actualAmount, mobile,
          notify, createTime, submitTime, status, retain1, retain2, apply, comment, approval,witChannel,witType,
-        channelId,appOrderId,currency ,txhash,ethFee
+        channelId,appOrderId,currency ,txhash,ethFee,pushOrder
           from alipay_withdraw
     </sql>
 
