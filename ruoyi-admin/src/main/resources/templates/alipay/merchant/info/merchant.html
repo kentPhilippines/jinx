@@ -19,6 +19,8 @@
                             <span>商户名称：</span>
                             <input type="text" id="userName" name="userName"/>
                         </li>
+                            <input type="text" id="type" name="type" hidden/>
+                            <input type="text" id="parentId" name="parentId" hidden/>
                         <li>
                             <span>上级商户账户：</span>
                             <input type="text" id="agent" name="agent"/>
@@ -58,7 +60,12 @@
 <script th:inline="javascript">
     const editFlag = [[${@permission.hasPermi('alipay:merchant:edit')}]];
     const openAccount = [[${@permission.hasPermi('alipay:merchant:opened')}]];
+    const sameRankFlag = [[${@permission.hasPermi('alipay:merchant:sameRank')}]];
+    const childrenRankFlag = [[${@permission.hasPermi('alipay:merchant:childrenRank')}]];
     const prefix = ctx + "alipay/merchant";
+    const prefix1 = ctx + "system/user";
+    const resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
+    const bindGoogleFlag = [[${@permission.hasPermi('system:user:bind')}]];
 
     $(function () {
         var options = {
@@ -66,6 +73,7 @@
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
             openUrl: prefix + "/open/account/{userId}",
+            listUrl: prefix + "/agentList/{userId}/{type}",
             modalName: "商户信息",
             columns: [{
                 checkbox: true
@@ -129,7 +137,7 @@
                 },
 
                 {
-                    field: 'userNode',
+                    field: 'remark',
                     title: '备注'
                 },
                 {
@@ -142,8 +150,19 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + sameRankFlag + '" href="javascript:void(0)" onclick="childrenDetail(\'' + row.agent + '\',\'agent\')"><i class="fa fa-edit"></i>同层商户</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + childrenRankFlag + '" href="javascript:void(0)" onclick="childrenDetail(\'' + row.userId + '\',\'agent\')"><i class="fa fa-edit"></i>下级商户</a> ');
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-primary btn-xs ' + openAccount + '" onclick="$.operate.openAccount(\'' + row.userId + '\', \'添加商户下级账户\',\'openUrl\')"><i class="fa fa-plus"></i>下级开户</a> ');
+                        if (row.isBind === '0') {
+                            actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetPwd(\'' + row.sysUserId + '\')"><i class="fa fa-key"></i>重置</a> ');
+                            actions.push('<a class="btn btn-warning btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleBind(\'' + row.sysUserId + '\',\'' + row.loginName + '\')"><i class="fa fa-close"></i>绑定</a> ');
+                        }
+                        if (row.isBind === '1') {
+                            actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetPwd(\'' + row.sysUserId + '\')"><i class="fa fa-key"></i>重置</a> ');
+                            actions.push('<a class="btn btn-primary btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleUnbind(\'' + row.sysUserId + '\',\'' + row.loginName + '\')"><i class="fa fa-check"></i>解绑</a>');
+                        }
+
                         return actions.join('');
                     }
                 }]
@@ -195,6 +214,31 @@
                 "params[paramValue]": val
             });
         })
+    }
+
+    /* 商户 */
+    function childrenDetail(id, type) {
+        $("#agent").val(id);
+        $("#type").val(type);
+        $.table.search();
+    }
+
+    function googleBind(userId, loginName) {
+        $.modal.confirm("确认要为此用户【绑定】谷歌验证器吗？", function () {
+            $.operate.post(prefix1 + "/bind", {"userId": userId, "loginName": loginName, "isBind": '1'});
+        })
+    }
+
+    function googleUnbind(userId, loginName) {
+        $.modal.confirm("确认要为此用户【解绑】谷歌验证器吗？", function () {
+            $.operate.post(prefix1 + "/bind", {"userId": userId, "loginName": loginName, "isBind": '0'});
+        })
+    }
+
+    /* 用户管理-重置密码 */
+    function resetPwd(userId) {
+        var url = prefix1 + '/resetPwd/' + userId;
+        $.modal.open("重置密码", url, '800', '300');
     }
 
     /* 商户管理-启用 */

@@ -153,10 +153,21 @@ public interface MerchantInfoEntityMapper {
             "</script>")
     AlipayUserInfo findBackUserByUserId(@Param("userId") String userId);
 
+    @Select("<script>" +
+            "select u.id, u.userId, u.userName, u.userType, u.payPasword,  u.switchs, u.email, u.agent, u.isAgent, u.credit, u.QQ, u.telegram, u.skype, " +
+            "u.createTime, u.submitTime, u.status, u.privateKey, u.publicKey, " +
+            "u.minAmount, u.maxAmount, u.timesTotal, u.startTime, u.endTime, u.witip, u.dealUrl " +
+            " from alipay_user_info u " +
+            " where u.agent = #{agent} " +
+            "</script>")
+    List<AlipayUserInfo> findChildrenByUserId(@Param("agent") String agent);
+
 
     @Select("select cashBalance,freezeBalance, rechargeNumber, accountBalance , quota from alipay_user_fund where userId = #{userId}")
     @ResultType(Map.class)
     Map<String, Object> findFundUserBalanceByUserId(@Param("userId") String userId);
+
+
 
     @Update("update alipay_user_info set " +
             "email = #{email}," +

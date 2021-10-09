@@ -1,5 +1,6 @@
 package com.ruoyi.system.service;
 
+import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.SysUserRole;
 
@@ -42,6 +43,8 @@ public interface ISysUserService {
      * @return 用户对象信息
      */
     SysUser selectUserByLoginName(String userName);
+
+    List<SysUser> selectUserByLoginNames(List<String> userNames);
 
     /**
      * 通过手机号码查询用户
@@ -188,6 +191,9 @@ public interface ISysUserService {
 
     int updateUserEmailByUserId(String userId, String email);
 
+    int updateUserByLoginName(AlipayUserInfo alipayUserInfo);
+
     SysUserRole selectUserRoleByUserId(Long userId);
+
 
 }

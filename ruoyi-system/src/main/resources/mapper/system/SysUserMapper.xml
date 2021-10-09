@@ -130,6 +130,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<include refid="selectUserVo"/>
 		where u.login_name = #{userName}
 	</select>
+	<select id="selectUserByLoginNames" parameterType="java.util.List" resultMap="SysUserResult">
+		<include refid="selectUserVo"/>
+		where u.login_name in
+		<foreach collection="list" item="loginName" open="(" separator="," close=")">
+			#{loginName}
+		</foreach>
+	</select>
 
 	<select id="selectUserByPhoneNumber" parameterType="String" resultMap="SysUserResult">
 		<include refid="selectUserVo"/>

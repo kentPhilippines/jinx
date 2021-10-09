@@ -28,6 +28,14 @@ public interface IMerchantInfoEntityService {
     List<AlipayUserInfo> selectMerchantInfoEntityList(AlipayUserInfo merchantInfoEntity);
 
     /**
+     * 查询商户信息列表
+     *
+     * @param userId 商户信息
+     * @return 商户信息集合
+     */
+    List<AlipayUserInfo> selectChildrenByUserId(String userId);
+
+    /**
      * 新增商户信息
      *
      * @param merchantInfoEntity 商户信息

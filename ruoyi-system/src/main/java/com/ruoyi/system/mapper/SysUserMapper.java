@@ -44,6 +44,13 @@ public interface SysUserMapper {
      * @return 用户对象信息
      */
     SysUser selectUserByLoginName(String userName);
+    /**
+     * 通过用户名查询用户
+     *
+     * @param names 用户名
+     * @return 用户对象信息
+     */
+    List<SysUser> selectUserByLoginNames(List<String> names);
 
     /**
      * 通过手机号码查询用户
@@ -143,4 +150,7 @@ public interface SysUserMapper {
 
     @Update("update sys_user set email = #{email} where login_name = #{userId}")
     int updateUserEmailByUserId(@Param("userId") String userId, @Param("email") String email);
+
+    @Update("update sys_user set remark = #{remark} where login_name = #{loginName}")
+    int updateUserByLoginName(@Param("loginName") String loginName,@Param("remark") String remark);
 }

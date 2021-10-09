@@ -1,8 +1,11 @@
 package com.ruoyi.system.service.impl;
 
+import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.security.Md5Utils;
@@ -75,6 +78,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param user 用户信息
      * @return 用户信息集合信息
      */
+    @Override
     @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUnallocatedList(SysUser user) {
         return userMapper.selectUnallocatedList(user);
@@ -89,6 +93,16 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public SysUser selectUserByLoginName(String userName) {
         return userMapper.selectUserByLoginName(userName);
+    }
+    /**
+     * 通过用户名查询用户
+     *
+     * @param userNames 用户名
+     * @return 用户对象信息
+     */
+    @Override
+    public List<SysUser> selectUserByLoginNames(List<String> userNames) {
+        return userMapper.selectUserByLoginNames(userNames);
     }
 
     /**
@@ -169,6 +183,7 @@ public class SysUserServiceImpl implements ISysUserService {
      */
     @Override
     @Transactional
+    @DataSource(value = DataSourceType.MASTER)
     public int insertUser(SysUser user) {
         List<SysRole> roles = user.getRoles();
         if (StringUtils.isNull(roles)){
@@ -468,6 +483,10 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public int updateUserEmailByUserId(String userId, String email) {
         return userMapper.updateUserEmailByUserId(userId, email);
+    }
+    @Override
+    public int updateUserByLoginName(AlipayUserInfo alipayUserInfo) {
+        return userMapper.updateUserByLoginName(alipayUserInfo.getUserId(),alipayUserInfo.getRemark());
     }
 
     @Override

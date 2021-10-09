@@ -45,6 +45,7 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
      * @param id 商户信息ID
      * @return 商户信息
      */
+    @Override
     @DataScope()
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayUserInfo selectMerchantInfoEntityById(Long id) {
@@ -61,6 +62,18 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserInfo> selectMerchantInfoEntityList(AlipayUserInfo merchantInfoEntity) {
         return merchantInfoEntityMapper.selectMerchantInfoEntityList(merchantInfoEntity);
+    }
+
+    /**
+     * 查询商户信息列表
+     *
+     * @param userId 商户信息
+     * @return 商户信息集合
+     */
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserInfo> selectChildrenByUserId(String userId) {
+        return merchantInfoEntityMapper.findChildrenByUserId(userId);
     }
 
     /**
@@ -211,14 +224,14 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         //查询商户所有的下级用户
         List<String> agentList = merchantInfoEntityMapper.selectNextAgentByParentId(alipayUserInfo.getUserId());
         String str = CollUtil.getFirst(agentList);
-        if(str.split(",").length > 2){
+        if (str.split(",").length > 2) {
             List list = new ArrayList(Arrays.asList(str.split(",")));
             list.remove(0);
             list.remove(0);
             //查询子集
             List<AlipayUserInfo> sub = merchantInfoEntityMapper.selectSubAgentMembersByList(list);
             return sub;
-        }else{
+        } else {
             return Lists.newArrayList();
         }
     }
@@ -229,24 +242,24 @@ public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService
         return merchantInfoEntityMapper.updateMerchantInfoById(merchantInfoEntity);
     }
 
-	@Override
+    @Override
     @DataSource(DataSourceType.ALIPAY_SLAVE)
-	public List<String> selectNextAgentByParentId(String orderAccount) {
-		   List<String> agentList = merchantInfoEntityMapper.selectNextAgentByParentId(orderAccount);
-		return agentList;
-	}
+    public List<String> selectNextAgentByParentId(String orderAccount) {
+        List<String> agentList = merchantInfoEntityMapper.selectNextAgentByParentId(orderAccount);
+        return agentList;
+    }
 
-	@Override
-	@DataSource(DataSourceType.ALIPAY_SLAVE)
-	public List<AlipayUserInfo> selectAgentByMerchantId(List<String> list) {
-		if(list.size()>0){
+    @Override
+    @DataSource(DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayUserInfo> selectAgentByMerchantId(List<String> list) {
+        if (list.size() > 0) {
             List<AlipayUserInfo> sub = merchantInfoEntityMapper.selectSubAgentMembersByList(list);
             return sub;
-        }else{
+        } else {
             return Lists.newArrayList();
         }
-		
-		
-	}
+
+
+    }
 
 }

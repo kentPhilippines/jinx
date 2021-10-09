@@ -18,15 +18,19 @@ import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.web.controller.tool.RandomValue;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 商户信息Controller
@@ -44,10 +48,18 @@ public class MerchantInfoEntityController extends BaseController {
     private DictionaryUtils dictionaryUtils;
     @Autowired
     private SysPasswordService passwordService;
+    @Autowired
+    private ISysUserService userService;
 
     @GetMapping()
     public String merchant() {
         return prefix + "/merchant";
+    }
+
+    @GetMapping("/agent")
+    public String agent(String parentId, ModelMap map) {
+        map.put("parentId", parentId);
+        return prefix + "/agent";
     }
 
     /**
@@ -58,7 +70,26 @@ public class MerchantInfoEntityController extends BaseController {
     @ResponseBody
     public TableDataInfo list(AlipayUserInfo merchantInfoEntity) {
         startPage();
-        List<AlipayUserInfo> list = merchantInfoEntityService.selectMerchantInfoEntityList(merchantInfoEntity);
+        List<AlipayUserInfo> list = new ArrayList<>();
+        if ("agent".equals(merchantInfoEntity.getType())) {
+            list = merchantInfoEntityService.selectChildrenByUserId(merchantInfoEntity.getAgent());
+        } else {
+            list = merchantInfoEntityService.selectMerchantInfoEntityList(merchantInfoEntity);
+        }
+        if (CollectionUtils.isNotEmpty(list)) {
+            List<String> loginNames = list.stream().map(AlipayUserInfo::getUserId).collect(Collectors.toList());
+            List<SysUser> sysUsers = userService.selectUserByLoginNames(loginNames);
+            Map<String, SysUser> value = sysUsers.stream().collect(Collectors.toMap(SysUser::getMerchantId, tmp -> tmp));
+            list.stream().forEach(tmp -> {
+                SysUser user = value.get(tmp.getUserId());
+                if (null != user) {
+                    tmp.setRemark(user.getRemark());
+                    tmp.setIsBind(user.getIsBind());
+                    tmp.setSysUserId(user.getUserId());
+                    tmp.setLoginName(user.getLoginName());
+                }
+            });
+        }
         return getDataTable(list);
     }
 
@@ -88,8 +119,45 @@ public class MerchantInfoEntityController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(AlipayUserInfo merchantInfoEntity) {
-        return toAjax(merchantInfoEntityService.insertMerchantInfoEntity(merchantInfoEntity));
+        int i = merchantInfoEntityService.insertMerchantInfoEntity(merchantInfoEntity);
+        int n = saveSysUser(merchantInfoEntity);
+        if (i > 0 && n > 0) {
+            return toAjax(1);
+        }
+        return error("新增失败");
     }
+
+    /**
+     * 增加后台用户
+     *
+     * @param merchantInfoEntity
+     * @return
+     */
+    private int saveSysUser(AlipayUserInfo merchantInfoEntity) {
+        SysUser user = new SysUser();
+        user.setSalt(ShiroUtils.randomSalt());
+        user.setPassword(passwordService.encryptPassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getBackPassword(), user.getSalt()));
+        user.setFundPassword(passwordService.encryptPassword(merchantInfoEntity.getUserId(), merchantInfoEntity.getFundPassword(), user.getSalt()));
+        user.setCreateBy(ShiroUtils.getLoginName());
+        user.setMerchantId(merchantInfoEntity.getUserId());
+        user.setRemark(merchantInfoEntity.getIpStr() + "&0");
+        List<SysRole> roles = new ArrayList<>();
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("BackUserType", 1);
+        SysRole sysRole = new SysRole();
+        sysRole.setRoleId(113L);
+        roles.add(sysRole);
+        user.setRoles(roles);
+        user.setParams(dataMap);
+        user.setSex("0");
+        user.setLoginName(merchantInfoEntity.getUserId());
+        user.setUserName(merchantInfoEntity.getUserName());
+        user.setPhonenumber(RandomValue.getTel());
+        user.setEmail(RandomValue.getEmail(6, 20));
+        int i = userService.insertUser(user);
+        return i;
+    }
+
 
     /**
      * 修改商户信息
@@ -108,8 +176,8 @@ public class MerchantInfoEntityController extends BaseController {
     @PostMapping("/edit")
     @RequiresPermissions("alipay:merchant:edit")
     @ResponseBody
-    public AjaxResult editSave(AlipayUserInfo merchantInfoEntity) {
-            return toAjax(merchantInfoEntityService.updateMerchantInfoById(merchantInfoEntity));
+    public AjaxResult editSave(AlipayUserInfo alipayUserInfo) {
+        return toAjax(userService.updateUserByLoginName(alipayUserInfo));
 //        //获取alipay处理接口URL
 //        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
 //        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
@@ -229,7 +297,12 @@ public class MerchantInfoEntityController extends BaseController {
     @PostMapping("/save/children")
     @ResponseBody
     public AjaxResult saveChildrenAccount(AlipayUserInfo merchantInfoEntity) {
-        return toAjax(merchantInfoEntityService.insertMerchantInfoEntity(merchantInfoEntity));
+        int n = merchantInfoEntityService.insertMerchantInfoEntity(merchantInfoEntity);
+        int i = saveSysUser(merchantInfoEntity);
+        if (i > 0 && n > 0) {
+            return toAjax(1);
+        }
+        return error();
     }
 
 }
