@@ -29,7 +29,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -69,6 +74,35 @@ public class MerchantInfoEntityController extends BaseController {
     @RequiresPermissions("alipay:merchant:list")
     @ResponseBody
     public TableDataInfo list(AlipayUserInfo merchantInfoEntity) {
+        List<AlipayUserInfo> userInfolist = new ArrayList<>();
+        SysUser userf = new SysUser();
+        startPage();
+        userInfolist = merchantInfoEntityService.selectMerchantInfoEntityList(merchantInfoEntity);
+        if (CollectionUtils.isNotEmpty(userInfolist)) {
+            List<String> loginNames = userInfolist.stream().map(AlipayUserInfo::getUserId).collect(Collectors.toList());
+            List<SysUser> sysUsers = userService.selectUserByLoginNames(loginNames);
+            ConcurrentHashMap<String, SysUser> value = sysUsers.stream().collect(Collectors.toConcurrentMap(SysUser::getMerchantId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+            //  Map<String, SysUser> value =  syslist.stream().collect(Collectors.toMap(SysUser::getMerchantId, tmp -> tmp));
+            userInfolist.stream().forEach(tmp -> {
+                SysUser user = value.get(tmp.getUserId());
+                if (null != user) {
+                    tmp.setRemark(user.getRemark());
+                    tmp.setIsBind(user.getIsBind());
+                    tmp.setSysUserId(user.getUserId());
+                    tmp.setLoginName(user.getLoginName());
+                }
+            });
+        }
+        return getDataTable(userInfolist);
+    }
+
+    /**
+     * 查询商户信息列表
+     */
+    @PostMapping("/listJson")
+    @RequiresPermissions("alipay:merchant:list")
+    @ResponseBody
+    public TableDataInfo listJson(@RequestBody AlipayUserInfo merchantInfoEntity) {
         startPage();
         List<AlipayUserInfo> list = new ArrayList<>();
         if ("agent".equals(merchantInfoEntity.getType())) {

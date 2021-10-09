@@ -74,10 +74,120 @@
             updateUrl: prefix + "/edit/{id}",
             openUrl: prefix + "/open/account/{userId}",
             listUrl: prefix + "/agentList/{userId}/{type}",
+            // detailView: true,//父子表
+            pagination: true,//显示分页
             modalName: "商户信息",
-            columns: [{
-                checkbox: true
+            //注册加载子表的事件。注意下这里的三个参数！
+            /*   onExpandRow: function (index, row, $detail) {
+                   initSubTable(index, row, $detail);
+               },*/
+            columns: [
+                {
+                    field: 'id',
+                    title: '数据ID',
+                    visible: false
+                },
+                {
+                    field: 'userId',
+                    title: '商户账户'
+                },
+                {
+                    field: 'userName',
+                    title: '商户名称'
+                },
+                {
+                    field: 'agent',
+                    title: '上级代理'
+                },
+                {
+                    field: 'publicKey',
+                    title: '商户公钥',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return download_public(row);
+                    }
+                },
+                {
+                    field: 'payPasword',
+                    title: '交易密钥',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return download_payPassword(row);
+                    }
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '商户状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 'switchs');
+                    }
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '交易状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 'receiveOrderState');
+                    }
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '代付状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 'remitOrderState');
+                    }
+                },
+
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    align: 'center',
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + sameRankFlag + '" href="javascript:void(0)" onclick="childrenDetail(\'' + row.agent + '\',\'agent\')"><i class="fa fa-edit"></i>同层商户</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + childrenRankFlag + '" href="javascript:void(0)" onclick="childrenDetail(\'' + row.userId + '\',\'agent\')"><i class="fa fa-edit"></i>下级商户</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>登陆ip</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs ' + openAccount + '" onclick="$.operate.openAccount(\'' + row.userId + '\', \'添加商户下级账户\',\'openUrl\')"><i class="fa fa-plus"></i>下级开户</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetPwd(\'' + row.sysUserId + '\')"><i class="fa fa-key"></i>重置</a> ');
+                        if (row.isBind === '0') {
+                            actions.push('<a class="btn btn-warning btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleBind(\'' + row.sysUserId + '\',\'' + row.loginName + '\')"><i class="fa fa-close"></i>绑定</a> ');
+                        } else {
+                            actions.push('<a class="btn btn-primary btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleUnbind(\'' + row.sysUserId + '\',\'' + row.loginName + '\')"><i class="fa fa-check"></i>解绑</a>');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+    //初始化子表格(无线循环)
+    initSubTable = function (index, row, $detail) {
+        var parentid = row.id;
+        var options = {
+            id: "bootstrap-table-" + row.userId,
+            url: prefix + "/list",
+            updateUrl: prefix + "/edit/{id}",
+            openUrl: prefix + "/open/account/{userId}",
+            listUrl: prefix + "/agentList/{userId}/{type}",
+            detailView: true,//父子表
+            sidePagination: "client",
+            pagination: true,//显示分页
+            method: "post",
+            //注册加载子表的事件。注意下这里的三个参数！
+            onExpandRow: function (index, row, $detail) {
+                initSubTable(index, row, $detail);
             },
+            columns: [
                 {
                     field: 'id',
                     title: '数据ID',
@@ -154,22 +264,20 @@
                         actions.push('<a class="btn btn-success btn-xs ' + childrenRankFlag + '" href="javascript:void(0)" onclick="childrenDetail(\'' + row.userId + '\',\'agent\')"><i class="fa fa-edit"></i>下级商户</a> ');
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-primary btn-xs ' + openAccount + '" onclick="$.operate.openAccount(\'' + row.userId + '\', \'添加商户下级账户\',\'openUrl\')"><i class="fa fa-plus"></i>下级开户</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetPwd(\'' + row.sysUserId + '\')"><i class="fa fa-key"></i>重置</a> ');
                         if (row.isBind === '0') {
-                            actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetPwd(\'' + row.sysUserId + '\')"><i class="fa fa-key"></i>重置</a> ');
                             actions.push('<a class="btn btn-warning btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleBind(\'' + row.sysUserId + '\',\'' + row.loginName + '\')"><i class="fa fa-close"></i>绑定</a> ');
                         }
-                        if (row.isBind === '1') {
-                            actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetPwd(\'' + row.sysUserId + '\')"><i class="fa fa-key"></i>重置</a> ');
+                        if (row.isBind == '1') {
                             actions.push('<a class="btn btn-primary btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleUnbind(\'' + row.sysUserId + '\',\'' + row.loginName + '\')"><i class="fa fa-check"></i>解绑</a>');
                         }
-
                         return actions.join('');
                     }
                 }]
-        };
+        }
         $.table.init(options);
-    });
-
+        var cur_table = $detail.html("<table id = 'bootstrap-table-" + row.userId + "'></table>").find('table');
+    }
     /* 商户状态显示 */
     function statusTools(row, param) {
         if (param === 'switchs') {
