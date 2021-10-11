@@ -19,8 +19,8 @@
                             <span>商户名称：</span>
                             <input type="text" id="userName" name="userName"/>
                         </li>
-                            <input type="text" id="type" name="type" hidden/>
-                            <input type="text" id="parentId" name="parentId" hidden/>
+                        <input type="text" id="type" name="type" hidden/>
+                        <input type="text" id="parentId" name="parentId" hidden/>
                         <li>
                             <span>上级商户账户：</span>
                             <input type="text" id="agent" name="agent"/>
@@ -193,6 +193,17 @@
                     title: '数据ID',
                     visible: false
                 },
+                // {
+                //     title: '',
+                //     align: 'center',
+                //     formatter: function (value, row, index) {
+                //         var actions = [];
+                //         if (row.hasParent) {
+                //             actions.push('<a class="" href="javascript:" onclick="addChildrenHtml(' + row.userId + ',this)"><i class="glyphicon glyphicon-plus icon-plus"></i></a>')
+                //             return actions.join('');
+                //         }
+                //     }
+                // },
                 {
                     field: 'userId',
                     title: '商户账户'
@@ -323,6 +334,111 @@
             });
         })
     }
+
+
+    // function addChildrenHtml(userId, tdThis) {
+    //     if ($(tdThis).children('i').hasClass('glyphicon-plus')) {
+    //         var html = "";
+    //         var formData = {"agent": userId};
+    //         $.ajax({
+    //             url: prefix + "/getChildList",
+    //             type: 'post',
+    //             dataType: json,
+    //             data: formData,
+    //             success: function (result) {
+    //                 if (result.code() == web_status.SUCCESS) {
+    //                     $.each(result.data, function (i, row) {
+    //                         html += '<tr child-index="' + i + '" class="child-tr pid-' + userId + '">';
+    //                         html += '<td/>';
+    //                         html += '<td style="">' + userId + '</td>';
+    //                         if (row.userName == null) {
+    //                             html += '<td style="">-</td>';
+    //                         } else {
+    //                             html += '<td style="">' + row.userName + '</td>';
+    //                         }
+    //                         if (row.agent == null) {
+    //                             html += '<td style="">-</td>';
+    //                         } else {
+    //                             html += '<td style="">' + row.agent + '</td>';
+    //                         }
+    //                         if (row.userName == null) {
+    //                             html += '<td style="">-</td>';
+    //                         } else {
+    //                             html += '<td style="">' + row.userName + '</td>';
+    //                         }
+    //                         html += '<td><i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载加密公钥" aria-hidden="true"  onclick="typePassword(\'' + row.publicKey + '\',\'' + row.userName + '公钥\')"></i></td>';
+    //                         html += '<td><i class=\"glyphicon glyphicon-download-alt\" style="cursor:pointer;" title="点击下载交易密钥" aria-hidden="true"  onclick="typePassword(\'' + row.payPasword + '\',\'' + row.userName + '交易密钥\')"></i></td> ';
+    //                         if (row.switchs === 0) {
+    //                             let msg = "确认要【启用】此商户的【用户状态】吗？";
+    //                             let val = 1;
+    //                             html += '<td><i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i></td> ';
+    //                         } else {
+    //                             let msg = "确认要【停用】此商户【用户状态】吗？";
+    //                             let val = 0;
+    //                             html += '<td><i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i></td>';
+    //                         }
+    //                         if (row.receiveOrderState === 2) {
+    //                             let msg = "确认要【开启】此商户的【交易状态】吗？";
+    //                             let val = 1;
+    //                             return '<td><i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> </td>';
+    //                         } else {
+    //                             let msg = "确认要【关闭】此商户的【交易状态】吗？";
+    //                             let val = 2;
+    //                             html += '<td><i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i></td> ';
+    //                         }
+    //                         if (row.remitOrderState === 2) {
+    //                             let msg = "确认要【开启】此商户的【代付状态】吗？";
+    //                             let val = 1;
+    //                             html += '<td><i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i></td> ';
+    //                         } else {
+    //                             let msg = "确认要【关闭】此商户的【代付状态】吗？";
+    //                             let val = 2;
+    //                             html += '<td><i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.userId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i></td> ';
+    //
+    //                         }
+    //
+    //                         if (row.remark == null) {
+    //                             html += '<td style="">-</td>';
+    //                         } else {
+    //                             html += '<td style="">' + row.remark + '</td>';
+    //                         }
+    //                         if (row.createTime == null) {
+    //                             html += '<td style="">-</td>';
+    //                         } else {
+    //                             html += '<td style="">' + row.createTime + '</td>';
+    //                         }
+    //                         html += '<td style="text-align: center;">'
+    //                         html += '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ';
+    //                         html += '<a class="btn btn-primary btn-xs ' + openAccount + '" onclick="$.operate.openAccount(\'' + row.userId + '\', \'添加商户下级账户\',\'openUrl\')"><i class="fa fa-plus"></i>下级开户</a> ';
+    //                         html += '<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="javascript:void(0)" onclick="resetPwd(\'' + row.sysUserId + '\')"><i class="fa fa-key"></i>重置</a> ';
+    //                         if (row.isBind === '0') {
+    //                             html += '<a class="btn btn-warning btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleBind(\'' + row.sysUserId + '\',\'' + row.loginName + '\')"><i class="fa fa-close"></i>绑定</a> ';
+    //                         } else if (row.isBind === '1') {
+    //                             html += '<a class="btn btn-primary btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleUnbind(\'' + row.sysUserId + '\',\'' + row.loginName + '\')"><i class="fa fa-check"></i>解绑</a>'
+    //                         }
+    //                         html += '</td>';
+    //                         html += '</tr>';
+    //                     });
+    //                     $(tdThis).parent().parent().after(html);
+    //                 } else {
+    //                     $.modal().alertError(result.msg);
+    //                 }
+    //             }
+    //
+    //         });
+    //         $(tdThis).children("i").removeClass('glyphicon-plus');
+    //         $(tdThis).children("i").removeClass('icon-plus');
+    //         $(tdThis).children("i").removeClass('glyphicon-minus');
+    //         $(tdThis).children("i").removeClass('icon-minus');
+    //     } else {
+    //         $(tdThis).children("i").removeClass('glyphicon-minus');
+    //         $(tdThis).children("i").removeClass('icon-minus');
+    //         $(tdThis).children("i").removeClass('glyphicon-plus');
+    //         $(tdThis).children("i").removeClass('icon-plus');
+    //     }
+    //
+    // }
+
 
     /* 商户 */
     function childrenDetail(id, type) {

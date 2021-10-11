@@ -21,6 +21,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
+//import com.ruoyi.web.LocalCache;
 import com.ruoyi.web.controller.tool.RandomValue;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -61,11 +62,6 @@ public class MerchantInfoEntityController extends BaseController {
         return prefix + "/merchant";
     }
 
-    @GetMapping("/agent")
-    public String agent(String parentId, ModelMap map) {
-        map.put("parentId", parentId);
-        return prefix + "/agent";
-    }
 
     /**
      * 查询商户信息列表
@@ -78,6 +74,7 @@ public class MerchantInfoEntityController extends BaseController {
         SysUser userf = new SysUser();
         startPage();
         userInfolist = merchantInfoEntityService.selectMerchantInfoEntityList(merchantInfoEntity);
+
         if (CollectionUtils.isNotEmpty(userInfolist)) {
             List<String> loginNames = userInfolist.stream().map(AlipayUserInfo::getUserId).collect(Collectors.toList());
             List<SysUser> sysUsers = userService.selectUserByLoginNames(loginNames);
@@ -90,6 +87,9 @@ public class MerchantInfoEntityController extends BaseController {
                     tmp.setIsBind(user.getIsBind());
                     tmp.setSysUserId(user.getUserId());
                     tmp.setLoginName(user.getLoginName());
+//                    if (LocalCache.alipay.contains(tmp.getUserId())) {
+//                        tmp.setHasParent(true);
+//                    }
                 }
             });
         }
@@ -97,19 +97,15 @@ public class MerchantInfoEntityController extends BaseController {
     }
 
     /**
-     * 查询商户信息列表
+     * 查询商户子集信息列表
      */
-    @PostMapping("/listJson")
-    @RequiresPermissions("alipay:merchant:list")
+    @PostMapping("/getChildreList")
+//    @RequiresPermissions("alipay:merchant:childrenList")
     @ResponseBody
-    public TableDataInfo listJson(@RequestBody AlipayUserInfo merchantInfoEntity) {
+    public TableDataInfo getChildren(@RequestBody AlipayUserInfo merchantInfoEntity) {
         startPage();
         List<AlipayUserInfo> list = new ArrayList<>();
-        if ("agent".equals(merchantInfoEntity.getType())) {
-            list = merchantInfoEntityService.selectChildrenByUserId(merchantInfoEntity.getAgent());
-        } else {
-            list = merchantInfoEntityService.selectMerchantInfoEntityList(merchantInfoEntity);
-        }
+        list = merchantInfoEntityService.selectChildrenByUserId(merchantInfoEntity.getAgent());
         if (CollectionUtils.isNotEmpty(list)) {
             List<String> loginNames = list.stream().map(AlipayUserInfo::getUserId).collect(Collectors.toList());
             List<SysUser> sysUsers = userService.selectUserByLoginNames(loginNames);
@@ -158,6 +154,7 @@ public class MerchantInfoEntityController extends BaseController {
         if (i > 0 && n > 0) {
             return toAjax(1);
         }
+
         return error("新增失败");
     }
 
