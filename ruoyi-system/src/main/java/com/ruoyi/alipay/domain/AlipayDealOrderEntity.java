@@ -117,6 +117,38 @@ public class AlipayDealOrderEntity extends BaseEntity {
      */
     private String orderQr;
 
+
+    @Excel(name = "汇率")
+    private String rate;
+    @Excel(name = "地址")
+    private String address;
+    @Excel(name = "数量")
+    private String count;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
     /**
      * 外部订单号(下游商户请求参数,用户数据回调)
      */

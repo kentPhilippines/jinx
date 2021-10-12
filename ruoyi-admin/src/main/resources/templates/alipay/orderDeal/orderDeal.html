@@ -68,10 +68,10 @@
                                         th:value="${channel.userId}"></option>
                             </select>
                         </li>
-                        <!-- <li>
+                         <li>
                              <span>二维码ID：</span>
                              <input type="text" name="orderQr"/>
-                         </li>-->
+                         </li>
                         <li class="select-selectpicker">
                             <label>订单状态： </label>
                             <select id="orderStatus" name="orderStatus" th:with="type=${@dict.getType('orderStatus')}"
@@ -181,12 +181,23 @@
                 {
                     field: 'orderType', title: '订单类型', formatter: function (value, row, index) {
                         if (value == 1) {
-                            return '<span class="badge badge-primary">商户充值->渠道主交易订单</span>'
+
+                            var date1 = new Date(row.createTime)
+                            var date2 = new Date(row.submitTime)
+                            var s1 = date1.getTime(), s2 = date2.getTime();
+                            var total = (s2 - s1) / 1000;
+                            var table = '<ul>'
+                            table += '<li>' + '<span class="badge badge-primary">商户充值->渠道主交易订单</span>' + '</li>'
+                            if (total > 300) {
+                                table += '<li>' + '<span class="badge badge-danger">标记：人工补单 </span>' + '</li>'
+                            }
+                            table += '</ul>'
+                            return table;
+
                         } else if (value == 4) {
                             return '<span class="badge badge-danger">商户代付->渠道出款主交易订单</span>'
                         } else if (value == 3) {
                             return '<span class="badge badge-info">卡商充值->渠道主交易订单</span>'
-
                         }
                     }
                 },
@@ -198,7 +209,7 @@
                 },
                 // {field: 'externalOrderId',   title: '外部订单号'},
                 {
-                    field: 'dealAmount', title: '交易金额',
+                    field: 'dealAmount', title: '交易数据',
                     footerFormatter: function (rows) {
                         var sumAmount = 0;
                         var sumFee = 0;
@@ -220,10 +231,32 @@
                         table += '<li><span style="color: green"><strong>' + '当页充值实际到账：' + sumActualAmount + '</strong></span><span style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;<strong>当日总充值实际到账 ： ' + sunCountActualAmount + '</strong></span></li>'
                         table += '</ul>'
                         return table;
+                    }, formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        table += '<li>' + row.dealAmount + '</li>'
+                        table += '<li>' + row.currency + '</li>'
+                        table += '</ul>'
+                        return table;
                     }
                 },
-                {field: 'currency', title: '货币类型'},
-                {field: 'orderQr', title: '交易媒介'},
+                /*    {field: 'currency', title: '货币类型'},*/
+                {
+                    field: 'orderQr', title: '交易详情', formatter: function (value, row, index) {
+                        var table = '<ul>'
+                        if (row.orderStatus == 2) {
+                            table += '<li>' + row.orderQr + '</li>'
+                            if (row.isNotify == 'YES') {
+
+                                table += '<li>' + '通知：已发送' + '</li>'
+                            } else {
+                                table += '<li>' + '通知：未收到' + '</li>'
+                            }
+                        }
+                        table += '<li>' + row.dealDescribe + '</li>'
+                        table += '</ul>'
+                        return table;
+                    }
+                },
                 /*                {   field: 'orderQr',       title: '关联二维码'  },*/
                 /*
                 {   field: 'isNotify',      title: '发送通知'   },*/
@@ -232,6 +265,11 @@
                         var table = '<ul>'
                         table += '<li>' + '创建时间：' + row.createTime + '</li>'
                         table += '<li>' + '修改时间：' + row.submitTime + '</li>'
+                        var date1 = new Date(row.createTime)
+                        var date2 = new Date(row.submitTime)
+                        var s1 = date1.getTime(), s2 = date2.getTime();
+                        var total = (s2 - s1) / 1000;
+                        table += '<li>' + '结算时间：' + total + '秒</li>'
                         table += '</ul>'
                         return table;
                     }
@@ -240,14 +278,23 @@
                     title: '操作',
                     align: 'left',
                     formatter: function (value, row, index) {
+                        var date1 = new Date();
+                        var date2 = new Date(row.createTime);
+                        var s1 = date1.getTime(), s2 = date2.getTime();
+                        var total = (s1 - s2) / 1000;
+                        var day = parseInt(total / (24 * 60 * 60));//计算整数天数
                         var actions = [];
                         actions.push('<a class="btn btn-primary btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
-                        actions.push('<a class="btn btn-primary btn-xs ' + backOrderFlag + '" onclick="$.operate.openAccount(\'' + row.id + '\',\'补单\',\'backOrderUrl\')"><i class="fa fa-plus"></i>补单</a> ');
+                        if (day < 7) {
+                            actions.push('<a class="btn btn-primary btn-xs ' + backOrderFlag + '" onclick="$.operate.openAccount(\'' + row.id + '\',\'补单\',\'backOrderUrl\')"><i class="fa fa-plus"></i>补单</a> ');
+                        }
                         if (row.orderStatus === '2') {
                             actions.push('<a class="btn btn-warning btn-xs ' + notifyFlag + '" href="javascript:void(0)" onclick="renotify(\'' + row.orderId + '\')"><i class="fa fa-bell-o"></i>重新通知</a> ');
                         }
                         if (row.orderStatus != 7 && row.orderStatus != '2') {
-                            actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
+                            if (day < 7) {
+                                actions.push('<a class="btn btn-danger btn-xs ' + updataOrder + '" href="javascript:void(0)" onclick="onUpdataOrder(\'' + row.id + '\')"><i class="fa fa-google-wallet"></i>转发财务</a> ');
+                            }
                         }
                         if (row.orderStatus === '1' && row.orderType == 4) {
                             actions.push('<a class="btn btn-warning btn-xs ' + notifyFlag + '" href="javascript:void(0)" onclick="updateBankCard(\'' + row.orderId + '\')"><i class="fa fa-bell-o"></i>修改出款卡商</a> ');

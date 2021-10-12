@@ -26,22 +26,19 @@ public class AlipayUserInfo extends BaseEntity {
     private String isBind;
     private Long sysUserId;
     private String loginName;
-//    private boolean hasParent;
-//
-//    public boolean isHasParent() {
-//        return hasParent;
-//    }
-//
-//    public void setHasParent(boolean hasParent) {
-//        this.hasParent = hasParent;
-//    }
+    private boolean hasParent;
+
+    public boolean isHasParent() {
+        return hasParent;
+    }
+
+    public void setHasParent(boolean hasParent) {
+        this.hasParent = hasParent;
+    }
 
     /**
      * 1表示查询子代理
      */
-
-
-
 
 
     private String type;

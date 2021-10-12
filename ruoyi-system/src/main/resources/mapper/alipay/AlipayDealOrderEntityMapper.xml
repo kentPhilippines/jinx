@@ -46,20 +46,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             createTime between #{params.dayStart} and #{params.dayEnd}
             <if test="orderId != null  and orderId != ''">and (orderId = #{orderId} or externalOrderId = #{orderId} )
             </if>
-            <if test="associatedId != null  and associatedId != ''"> and associatedId = #{associatedId}</if>
-            <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
-            <if test="dealAmount != null "> and dealAmount = #{dealAmount}</if>
-            <if test="dealFee != null "> and dealFee = #{dealFee}</if>
-            <if test="actualAmount != null "> and actualAmount = #{actualAmount}</if>
-            <if test="orderType != null  and orderType != ''"> and orderType = #{orderType}</if>
-            <if test="orderAccount != null  and orderAccount != ''"> and orderAccount = #{orderAccount}</if>
-            <if test="orderQrUser != null  and orderQrUser != ''"> and orderQrUser = #{orderQrUser}</if>
-            <if test="orderQr != null  and orderQr != ''"> and orderQr = #{orderQr}</if>
-            <if test="externalOrderId != null  and externalOrderId != ''"> and externalOrderId = #{externalOrderId}</if>
-            <if test="generationIp != null  and generationIp != ''"> and generationIp = #{generationIp}</if>
-            <if test="dealDescribe != null  and dealDescribe != ''"> and dealDescribe = #{dealDescribe}</if>
-            <if test="isNotify != null  and isNotify != ''"> and isNotify = #{isNotify}</if>
-            <if test="status != null "> and status = #{status}</if>
+            <if test="associatedId != null  and associatedId != ''">and associatedId = #{associatedId}</if>
+            <if test="orderStatus != null  and orderStatus != ''">
+                <if test="orderStatus == 7 ">
+                    and TIMESTAMPDIFF(second,createTime,submitTime) > 300
+                </if>
+                <if test="orderStatus != 7 ">
+                    and orderStatus = #{orderStatus}
+                </if>
+
+            </if>
+            <if test="dealAmount != null ">and dealAmount = #{dealAmount}</if>
+            <if test="dealFee != null ">and dealFee = #{dealFee}</if>
+            <if test="actualAmount != null ">and actualAmount = #{actualAmount}</if>
+            <if test="orderType != null  and orderType != ''">and orderType = #{orderType}</if>
+            <if test="orderAccount != null  and orderAccount != ''">and orderAccount = #{orderAccount}</if>
+            <if test="orderQrUser != null  and orderQrUser != ''">and orderQrUser = #{orderQrUser}</if>
+            <if test="orderQr != null  and orderQr != ''">and orderQr like concat('%', #{orderQr} , '%')</if>
+            <if test="externalOrderId != null  and externalOrderId != ''">and externalOrderId = #{externalOrderId}</if>
+            <if test="generationIp != null  and generationIp != ''">and generationIp = #{generationIp}</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">and dealDescribe = #{dealDescribe}</if>
+            <if test="isNotify != null  and isNotify != ''">and isNotify = #{isNotify}</if>
+            <if test="status != null ">
+
+                and status = #{status}
+            </if>
             <if test="retain1 != null and retain1 != '' ">and retain1 = #{retain1}</if>
             <if test="currency != null and currency != '' ">and currency = #{currency}</if>
         </where>

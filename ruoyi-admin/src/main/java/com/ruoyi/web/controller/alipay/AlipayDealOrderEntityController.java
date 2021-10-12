@@ -110,7 +110,6 @@ public class AlipayDealOrderEntityController extends BaseController {
                 order.setRetain1(product.getProductName());
             }
             order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
-
         }
         userCollect = null;
         AlipayDealOrderEntity deal = alipayDealOrderEntityService.selectAlipayDealOrderEntityListSum(alipayDealOrderEntity);
@@ -183,6 +182,19 @@ public class AlipayDealOrderEntityController extends BaseController {
     public AjaxResult export(AlipayDealOrderEntity alipayDealOrderEntity) {
         List<AlipayDealOrderEntity> list = alipayDealOrderEntityService
                 .selectAlipayDealOrderEntityList(alipayDealOrderEntity);
+        //0xfaaaf2673d5117d05656b244578ac7c74026c5b1:汇率:6.19: 数量:8078.03
+        for (AlipayDealOrderEntity orderEntity : list) {
+            if (!orderEntity.getOrderId().contains("USDT")) {
+                continue;
+            }
+            String orderQr = orderEntity.getOrderQr();
+            String[] split = orderQr.split(":");
+            String rate = split[1] + ":" + split[2];
+            String count = split[3] + ":" + split[4];
+            orderEntity.setCount(count);
+            orderEntity.setRate(rate);
+            orderEntity.setAddress(split[0]);
+        }
         ExcelUtil<AlipayDealOrderEntity> util = new ExcelUtil<AlipayDealOrderEntity>(AlipayDealOrderEntity.class);
         return util.exportExcel(list, "orderDeal");
     }

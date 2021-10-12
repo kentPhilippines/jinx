@@ -21,7 +21,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
-//import com.ruoyi.web.LocalCache;
+import com.ruoyi.web.LocalCache;
 import com.ruoyi.web.controller.tool.RandomValue;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -79,7 +79,6 @@ public class MerchantInfoEntityController extends BaseController {
             List<String> loginNames = userInfolist.stream().map(AlipayUserInfo::getUserId).collect(Collectors.toList());
             List<SysUser> sysUsers = userService.selectUserByLoginNames(loginNames);
             ConcurrentHashMap<String, SysUser> value = sysUsers.stream().collect(Collectors.toConcurrentMap(SysUser::getMerchantId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
-            //  Map<String, SysUser> value =  syslist.stream().collect(Collectors.toMap(SysUser::getMerchantId, tmp -> tmp));
             userInfolist.stream().forEach(tmp -> {
                 SysUser user = value.get(tmp.getUserId());
                 if (null != user) {
@@ -87,9 +86,9 @@ public class MerchantInfoEntityController extends BaseController {
                     tmp.setIsBind(user.getIsBind());
                     tmp.setSysUserId(user.getUserId());
                     tmp.setLoginName(user.getLoginName());
-//                    if (LocalCache.alipay.contains(tmp.getUserId())) {
-//                        tmp.setHasParent(true);
-//                    }
+                    if (LocalCache.alipay.contains(tmp.getUserId())) {
+                        tmp.setHasParent(true);
+                    }
                 }
             });
         }
@@ -102,7 +101,7 @@ public class MerchantInfoEntityController extends BaseController {
     @PostMapping("/getChildreList")
 //    @RequiresPermissions("alipay:merchant:childrenList")
     @ResponseBody
-    public TableDataInfo getChildren(@RequestBody AlipayUserInfo merchantInfoEntity) {
+    public TableDataInfo getChildren(AlipayUserInfo merchantInfoEntity) {
         startPage();
         List<AlipayUserInfo> list = new ArrayList<>();
         list = merchantInfoEntityService.selectChildrenByUserId(merchantInfoEntity.getAgent());
@@ -197,6 +196,12 @@ public class MerchantInfoEntityController extends BaseController {
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayUserInfo userInfo = merchantInfoEntityService.selectMerchantInfoEntityById(id);
         mmap.put("alipayUserInfo", userInfo);
+        List<String> str = new ArrayList();
+        str.add(userInfo.getUserId());
+        List<SysUser> sysUsers = userService.selectUserByLoginNames(str);
+        for (SysUser sys : sysUsers) {
+            mmap.put("remark", sys.getRemark());
+        }
         return prefix + "/edit";
     }
 
