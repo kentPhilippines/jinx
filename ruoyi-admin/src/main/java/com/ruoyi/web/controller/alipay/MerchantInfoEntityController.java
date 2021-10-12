@@ -57,6 +57,9 @@ public class MerchantInfoEntityController extends BaseController {
     @Autowired
     private ISysUserService userService;
 
+    @Autowired
+    private LocalCache localCache;
+
     @GetMapping()
     public String merchant() {
         return prefix + "/merchant";
@@ -116,6 +119,9 @@ public class MerchantInfoEntityController extends BaseController {
                     tmp.setIsBind(user.getIsBind());
                     tmp.setSysUserId(user.getUserId());
                     tmp.setLoginName(user.getLoginName());
+                    if (LocalCache.alipay.contains(tmp.getUserId())) {
+                        tmp.setHasParent(true);
+                    }
                 }
             });
         }
@@ -153,7 +159,7 @@ public class MerchantInfoEntityController extends BaseController {
         if (i > 0 && n > 0) {
             return toAjax(1);
         }
-
+        localCache.cacheInit();
         return error("新增失败");
     }
 
@@ -338,6 +344,7 @@ public class MerchantInfoEntityController extends BaseController {
         if (i > 0 && n > 0) {
             return toAjax(1);
         }
+        localCache.cacheInit();
         return error();
     }
 

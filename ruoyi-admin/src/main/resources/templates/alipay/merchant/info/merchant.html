@@ -83,16 +83,17 @@
                },*/
             columns: [
                 {
-                    field: 'id',
-                    title: '数据ID',
-                    visible: false
-                    /* formatter: function (value, row, index) {
+
+                    title: '',
+                    align: 'center',
+                    // visible: false
+                     formatter: function (value, row, index) {
                          var actions = [];
                          if (row.hasParent) {
-                             actions.push('<a class="" href="javascript:" onclick="addChildrenHtml(\'' + row.userId + '\',\'' + index  + '\')"><i class="glyphicon glyphicon-plus icon-plus"></i></a>')
+                             actions.push('<a class="'+index+'" href="javascript:" onclick="addChildrenHtml(\'' + row.userId + '\',this)"><i class="glyphicon glyphicon-plus icon-plus"></i></a>')
                              return actions.join('');
                          }
-                     }*/
+                     }
                 },
                 {
                     field: 'userId',
@@ -232,9 +233,8 @@
     }
 
 
-    function addChildrenHtml(userId, index) {
-        $tdThis = $("[data-index=" + index + "]")
-        if ($tdThis.find('.glyphicon glyphicon-plus icon-plus')) {
+    function addChildrenHtml(userId, tdThis) {
+        if ($(tdThis).children('i').hasClass('glyphicon-plus')) {
             var html = "";
             var formData = {"agent": userId};
             $.ajax({
@@ -245,8 +245,9 @@
                 success: function (result) {
                     if (result.code == web_status.SUCCESS) {
                         $.each(result.rows, function (i, row) {
-                            html += '<tr child-index="' + i + '" class="child-tr pid-' + userId + '">';
+                            html += '<tr   child-index="' + i + '" class="child-tr pid-' + userId + '">';
                             html += '<td/>';
+                            html += '<td><a class="" href="javascript:" onclick="addChildrenHtml(\'' + row.userId + '\',this)"><i class="glyphicon glyphicon-plus icon-plus"></i></a></td>';
                             html += '<td style="">' + row.userId + '</td>';
                             if (row.userName == null) {
                                 html += '<td style="">-</td>';
@@ -316,23 +317,22 @@
                             html += '</td>';
                             html += '</tr>';
                         });
-                        $tdThis.after(html);
+                        $(tdThis).parent().parent().after(html);
                     } else {
                         $.modal().alertError(result.msg);
                     }
                 }
 
             });
-            $tdThis.find("i").removeClass('glyphicon-plus');
-            $tdThis.find("i").removeClass('icon-plus');
-            $tdThis.find("i").addClass('glyphicon-minus');
-            $tdThis.find("i").addClass('icon-minus');
+            $(tdThis).find("i").removeClass('glyphicon-plus');
+            $(tdThis).find("i").removeClass('icon-plus');
+            $(tdThis).find("i").addClass('glyphicon-minus');
+            $(tdThis).find("i").addClass('icon-minus');
         } else {
-            $(".child-tr pid-" + userId).remove();
-            $tdThis.find("i").removeClass('glyphicon-minus');
-            $tdThis.find("i").removeClass('icon-minus');
-            $tdThis.find("i").addClass('glyphicon-plus');
-            $tdThis.find("i").addClass('icon-plus');
+            $(".pid-" + userId).remove();
+            $(tdThis).find("i").removeClass('glyphicon-minus');
+            $(tdThis).find("i").removeClass('icon-minus');
+            $(tdThis).find("i").addClass('glyphicon-plus');
         }
 
     }
