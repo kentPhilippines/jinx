@@ -96,6 +96,10 @@
                      }
                 },
                 {
+                    title: '',
+                    align: 'center'
+                },
+                {
                     field: 'userId',
                     title: '商户账户'
 
@@ -246,8 +250,8 @@
                     if (result.code == web_status.SUCCESS) {
                         $.each(result.rows, function (i, row) {
                             html += '<tr   child-index="' + i + '" class="child-tr pid-' + userId + '">';
-                            html += '<td/>';
                             html += '<td><a class="" href="javascript:" onclick="addChildrenHtml(\'' + row.userId + '\',this)"><i class="glyphicon glyphicon-plus icon-plus"></i></a></td>';
+                            html += '<td/>';
                             html += '<td style="">' + row.userId + '</td>';
                             if (row.userName == null) {
                                 html += '<td style="">-</td>';
