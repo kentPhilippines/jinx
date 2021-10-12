@@ -195,13 +195,13 @@ public class MerchantInfoEntityController extends BaseController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayUserInfo userInfo = merchantInfoEntityService.selectMerchantInfoEntityById(id);
-        mmap.put("alipayUserInfo", userInfo);
         List<String> str = new ArrayList();
         str.add(userInfo.getUserId());
         List<SysUser> sysUsers = userService.selectUserByLoginNames(str);
         for (SysUser sys : sysUsers) {
-            mmap.put("remark", sys.getRemark());
+            userInfo.setRemark(sys.getRemark());
         }
+        mmap.put("alipayUserInfo", userInfo);
         return prefix + "/edit";
     }
 

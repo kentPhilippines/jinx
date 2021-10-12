@@ -132,7 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="selectUserByLoginNames" parameterType="java.util.List" resultMap="SysUserResult">
 		<include refid="selectUserVo"/>
-		where u.login_name in
+		where u.merchant_id in
 		<foreach collection="list" item="loginName" open="(" separator="," close=")">
 			#{loginName}
 		</foreach>

@@ -486,7 +486,13 @@ public class SysUserServiceImpl implements ISysUserService {
     }
     @Override
     public int updateUserByLoginName(AlipayUserInfo alipayUserInfo) {
-        return userMapper.updateUserByLoginName(alipayUserInfo.getUserId(),alipayUserInfo.getRemark());
+        List<String> loginNames = new ArrayList<>();
+        loginNames.add(alipayUserInfo.getUserId());
+        List<SysUser> sysUsers = userMapper.selectUserByLoginNames(loginNames);
+        for (SysUser u : sysUsers) {
+            alipayUserInfo.setUserId(u.getLoginName());
+        }
+        return userMapper.updateUserByLoginName(alipayUserInfo.getUserId(), alipayUserInfo.getRemark());
     }
 
     @Override
