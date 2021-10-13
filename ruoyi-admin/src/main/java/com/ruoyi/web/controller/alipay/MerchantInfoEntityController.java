@@ -21,7 +21,6 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.web.LocalCache;
 import com.ruoyi.web.controller.tool.RandomValue;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -57,8 +56,7 @@ public class MerchantInfoEntityController extends BaseController {
     @Autowired
     private ISysUserService userService;
 
-    @Autowired
-    private LocalCache localCache;
+
 
     @GetMapping()
     public String merchant() {
@@ -89,9 +87,6 @@ public class MerchantInfoEntityController extends BaseController {
                     tmp.setIsBind(user.getIsBind());
                     tmp.setSysUserId(user.getUserId());
                     tmp.setLoginName(user.getLoginName());
-                    if (LocalCache.alipay.contains(tmp.getUserId())) {
-                        tmp.setHasParent(true);
-                    }
                 }
             });
         }
@@ -101,7 +96,7 @@ public class MerchantInfoEntityController extends BaseController {
     /**
      * 查询商户子集信息列表
      */
-    @PostMapping("/getChildreList")
+    @PostMapping("/childrenList")
 //    @RequiresPermissions("alipay:merchant:childrenList")
     @ResponseBody
     public TableDataInfo getChildren(AlipayUserInfo merchantInfoEntity) {
@@ -119,9 +114,6 @@ public class MerchantInfoEntityController extends BaseController {
                     tmp.setIsBind(user.getIsBind());
                     tmp.setSysUserId(user.getUserId());
                     tmp.setLoginName(user.getLoginName());
-                    if (LocalCache.alipay.contains(tmp.getUserId())) {
-                        tmp.setHasParent(true);
-                    }
                 }
             });
         }
@@ -159,7 +151,6 @@ public class MerchantInfoEntityController extends BaseController {
         if (i > 0 && n > 0) {
             return toAjax(1);
         }
-        localCache.cacheInit();
         return error("新增失败");
     }
 
@@ -344,7 +335,6 @@ public class MerchantInfoEntityController extends BaseController {
         if (i > 0 && n > 0) {
             return toAjax(1);
         }
-        localCache.cacheInit();
         return error();
     }
 
