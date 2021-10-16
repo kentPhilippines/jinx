@@ -143,6 +143,13 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
         return alipayUserFundEntityMapper.findSumFundC(currency);
     }
 
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public AlipayUserFundEntity findSumFundByAgent(String currency,String agent) {
+        return alipayUserFundEntityMapper.findSumFundMByAgent(currency,agent);
+    }
+
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserInfo> findUserByAgent(String agentUserId) {

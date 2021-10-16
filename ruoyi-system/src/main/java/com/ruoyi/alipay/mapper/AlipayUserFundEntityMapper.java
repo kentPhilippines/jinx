@@ -86,18 +86,28 @@ public interface AlipayUserFundEntityMapper {
             " sum(freezeBalance) as freezeBalance , " +
             "sum(accountBalance) as accountBalance ," +
             "sum(quota) as quota , " +
-            "sum(todayDealAmount) , " +
-            "sum(todayAgentProfit) " +
+            "sum(todayDealAmount) as todayDealAmount, " +
+            "sum(todayAgentProfit) as todayAgentProfit " +
             " from " +
             "alipay_user_fund where userType = 1  and currency = #{currency}")
     AlipayUserFundEntity findSumFundM(@Param("currency") String currency);
+
+    @Select("select '所有' as userId , '商户总余额' as userName ," +
+            " sum(freezeBalance) as freezeBalance , " +
+            "sum(accountBalance) as accountBalance ," +
+            "sum(quota) as quota , " +
+            "sum(todayDealAmount) as todayDealAmount, " +
+            "sum(todayAgentProfit) as todayAgentProfit" +
+            " from " +
+            "alipay_user_fund where agent=#{agent} and currency = #{currency}")
+    AlipayUserFundEntity findSumFundMByAgent(@Param("currency") String currency, @Param("agent") String agent);
 
     @Select("select '所有' as userId , '上游卡商总余额' as userName ," +
             " sum(freezeBalance) as freezeBalance , " +
             "sum(accountBalance) as accountBalance ," +
             "sum(quota) as quota , " +
-            "sum(todayDealAmount) , " +
-            "sum(todayAgentProfit) " +
+            "sum(todayDealAmount) as todayDealAmount, " +
+            "sum(todayAgentProfit) as todayAgentProfit" +
             " from " +
             "alipay_user_fund where userType = 2  and currency = #{currency}")
     AlipayUserFundEntity findSumFundC(@Param("currency") String currency);

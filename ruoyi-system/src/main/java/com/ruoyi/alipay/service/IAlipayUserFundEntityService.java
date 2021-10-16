@@ -107,6 +107,14 @@ public interface IAlipayUserFundEntityService {
      */
     AlipayUserFundEntity findSumFundC(String currency);
 
+    /**
+     * 卡商总余额
+     *
+     * @param currency
+     * @return
+     */
+    AlipayUserFundEntity findSumFundByAgent(String currency,String agent);
+
     List<AlipayUserInfo> findUserByAgent(String agentUserId);
 
     int updateStatus(String userId, Integer status);

@@ -14,6 +14,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.enums.DeductStatusEnum;
 import com.ruoyi.common.enums.RefundDeductType;
 import com.ruoyi.common.utils.GenerateOrderNo;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
@@ -82,6 +83,37 @@ public class AlipayUserFundEntityController extends BaseController {
         }
         AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.findSumFundM(alipayUserFundEntity.getCurrency());
         list.add(0, userFundEntity);
+        return getDataTable(list);
+    }
+
+    @PostMapping("/childrenList")
+//    @RequiresPermissions("fund:alipay:list")
+    @ResponseBody
+    public TableDataInfo childrenList(AlipayUserFundEntity alipayUserFundEntity) {
+        List<AlipayUserFundEntity> list = alipayUserFundEntityService
+                .selectAlipayUserFundEntityList(alipayUserFundEntity);
+        if (StringUtils.isBlank(alipayUserFundEntity.getCurrency())) {
+            AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.
+                    findSumFundByAgent("USDT", alipayUserFundEntity.getAgent());
+            AlipayUserFundEntity userFundEntity1 = alipayUserFundEntityService.
+                    findSumFundByAgent("CNY", alipayUserFundEntity.getAgent());
+            if (null != userFundEntity) {
+                userFundEntity.setCurrency("USDT");
+                userFundEntity.setUserId("所有-USDT");
+                list.add(0, userFundEntity);
+            }
+            if (null != userFundEntity1) {
+                userFundEntity1.setUserId("所有-CNY");
+                userFundEntity1.setCurrency("CNY");
+                list.add(0, userFundEntity1);
+            }
+        } else {
+            AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.
+                    findSumFundByAgent(alipayUserFundEntity.getCurrency(), alipayUserFundEntity.getAgent());
+            userFundEntity.setCurrency(alipayUserFundEntity.getCurrency());
+            userFundEntity.setUserId("所有-"+alipayUserFundEntity.getCurrency());
+            list.add(0, userFundEntity);
+        }
         return getDataTable(list);
     }
 
@@ -177,6 +209,7 @@ public class AlipayUserFundEntityController extends BaseController {
 
     /**
      * 减少授权页面
+     *
      * @param userId
      * @param mmap
      * @return
@@ -232,6 +265,7 @@ public class AlipayUserFundEntityController extends BaseController {
         }
         return toAjax(alipayAmountEntityService.insertAlipayAmountFreeze(alipayAmountEntity));
     }
+
     /**
      * 加款保存用户加款记录
      */

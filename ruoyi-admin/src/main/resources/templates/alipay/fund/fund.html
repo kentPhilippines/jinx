@@ -34,7 +34,7 @@
                         </li>
                         <li class="select-selectpicker">
                             <label>货币类型： </label>
-                            <select class="selectpicker" data-none-selected-text="请选择" id="currency"
+                            <select class="selectpicker"  data-none-selected-text="请选择" id="currency"
                                     name="currency" th:with="type=${@dict.getType('currency')}">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -94,6 +94,10 @@
             deleteFreezeUrl: prefix + "/deleteFreezeUrl/{userId}",
             deleteQuotaUrl: prefix + "/deleteQuotaUrl/{userId}",
             modalName: "用户资金账户",
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail);
+            },
             columns: [{
                 checkbox: true
             },
@@ -215,6 +219,145 @@
         };
         $.table.init(options);
     });
+
+    initChildTable = function(index, row, $detail) {
+        var currency=$('#currency option:selected').val();//选中的值
+        var childTable = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+        $(childTable).bootstrapTable({
+            detailView:true,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail);
+            },
+            url: prefix + "/childrenList",
+            method: 'post',
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",
+            queryParams : {
+                agent: row.userId,
+                currency:currency
+            },
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '数据ID',
+                    visible: false
+                },
+                {
+                    field: 'userId',
+                    title: '用户账户 '
+                },
+                {
+                    field: 'userName',
+                    title: '账户名称 '
+                },
+                /* {
+                     field: 'cashBalance',
+                     title: '现金账户 '
+                 },
+                 {
+                     field: 'rechargeNumber',
+                     title: '充值点数'
+                 },*/
+                {
+                    field: 'freezeBalance',
+                    title: '冻结账户',
+                    sortable: true
+                },
+                {
+                    field: 'accountBalance',
+                    title: '可取现金额 ',
+                    sortable: true
+                },
+                {
+                    field: 'currency',
+                    title: '货币类型 '
+                },
+                {
+                    field: 'quota',
+                    title: '预授额度',
+                    sortable: true
+
+                },
+                {
+                    field: 'todayDealAmount',
+                    title: '当日交易',
+                    sortable: true
+                }, {
+                    field: 'todayAgentProfit',
+                    title: '当日代理利润',
+                    sortable: true
+                }, {
+                    field: 'todayWitAmount',
+                    title: '当日取款',
+                    sortable: true
+                },
+                /*      {
+                          field: 'sumDealAmount',
+                          title: '累计交易'
+                      },
+                      {
+                          field: 'sumRechargeAmount',
+                          title: '累计充值 '
+                      },
+                      {
+                          field: 'todayDealAmount',
+                          title: '当日接单金额'
+                      },
+                      {
+                          field: 'userType',
+                          title: '用户类型',
+                          formatter: function (value, row, index) {
+                              return $.table.selectDictLabel(userType, value);
+                          }
+                      },*/
+                /* {
+                     field: 'isAgent',
+                     title: '账号性质',
+                     formatter: function (value, item, index) {
+                         if (item.isAgent == '1') {
+                             return '<span>代理商</span>';
+                         } else if (item.userType == '2') {
+                             return '<span>普通账户</span>';
+                         }
+                     }
+                 },*/
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    field: 'statistics',
+                    title: '月度数据',
+                    formatter: function (value, row, index) {
+                        if ("所有" == row.userId || "所有" == row.userId) {
+                            return null;
+                        }
+                        return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="detail(\'' + row.userId + '\')"><i class="fa fa-google-wallet"></i> 查看月度数据' + '</a>';
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if (row.userId != '所有') {
+                            actions.push('<a class="btn btn-primary btn-xs ' + refundFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户加款\',\'openUrl\')"><i class="fa fa-plus"></i>加款</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + deductFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户减款\',\'updateUrl\')"><i class="fa fa-minus"></i>减款</a> ');
+                            actions.push('<a class="btn btn-primary btn-xs ' + addFreezeFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户解冻\',\'addFreezeFlag\')"><i class="fa fa-plus"></i>账户解冻</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + deleteFreezeFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户冻结\',\'deleteFreezeFlag\')"><i class="fa fa-minus"></i>账户冻结</a> ');
+                            actions.push('<a class="btn btn-primary btn-xs ' + addQuotaFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'增加账户授权\',\'addQuotaFlag\')"><i class="fa fa-plus"></i>增加账户授权</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + deleteQuotaFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'减少账户授权\',\'deleteQuotaFlag\')"><i class="fa fa-minus"></i>减少账户授权</a> ');
+
+                        }
+                        return actions.join('');
+                    }
+                }]
+
+        });
+    };
+
 
     /*商户月度交易-详细*/
     function detail(userId) {
