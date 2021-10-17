@@ -3,8 +3,10 @@ package com.ruoyi.web.controller.alipay;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayAmountEntity;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
+import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.alipay.service.IAlipayAmountEntityService;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
+import com.ruoyi.alipay.service.IMerchantInfoEntityService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -27,9 +29,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 用户资金账户Controller
@@ -50,6 +54,8 @@ public class AlipayUserFundEntityController extends BaseController {
     private IAlipayAmountEntityService alipayAmountEntityService;
     @Autowired
     private SysPasswordService passwordService;
+    @Autowired
+    private IMerchantInfoEntityService merchantInfoEntityService;
 
 
     @GetMapping()
@@ -90,29 +96,50 @@ public class AlipayUserFundEntityController extends BaseController {
 //    @RequiresPermissions("fund:alipay:list")
     @ResponseBody
     public TableDataInfo childrenList(AlipayUserFundEntity alipayUserFundEntity) {
-        List<AlipayUserFundEntity> list = alipayUserFundEntityService
-                .selectAlipayUserFundEntityList(alipayUserFundEntity);
-        if (StringUtils.isBlank(alipayUserFundEntity.getCurrency())) {
-            AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.
-                    findSumFundByAgent("USDT", alipayUserFundEntity.getAgent());
-            AlipayUserFundEntity userFundEntity1 = alipayUserFundEntityService.
-                    findSumFundByAgent("CNY", alipayUserFundEntity.getAgent());
-            if (null != userFundEntity) {
-                userFundEntity.setCurrency("USDT");
-                userFundEntity.setUserId("所有-USDT");
-                list.add(0, userFundEntity);
+        String currencyFilter = alipayUserFundEntity.getCurrency();
+        if (StringUtils.isBlank(currencyFilter)) {
+            currencyFilter = "USDT-CNY";
+        }
+        List<AlipayUserFundEntity> list = new ArrayList<>();
+        List<AlipayUserInfo> alipayUserInfoList = merchantInfoEntityService.selectChildrenByUserId(alipayUserFundEntity.getAgent());
+        String str = "";
+        if (alipayUserInfoList.size() > 0 && null != alipayUserInfoList) {
+            List<String> idList = alipayUserInfoList.stream().map(AlipayUserInfo::getUserId).collect(Collectors.toList());
+            StringBuffer stringBuffer = new StringBuffer();
+            for (int i = 0; i < idList.size(); i++) {
+                if (i == idList.size() - 1) {
+                    stringBuffer.append("'" + idList.get(i) + "'");
+                } else {
+                    stringBuffer.append("'" + idList.get(i) + "'" + ",");
+                }
+                str = stringBuffer.toString();
             }
-            if (null != userFundEntity1) {
-                userFundEntity1.setUserId("所有-CNY");
-                userFundEntity1.setCurrency("CNY");
-                list.add(0, userFundEntity1);
+            list = alipayUserFundEntityService.selectAlipayUserFundEntityListByUserId(idList);
+            String finalCurrencyFilter = currencyFilter;
+            list = list.stream().
+                    filter(tmp -> finalCurrencyFilter.contains(alipayUserFundEntity.getCurrency())).collect(Collectors.toList());
+
+            List<AlipayUserFundEntity> sumFundByUserId = alipayUserFundEntityService.findSumFundByUserId(str);
+            List<AlipayUserFundEntity> collect1 = sumFundByUserId.stream().
+                    filter(tmp -> finalCurrencyFilter.
+                            contains(alipayUserFundEntity.getCurrency()) &&
+                            (null != tmp.getTodayDealAmount() || null != tmp.getFreezeBalance()
+                                    || null != tmp.getAccountBalance() || null != tmp.getQuota()
+                                    || null != tmp.getTodayProfit() || null != tmp.getTodayWitAmount())).collect(Collectors.toList());
+
+            if (list.size() > 0 && collect1.size() > 0) {
+                for (AlipayUserFundEntity tmp : collect1) {
+                    if ("USDT".equals(tmp.getCurrency())) {
+                        tmp.setUserId("所有-USDT");
+                        tmp.setUserName("商户余额-USDT");
+
+                    } else if ("CNY".equals(tmp.getCurrency())) {
+                        tmp.setUserId("所有-CNY");
+                        tmp.setUserName("商户余额-CNY");
+                    }
+                    list.add(0, tmp);
+                }
             }
-        } else {
-            AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.
-                    findSumFundByAgent(alipayUserFundEntity.getCurrency(), alipayUserFundEntity.getAgent());
-            userFundEntity.setCurrency(alipayUserFundEntity.getCurrency());
-            userFundEntity.setUserId("所有-"+alipayUserFundEntity.getCurrency());
-            list.add(0, userFundEntity);
         }
         return getDataTable(list);
     }

@@ -111,6 +111,21 @@
         order by accountBalance desc , freezeBalance desc , quota desc
     </select>
 
+    <select id="selectListByIdList" parameterType="java.util.List"
+            resultMap="AlipayUserFundEntityResult">
+        <include refid="selectAlipayUserFundEntityVo"/>
+        <where>
+          1=1
+            and
+            userId in
+            <foreach collection="list" item="userId" open="(" separator="," close=")">
+                #{userId}
+            </foreach>
+            /* and (userType != '3' and userType != '2')*/
+        </where>
+        order by accountBalance desc , freezeBalance desc , quota desc
+    </select>
+
     <select id="selectAlipayUserFundEntityById" parameterType="Long" resultMap="AlipayUserFundEntityResult">
         <include refid="selectAlipayUserFundEntityVo"/>
         where id = #{id}
@@ -206,6 +221,7 @@
         <if test="userId != null  and userId != ''">and userId = #{userId}</if>
         <if test="userName != null and userName != '' ">and userName = #{userName}</if>
     </select>
+
     <select id="findUserList" resultMap="AlipayUserFundEntityResult">
         SELECT * FROM `alipay_user_fund_bak` WHERE userId
         IN

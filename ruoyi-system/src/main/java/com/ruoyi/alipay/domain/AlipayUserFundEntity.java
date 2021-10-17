@@ -18,6 +18,16 @@ public class AlipayUserFundEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
     private String userNode;
     private Double minAmount;
+    private String idStr;
+
+    public String getIdStr() {
+        return idStr;
+    }
+
+    public void setIdStr(String idStr) {
+        this.idStr = idStr;
+    }
+
     /**
      * 最大金额
      */

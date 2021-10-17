@@ -32,6 +32,13 @@ public interface AlipayUserFundEntityMapper {
      * @return 用户资金账户集合
      */
     List<AlipayUserFundEntity> selectAlipayUserFundEntityList(AlipayUserFundEntity alipayUserFundEntity);
+    /**
+     * 查询用户资金账户列表
+     *
+     * @param alipayUserFundEntity 用户资金账户
+     * @return 用户资金账户集合
+     */
+    List<AlipayUserFundEntity> selectListByIdList(List<String> idList);
 
     /**
      * 新增用户资金账户
@@ -92,15 +99,15 @@ public interface AlipayUserFundEntityMapper {
             "alipay_user_fund where userType = 1  and currency = #{currency}")
     AlipayUserFundEntity findSumFundM(@Param("currency") String currency);
 
-    @Select("select '所有' as userId , '商户总余额' as userName ," +
+    @Select("select '所有' as userId , '商户总余额' as userName ,currency as currency," +
             " sum(freezeBalance) as freezeBalance , " +
-            "sum(accountBalance) as accountBalance ," +
-            "sum(quota) as quota , " +
+            "sum(accountBalance) as accountBalance," +
+            "sum(quota) as quota, " +
             "sum(todayDealAmount) as todayDealAmount, " +
             "sum(todayAgentProfit) as todayAgentProfit" +
             " from " +
-            "alipay_user_fund where agent=#{agent} and currency = #{currency}")
-    AlipayUserFundEntity findSumFundMByAgent(@Param("currency") String currency, @Param("agent") String agent);
+            "alipay_user_fund where userId in (${userId}) group by currency")
+    List<AlipayUserFundEntity> findSumFundByUserId(@Param("userId") String userId);
 
     @Select("select '所有' as userId , '上游卡商总余额' as userName ," +
             " sum(freezeBalance) as freezeBalance , " +
