@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
@@ -29,11 +30,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -55,7 +54,6 @@ public class MerchantInfoEntityController extends BaseController {
     private SysPasswordService passwordService;
     @Autowired
     private ISysUserService userService;
-
 
 
     @GetMapping()
@@ -103,10 +101,11 @@ public class MerchantInfoEntityController extends BaseController {
         startPage();
         List<AlipayUserInfo> list = new ArrayList<>();
         list = merchantInfoEntityService.selectChildrenByUserId(merchantInfoEntity.getAgent());
-        if (CollectionUtils.isNotEmpty(list)) {
+        if (CollectionUtil.isNotEmpty(list)) {
             List<String> loginNames = list.stream().map(AlipayUserInfo::getUserId).collect(Collectors.toList());
             List<SysUser> sysUsers = userService.selectUserByLoginNames(loginNames);
             Map<String, SysUser> value = sysUsers.stream().collect(Collectors.toMap(SysUser::getMerchantId, tmp -> tmp));
+            Integer colorIndex = merchantInfoEntity.getColorIndex()==null?0:merchantInfoEntity.getColorIndex()+1;
             list.stream().forEach(tmp -> {
                 SysUser user = value.get(tmp.getUserId());
                 if (null != user) {
@@ -114,6 +113,7 @@ public class MerchantInfoEntityController extends BaseController {
                     tmp.setIsBind(user.getIsBind());
                     tmp.setSysUserId(user.getUserId());
                     tmp.setLoginName(user.getLoginName());
+                    tmp.setColorIndex(colorIndex);
                 }
             });
         }

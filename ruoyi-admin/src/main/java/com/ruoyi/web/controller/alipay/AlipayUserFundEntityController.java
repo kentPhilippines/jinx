@@ -100,6 +100,7 @@ public class AlipayUserFundEntityController extends BaseController {
         if (StringUtils.isBlank(currencyFilter)) {
             currencyFilter = "USDT-CNY";
         }
+        Integer colorIndex = alipayUserFundEntity.getColorIndex()==null?0:alipayUserFundEntity.getColorIndex()+1;
         List<AlipayUserFundEntity> list = new ArrayList<>();
         List<AlipayUserInfo> alipayUserInfoList = merchantInfoEntityService.selectChildrenByUserId(alipayUserFundEntity.getAgent());
         String str = "";
@@ -141,6 +142,9 @@ public class AlipayUserFundEntityController extends BaseController {
                 }
             }
         }
+        list.stream().forEach(tmp2->{
+            tmp2.setColorIndex(colorIndex);
+        });
         return getDataTable(list);
     }
 

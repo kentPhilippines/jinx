@@ -19,6 +19,17 @@ public class AlipayUserFundEntity extends BaseEntity {
     private String userNode;
     private Double minAmount;
     private String idStr;
+    private Integer colorIndex;
+
+
+    public Integer getColorIndex() {
+        return colorIndex;
+    }
+
+    public void setColorIndex(Integer colorIndex) {
+        this.colorIndex = colorIndex;
+    }
+
 
     public String getIdStr() {
         return idStr;

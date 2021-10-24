@@ -79,9 +79,9 @@
             modalName: "商户信息",
             detailView: true,
             //注册加载子表的事件。注意下这里的三个参数！
-              onExpandRow: function (index, row, $detail) {
-                   initChildTable(index, row, $detail);
-               },
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail, 0);
+            },
             columns: [
                 {
                     field: 'id',
@@ -177,6 +177,7 @@
         };
         $.table.init(options);
     });
+
     /* 商户状态显示 */
     function statusTools(row, param) {
         if (param === 'switchs') {
@@ -224,19 +225,83 @@
     }
 
 
-    initChildTable = function(index, row, $detail) {
+    initChildTable = function (index, row, $detail, colorIndex) {
         var childTable = $detail.html('<table style="table-layout:fixed"></table>').find('table');
         $(childTable).bootstrapTable({
-            detailView:true,
+            detailView: true,
             onExpandRow: function (index, row, $detail) {
-                initChildTable(index, row, $detail);
+                initChildTable(index, row, $detail, row.colorIndex);
             },
             url: prefix + "/childrenList",
             method: 'post',
+            rowStyle: function (row, index) {
+                //这里有5个取值代表5中颜色['active', 'success', 'info', 'warning', 'danger'];
+                var strclass = "childIndex-20";
+                if (row.colorIndex == '1') {
+                    strclass = 'childIndex-1';//还有一个active
+                }
+                if (row.colorIndex == '2') {
+                    strclass = 'childIndex-2';//还有一个active
+                }
+                if (row.colorIndex == '3') {
+                    strclass = 'childIndex-3';//还有一个active
+                }
+                if (row.colorIndex == '4') {
+                    strclass = 'childIndex-4';//还有一个active
+                }
+                if (row.colorIndex == '5') {
+                    strclass = 'childIndex-5';//还有一个active
+                }
+                if (row.colorIndex == '6') {
+                    strclass = 'childIndex-6';//还有一个active
+                }
+                if (row.colorIndex == '7') {
+                    strclass = 'childIndex-7';//还有一个active
+                }
+                if (row.colorIndex == '8') {
+                    strclass = 'childIndex-8';//还有一个active
+                }
+                if (row.colorIndex == '9') {
+                    strclass = 'childIndex-9';//还有一个active
+                }
+                if (row.colorIndex == '10') {
+                    strclass = 'childIndex-10';//还有一个active
+                }
+                if (row.colorIndex == '11') {
+                    strclass = 'childIndex-11';//还有一个active
+                }
+                if (row.colorIndex == '12') {
+                    strclass = 'childIndex-12';//还有一个active
+                }
+                if (row.colorIndex == '13') {
+                    strclass = 'childIndex-13';//还有一个active
+                }
+                if (row.colorIndex == '14') {
+                    strclass = 'childIndex-14';//还有一个active
+                }
+                if (row.colorIndex == '15') {
+                    strclass = 'childIndex-15';//还有一个active
+                }
+                if (row.colorIndex == '16') {
+                    strclass = 'childIndex-16';//还有一个active
+                }
+                if (row.colorIndex == '17') {
+                    strclass = 'childIndex-17';//还有一个active
+                }
+                if (row.colorIndex == '18') {
+                    strclass = 'childIndex-18';//还有一个active
+                }
+                if (row.colorIndex == '19') {
+                    strclass = 'childIndex-19';//还有一个active
+                }
+
+                return {classes: strclass}
+            },
             sidePagination: "server",
             contentType: "application/x-www-form-urlencoded",
-            queryParams : {
-                agent: row.userId
+            queryParams: {
+                agent: row.userId,
+                colorIndex: colorIndex
             },
             columns: [
                 {

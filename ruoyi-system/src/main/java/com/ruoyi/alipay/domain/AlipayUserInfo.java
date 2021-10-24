@@ -26,11 +26,22 @@ public class AlipayUserInfo extends BaseEntity {
     private String isBind;
     private Long sysUserId;
     private String loginName;
+    private Integer colorIndex;
 
+
+    public Integer getColorIndex() {
+        return colorIndex;
+    }
+
+    public void setColorIndex(Integer colorIndex) {
+        this.colorIndex = colorIndex;
+    }
 
     /**
      * 1表示查询子代理
      */
+
+
 
 
     private String type;
