@@ -50,7 +50,7 @@
                             <select class="selectpicker" data-none-selected-text="请选择" id="currency"
                                     name="currency" th:with="type=${@dict.getType('currency')}">
                                 <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:selected="${dict.dictLabel}=='CNY'? 'selected':''"
+                                <option th:each="dict : ${type}"
                                         th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
