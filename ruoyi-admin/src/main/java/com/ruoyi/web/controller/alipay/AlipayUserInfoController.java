@@ -185,7 +185,7 @@ public class AlipayUserInfoController extends BaseController {
     /**
      * 码商状态修改（调用api）
      */
-    @Log(title = "码商查询", businessType = BusinessType.UPDATE)
+    @Log(title = "状态调整", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(AlipayUserInfo user) {

@@ -184,7 +184,7 @@ public class AlipayDealOrderEntityController extends BaseController {
                 .selectAlipayDealOrderEntityList(alipayDealOrderEntity);
         //0xfaaaf2673d5117d05656b244578ac7c74026c5b1:汇率:6.19: 数量:8078.03
         for (AlipayDealOrderEntity orderEntity : list) {
-            if (!orderEntity.getOrderId().contains("USDT")) {
+            if (!orderEntity.getExternalOrderId().contains("USDT")) {
                 continue;
             }
             String orderQr = orderEntity.getOrderQr();

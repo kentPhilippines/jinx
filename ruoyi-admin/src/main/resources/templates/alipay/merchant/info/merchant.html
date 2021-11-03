@@ -85,7 +85,10 @@
             columns: [
                 {
                     field: 'id',
-                    title: '数据id'
+                    title: '数据id',
+                    formatter: function (value, row, index) {
+                        return index;
+                    }
 
                 },
                 {
@@ -306,8 +309,10 @@
             columns: [
                 {
                     field: 'id',
-                    title: '数据id'
-
+                    title: '排序',
+                    formatter: function (value, row, index) {
+                        return index;
+                    }
                 },
                 {
                     field: 'userId',

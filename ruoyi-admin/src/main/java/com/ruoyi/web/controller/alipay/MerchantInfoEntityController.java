@@ -30,9 +30,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -73,7 +75,6 @@ public class MerchantInfoEntityController extends BaseController {
         SysUser userf = new SysUser();
         startPage();
         userInfolist = merchantInfoEntityService.selectMerchantInfoEntityList(merchantInfoEntity);
-
         if (CollectionUtils.isNotEmpty(userInfolist)) {
             List<String> loginNames = userInfolist.stream().map(AlipayUserInfo::getUserId).collect(Collectors.toList());
             List<SysUser> sysUsers = userService.selectUserByLoginNames(loginNames);
@@ -104,8 +105,12 @@ public class MerchantInfoEntityController extends BaseController {
         if (CollectionUtil.isNotEmpty(list)) {
             List<String> loginNames = list.stream().map(AlipayUserInfo::getUserId).collect(Collectors.toList());
             List<SysUser> sysUsers = userService.selectUserByLoginNames(loginNames);
-            Map<String, SysUser> value = sysUsers.stream().collect(Collectors.toMap(SysUser::getMerchantId, tmp -> tmp));
-            Integer colorIndex = merchantInfoEntity.getColorIndex()==null?0:merchantInfoEntity.getColorIndex()+1;
+            Map<String, SysUser> value = new ConcurrentHashMap<>();
+            for (int i = 0; i < sysUsers.size(); i++) {// 原遍历方式  存在 bug
+                SysUser sysUser = sysUsers.get(i);
+                value.put(sysUser.getMerchantId(), sysUser);
+            }
+            Integer colorIndex = merchantInfoEntity.getColorIndex() == null ? 0 : merchantInfoEntity.getColorIndex() + 1;
             list.stream().forEach(tmp -> {
                 SysUser user = value.get(tmp.getUserId());
                 if (null != user) {

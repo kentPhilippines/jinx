@@ -1,35 +1,29 @@
 package com.ruoyi.web.controller.dealpay;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
-import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.MapDataUtil;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.dealpay.domain.DealpayUserInfoEntity;
+import com.ruoyi.dealpay.service.IDealpayUserInfoService;
 import com.ruoyi.framework.util.DictionaryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.dealpay.domain.DealpayUserInfoEntity;
-import com.ruoyi.dealpay.service.IDealpayUserInfoService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户详情Controller
@@ -185,7 +179,7 @@ public class DealpayUserInfoController extends BaseController {
     /**
      * 卡商状态修改（调用api）
      */
-    @Log(title = "码商查询", businessType = BusinessType.UPDATE)
+    @Log(title = "状态修改", businessType = BusinessType.UPDATE)
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(DealpayUserInfoEntity user) {

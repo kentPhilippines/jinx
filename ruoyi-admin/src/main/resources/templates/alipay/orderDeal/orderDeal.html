@@ -32,8 +32,10 @@
                             <select class="selectpicker" data-none-selected-text="请选择" id="currency"
                                     name="currency" th:with="type=${@dict.getType('currency')}">
                                 <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:selected="${dict.dictLabel}=='CNY'? 'selected':''"
-                                        th:text="${dict.dictLabel}"
+                                <!-- <option th:each="dict : ${type}" th:selected="${dict.dictLabel}=='CNY'? 'selected':''"
+                                         th:text="${dict.dictLabel}"
+                                         th:value="${dict.dictValue}"></option>-->
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
                             </select>
                         </li>
@@ -244,7 +246,6 @@
                     field: 'orderQr', title: '交易详情', formatter: function (value, row, index) {
                         var table = '<ul>'
                         if (row.orderStatus == 2) {
-                            table += '<li>' + row.orderQr + '</li>'
                             if (row.isNotify == 'YES') {
 
                                 table += '<li>' + '通知：已发送' + '</li>'
@@ -252,6 +253,7 @@
                                 table += '<li>' + '通知：未收到' + '</li>'
                             }
                         }
+                        table += '<li>' + row.orderQr + '</li>'
                         table += '<li>' + row.dealDescribe + '</li>'
                         table += '</ul>'
                         return table;
