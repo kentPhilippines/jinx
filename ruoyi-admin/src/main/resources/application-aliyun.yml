@@ -10,28 +10,28 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/zongbang_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: ENC(ASbHtWW7AAWLrEAtUBJmigSYYPvhLY/4)
         password: ENC(rvJeIhYegm9BPhEIm+LZYu2FHMW/iRvP)
       # alipay从库数据源
       alipay:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/zongbang_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: ENC(ASbHtWW7AAWLrEAtUBJmigSYYPvhLY/4)
         password: ENC(rvJeIhYegm9BPhEIm+LZYu2FHMW/iRvP)
       # pay从库数据源
       pay:
         # 从数据源开关/默认关闭
         enabled: false
-        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/zongbang_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: ENC(ASbHtWW7AAWLrEAtUBJmigSYYPvhLY/4)
         password: ENC(rvJeIhYegm9BPhEIm+LZYu2FHMW/iRvP)
       # dealpay从库数据源
       dealpay:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://rm-3nss9b6z93e4rk299oo.mysql.rds.aliyuncs.com:3306/zongbang_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: ENC(ASbHtWW7AAWLrEAtUBJmigSYYPvhLY/4)
         password: ENC(rvJeIhYegm9BPhEIm+LZYu2FHMW/iRvP)
       # 初始连接数
