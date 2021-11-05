@@ -216,6 +216,7 @@ public class MerchantInfoEntityController extends BaseController {
     @ResponseBody
     public AjaxResult editSave(AlipayUserInfo alipayUserInfo) {
         return toAjax(userService.updateUserByLoginName(alipayUserInfo));
+
 //        //获取alipay处理接口URL
 //        String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
 //        String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_1);
