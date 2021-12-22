@@ -141,7 +141,7 @@ public class AlipayDealOrderEntityController extends BaseController {
     /**
      * 代付主交易订单修改卡商账户
      *
-     * @param userId 这里其实为 订单号
+     * @param
      * @return
      */
     @GetMapping("/updateBankCardShow/{userId}")
@@ -315,7 +315,7 @@ public class AlipayDealOrderEntityController extends BaseController {
             alipayDealOrderApp.setOrderId(dataOrigin.getAssociatedId());
             AlipayDealOrderApp data = alipayDealOrderAppService.selectAlipayDealOrderApp(alipayDealOrderApp);
             if (data == null) {
-                AjaxResult.error();
+                return AjaxResult.error();
             }
             data.setSubmitTime(new Date());
             data.setCreateTime(new Date());

@@ -16,10 +16,10 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.common.utils.RSAUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -30,13 +30,13 @@ import java.util.*;
  */
 @Service
 public class MerchantInfoEntityServiceImpl implements IMerchantInfoEntityService {
-    @Autowired
+    @Resource
     private MerchantInfoEntityMapper merchantInfoEntityMapper;
 
-    @Autowired
+    @Resource
     private AlipayUserFundEntityMapper alipayUserFundEntityMapper;
 
-    @Autowired
+    @Resource
     private AlipayUserInfoMapper alipayUserInfoMapper;
 
     /**
