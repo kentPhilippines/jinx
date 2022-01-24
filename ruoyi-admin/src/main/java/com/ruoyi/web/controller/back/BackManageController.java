@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.*;
@@ -409,10 +410,10 @@ public class BackManageController extends BaseController {
                     try {
                         Double onlineRate = 0.0;
                         Double locatuonRate = Double.valueOf(date.getDictValue());
-                        String smallbull = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=buy&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=general&online=1&range=0&amount=";
-                        String rateBull = getRate(smallbull);
-                        String smallSell = "https://otc-api-hk.eiijo.cn/v1/data/trade-market?coinId=2&currency=1&tradeType=sell&currPage=1&payMethod=0&acceptOrder=-1&country=&blockType=general&online=1&range=0&amount=";
-                        String rateSell = getRate(smallSell);
+                        String smallbull = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
+                        String rateBull = getRate(smallbull,"buy");
+                        String smallSell = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
+                        String rateSell = getRate(smallSell,"sell");
                         BigDecimal bigDecimal = new BigDecimal(rateBull);
                         BigDecimal bigDecimal1 = new BigDecimal(rateSell);
                         if (bigDecimal.compareTo(bigDecimal1) == -1) {
@@ -726,20 +727,44 @@ public class BackManageController extends BaseController {
         return getDataTable(dataList);
     }
 
-    String getRate(String url) {
+    String getRate(String url, String type) {
         try {
-            String sell = HttpUtil.get(url);
-            cn.hutool.json.JSONObject jsonObjectsell = JSONUtil.parseObj(sell);
-            String codesell = jsonObjectsell.getStr("code");
-            if ("200".contains(codesell)) {
-                String date1sell = jsonObjectsell.getStr("data");
-                JSONArray datesell = JSONUtil.parseArray(date1sell);
-                Object[] objectssell = datesell.stream().toArray();
-                Object objectsell = objectssell[0];
-                cn.hutool.json.JSONObject jsonObject1sell = JSONUtil.parseObj(objectsell);
-                String pricesell = jsonObject1sell.getStr("price");
-                return pricesell;
+            String params = null;
+            if (type.equals("sell")) {
+                params = "{\"page\":1,\"rows\":10,\"payTypes\":[],\"classifies\":[],\"asset\":\"USDT\",\"tradeType\":\"SELL\",\"fiat\":\"CNY\",\"publisherType\":null,\"filter\":{\"payTypes\":[]}}";
+            } else if (type.equals("buy")) {
+                params = "{\"page\":1,\"rows\":10,\"payTypes\":[],\"classifies\":[],\"asset\":\"USDT\",\"tradeType\":\"BUY\",\"fiat\":\"CNY\",\"publisherType\":null,\"filter\":{\"payTypes\":[]}}";
             }
+            String sell = HttpUtil.post(url, params);
+            JSONObject jsonObject = JSON.parseObject(sell);
+            String code = jsonObject.getString("code");
+            if ("000000".equals(code) && type.contains("sell")) {
+                String data = jsonObject.getString("data");
+                JSONArray objects = JSONUtil.parseArray(data);
+                String price = null;
+                if (objects.size() >= 5) {
+                    String o = objects.getStr(4);
+                    JSONObject jsonObject1 = JSON.parseObject(o);
+                    JSONObject adDetailResp = jsonObject1.getJSONObject("adDetailResp");
+                    price = adDetailResp.getString("price");
+                }
+                return price;
+            }
+
+            Set<Object> setList = new HashSet<>();
+            if ("000000".equals(code) && type.contains("buy")) {
+                String data = jsonObject.getString("data");
+                JSONArray objects = JSONUtil.parseArray(data);
+                String price = null;
+                if (objects.size() >= 1) {
+                    String o = objects.getStr(0);
+                    JSONObject jsonObject1 = JSON.parseObject(o);
+                    JSONObject adDetailResp = jsonObject1.getJSONObject("adDetailResp");
+                    price = adDetailResp.getString("price");
+                }
+                return price;
+            }
+
         } catch (Exception e) {
             return "获取错误";
         }

@@ -104,12 +104,16 @@ public class AlipayDealOrderEntityController extends BaseController {
             }
         }
         for (AlipayDealOrderEntity order : list) {
-            order.setChannelName(userCollect1.get(order.getOrderQrUser()).getUserName());
+            if(ObjectUtil.isNotNull(userCollect1.get(order.getOrderQrUser()))){
+                order.setChannelName(userCollect1.get(order.getOrderQrUser()).getUserName());
+            }
             AlipayProductEntity product = prCollect.get(order.getRetain1());
             if (ObjectUtil.isNotNull(product)) {
                 order.setRetain1(product.getProductName());
             }
-            order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
+            if(ObjectUtil.isNotNull(userCollect.get(order.getOrderAccount()))){
+                order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
+            }
         }
         userCollect = null;
         AlipayDealOrderEntity deal = alipayDealOrderEntityService.selectAlipayDealOrderEntityListSum(alipayDealOrderEntity);
