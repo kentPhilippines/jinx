@@ -353,7 +353,7 @@ public class AlipayUserRateEntityController extends BaseController {
         String key = alipayUserInfos.get(0).getPayPasword();//交易密钥
         String publicKey = alipayUserInfos.get(0).getPublicKey();
         String dealurl = alipayUserInfos.get(0).getDealUrl();
-        String amount = "1000.00";
+        String amount = "50.00";
         parMap.put("amount", amount);
         parMap.put("appId", userId);
         parMap.put("applyDate", d.format(new Date()));
