@@ -152,9 +152,10 @@ public class SysDictDataController extends BaseController {
         Object o = this.cache.get(RATE_KEY + DateUtils.getTime());
         if (null == o) {
             String smallbull = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
-            String rateBull = getRate(smallbull,"buy");
+            String rateBull = getRate(smallbull, "buy");
             String smallSell = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
-            String rateSell = getRate(smallSell,"sell");
+            String rateSell = getRate(smallSell, "sell");
+            logger.info("实时汇率为-{}",rateBull);
             BigDecimal bigDecimal = new BigDecimal(rateBull);
             BigDecimal bigDecimal1 = new BigDecimal(rateSell);
             if (bigDecimal.compareTo(bigDecimal1) == -1) {
@@ -180,14 +181,14 @@ public class SysDictDataController extends BaseController {
         String smallSell = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
         smalls.setId("3");
         smalls.setRateType("自选交易购买价格");
-        smalls.setPrice(getRate(smallSell,"sell"));
+        smalls.setPrice(getRate(smallSell, "sell"));
         smalls.setCaeateTime(DateUtils.getTime());
         list.add(smalls);
         HUOBI smallb = new HUOBI();
         String smallbull = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
         smallb.setId("4");
         smallb.setRateType("自选交易出售价格");
-        smallb.setPrice(getRate(smallbull,"buy"));
+        smallb.setPrice(getRate(smallbull, "buy"));
         smallb.setCaeateTime(DateUtils.getTime());
         list.add(smallb);
         return getDataTable(list);
@@ -202,7 +203,13 @@ public class SysDictDataController extends BaseController {
             } else if (type.equals("buy")) {
                 params = "{\"page\":1,\"rows\":10,\"payTypes\":[],\"classifies\":[],\"asset\":\"USDT\",\"tradeType\":\"BUY\",\"fiat\":\"CNY\",\"publisherType\":null,\"filter\":{\"payTypes\":[]}}";
             }
-            String sell = HttpUtil.post(url, params);
+            String sell = null;
+            try {
+                sell = HttpUtil.post(url, params);
+            } catch (Exception e) {
+                logger.info("获取汇率错误-{}", e);
+            }
+            logger.info("获取汇率数据为-{}", sell);
             com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(sell);
             String code = jsonObject.getString("code");
             if ("000000".equals(code) && type.contains("sell")) {
