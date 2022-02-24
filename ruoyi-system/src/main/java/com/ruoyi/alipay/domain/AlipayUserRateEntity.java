@@ -132,7 +132,7 @@ public class AlipayUserRateEntity extends BaseEntity {
     /**
      * 预留，添加业务使用
      */
-    @Excel(name = "预留，添加业务使用")
+    @Excel(name = "额外抽点")
     private String retain3;
 
     /**

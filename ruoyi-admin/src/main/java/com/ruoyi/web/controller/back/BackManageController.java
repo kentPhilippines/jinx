@@ -728,47 +728,18 @@ public class BackManageController extends BaseController {
     }
 
     String getRate(String url, String type) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("url", url);
+        data.put("type", type);
+        String params = JSON.toJSONString(data);
+        String post = null;
         try {
-            String params = null;
-            if (type.equals("sell")) {
-                params = "{\"page\":1,\"rows\":10,\"payTypes\":[],\"classifies\":[],\"asset\":\"USDT\",\"tradeType\":\"SELL\",\"fiat\":\"CNY\",\"publisherType\":null,\"filter\":{\"payTypes\":[]}}";
-            } else if (type.equals("buy")) {
-                params = "{\"page\":1,\"rows\":10,\"payTypes\":[],\"classifies\":[],\"asset\":\"USDT\",\"tradeType\":\"BUY\",\"fiat\":\"CNY\",\"publisherType\":null,\"filter\":{\"payTypes\":[]}}";
-            }
-            String sell = HttpUtil.post(url, params);
-            JSONObject jsonObject = JSON.parseObject(sell);
-            String code = jsonObject.getString("code");
-            if ("000000".equals(code) && type.contains("sell")) {
-                String data = jsonObject.getString("data");
-                JSONArray objects = JSONUtil.parseArray(data);
-                String price = null;
-                if (objects.size() >= 5) {
-                    String o = objects.getStr(4);
-                    JSONObject jsonObject1 = JSON.parseObject(o);
-                    JSONObject adDetailResp = jsonObject1.getJSONObject("adDetailResp");
-                    price = adDetailResp.getString("price");
-                }
-                return price;
-            }
-
-            Set<Object> setList = new HashSet<>();
-            if ("000000".equals(code) && type.contains("buy")) {
-                String data = jsonObject.getString("data");
-                JSONArray objects = JSONUtil.parseArray(data);
-                String price = null;
-                if (objects.size() >= 1) {
-                    String o = objects.getStr(0);
-                    JSONObject jsonObject1 = JSON.parseObject(o);
-                    JSONObject adDetailResp = jsonObject1.getJSONObject("adDetailResp");
-                    price = adDetailResp.getString("price");
-                }
-                return price;
-            }
-
+            post = HttpUtil.post("http://47.242.24.220:32412/http/rate", params);
         } catch (Exception e) {
-            return "获取错误";
+            logger.error("获取汇率失败", e);
+            return null;
         }
-        return "获取失败";
+        return post;
     }
 
 

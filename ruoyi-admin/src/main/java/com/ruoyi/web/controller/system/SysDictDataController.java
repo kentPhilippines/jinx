@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.system;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
@@ -13,6 +14,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.HUOBI;
@@ -152,9 +154,10 @@ public class SysDictDataController extends BaseController {
         Object o = this.cache.get(RATE_KEY + DateUtils.getTime());
         if (null == o) {
             String smallbull = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
-            String rateBull = getRate(smallbull,"buy");
+            String rateBull = getRate(smallbull, "buy");
             String smallSell = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
-            String rateSell = getRate(smallSell,"sell");
+            String rateSell = getRate(smallSell, "sell");
+            logger.info("实时汇率为-{}", rateBull);
             BigDecimal bigDecimal = new BigDecimal(rateBull);
             BigDecimal bigDecimal1 = new BigDecimal(rateSell);
             if (bigDecimal.compareTo(bigDecimal1) == -1) {
@@ -180,14 +183,14 @@ public class SysDictDataController extends BaseController {
         String smallSell = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
         smalls.setId("3");
         smalls.setRateType("自选交易购买价格");
-        smalls.setPrice(getRate(smallSell,"sell"));
+        smalls.setPrice(getRate(smallSell, "sell"));
         smalls.setCaeateTime(DateUtils.getTime());
         list.add(smalls);
         HUOBI smallb = new HUOBI();
         String smallbull = "https://www.pexpay.com/bapi/c2c/v1/friendly/c2c/ad/search";
         smallb.setId("4");
         smallb.setRateType("自选交易出售价格");
-        smallb.setPrice(getRate(smallbull,"buy"));
+        smallb.setPrice(getRate(smallbull, "buy"));
         smallb.setCaeateTime(DateUtils.getTime());
         list.add(smallb);
         return getDataTable(list);
@@ -195,47 +198,18 @@ public class SysDictDataController extends BaseController {
 
 
     String getRate(String url, String type) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("url", url);
+        data.put("type", type);
+        String params = JSON.toJSONString(data);
+        String post = null;
         try {
-            String params = null;
-            if (type.equals("sell")) {
-                params = "{\"page\":1,\"rows\":10,\"payTypes\":[],\"classifies\":[],\"asset\":\"USDT\",\"tradeType\":\"SELL\",\"fiat\":\"CNY\",\"publisherType\":null,\"filter\":{\"payTypes\":[]}}";
-            } else if (type.equals("buy")) {
-                params = "{\"page\":1,\"rows\":10,\"payTypes\":[],\"classifies\":[],\"asset\":\"USDT\",\"tradeType\":\"BUY\",\"fiat\":\"CNY\",\"publisherType\":null,\"filter\":{\"payTypes\":[]}}";
-            }
-            String sell = HttpUtil.post(url, params);
-            com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(sell);
-            String code = jsonObject.getString("code");
-            if ("000000".equals(code) && type.contains("sell")) {
-                String data = jsonObject.getString("data");
-                JSONArray objects = JSONUtil.parseArray(data);
-                String price = null;
-                if (objects.size() >= 5) {
-                    String o = objects.getStr(4);
-                    com.alibaba.fastjson.JSONObject jsonObject1 = JSON.parseObject(o);
-                    com.alibaba.fastjson.JSONObject adDetailResp = jsonObject1.getJSONObject("adDetailResp");
-                    price = adDetailResp.getString("price");
-                }
-                return price;
-            }
-
-            Set<Object> setList = new HashSet<>();
-            if ("000000".equals(code) && type.contains("buy")) {
-                String data = jsonObject.getString("data");
-                JSONArray objects = JSONUtil.parseArray(data);
-                String price = null;
-                if (objects.size() >= 1) {
-                    String o = objects.getStr(0);
-                    com.alibaba.fastjson.JSONObject jsonObject1 = JSON.parseObject(o);
-                    JSONObject adDetailResp = jsonObject1.getJSONObject("adDetailResp");
-                    price = adDetailResp.getString("price");
-                }
-                return price;
-            }
-
+            post = HttpUtil.post("http://47.242.24.220:32412/http/rate", params);
         } catch (Exception e) {
-            return "获取错误";
+            logger.error("获取汇率失败", e);
+            return null;
         }
-        return "获取失败";
+        return post;
     }
 
 }
