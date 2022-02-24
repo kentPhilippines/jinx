@@ -3,6 +3,7 @@ package com.ruoyi.framework.shiro.service;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -24,6 +25,7 @@ import com.ruoyi.system.domain.SysUser;
  * @author ruoyi
  */
 @Component
+@Slf4j
 public class SysPasswordService {
     @Autowired
     private CacheManager cacheManager;
@@ -71,7 +73,9 @@ public class SysPasswordService {
     }
 
     public void clearLoginRecordCache(String username) {
+        log.info("pwd error count:{}",loginRecordCache.get(username));
         loginRecordCache.remove(username);
+        log.info("pwd error count:{}",loginRecordCache.get(username));
     }
 
     public String encryptPassword(String username, String password, String salt) {

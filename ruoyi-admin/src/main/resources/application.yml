@@ -43,6 +43,10 @@ user:
 
 # Spring配置
 spring:
+  redis:
+    host: redis-server
+    port: 6379
+    password: will1234
   # 模板引擎
   thymeleaf:
     mode: HTML
@@ -58,8 +62,8 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     #发布到运营时候修改该配置 online
   profiles:
-    active: google-online
-    #active: druid
+    #active: google-online
+    active: druid
     #  active: google-test
     #active: druid-huifutong
   # 文件上传

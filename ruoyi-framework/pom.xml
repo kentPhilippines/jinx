@@ -10,13 +10,22 @@
     <modelVersion>4.0.0</modelVersion>
 	
     <artifactId>ruoyi-framework</artifactId>
-	
+
 	<description>
 	    framework框架核心
 	</description>
-    
-    <dependencies>
 
+	<properties>
+		<redisson-spring-boot-starter.version>3.13.3</redisson-spring-boot-starter.version>
+		<jetcache-starter-redis.version>2.6.0</jetcache-starter-redis.version>
+	</properties>
+    <dependencies>
+		<!-- shiro+redis缓存插件 -->
+		<dependency>
+			<groupId>org.crazycake</groupId>
+			<artifactId>shiro-redis</artifactId>
+			<version>3.1.0</version>
+		</dependency>
         <!-- SpringBoot Web容器 -->
 	     <dependency>
             <groupId>org.springframework.boot</groupId>

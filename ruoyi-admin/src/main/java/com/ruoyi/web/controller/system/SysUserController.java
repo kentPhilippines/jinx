@@ -179,6 +179,8 @@ public class SysUserController extends BaseController {
         SysUser user1 = userService.selectUserById(user.getUserId());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user1.getSalt()));
         if (userService.resetUserPwd(user) > 0) {
+            //重置密码后 清除错误次数
+            passwordService.clearLoginRecordCache(user1.getLoginName());
             if (ShiroUtils.getUserId().equals(user.getUserId())) {
                 ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
             }
