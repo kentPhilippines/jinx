@@ -43,13 +43,26 @@ public interface AlipayWithdrawEntityMapper {
 
 
     @Select("<script>" +
+
+            "select " +
+            " '所有' as userId ," +
+            "COALESCE(SUM(amount),0) totalAmount," +
+            "COALESCE(SUM(CASE orderStatus WHEN 2 THEN amount ELSE 0 END),0) successAmount," +
+            "COALESCE(SUM(CASE orderStatus WHEN 2 THEN fee ELSE 0 END),0) successFee," +
+            "COUNT(1) totalCount," +
+            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount ," +
+            "from " +
+            "alipay_withdraw where " +
+            "createTime BETWEEN #{statisticsEntity.params.dayStart} AND #{statisticsEntity.params.dayEnd} " +
+            "and withdrawType = 1 and status = 1 " +
+             " union all " +
             "select " +
             " userId as userId ," +
             "COALESCE(SUM(amount),0) totalAmount," +
             "COALESCE(SUM(CASE orderStatus WHEN 2 THEN amount ELSE 0 END),0) successAmount," +
+            "COALESCE(SUM(CASE orderStatus WHEN 2 THEN fee ELSE 0 END),0) successFee," +
             "COUNT(1) totalCount," +
             "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount ," +
-            "coalesce(CASE retain1 WHEN 2   THEN 'API' ELSE 'MANAGE' END) userAgent " +     //api代付标示
             "from " +
             "alipay_withdraw where " +
             "createTime BETWEEN #{statisticsEntity.params.dayStart} AND #{statisticsEntity.params.dayEnd} " +
@@ -57,7 +70,7 @@ public interface AlipayWithdrawEntityMapper {
             "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
             "and userId = #{statisticsEntity.userId} " +
             "</if>" +
-            "group by userId, witChannel ,channelId , retain1" +
+            "group by userId " +
             "</script>")
     List<StatisticsEntity> statisticsWit(@Param("statisticsEntity") StatisticsEntity statisticsEntity);
 
