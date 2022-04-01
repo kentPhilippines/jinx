@@ -50,7 +50,7 @@ public interface AlipayWithdrawEntityMapper {
             "COALESCE(SUM(CASE orderStatus WHEN 2 THEN amount ELSE 0 END),0) successAmount," +
             "COALESCE(SUM(CASE orderStatus WHEN 2 THEN fee ELSE 0 END),0) successFee," +
             "COUNT(1) totalCount," +
-            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount ," +
+            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount " +
             "from " +
             "alipay_withdraw where " +
             "createTime BETWEEN #{statisticsEntity.params.dayStart} AND #{statisticsEntity.params.dayEnd} " +
@@ -62,12 +62,12 @@ public interface AlipayWithdrawEntityMapper {
             "COALESCE(SUM(CASE orderStatus WHEN 2 THEN amount ELSE 0 END),0) successAmount," +
             "COALESCE(SUM(CASE orderStatus WHEN 2 THEN fee ELSE 0 END),0) successFee," +
             "COUNT(1) totalCount," +
-            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount ," +
+            "COUNT(CASE orderStatus WHEN 2 THEN orderId ELSE null END) successCount " +
             "from " +
             "alipay_withdraw where " +
             "createTime BETWEEN #{statisticsEntity.params.dayStart} AND #{statisticsEntity.params.dayEnd} " +
             "and withdrawType = 1 and status = 1 " +
-            "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
+            "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\"> " +
             "and userId = #{statisticsEntity.userId} " +
             "</if>" +
             "group by userId " +
