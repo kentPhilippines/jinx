@@ -6,30 +6,30 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://rm-0iw59mny5050jpg70jo.mysql.japan.rds.aliyuncs.com:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: kent
-        password: 9asdasd7dwgdo7$as8d)asd
+        url: jdbc:mysql://35.220.247.103:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456test
       # alipay从库数据源
       alipay:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://rm-0iw59mny5050jpg70jo.mysql.japan.rds.aliyuncs.com:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: kent
-        password: 9asdasd7dwgdo7$as8d)asd
+        url: jdbc:mysql://35.220.247.103:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456test
       # pay从库数据源
       pay:
         # 从数据源开关/默认关闭
         enabled: false
-        url: jdbc:mysql://rm-0iw59mny5050jpg70jo.mysql.japan.rds.aliyuncs.com:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: kent
-        password: 9asdasd7dwgdo7$as8d)asd
+        url: jdbc:mysql://35.220.247.103:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456test
       # dealpay从库数据源
       dealpay:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://rm-0iw59mny5050jpg70jo.mysql.japan.rds.aliyuncs.com:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: kent
-        password: 9asdasd7dwgdo7$as8d)asd
+        url: jdbc:mysql://35.220.247.103:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456test
       # 初始连接数
       initialSize: 5
       # 最小连接池数量
