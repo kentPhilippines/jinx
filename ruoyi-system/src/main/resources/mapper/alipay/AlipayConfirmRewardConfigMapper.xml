@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayConfirmRewardConfigMapper">
+    
+    <resultMap type="AlipayConfirmRewardConfig" id="AlipayConfirmRewardConfigResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="rebateRate"    column="rebate_rate"    />
+        <result property="minimum"    column="minimum"    />
+        <result property="timeOut"    column="time_out"    />
+        <result property="remark"    column="remark"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+
+    <sql id="selectAlipayConfirmRewardConfigVo">
+        select id, user_id, rebate_rate, minimum, time_out, remark, create_date from alipay_confirm_reward_config
+    </sql>
+
+    <select id="selectAlipayConfirmRewardConfigList" parameterType="AlipayConfirmRewardConfig" resultMap="AlipayConfirmRewardConfigResult">
+        <include refid="selectAlipayConfirmRewardConfigVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="rebateRate != null "> and rebate_rate = #{rebateRate}</if>
+            <if test="minimum != null "> and minimum = #{minimum}</if>
+            <if test="timeOut != null "> and time_out = #{timeOut}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayConfirmRewardConfigById" parameterType="Long" resultMap="AlipayConfirmRewardConfigResult">
+        <include refid="selectAlipayConfirmRewardConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayConfirmRewardConfig" parameterType="AlipayConfirmRewardConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_confirm_reward_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="rebateRate != null ">rebate_rate,</if>
+            <if test="minimum != null ">minimum,</if>
+            <if test="timeOut != null ">time_out,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createDate != null ">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="rebateRate != null ">#{rebateRate},</if>
+            <if test="minimum != null ">#{minimum},</if>
+            <if test="timeOut != null ">#{timeOut},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createDate != null ">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayConfirmRewardConfig" parameterType="AlipayConfirmRewardConfig">
+        update alipay_confirm_reward_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id = #{userId},</if>
+            <if test="rebateRate != null ">rebate_rate = #{rebateRate},</if>
+            <if test="minimum != null ">minimum = #{minimum},</if>
+            <if test="timeOut != null ">time_out = #{timeOut},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createDate != null ">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayConfirmRewardConfigById" parameterType="Long">
+        delete from alipay_confirm_reward_config where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayConfirmRewardConfigByIds" parameterType="String">
+        delete from alipay_confirm_reward_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

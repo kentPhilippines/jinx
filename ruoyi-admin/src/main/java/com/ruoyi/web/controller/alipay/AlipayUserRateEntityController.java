@@ -376,7 +376,7 @@ public class AlipayUserRateEntityController extends BaseController {
         postMap.put("cipherText", publicEncrypt);
         postMap.put("userId", userid);
         logger.info("请求参数：" + postMap.toString());
-        String post = HttpUtil.post(dealurl + "/deal/pay", postMap);
+         String post = HttpUtil.post(dealurl + "/deal/pay", postMap);
         logger.info("相应结果集：" + post);
         JSONObject json = JSONObject.parseObject(post);
         String result = json.getString("success");
