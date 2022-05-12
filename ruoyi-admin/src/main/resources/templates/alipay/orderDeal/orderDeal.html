@@ -141,6 +141,7 @@
             statisticsMerchantUrl: prefix + "/statistics/merchant/table",
             exportUrl: prefix + "/export",
             openUrl: prefix + "/updateBankCardShow/{userId}",
+            onlineCardUrl: prefix + "/onlineCardUrl/{id}",
             backOrderUrl: prefix + "/backOrder/{id}",
             modalName: "主交易订单",
             showFooter: true,
@@ -151,6 +152,9 @@
                 {
                     field: 'orderId', title: '平台订单', formatter: function (value, row, index) {
                         var table = '<ul>'
+                        if(null != row.retain1 && '' != row.retain1 && row.retain1.indexOf('大客户')>-1 ) {
+                            table = '<ul style="background-color: orange">';
+                        }
                         table += '<li>' + '主订单：' + row.orderId + '</li>'
                         table += '<li>' + '关联订单：' + row.associatedId + '</li>'
                         table += '<li>' + '外部订单：' + row.externalOrderId + '</li>'
@@ -300,6 +304,11 @@
                         }
                         if (row.orderStatus === '1' && row.orderType == 4) {
                             actions.push('<a class="btn btn-warning btn-xs ' + notifyFlag + '" href="javascript:void(0)" onclick="updateBankCard(\'' + row.orderId + '\')"><i class="fa fa-bell-o"></i>修改出款卡商</a> ');
+                        }
+                        if(row.orderStatus === '1' || row.orderStatus === '1'){
+                            if(null != row.retain1 && '' != row.retain1 && row.retain1.indexOf('大客户')>-1 ) {
+                             //   actions.push('<a class="btn btn-danger btn-xs  href="javascript:void(0) onclick="$.operate.openAccount(\'' + row.id + '\',\'选择配置卡\',\'onlineCardUrl\')"><i class="fa fa-bell-o"></i>配卡入款</a> ');
+                            }
                         }
                         return actions.join('');
                     }
