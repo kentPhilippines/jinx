@@ -1318,6 +1318,9 @@ var table = {
                     $.modal.open(title, $.operate.deleteQuotaUrlM(id))
                 } else if (flag == 'addQuotaFlag') {
                     $.modal.open(title, $.operate.addQuotaUrlM(id))
+                }else if(flag == 'onlineCardUrl'){
+                    $.modal.open(title, $.operate.onlineCardUrl(id))
+
                 }
             },
             //修改媒介上限金额

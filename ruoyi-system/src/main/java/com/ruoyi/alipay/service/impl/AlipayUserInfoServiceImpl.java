@@ -240,4 +240,9 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     public int upUserAgents(Long id) {
         return alipayUserInfoMapper.upUserAgents(id);
     }
+
+    @Override
+    public AlipayUserInfo findUserByUserId(String orderAccount) {
+        return null;
+    }
 }

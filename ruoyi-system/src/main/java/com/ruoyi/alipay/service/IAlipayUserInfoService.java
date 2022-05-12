@@ -161,4 +161,9 @@ public interface IAlipayUserInfoService {
      * @return
      */
     int upUserAgents(Long id);
+
+    AlipayUserInfo findUserByUserId(String orderAccount);
+
+
+
 }
