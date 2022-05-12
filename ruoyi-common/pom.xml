@@ -10,13 +10,26 @@
     <modelVersion>4.0.0</modelVersion>
 	
     <artifactId>ruoyi-common</artifactId>
-	
+	<properties>
+		<redisson-spring-boot-starter.version>3.13.3</redisson-spring-boot-starter.version>
+		<jetcache-starter-redis.version>2.6.0</jetcache-starter-redis.version>
+	</properties>
 	<description>
 	    common通用工具
 	</description>
 
     <dependencies>
-		
+		<dependency>
+			<groupId>com.alicp.jetcache</groupId>
+			<artifactId>jetcache-starter-redis</artifactId>
+			<version>${jetcache-starter-redis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.redisson</groupId>
+			<artifactId>redisson-spring-boot-starter</artifactId>
+			<version>${redisson-spring-boot-starter.version}</version>
+		</dependency>
 		<!-- Spring框架基本的核心工具 -->
 		<dependency>
 			<groupId>org.springframework</groupId>

@@ -3,6 +3,9 @@ package com.ruoyi.web.controller.alipay;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.service.*;
@@ -33,6 +36,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -60,6 +65,8 @@ public class AlipayWithdrawEntityController extends BaseController {
     private IAlipayRunOrderEntityService alipayRunOrderEntityService;
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
+    @CreateCache(name = "ALIPAY_WITHDRAWAL_LOCK:", expire = 60, timeUnit = TimeUnit.SECONDS, cacheType = CacheType.LOCAL)
+    private Cache<String, String> cache;
 
     @GetMapping("/qr")
     public String qr_withdrawal() {
@@ -161,6 +168,13 @@ public class AlipayWithdrawEntityController extends BaseController {
     @PostMapping("/merchant/approval")
     @ResponseBody
     public AjaxResult apporval(AlipayWithdrawEntity alipayWithdrawEntity) {
+        if(cache.get(alipayWithdrawEntity.getOrderId())!=null)
+        {
+            return error("1分钟内不允许重复操作");
+        }
+        cache.put(alipayWithdrawEntity.getOrderId(),alipayWithdrawEntity.getOrderId());
+
+
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
         if ("2".equals(alipayWithdrawEntity.getOrderStatus())) {
