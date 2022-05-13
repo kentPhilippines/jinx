@@ -174,6 +174,16 @@ public class AlipayWithdrawEntityController extends BaseController {
         }
         cache.put(alipayWithdrawEntity.getOrderId(),alipayWithdrawEntity.getOrderId());
 
+        //新增逻辑 判断金流里是否有这笔失败的 如果有就返回
+        if(alipayWithdrawEntity.getOrderStatus().equals("3"))
+        {
+            AlipayRunOrderEntity alipayRunOrderEntity = new AlipayRunOrderEntity();
+            alipayRunOrderEntity.setAssociatedId(alipayWithdrawEntity.getOrderId());
+            List<AlipayRunOrderEntity> list = alipayRunOrderEntityService.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
+            list.stream().filter(entity ->entity.getRunOrderType()==8 ||entity.getRunOrderType()==22 ).findAny().ifPresent(runOrderEntity->{
+                throw new BusinessException("此订单金流里已有失败数据");
+            });
+        }
 
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
