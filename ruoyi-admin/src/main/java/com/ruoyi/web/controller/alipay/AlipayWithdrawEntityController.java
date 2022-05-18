@@ -65,6 +65,10 @@ public class AlipayWithdrawEntityController extends BaseController {
     private IAlipayRunOrderEntityService alipayRunOrderEntityService;
     @Autowired
     private IMerchantInfoEntityService merchantInfoEntityService;
+
+    @Autowired
+    private AlipayWithdrawAuditRuleService alipayWithdrawAuditRuleService;
+
     @CreateCache(name = "ALIPAY_WITHDRAWAL_LOCK:", expire = 60, timeUnit = TimeUnit.SECONDS, cacheType = CacheType.LOCAL)
     private Cache<String, String> cache;
 
@@ -167,15 +171,17 @@ public class AlipayWithdrawEntityController extends BaseController {
     @Log(title = "代付订单确认", businessType = BusinessType.UPDATE)
     @PostMapping("/merchant/approval")
     @ResponseBody
-    public AjaxResult apporval(AlipayWithdrawEntity alipayWithdrawEntity) {
+    public AjaxResult apporval(AlipayWithdrawEntity alipayWithdrawEntity)  {
         if(cache.get(alipayWithdrawEntity.getOrderId())!=null)
         {
             return error("1分钟内不允许重复操作");
         }
         cache.put(alipayWithdrawEntity.getOrderId(),alipayWithdrawEntity.getOrderId());
 
+
+        alipayWithdrawAuditRuleService.checkRuleBeforeAudit(alipayWithdrawEntity);
         //新增逻辑 判断金流里是否有这笔失败的 如果有就返回
-        if(alipayWithdrawEntity.getOrderStatus().equals("3"))
+       /* if(alipayWithdrawEntity.getOrderStatus().equals("3"))
         {
             AlipayRunOrderEntity alipayRunOrderEntity = new AlipayRunOrderEntity();
             alipayRunOrderEntity.setAssociatedId(alipayWithdrawEntity.getOrderId());
@@ -183,7 +189,7 @@ public class AlipayWithdrawEntityController extends BaseController {
             list.stream().filter(entity ->entity.getRunOrderType()==8 ||entity.getRunOrderType()==22 ).findAny().ifPresent(runOrderEntity->{
                 throw new BusinessException("此订单金流里已有失败数据");
             });
-        }
+        }*/
 
         // 获取当前的用户
         SysUser currentUser = ShiroUtils.getSysUser();
