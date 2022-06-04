@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -71,6 +72,7 @@ public class AlipayWithdrawEntityController extends BaseController {
 
     @CreateCache(name = "ALIPAY_WITHDRAWAL_LOCK:", expire = 60, timeUnit = TimeUnit.SECONDS, cacheType = CacheType.LOCAL)
     private Cache<String, String> cache;
+    private ReentrantLock reentrantLock = new ReentrantLock();
 
     @GetMapping("/qr")
     public String qr_withdrawal() {
@@ -172,11 +174,18 @@ public class AlipayWithdrawEntityController extends BaseController {
     @PostMapping("/merchant/approval")
     @ResponseBody
     public AjaxResult apporval(AlipayWithdrawEntity alipayWithdrawEntity)  {
-        if(cache.get(alipayWithdrawEntity.getOrderId())!=null)
-        {
-            return error("1分钟内不允许重复操作");
+        try {
+            reentrantLock.tryLock(10,TimeUnit.SECONDS);
+            if(cache.get(alipayWithdrawEntity.getOrderId())!=null)
+            {
+                return error("1分钟内不允许重复操作");
+            }
+            cache.put(alipayWithdrawEntity.getOrderId(),alipayWithdrawEntity.getOrderId());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }finally {
+            reentrantLock.unlock();
         }
-        cache.put(alipayWithdrawEntity.getOrderId(),alipayWithdrawEntity.getOrderId());
 
 
         alipayWithdrawAuditRuleService.checkRuleBeforeAudit(alipayWithdrawEntity);
