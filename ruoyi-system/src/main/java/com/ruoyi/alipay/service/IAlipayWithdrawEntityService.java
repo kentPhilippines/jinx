@@ -56,4 +56,16 @@ public interface IAlipayWithdrawEntityService {
     List<AlipayWithdrawEntity> findWitLimit(String starTime, String endTime, Integer page, Integer size);
 
     AlipayWithdrawEntity selectAlipayWithdrawEntityListSum(AlipayWithdrawEntity alipayWithdrawEntity);
+
+
+    /**
+     * 修改代付订单是否处于挂起状态
+     *
+     * @param orderId
+     * @param moreMacth
+     * @return
+     */
+    int updateMacthMore(String orderId, Integer moreMacth);
+
+
 }

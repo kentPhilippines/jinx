@@ -83,4 +83,7 @@ public interface AlipayWithdrawEntityMapper {
     List<AlipayWithdrawEntity> findWitLimit(@Param("starTime") String starTime, @Param("endTime") String endTime, @Param("page") Integer page, @Param("size") Integer size);
 
     AlipayWithdrawEntity selectAlipayWithdrawEntityListSum(AlipayWithdrawEntity alipayWithdrawEntity);
+    @Update("update alipay_withdraw set moreMacth = #{moreMacth} where orderId = #{orderId}")
+    int updateMacthMore(@Param("orderId")String orderId, @Param("moreMacth") Integer moreMacth);
+
 }

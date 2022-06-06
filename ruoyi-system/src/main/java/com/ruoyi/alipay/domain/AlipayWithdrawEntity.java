@@ -39,6 +39,60 @@ public class AlipayWithdrawEntity extends BaseEntity {
     private String sunCountActualAmount = "0";
     private String pushOrder;//推送字段  1 默认       3 上游驳回
 
+    private String macthMsg;  ///撮合订单 解释
+    private Integer macthStatus;  ///撮合订单 状态   1已撮合 未支付     2 已撮合 已支付
+    private Integer payStatus;  ///结算状态  1 已扣款结算   2 未扣款结算
+    private Integer macthLock;  /// 撮合锁定当前不可以进行任何操作，  默认不锁定 0    1 锁定
+    private Integer moreMacth;  /// 是否可以多次撮合[是否挂起]， 0 不可以  1 可以      可以就是挂起
+    private Integer macthCount;  ///  撮合次数
+
+    public Integer getMacthCount() {
+        return macthCount;
+    }
+
+    public void setMacthCount(Integer macthCount) {
+        this.macthCount = macthCount;
+    }
+
+    public Integer getMoreMacth() {
+        return moreMacth;
+    }
+
+    public void setMoreMacth(Integer moreMacth) {
+        this.moreMacth = moreMacth;
+    }
+
+    public Integer getMacthLock() {
+        return macthLock;
+    }
+
+    public void setMacthLock(Integer macthLock) {
+        this.macthLock = macthLock;
+    }
+
+    public Integer getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(Integer payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public Integer getMacthStatus() {
+        return macthStatus;
+    }
+
+    public void setMacthStatus(Integer macthStatus) {
+        this.macthStatus = macthStatus;
+    }
+
+    public String getMacthMsg() {
+        return macthMsg;
+    }
+
+    public void setMacthMsg(String macthMsg) {
+        this.macthMsg = macthMsg;
+    }
 
     public String getPushOrder() {
         return pushOrder;
@@ -498,28 +552,54 @@ public class AlipayWithdrawEntity extends BaseEntity {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("id", getId())
-                .append("orderId", getOrderId())
-                .append("userId", getUserId())
-                .append("withdrawType", getWithdrawType())
-                .append("bankNo", getBankNo())
-                .append("accname", getAccname())
-                .append("orderStatus", getOrderStatus())
-                .append("bankName", getBankName())
-                .append("amount", getAmount())
-                .append("fee", getFee())
-                .append("actualAmount", getActualAmount())
-                .append("mobile", getMobile())
-                .append("notify", getNotify())
-                .append("createTime", getCreateTime())
-                .append("submitTime", getSubmitTime())
-                .append("status", getStatus())
-                .append("retain1", getRetain1())
-                .append("retain2", getRetain2())
-                .append("apply",getApply())
-                .append("approval", getApproval())
-                .append("comment", getComment())
-                .toString();
+        return "AlipayWithdrawEntity{" +
+                "usdt='" + usdt + '\'' +
+                ", price='" + price + '\'' +
+                ", used='" + used + '\'' +
+                ", eth='" + eth + '\'' +
+                ", priceUsdt='" + priceUsdt + '\'' +
+                ", hash='" + hash + '\'' +
+                ", ethFee=" + ethFee +
+                ", txhash='" + txhash + '\'' +
+                ", USDTamount='" + USDTamount + '\'' +
+                ", USDTRate='" + USDTRate + '\'' +
+                ", sunCountAmount='" + sunCountAmount + '\'' +
+                ", sunCountAmountFee='" + sunCountAmountFee + '\'' +
+                ", sunCountActualAmount='" + sunCountActualAmount + '\'' +
+                ", pushOrder='" + pushOrder + '\'' +
+                ", macthMsg='" + macthMsg + '\'' +
+                ", macthStatus=" + macthStatus +
+                ", payStatus=" + payStatus +
+                ", macthLock=" + macthLock +
+                ", moreMacth=" + moreMacth +
+                ", macthCount=" + macthCount +
+                ", bankcode='" + bankcode + '\'' +
+                ", appOrderId='" + appOrderId + '\'' +
+                ", id=" + id +
+                ", orderId='" + orderId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", withdrawType='" + withdrawType + '\'' +
+                ", bankNo='" + bankNo + '\'' +
+                ", accname='" + accname + '\'' +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", amount=" + amount +
+                ", fee=" + fee +
+                ", actualAmount=" + actualAmount +
+                ", mobile='" + mobile + '\'' +
+                ", notify='" + notify + '\'' +
+                ", createTime=" + createTime +
+                ", submitTime=" + submitTime +
+                ", status=" + status +
+                ", retain1='" + retain1 + '\'' +
+                ", retain2='" + retain2 + '\'' +
+                ", apply='" + apply + '\'' +
+                ", approval='" + approval + '\'' +
+                ", witType='" + witType + '\'' +
+                ", witChannel='" + witChannel + '\'' +
+                ", channelId='" + channelId + '\'' +
+                ", currency='" + currency + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
     }
 }

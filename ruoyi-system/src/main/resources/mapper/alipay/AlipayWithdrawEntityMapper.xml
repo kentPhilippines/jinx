@@ -37,13 +37,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sunCountAmountFee" column="sunCountAmountFee"/>
         <result property="sunCountActualAmount" column="sunCountActualAmount"/>
         <result property="pushOrder" column="pushOrder"/>
+
+
+
+
+        <result property="macthMsg" column="macthMsg"/>
+        <result property="macthStatus" column="macthStatus"/>
+        <result property="payStatus" column="payStatus"/>
+        <result property="macthLock" column="macthLock"/>
+        <result property="moreMacth" column="moreMacth"/>
+        <result property="macthCount" column="macthCount"/>
+
+
+
     </resultMap>
 
     <sql id="selectAlipayWithdrawEntityVo">
         select id, orderId, userId, withdrawType, bankNo, accname,
          orderStatus, bankName, amount, fee, actualAmount, mobile,
          notify, createTime, submitTime, status, retain1, retain2, apply, comment, approval,witChannel,witType,
-        channelId,appOrderId,currency ,txhash,ethFee,pushOrder
+        channelId,appOrderId,currency ,txhash,ethFee,pushOrder,macthMsg,macthStatus,payStatus,macthLock,moreMacth,macthCount
           from alipay_withdraw
     </sql>
 
@@ -65,6 +78,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appOrderId != null  and appOrderId != ''">and appOrderId = #{appOrderId}</if>
             <if test="witChannel != null  and witChannel != ''">and witChannel = #{witChannel}</if>
             <if test="currency != null  and currency != ''">and currency = #{currency}</if>
+
+            <if test="macthStatus != null  and macthStatus != ''">and macthStatus = #{macthStatus}</if>
+            <if test="payStatus != null  and payStatus != ''">and payStatus = #{payStatus}</if>
+            <if test="macthLock != null  and macthLock != ''">and macthLock = #{macthLock}</if>
+            <if test="moreMacth != null  and moreMacth != ''">and moreMacth = #{moreMacth}</if>
+
         </where>
         order by id desc
     </select>

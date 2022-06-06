@@ -346,5 +346,17 @@ public class AlipayWithdrawEntityController extends BaseController {
         return getDataTable(staList);
     }
 
+    @PostMapping("/changeMacthStatus")
+    @ResponseBody
+    public AjaxResult changeMacthStatus(  AlipayWithdrawEntity alipayWithdrawEntity) {
+        logger.info(alipayWithdrawEntity.toString());
+        int  a =   alipayWithdrawEntityService.updateMacthMore(alipayWithdrawEntity.getOrderId(),alipayWithdrawEntity.getMoreMacth());
+        return toAjax(a);
+    }
+
+
+
+
+
 
 }

@@ -52,6 +52,14 @@
                             </select>
                         </li>
                         <li class="select-selectpicker">
+                            <label>撮合锁定： </label>
+                            <select data-none-selected-text="请选择" id="macthStatus" name="macthStatus">
+                                <option value="">所有</option>
+                                <option value="1">撮合未支付</option>
+                                <option value="2"> 撮合已支付</option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
                             <label>订单类型：</label>
                             <select class="selectpicker" data-none-selected-text="请选择" id="orderType" name="orderType">
                                 <option value="">所有</option>
@@ -210,7 +218,15 @@
                 {
                     field: 'orderStatus', title: '订单状态',
                     formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(orderstatusDatas, value);
+                        var table = '<ul>'
+                        table += '<li>' + '状态：' +  $.table.selectDictLabel(orderstatusDatas, value); + '</li>'
+                        if(row.macthStatus == 1 || row.macthStatus== '1'){
+                            table += '<li>' + '<span class="badge badge-info"> 撮合未支付</span>' + '</li>'
+                        }
+                        if(row.macthStatus == 2 || row.macthStatus== '2'){
+                            table += '<li>' + '<span class="badge badge-info"> 撮合已支付</span>' + '</li>'
+                        }
+                        return table;
                     }
                 },
                 // {field: 'externalOrderId',   title: '外部订单号'},
@@ -259,6 +275,7 @@
                         }
                         table += '<li>' + row.orderQr + '</li>'
                         table += '<li>' + row.dealDescribe + '</li>'
+                        table += '<li>' + row.macthMsg + '</li>'
                         table += '</ul>'
                         return table;
                     }

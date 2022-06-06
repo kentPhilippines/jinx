@@ -99,4 +99,10 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
     public AlipayWithdrawEntity selectAlipayWithdrawEntityListSum(AlipayWithdrawEntity alipayWithdrawEntity) {
         return alipayWithdrawEntityMapper.selectAlipayWithdrawEntityListSum(alipayWithdrawEntity);
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public int updateMacthMore(String orderId, Integer moreMacth) {
+        return alipayWithdrawEntityMapper.updateMacthMore(orderId,moreMacth);
+    }
 }

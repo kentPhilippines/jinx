@@ -46,6 +46,22 @@
                             </select>
                         </li>
                         <li class="select-selectpicker">
+                            <label>是否挂起： </label>
+                            <select data-none-selected-text="请选择" id="moreMacth" name="moreMacth">
+                                <option value="">所有</option>
+                                <option value="1">挂起</option>
+                                <option value="2">自动推送</option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
+                            <label>撮合锁定： </label>
+                            <select data-none-selected-text="请选择" id="macthLock" name="macthLock">
+                                <option value="">所有</option>
+                                <option value="1">撮合锁定</option>
+                                <option value="0"> 等待</option>
+                            </select>
+                        </li>
+                        <li class="select-selectpicker">
                             <label>货币类型： </label>
                             <select class="selectpicker" data-none-selected-text="请选择" id="currency"
                                     name="currency" th:with="type=${@dict.getType('currency')}">
@@ -159,7 +175,12 @@
                     formatter: function (value, row, index) {
                         var table = '<ul>'
                         table += '<li>' + '商户账户：' + row.userId + '</li>'
-                        table += '<li>' + '申请人：' + row.apply + '</li>'
+                        if( row.apply){
+
+                               table += '<li>' + '申请人： 无</li>'
+                        }else{
+                            table += '<li>' + '申请人：' + row.apply + '</li>'
+                        }
                         table += '</ul>'
                         return table;
                     }
@@ -172,7 +193,26 @@
                     field: 'orderStatus',
                     title: '订单状态',
                     formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(orderStatus, value);
+                        var table = '<ul>'
+                        if(row.moreMacth == 1 || row.moreMacth== '1'){
+                            table += '<li>' + '<span class="badge badge-danger"> 等待撮合 已挂起 </span>' + '</li>'
+                        }
+                        if(row.macthLock == 1 || row.macthLock== '1'){
+                            table += '<li>' + '<span class="badge badge-info"> 订单已被撮合 锁定 </span>' + '</li>'
+                        }
+                        if(row.macthStatus == 1 || row.macthStatus== '1'){
+                            table += '<li>' + '<span class="badge badge-info"> 撮合未支付</span>' + '</li>'
+                        }
+                        if(row.macthStatus == 2 || row.macthStatus== '2'){
+                            table += '<li>' + '<span class="badge badge-info"> 撮合已支付</span>' + '</li>'
+                        }
+                        if(row.payStatus == 1 || row.payStatus== '1'){
+                            table += '<li>' + '<span class="badge badge-primary"> 已扣款结算 </span>' + '</li>'
+                        }else{
+                            table += '<li>' + '<span class="badge badge-primary"> 未扣款结算 </span>' + '</li>'
+                        }
+                        table += '<li>' + $.table.selectDictLabel(orderStatus, value) + '</li>'
+                        return table;
                     }
                 },
                 {
@@ -189,17 +229,6 @@
                         table += '<li>' + '开户行：' + row.bankName + '</li>'
                         table += '</ul>'
                         return table;
-                    }
-                },
-                {
-                    field: 'withdrawType',
-                    title: '提现类型',
-                    formatter: function (value, row, index) {
-                        if (row.withdrawType === '1') {
-                            return '商户提现';
-                        } else if (row.withdrawType === '2') {
-                            return '卡商提现';
-                        }
                     }
                 },
                 {
@@ -249,7 +278,22 @@
                         var table = '<ul>'
                         table += '<li>' + '创建时间：' + row.createTime + '</li>'
                         table += '<li>' + '修改时间：' + row.submitTime + '</li>'
+
+                        if(  2 !=  row.orderStatus ){
+                            table += '<strong><li color="#FF0000"   > 处理时间 ' +'<span id = '+row.orderId +' ></span>' + '</li></strong>'
+                            window.setInterval(function () {
+                                var date1 = new Date()
+                                var date2 = new Date(row.submitTime)
+                                var s1 = date1.getTime(), s2 = date2.getTime();
+                                var total = (s1 - s2 ) / 1000;//当前时间差
+                                total =  parseInt(total)
+                                $('#'+row.orderId+'').html('<s></s>' + total + '秒');
+                            }, 1000);
+                        }
                         table += '</ul>'
+                        if(row.macthCount>0){
+                            table += '<li>' + '撮合次数：' + row.macthCount + '</li>'
+                        }
                         return table;
                     }
                 },
@@ -259,7 +303,13 @@
                     formatter: function (value, row, index) {
                         var table = '<ul>'
                         table += '<li>' + '配置出款渠道：' + row.witChannel + '</li>'
-                        table += '<li>' + '实际出款渠道：' + row.channelId + '</li>'
+                        if(row.channelId){
+                            table += '<li>' + '实际出款渠道：未配置</li>'
+                        }else{
+                            table += '<li>' + '实际出款渠道：' + row.channelId + '</li>'
+
+                        }
+
                         table += '<li>' + '代付产品类型：' + row.witType + '</li>'
                         table += '</ul>'
                         return table;
@@ -277,6 +327,21 @@
                     field: 'comment',
                     title: '情况'
 
+                }, {
+                    field: 'macthMsg',
+                    title: '撮合情况'
+
+                }, {
+                    field: 'moreMacth',
+                    title: '挂起',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if(row.orderStatus != 2 ){
+                            return statusTools(row, 'moreMacth');
+                        }else{
+                            return '';
+                        }
+                    }
                 },
                 {
                     title: '操作',
@@ -291,6 +356,9 @@
 
     /* 状态显示 */
     function check(row) {
+        if (row.macthLock == 1) {//订单锁定证明已经被 撮合
+                return  "等待订单释放";
+        }
         var actions = [];
         if (row.orderStatus === '4' || row.orderStatus === '1') {
             actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>')
@@ -334,6 +402,7 @@
     function rowStyle(row) {
 
     }
+
     /*
 
         $(function () {
@@ -344,6 +413,40 @@
 
     */
 
+
+    function statusTools(row, param) {
+        if (param === 'moreMacth') {
+            if (row.moreMacth == 0) {
+                let msg = "确认要【启用】此订单的【挂起状态】吗？";
+                let val = 1;
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enable(\'' + row.orderId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            } else {
+                let msg = "确认要【停用】此订单的【挂起状态】吗？";
+                let val = 0;
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disable(\'' + row.orderId + '\', \'' + param + '\', \'' + msg + '\', \'' + val + '\')"></i> ';
+            }
+        }
+    }
+
+    /* 商户管理-停用 */
+    function disable(orderId, param, msg, val) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefix + "/changeMacthStatus", {
+                "userId": orderId,
+                "moreMacth": val
+            });
+        })
+    }
+
+    /* 商户管理-启用 */
+    function enable(orderId, param, msg, val) {
+        $.modal.confirm(msg, function () {
+            $.operate.post(prefix + "/changeMacthStatus", {
+                "orderId": orderId,
+                "moreMacth": val
+            });
+        })
+    }
 
 </script>
 </body>
