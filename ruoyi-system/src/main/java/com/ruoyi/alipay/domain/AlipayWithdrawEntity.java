@@ -278,6 +278,17 @@ public class AlipayWithdrawEntity extends BaseEntity {
     @Excel(name = "数据修改时间", width = 30, dateFormat = DatePattern.NORM_DATETIME_PATTERN)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date submitTime;
+    @Excel(name = "撮合时间", width = 30, dateFormat = DatePattern.NORM_DATETIME_PATTERN)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date macthTime;
+
+    public Date getMacthTime() {
+        return macthTime;
+    }
+
+    public void setMacthTime(Date macthTime) {
+        this.macthTime = macthTime;
+    }
 
     /**
      * 1数据可用2数据无用
