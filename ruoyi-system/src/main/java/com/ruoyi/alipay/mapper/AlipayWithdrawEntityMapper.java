@@ -24,6 +24,14 @@ public interface AlipayWithdrawEntityMapper {
     AlipayWithdrawEntity selectAlipayWithdrawEntityById(Long id);
 
     /**
+     * 查询会员提现记录
+     *
+     * @param ids 会员提现记录ID
+     * @return 会员提现记录
+     */
+    List<AlipayWithdrawEntity> selectAlipayWithdrawEntityByIds(String[] ids);
+
+    /**
      * 查询会员提现记录列表
      *
      * @param alipayWithdrawEntity 会员提现记录
@@ -85,5 +93,8 @@ public interface AlipayWithdrawEntityMapper {
     AlipayWithdrawEntity selectAlipayWithdrawEntityListSum(AlipayWithdrawEntity alipayWithdrawEntity);
     @Update("update alipay_withdraw set moreMacth = #{moreMacth} where orderId = #{orderId}")
     int updateMacthMore(@Param("orderId")String orderId, @Param("moreMacth") Integer moreMacth);
+
+    @Update("update alipay_withdraw set moreMacth = #{moreMacth} where id = #{id}")
+    int updateMacthMoreById(@Param("id")String id, @Param("moreMacth") Integer moreMacth);
 
 }

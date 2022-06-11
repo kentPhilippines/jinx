@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.alipay;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alicp.jetcache.Cache;
@@ -99,7 +100,10 @@ public class AlipayWithdrawEntityController extends BaseController {
         modelMap.put("channelList", channelId);
         return prefix + "/merchant_withdrawal";
     }
-    @Autowired  IAlipayProductService iAlipayProductService;
+
+    @Autowired
+    IAlipayProductService iAlipayProductService;
+
     /**
      * 查询商户提现记录列表
      */
@@ -160,6 +164,36 @@ public class AlipayWithdrawEntityController extends BaseController {
         return prefix + "/edit";
     }
 
+    /**
+     * 显示商户提现详情页
+     */
+    @GetMapping("/merchant/edits/{ids}")
+    public String edit(@PathVariable("ids") String ids, ModelMap mmap) {
+        mmap.put("ids", ids);
+        List<AlipayWithdrawEntity> alipayWithdrawEntitys = alipayWithdrawEntityService.selectAlipayWithdrawEntityByIds(ids);
+        StrBuilder strBuilder = StrBuilder.create();
+        for (AlipayWithdrawEntity entity : alipayWithdrawEntitys) {
+            strBuilder.append("id:").append(entity.getId()).append(" 系统订单：").append(entity.getOrderId()).append(" ").append("原状态：");
+            if (entity.getMoreMacth() == 1) {
+                strBuilder.append("启用挂起");
+            } else if (entity.getMoreMacth() == 0) {
+                strBuilder.append("停用挂起");
+            }
+            strBuilder.append(" ");
+//                    .append("原渠道：").append(rateEntity.getChannelId()).append(" ").append("原产品：").append(rateEntity.getPayTypr() + " ");
+        }
+        mmap.put("rete", strBuilder.toString());
+        return prefix + "/edits";
+    }
+
+    @Log(title = "出款订单批量修改", businessType = BusinessType.UPDATE)
+    @PostMapping("/merchant/edits")
+    @ResponseBody
+    public AjaxResult editsSave(String ids, Integer status) {
+        alipayWithdrawEntityService.batchUpdateMacthMore(ids, status);
+        return AjaxResult.success();
+    }
+
     @GetMapping("/qr/edit/{id}")
     public String qrEdit(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayWithdrawEntity alipayWithdrawEntity = alipayWithdrawEntityService.selectAlipayWithdrawEntityById(id);
@@ -173,17 +207,16 @@ public class AlipayWithdrawEntityController extends BaseController {
     @Log(title = "代付订单确认", businessType = BusinessType.UPDATE)
     @PostMapping("/merchant/approval")
     @ResponseBody
-    public AjaxResult apporval(AlipayWithdrawEntity alipayWithdrawEntity)  {
+    public AjaxResult apporval(AlipayWithdrawEntity alipayWithdrawEntity) {
         try {
-            reentrantLock.tryLock(10,TimeUnit.SECONDS);
-            if(cache.get(alipayWithdrawEntity.getOrderId())!=null)
-            {
+            reentrantLock.tryLock(10, TimeUnit.SECONDS);
+            if (cache.get(alipayWithdrawEntity.getOrderId()) != null) {
                 return error("1分钟内不允许重复操作");
             }
-            cache.put(alipayWithdrawEntity.getOrderId(),alipayWithdrawEntity.getOrderId());
+            cache.put(alipayWithdrawEntity.getOrderId(), alipayWithdrawEntity.getOrderId());
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             reentrantLock.unlock();
         }
 
@@ -348,15 +381,11 @@ public class AlipayWithdrawEntityController extends BaseController {
 
     @PostMapping("/changeMacthStatus")
     @ResponseBody
-    public AjaxResult changeMacthStatus(  AlipayWithdrawEntity alipayWithdrawEntity) {
+    public AjaxResult changeMacthStatus(AlipayWithdrawEntity alipayWithdrawEntity) {
         logger.info(alipayWithdrawEntity.toString());
-        int  a =   alipayWithdrawEntityService.updateMacthMore(alipayWithdrawEntity.getOrderId(),alipayWithdrawEntity.getMoreMacth());
+        int a = alipayWithdrawEntityService.updateMacthMore(alipayWithdrawEntity.getOrderId(), alipayWithdrawEntity.getMoreMacth());
         return toAjax(a);
     }
-
-
-
-
 
 
 }

@@ -1,7 +1,9 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayWithdrawEntity;
+import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.StatisticsEntity;
+import com.ruoyi.common.enums.DataSourceType;
 
 import java.util.List;
 
@@ -19,6 +21,8 @@ public interface IAlipayWithdrawEntityService {
      * @return 会员提现记录
      */
     AlipayWithdrawEntity selectAlipayWithdrawEntityById(Long id);
+
+    List<AlipayWithdrawEntity> selectAlipayWithdrawEntityByIds(String ids);
 
     /**
      * 查询会员提现记录列表
@@ -68,4 +72,6 @@ public interface IAlipayWithdrawEntityService {
     int updateMacthMore(String orderId, Integer moreMacth);
 
 
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    void batchUpdateMacthMore(String orderIds, Integer moreMacth);
 }

@@ -116,6 +116,9 @@
                shiro:hasPermission="wit:order:statistics:chanel">
                 <i class="fa fa-bar-chart"></i> 当天数据统计
             </a>
+            <a class="btn btn-primary multiple disabled" onclick="$.operate.editAll('批量挂起/停止挂起')">
+                <i class="fa fa-bar-chart"></i> 批量挂起/停止挂起
+            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>
@@ -130,12 +133,14 @@
     const orderStatus = [[${@dict.getType('withdrawal_status')}]];
     const prefix = ctx + "alipay/withdrawal";
     const prefix_ver = ctx + "verify/identity";
+
     $(function () {
         var options = {
             url: prefix + "/merchant/list",
             updateUrl: prefix + "/merchant/edit/{id}",
             detailUrl: prefix + "/merchant/detail/{id}",
             ethFeeUrl: prefix + "/merchant/ethFee/{id}",
+            updateUrlAll: prefix + "/merchant/edits/{ids}",
             statisticsUrl: prefix + "/statistics/merchant/channelWit",
             exportUrl: prefix + "/merchant/export",
             showFooter: true,

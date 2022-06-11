@@ -9,7 +9,9 @@ import com.ruoyi.common.enums.DataSourceType;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * 会员提现记录Service业务层处理
@@ -31,6 +33,18 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public AlipayWithdrawEntity selectAlipayWithdrawEntityById(Long id) {
         return alipayWithdrawEntityMapper.selectAlipayWithdrawEntityById(id);
+    }
+    /**
+     * 查询会员提现记录
+     *
+     * @param ids 会员提现记录ID
+     * @return 会员提现记录
+     */
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public List<AlipayWithdrawEntity> selectAlipayWithdrawEntityByIds(String ids) {
+        String[] split = ids.split(",");
+        return alipayWithdrawEntityMapper.selectAlipayWithdrawEntityByIds(split);
     }
 
     /**
@@ -104,5 +118,14 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int updateMacthMore(String orderId, Integer moreMacth) {
         return alipayWithdrawEntityMapper.updateMacthMore(orderId,moreMacth);
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void batchUpdateMacthMore(String ids, Integer moreMacth) {
+        Arrays.stream(ids.split(",")).forEach(id->{
+            alipayWithdrawEntityMapper.updateMacthMoreById(id,moreMacth);
+        });
+
     }
 }

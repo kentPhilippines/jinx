@@ -93,7 +93,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-
+    <select id="selectAlipayWithdrawEntityByIds" parameterType="String" resultMap="AlipayWithdrawEntityResult">
+        <include refid="selectAlipayWithdrawEntityVo"/>
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
     <select id="selectAlipayWithdrawEntityListSum" parameterType="AlipayWithdrawEntity"
             resultMap="AlipayWithdrawEntityResult">
         select sum(s.amount) as sunCountAmount ,

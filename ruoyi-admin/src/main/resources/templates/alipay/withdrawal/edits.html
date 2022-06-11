@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改用户通道费率')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-rate-edit">
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">订单状态：</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" id="ids" name="ids" rows="5" style="display:none;">[[${ids}]]</textarea>
+                <textarea class="form-control" id="rete" maxlength="500" name="rete" required
+                          rows="5">[[${rete}]]</textarea>
+
+                <!--    <input name="ids"  th:field="${ids}"   class="form-control"   required>-->
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">状态：</label>
+            <div class="col-sm-8">
+                <select class="form-control  " id="status" name="status">
+                    <option value="1">启用挂起</option>
+                    <option value="0">停用挂起</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script type="text/javascript">
+    const prefix = ctx + "alipay/withdrawal";
+
+    function submitHandler() {
+        let ids = $('#ids').val()
+        let status = $("#status").val()
+        var date = {'ids': ids, 'status': status}
+        $.operate.save(prefix + "/merchant/edits", date);
+    }
+</script>
+</body>
+</html>
