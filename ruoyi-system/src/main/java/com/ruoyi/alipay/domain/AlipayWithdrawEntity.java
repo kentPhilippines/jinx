@@ -45,6 +45,16 @@ public class AlipayWithdrawEntity extends BaseEntity {
     private Integer macthLock;  /// 撮合锁定当前不可以进行任何操作，  默认不锁定 0    1 锁定
     private Integer moreMacth;  /// 是否可以多次撮合[是否挂起]， 0 不可以  1 可以      可以就是挂起
     private Integer macthCount;  ///  撮合次数
+    private Integer watingTime;  ///  撮合次数
+
+
+    public Integer getWatingTime() {
+        return watingTime;
+    }
+
+    public void setWatingTime(Integer watingTime) {
+        this.watingTime = watingTime;
+    }
 
     public Integer getMacthCount() {
         return macthCount;

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * 会员提现记录Service业务层处理
@@ -122,10 +121,19 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    public void batchUpdateMacthMore(String ids, Integer moreMacth) {
+    public void batchUpdateMacthMore(String ids, Integer moreMacth, String watingTime) {
         Arrays.stream(ids.split(",")).forEach(id->{
             alipayWithdrawEntityMapper.updateMacthMoreById(id,moreMacth);
         });
 
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void batchUpdateMacthMoreWatingTime(String ids, String watingTime) {
+        Integer wati = Integer.valueOf(watingTime);
+        Arrays.stream(ids.split(",")).forEach(id->{
+            alipayWithdrawEntityMapper.batchUpdateMacthMoreWatingTime(id,wati);
+        });
     }
 }
