@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.alipay.mapper.AlipayBankConfigMapper">
+    
+    <resultMap type="AlipayBankConfig" id="AlipayBankConfigResult">
+        <result property="id"    column="id"    />
+        <result property="codeValue"    column="code_value"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="alias1"    column="alias1"    />
+        <result property="alias2"    column="alias2"    />
+        <result property="alias3"    column="alias3"    />
+        <result property="alias4"    column="alias4"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAlipayBankConfigVo">
+        select id, code_value, bank_name, alias1, alias2, alias3, alias4, create_time from alipay_bank_config
+    </sql>
+
+    <select id="selectAlipayBankConfigList" parameterType="AlipayBankConfig" resultMap="AlipayBankConfigResult">
+        <include refid="selectAlipayBankConfigVo"/>
+        <where>  
+            <if test="codeValue != null  and codeValue != ''"> and code_value = #{codeValue}</if>
+            <if test="bankName != null  and bankName != ''"> and bank_name like concat('%', #{bankName}, '%')</if>
+            <if test="alias1 != null  and alias1 != ''"> and alias1 = #{alias1}</if>
+            <if test="alias2 != null  and alias2 != ''"> and alias2 = #{alias2}</if>
+            <if test="alias3 != null  and alias3 != ''"> and alias3 = #{alias3}</if>
+            <if test="alias4 != null  and alias4 != ''"> and alias4 = #{alias4}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlipayBankConfigById" parameterType="Integer" resultMap="AlipayBankConfigResult">
+        <include refid="selectAlipayBankConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlipayBankConfig" parameterType="AlipayBankConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into alipay_bank_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="codeValue != null  and codeValue != ''">code_value,</if>
+            <if test="bankName != null  and bankName != ''">bank_name,</if>
+            <if test="alias1 != null  and alias1 != ''">alias1,</if>
+            <if test="alias2 != null  and alias2 != ''">alias2,</if>
+            <if test="alias3 != null  and alias3 != ''">alias3,</if>
+            <if test="alias4 != null  and alias4 != ''">alias4,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="codeValue != null  and codeValue != ''">#{codeValue},</if>
+            <if test="bankName != null  and bankName != ''">#{bankName},</if>
+            <if test="alias1 != null  and alias1 != ''">#{alias1},</if>
+            <if test="alias2 != null  and alias2 != ''">#{alias2},</if>
+            <if test="alias3 != null  and alias3 != ''">#{alias3},</if>
+            <if test="alias4 != null  and alias4 != ''">#{alias4},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlipayBankConfig" parameterType="AlipayBankConfig">
+        update alipay_bank_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="codeValue != null  and codeValue != ''">code_value = #{codeValue},</if>
+            <if test="bankName != null  and bankName != ''">bank_name = #{bankName},</if>
+            <if test="alias1 != null  and alias1 != ''">alias1 = #{alias1},</if>
+            <if test="alias2 != null  and alias2 != ''">alias2 = #{alias2},</if>
+            <if test="alias3 != null  and alias3 != ''">alias3 = #{alias3},</if>
+            <if test="alias4 != null  and alias4 != ''">alias4 = #{alias4},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlipayBankConfigById" parameterType="Integer">
+        delete from alipay_bank_config where id = #{id}
+    </delete>
+
+    <delete id="deleteAlipayBankConfigByIds" parameterType="String">
+        delete from alipay_bank_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

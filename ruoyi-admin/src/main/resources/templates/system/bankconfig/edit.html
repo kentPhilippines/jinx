@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改bankconfig')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-config-edit" th:object="${alipayBankConfig}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">银行编码：</label>
+                <div class="col-sm-8">
+                    <input name="codeValue" th:field="*{codeValue}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">银行名称：</label>
+                <div class="col-sm-8">
+                    <input name="bankName" th:field="*{bankName}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">方言1：</label>
+                <div class="col-sm-8">
+                    <input name="alias1" th:field="*{alias1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">方言2：</label>
+                <div class="col-sm-8">
+                    <input name="alias2" th:field="*{alias2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">方言3：</label>
+                <div class="col-sm-8">
+                    <input name="alias3" th:field="*{alias3}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">方言4：</label>
+                <div class="col-sm-8">
+                    <input name="alias4" th:field="*{alias4}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/bankConfig";
+        $("#form-config-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-config-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>
