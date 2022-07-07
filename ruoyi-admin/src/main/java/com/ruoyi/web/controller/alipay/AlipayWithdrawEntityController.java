@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
@@ -185,12 +186,59 @@ public class AlipayWithdrawEntityController extends BaseController {
         mmap.put("rete", strBuilder.toString());
         return prefix + "/edits";
     }
+    /**
+     * 显示商户提现详情页
+     */
+    @GetMapping("/merchant/editAllPush/{ids}")
+    public String editAllPush(@PathVariable("ids") String ids, ModelMap mmap) {
+        mmap.put("ids", ids);
+        List<AlipayWithdrawEntity> alipayWithdrawEntitys = alipayWithdrawEntityService.selectAlipayWithdrawEntityByIds(ids);
+        StrBuilder strBuilder = StrBuilder.create();
+        for (AlipayWithdrawEntity entity : alipayWithdrawEntitys) {
+            strBuilder.append("id:").append(entity.getId()).append(" 系统订单：").append(entity.getOrderId()).append(" ") ;
+
+//                    .append("原渠道：").append(rateEntity.getChannelId()).append(" ").append("原产品：").append(rateEntity.getPayTypr() + " ");
+        }
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();//查询所有渠道账户
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        alipayProductEntity.setProductCode("1");
+        List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        mmap.put("channelList", rateList);
+        mmap.put("productList", productlist);
+        mmap.put("rete", strBuilder.toString());
+        return prefix + "/editAllPushs";
+    }
+    @GetMapping("/merchant/editWating/{ids}")
+    public String editWating(@PathVariable("ids") String ids, ModelMap mmap) {
+        mmap.put("ids", ids);
+        List<AlipayWithdrawEntity> alipayWithdrawEntitys = alipayWithdrawEntityService.selectAlipayWithdrawEntityByIds(ids);
+        StrBuilder strBuilder = StrBuilder.create();
+        for (AlipayWithdrawEntity entity : alipayWithdrawEntitys) {
+            strBuilder.append("  id:").append(entity.getId()).append(" 系统订单：").append(entity.getOrderId()).append(" ").append("配置渠道：");
+            strBuilder.append("原等待时间");
+            strBuilder.append("：  ");
+            strBuilder.append(entity.getWatingTime());
+        }
+        mmap.put("rete", strBuilder.toString());
+        return prefix + "/editWating";
+    }
 
     @Log(title = "出款订单批量修改", businessType = BusinessType.UPDATE)
     @PostMapping("/merchant/edits")
     @ResponseBody
-    public AjaxResult editsSave(String ids, Integer status) {
-        alipayWithdrawEntityService.batchUpdateMacthMore(ids, status);
+    public AjaxResult editsSave(String ids, Integer status,String watingTime) {
+
+        alipayWithdrawEntityService.batchUpdateMacthMore(ids, status,watingTime);
+        return AjaxResult.success();
+    }
+    @Log(title = "批量修改等待时间", businessType = BusinessType.UPDATE)
+    @PostMapping("/merchant/editsWatingTime")
+    @ResponseBody
+    public AjaxResult editsSaveWatingTime(String ids,  String watingTime) {
+        logger.info("订单号："+ids );
+        logger.info("时间："+watingTime );
+        alipayWithdrawEntityService.batchUpdateMacthMoreWatingTime(ids,watingTime);
         return AjaxResult.success();
     }
 
@@ -264,8 +312,95 @@ public class AlipayWithdrawEntityController extends BaseController {
         } else if ("100".equals(alipayWithdrawEntity.getOrderStatus())) {//商户后台大夫推送处理，将订单修改为已推送
             alipayWithdrawEntityService.updateWitStatus(alipayWithdrawEntity.getId());
         }
-
         return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
+    }
+        /**
+     * 财务审核会员提现记录
+     */
+    @Log(title = "批量代付订单确认", businessType = BusinessType.UPDATE)
+    @PostMapping("/merchant/apporvalAll")
+    @ResponseBody
+    public AjaxResult apporvalAll(String ids,String channelId , String witType,String comment,String orderStatus) {
+
+        StringBuilder bu   = new StringBuilder();
+        List<AlipayWithdrawEntity> alipayWithdrawEntitys = alipayWithdrawEntityService.selectAlipayWithdrawEntityByIds(ids);
+        for (AlipayWithdrawEntity alipayWithdrawEntity :alipayWithdrawEntitys){
+          if(! alipayWithdrawEntity.getOrderStatus().equals("1")) {
+              logger.info("审核中的订单才可以推送，当前订单号："+alipayWithdrawEntity.getOrderId());
+              continue;
+          }
+            alipayWithdrawEntity.setComment(comment);
+            alipayWithdrawEntity.setChannelId(channelId);
+            alipayWithdrawEntity.setWitType(witType);
+            alipayWithdrawEntity.setOrderStatus(orderStatus);
+            try {
+                reentrantLock.tryLock(10, TimeUnit.SECONDS);
+                if (cache.get(alipayWithdrawEntity.getOrderId()) != null) {
+                    return error("1分钟内不允许重复操作");
+                }
+                cache.put(alipayWithdrawEntity.getOrderId(), alipayWithdrawEntity.getOrderId());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                reentrantLock.unlock();
+            }
+
+
+            alipayWithdrawAuditRuleService.checkRuleBeforeAudit(alipayWithdrawEntity);
+            //新增逻辑 判断金流里是否有这笔失败的 如果有就返回
+       /* if(alipayWithdrawEntity.getOrderStatus().equals("3"))
+        {
+            AlipayRunOrderEntity alipayRunOrderEntity = new AlipayRunOrderEntity();
+            alipayRunOrderEntity.setAssociatedId(alipayWithdrawEntity.getOrderId());
+            List<AlipayRunOrderEntity> list = alipayRunOrderEntityService.selectAlipayRunOrderEntityList(alipayRunOrderEntity);
+            list.stream().filter(entity ->entity.getRunOrderType()==8 ||entity.getRunOrderType()==22 ).findAny().ifPresent(runOrderEntity->{
+                throw new BusinessException("此订单金流里已有失败数据");
+            });
+        }*/
+
+            // 获取当前的用户
+            SysUser currentUser = ShiroUtils.getSysUser();
+            if ("2".equals(alipayWithdrawEntity.getOrderStatus())) {
+                if (StrUtil.isBlank(alipayWithdrawEntity.getChannelId()) && StrUtil.isBlank(alipayWithdrawEntity.getWitType())) {
+                    return error("实际出款渠道为空");
+                }
+                AlipayChanelFee channelBy = alipayChanelFeeService.findChannelBy(alipayWithdrawEntity.getChannelId(), alipayWithdrawEntity.getWitType());
+                if (ObjectUtil.isNull(channelBy)) {
+                    return error("所选实际出款渠道未配置出款费率，请重新配置");
+                }
+            }
+            //获取alipay处理接口URL
+            String ipPort = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_IP_URL_KEY, StaticConstants.ALIPAY_IP_URL_VALUE);
+            String urlPath = dictionaryUtils.getApiUrlPath(StaticConstants.ALIPAY_SERVICE_API_KEY, StaticConstants.ALIPAY_SERVICE_API_VALUE_7);
+            Map<String, Object> mapParam = Collections.synchronizedMap(Maps.newHashMap());
+            mapParam.put("orderId", alipayWithdrawEntity.getOrderId());//订单号
+            mapParam.put("userId", alipayWithdrawEntity.getUserId());
+            mapParam.put("orderStatus", alipayWithdrawEntity.getOrderStatus());
+            mapParam.put("approval", currentUser.getLoginName());
+            mapParam.put("comment", alipayWithdrawEntity.getComment());
+            mapParam.put("channelId", alipayWithdrawEntity.getChannelId());
+            mapParam.put("witType", alipayWithdrawEntity.getWitType());
+            if ("3".equals(alipayWithdrawEntity.getOrderStatus())) {
+                List<AlipayRunOrderEntity> associdOrder = alipayRunOrderEntityService.findAssocidOrder(alipayWithdrawEntity.getOrderId());
+                if (CollUtil.isEmpty(associdOrder)) {
+                    throw new BusinessException("操作失败，当前账户流水扣款失败");
+                }
+                mapParam.put("ip", IpUtils.getHostIp());
+            } else if ("100".equals(alipayWithdrawEntity.getOrderStatus())) {//商户后台大夫推送处理，将订单修改为已推送
+                alipayWithdrawEntityService.updateWitStatus(alipayWithdrawEntity.getId());
+            }
+            AjaxResult ajaxResult = HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
+            logger.info("响应结果："+ajaxResult.toString());
+            String code = ajaxResult.get("code").toString();
+
+            if(!code.equals("0")){
+                code = ajaxResult.get("msg").toString();
+            }else {
+                code = "失败";
+            }
+            bu.append("订单："+alipayWithdrawEntity.getOrderId() + "，推送结果："+code);
+        }
+     return AjaxResult.success(bu);
     }
 
     @Log(title = "结算eth矿工手续费", businessType = BusinessType.UPDATE)

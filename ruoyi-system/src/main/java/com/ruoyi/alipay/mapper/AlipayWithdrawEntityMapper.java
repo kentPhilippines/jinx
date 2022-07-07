@@ -94,7 +94,10 @@ public interface AlipayWithdrawEntityMapper {
     @Update("update alipay_withdraw set moreMacth = #{moreMacth} where orderId = #{orderId}")
     int updateMacthMore(@Param("orderId")String orderId, @Param("moreMacth") Integer moreMacth);
 
-    @Update("update alipay_withdraw set moreMacth = #{moreMacth} where id = #{id}")
-    int updateMacthMoreById(@Param("id")String id, @Param("moreMacth") Integer moreMacth);
+    @Update("update alipay_withdraw set moreMacth = #{moreMacth}   where id = #{id}")
+    int updateMacthMoreById(@Param("id") String id, @Param("moreMacth") Integer moreMacth);
+    @Update("update alipay_withdraw set watingTime = #{watingTime}   where id = #{id}")
+    void batchUpdateMacthMoreWatingTime(@Param("id") String id,@Param("watingTime") Integer watingTime);
+
 
 }

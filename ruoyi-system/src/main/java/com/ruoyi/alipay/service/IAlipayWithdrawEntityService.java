@@ -72,6 +72,7 @@ public interface IAlipayWithdrawEntityService {
     int updateMacthMore(String orderId, Integer moreMacth);
 
 
-    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    void batchUpdateMacthMore(String orderIds, Integer moreMacth);
+    void batchUpdateMacthMore(String orderIds, Integer moreMacth, String watingTime);
+    void batchUpdateMacthMoreWatingTime(String ids, String watingTime);
+
 }
