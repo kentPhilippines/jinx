@@ -1,4 +1,4 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.alipay.domain;
 
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;

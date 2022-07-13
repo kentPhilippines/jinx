@@ -1,4 +1,4 @@
-package com.ruoyi.system.service.impl;
+package com.ruoyi.alipay.service.impl;
 
 import com.ruoyi.alipay.domain.AlipayBankConfig;
 import com.ruoyi.alipay.mapper.AlipayBankConfigMapper;
