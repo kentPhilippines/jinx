@@ -270,7 +270,7 @@ public class AlipayUserRateEntityController extends BaseController {
     @Log(title = "商户费率批量修改", businessType = BusinessType.UPDATE)
     @PostMapping("/edits")
     @ResponseBody
-    public AjaxResult editsSave(String ids, final String channel) {
+        public AjaxResult editsSave(String ids, final String channel) {
         List<AlipayUserRateEntity> rateEntityList = alipayUserRateEntityService.findRates(ids);
         Map map = new HashMap();
         for (AlipayUserRateEntity rateEntity : rateEntityList) {

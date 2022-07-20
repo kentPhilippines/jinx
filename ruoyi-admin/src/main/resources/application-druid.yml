@@ -1,12 +1,9 @@
-#jasypt:
-#  encryptor:
-#    password: EWRREWRERWECCCXC
-#    algorithm: PBEWithMD5AndDES
+# 数据源配置
 spring:
   redis:
-    host: 34.150.94.93
+    host: redis-server
     port: 6379
-    password: redis123456
+    password: will1234
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
