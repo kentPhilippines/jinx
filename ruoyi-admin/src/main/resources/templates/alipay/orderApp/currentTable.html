@@ -19,7 +19,7 @@
                             <select class="selectpicker" data-none-selected-text="请选择" id="retain1" name="retain1">
                                 <option value="">所有</option>
                                 <option th:each="product : ${productList}" th:text="${product.productName}"
-                                        th:value="${product.productId}"></option>
+                                        th:value="${product.productName}"></option>
                             </select>
                         </li>
                         <li>

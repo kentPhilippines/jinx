@@ -14,6 +14,16 @@ public class StatisticsEntity extends BaseEntity implements Serializable {
     private String agentAmount;
     private String userAgent;
 
+    public String getRetain1() {
+        return retain1;
+    }
+
+    public void setRetain1(String retain1) {
+        this.retain1 = retain1;
+    }
+
+    private String retain1;
+
     @Excel(name = "货币类型")
     private String currency;
 

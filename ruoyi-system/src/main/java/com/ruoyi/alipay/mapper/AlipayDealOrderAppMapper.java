@@ -86,6 +86,10 @@ public interface AlipayDealOrderAppMapper {
             "and app.currency = #{statisticsEntity.currency} " +
             "</if>" +
             " and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
+                    "group by app.orderAccount,p.productName" +
+            "<if test = \"statisticsEntity.retain1 != null and statisticsEntity.retain1 != ''\">" +
+            "having p.productName = #{statisticsEntity.retain1} " +
+            "</if>" +
             " union all " +
             "select app.orderAccount userId,p.productName productName," +
             "coalesce(sum(app.orderAmount),0.00) totalAmount," +
@@ -107,7 +111,10 @@ public interface AlipayDealOrderAppMapper {
             "<if test = \"statisticsEntity.currency != null and statisticsEntity.currency != ''\">" +
             "and app.currency = #{statisticsEntity.currency} " +
             "</if>" +
-            "group by app.orderAccount,app.retain1" +
+            "group by app.orderAccount,p.productName" +
+            "<if test = \"statisticsEntity.retain1 != null and statisticsEntity.retain1 != ''\">" +
+            "having p.productName = #{statisticsEntity.retain1} " +
+            "</if>" +
             "</script>")
     List<StatisticsEntity> selectOrderAppStatDateByDay(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 
