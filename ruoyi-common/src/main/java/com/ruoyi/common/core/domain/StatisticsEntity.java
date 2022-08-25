@@ -231,4 +231,51 @@ public class StatisticsEntity extends BaseEntity implements Serializable {
                 .append("successPercent", getSuccessPercent())
                 .toString();
     }
+
+    public static void main(String[] args) {
+        String str = "select '所有' userId,p.productName productName," +
+                "coalesce(sum(app.orderAmount),0) totalAmount," +
+                "coalesce(sum(case app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount," +
+                "count(1) totalCount," +
+                "count(case app.orderStatus when 2 then app.id else null end) successCount ," +
+                "coalesce(sum(app.retain3),0) fee ," +
+                "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
+                "from alipay_deal_order_app app left join alipay_product p on app.retain1 = p.productId " +
+                "where " +
+                "  app.createTime between #{statisticsEntity.params.dayStart} " +
+                "<if test = \"statisticsEntity.currency != null and statisticsEntity.currency != ''\">" +
+                "and app.currency = #{statisticsEntity.currency} " +
+                "</if>" +
+                " and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
+                "group by app.orderAccount,p.productName" +
+                "<if test = \"statisticsEntity.retain1 != null and statisticsEntity.retain1 != ''\">" +
+                "having p.productName = #{statisticsEntity.retain1} " +
+                "</if>" +
+                " union all " +
+                "select app.orderAccount userId,p.productName productName," +
+                "coalesce(sum(app.orderAmount),0.00) totalAmount," +
+                "coalesce(sum(case app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount," +
+                "count(1) totalCount," +
+                "count(case app.orderStatus when 2 then app.id else null end) successCount ," +
+                "coalesce(sum(app.retain3),0) fee ," +
+                "coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee " +
+                "from alipay_deal_order_app app left join alipay_product p on app.retain1 = p.productId " +
+                "where " +
+                "  app.createTime between #{statisticsEntity.params.dayStart} " +
+                "and #{statisticsEntity.params.dayEnd} and app.orderType = 1 " +
+                "<if test = \"statisticsEntity.userId != null and statisticsEntity.userId != ''\">" +
+                "and app.orderAccount = #{statisticsEntity.userId} " +
+                "</if>" +
+                "<if test = \"statisticsEntity.userAgent != null and statisticsEntity.userAgent != ''\">" +
+                "and app.orderAccount in (select userId from alipay_user_info where agent = #{statisticsEntity.userAgent}) " +
+                "</if>" +
+                "<if test = \"statisticsEntity.currency != null and statisticsEntity.currency != ''\">" +
+                "and app.currency = #{statisticsEntity.currency} " +
+                "</if>" +
+                "group by app.orderAccount,p.productName" +
+                "<if test = \"statisticsEntity.retain1 != null and statisticsEntity.retain1 != ''\">" +
+                "having p.productName = #{statisticsEntity.retain1} " +
+                "</if>" ;
+        System.out.println(str);
+    }
 }

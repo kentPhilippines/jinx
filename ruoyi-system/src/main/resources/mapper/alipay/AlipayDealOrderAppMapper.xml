@@ -1,57 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.alipay.mapper.AlipayDealOrderAppMapper">
 
     <resultMap type="AlipayDealOrderApp" id="AlipayDealOrderAppResult">
-        <result property="id"    column="id"    />
-        <result property="orderId"    column="orderId"    />
-        <result property="orderType"    column="orderType"    />
-        <result property="orderAccount"    column="orderAccount"    />
-        <result property="orderStatus"    column="orderStatus"    />
-        <result property="dealDescribe"    column="dealDescribe"    />
-        <result property="orderAmount"    column="orderAmount"    />
-        <result property="orderIp"    column="orderIp"    />
-        <result property="appOrderId"    column="appOrderId"    />
-        <result property="feeId"    column="feeId"    />
-        <result property="notify"    column="notify"    />
-        <result property="back"    column="back"    />
-        <result property="submitTime"    column="submitTime"    />
-        <result property="createTime"    column="createTime"    />
-        <result property="status"    column="status"    />
-        <result property="retain1"    column="retain1"    />
-        <result property="retain2"    column="retain2"    />
-        <result property="retain3"    column="retain3"    />
+        <result property="id" column="id"/>
+        <result property="orderId" column="orderId"/>
+        <result property="orderType" column="orderType"/>
+        <result property="orderAccount" column="orderAccount"/>
+        <result property="orderStatus" column="orderStatus"/>
+        <result property="dealDescribe" column="dealDescribe"/>
+        <result property="orderAmount" column="orderAmount"/>
+        <result property="orderIp" column="orderIp"/>
+        <result property="appOrderId" column="appOrderId"/>
+        <result property="feeId" column="feeId"/>
+        <result property="notify" column="notify"/>
+        <result property="back" column="back"/>
+        <result property="submitTime" column="submitTime"/>
+        <result property="createTime" column="createTime"/>
+        <result property="status" column="status"/>
+        <result property="retain1" column="retain1"/>
+        <result property="retain2" column="retain2"/>
+        <result property="retain3" column="retain3"/>
         <result property="currency" column="currency"/>
         <result property="txhash" column="txhash"/>
     </resultMap>
 
     <sql id="selectAlipayDealOrderAppVo">
-        select id, orderId, currency , orderType, orderAccount, orderStatus, dealDescribe, orderAmount, orderIp, appOrderId, feeId, notify, back, submitTime, createTime, status, retain1, retain2, retain3 , txhash from alipay_deal_order_app
+        select id,
+               orderId,
+               currency,
+               orderType,
+               orderAccount,
+               orderStatus,
+               dealDescribe,
+               orderAmount,
+               orderIp,
+               appOrderId,
+               feeId,
+               notify,
+               back,
+               submitTime,
+               createTime,
+               status,
+               retain1,
+               retain2,
+               retain3,
+               txhash
+        from alipay_deal_order_app
     </sql>
 
     <select id="selectAlipayDealOrderAppList" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">
         <include refid="selectAlipayDealOrderAppVo"/>
         <where>
             createTime between #{params.dayStart} and #{params.dayEnd}
-            <if test="orderType != null "> and orderType = #{orderType}</if>
+            <if test="orderType != null ">and orderType = #{orderType}</if>
             <if test="orderId != null and orderId != ''">and orderId = #{orderId}</if>
-            <if test="orderAccount != null  and orderAccount != ''"> and orderAccount = #{orderAccount}</if>
-            <if test="orderStatus != null  and orderStatus != ''"> and orderStatus = #{orderStatus}</if>
-            <if test="dealDescribe != null  and dealDescribe != ''"> and dealDescribe = #{dealDescribe}</if>
-            <if test="orderAmount != null "> and orderAmount = #{orderAmount}</if>
-            <if test="orderIp != null  and orderIp != ''"> and orderIp = #{orderIp}</if>
-            <if test="appOrderId != null  and appOrderId != ''"> and appOrderId = #{appOrderId}</if>
-            <if test="feeId != null "> and feeId = #{feeId}</if>
-            <if test="notify != null  and notify != ''"> and notify = #{notify}</if>
-            <if test="back != null  and back != ''"> and back = #{back}</if>
-      <!--      <if test="submitTime != null "> and submitTime = #{submitTime}</if>
-            <if test="createTime != null "> and createTime = #{createTime}</if>-->
-            <if test="status != null "> and status = #{status}</if>
-            <if test="retain1 != null  and retain1 != ''"> and retain1 = #{retain1}</if>
-            <if test="retain2 != null  and retain2 != ''"> and retain2 = #{retain2}</if>
-            <if test="retain3 != null  and retain3 != ''"> and retain3 = #{retain3}</if>
+            <if test="orderAccount != null  and orderAccount != ''">and orderAccount = #{orderAccount}</if>
+            <if test="orderStatus != null  and orderStatus != ''">and orderStatus = #{orderStatus}</if>
+            <if test="dealDescribe != null  and dealDescribe != ''">and dealDescribe = #{dealDescribe}</if>
+            <if test="orderAmount != null ">and orderAmount = #{orderAmount}</if>
+            <if test="orderIp != null  and orderIp != ''">and orderIp = #{orderIp}</if>
+            <if test="appOrderId != null  and appOrderId != ''">and appOrderId = #{appOrderId}</if>
+            <if test="feeId != null ">and feeId = #{feeId}</if>
+            <if test="notify != null  and notify != ''">and notify = #{notify}</if>
+            <if test="back != null  and back != ''">and back = #{back}</if>
+            <!--      <if test="submitTime != null "> and submitTime = #{submitTime}</if>
+                  <if test="createTime != null "> and createTime = #{createTime}</if>-->
+            <if test="status != null ">and status = #{status}</if>
+            <if test="retain1 != null  and retain1 != ''">and retain1 = #{retain1}</if>
+            <if test="retain2 != null  and retain2 != ''">and retain2 = #{retain2}</if>
+            <if test="retain3 != null  and retain3 != ''">and retain3 = #{retain3}</if>
             <if test="currency != null  and currency != ''">and currency = #{currency}</if>
         </where>
         order by id desc
@@ -64,9 +84,58 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAlipayDealOrderApp" parameterType="AlipayDealOrderApp" resultMap="AlipayDealOrderAppResult">
         <include refid="selectAlipayDealOrderAppVo"/>
-        <if test="orderId != null and orderId != ''"> where orderId = #{orderId}</if>
+        <if test="orderId != null and orderId != ''">where orderId = #{orderId}</if>
     </select>
 
+    <select id="selectOrderAppStatDateByDay" parameterType="AlipayDealOrderApp" resultType="com.ruoyi.common.core.domain.StatisticsEntity">
+        select '所有' userId,'所有' productName,coalesce(sum(app.orderAmount),0) totalAmount,coalesce(sum(case
+        app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount,count(1) totalCount,count(case
+        app.orderStatus when 2 then app.id else null end) successCount ,coalesce(sum(app.retain3),0) fee
+        ,coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0) successFee from alipay_deal_order_app
+        app left join alipay_product p on app.retain1 = p.productId where app.createTime between
+        #{statisticsEntity.params.dayStart}
+        and #{statisticsEntity.params.dayEnd} and app.orderType = 1
+
+        <if test="statisticsEntity.currency != null and statisticsEntity.currency != ''">
+            and app.currency = #{statisticsEntity.currency}
+        </if>
+        <if test="statisticsEntity.retain1 != null and statisticsEntity.retain1 != ''">
+            and p.productName = #{statisticsEntity.retain1}
+        </if>
+        <if test="statisticsEntity.userId != null and statisticsEntity.userId != ''">and app.orderAccount =
+            #{statisticsEntity.userId}
+        </if>
+        <if test="statisticsEntity.userAgent != null and statisticsEntity.userAgent != ''">
+            and app.orderAccount in
+            (select userId from alipay_user_info where agent = #{statisticsEntity.userAgent})
+        </if>
+        /*group by app.orderAccount,p.productName*/
+
+        union all
+
+        select app.orderAccount userId,p.productName productName,coalesce(sum(app.orderAmount),0.00)
+        totalAmount,coalesce(sum(case app.orderStatus when 2 then app.orderAmount else 0 end),0) successAmount,count(1)
+        totalCount,count(case app.orderStatus when 2 then app.id else null end) successCount
+        ,coalesce(sum(app.retain3),0) fee ,coalesce(sum(case app.orderStatus when 2 then app.retain3 else 0 end),0)
+        successFee from alipay_deal_order_app app left join alipay_product p on app.retain1 = p.productId where
+        app.createTime between #{statisticsEntity.params.dayStart} and #{statisticsEntity.params.dayEnd} and
+        app.orderType = 1
+        <if test="statisticsEntity.userId != null and statisticsEntity.userId != ''">and app.orderAccount =
+            #{statisticsEntity.userId}
+        </if>
+        <if test="statisticsEntity.userAgent != null and statisticsEntity.userAgent != ''">
+            and app.orderAccount in
+            (select userId from alipay_user_info where agent = #{statisticsEntity.userAgent})
+        </if>
+        <if test="statisticsEntity.currency != null and statisticsEntity.currency != ''">and app.currency =
+            #{statisticsEntity.currency}
+        </if>
+        <if test="statisticsEntity.retain1 != null and statisticsEntity.retain1 != ''">
+            and p.productName = #{statisticsEntity.retain1}
+        </if>
+        group by app.orderAccount,p.productName
+
+    </select>
 
     <insert id="insertAlipayDealOrderApp" parameterType="AlipayDealOrderApp" useGeneratedKeys="true" keyProperty="id">
         insert into alipay_deal_order_app
@@ -88,7 +157,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="retain1 != null  and retain1 != ''">retain1,</if>
             <if test="retain2 != null  and retain2 != ''">retain2,</if>
             <if test="retain3 != null  and retain3 != ''">retain3,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderId != null  and orderId != ''">#{orderId},</if>
             <if test="orderType != null ">#{orderType},</if>
@@ -107,7 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="retain1 != null  and retain1 != ''">#{retain1},</if>
             <if test="retain2 != null  and retain2 != ''">#{retain2},</if>
             <if test="retain3 != null  and retain3 != ''">#{retain3},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateAlipayDealOrderApp" parameterType="AlipayDealOrderApp">
@@ -135,7 +204,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteAlipayDealOrderAppById" parameterType="Long">
-        delete from alipay_deal_order_app where id = #{id}
+        delete
+        from alipay_deal_order_app
+        where id = #{id}
     </delete>
 
     <delete id="deleteAlipayDealOrderAppByIds" parameterType="String">
