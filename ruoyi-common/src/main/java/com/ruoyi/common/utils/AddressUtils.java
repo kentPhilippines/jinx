@@ -25,7 +25,8 @@ public class AddressUtils {
             return "内网IP";
         }
         if (Global.isAddressEnabled()) {
-            String rspStr = HttpUtils.sendPost(IP_URL, "ip=" + ip);
+//            String rspStr = HttpUtils.sendPost(IP_URL, "ip=" + ip);
+            String rspStr = "";
             if (StringUtils.isEmpty(rspStr)) {
                 log.error("获取地理位置异常 {}", ip);
                 return address;
