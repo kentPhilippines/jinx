@@ -28,7 +28,16 @@ public class AlipayUserRateEntity extends BaseEntity {
     @Excel(name = "用户id【登录账号】")
     private String userId;
     private String agentUserId;
+    private String queueList;
     private List<String> agentList;
+
+    public String getQueueList() {
+        return queueList;
+    }
+
+    public void setQueueList(String queueList) {
+        this.queueList = queueList;
+    }
 
     public List<String> getAgentList() {
         return agentList;

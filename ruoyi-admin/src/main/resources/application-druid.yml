@@ -1,9 +1,11 @@
 # 数据源配置
 spring:
   redis:
-    host: redis-server
     port: 6379
-    password: will1234
+    host: 34.150.94.93
+    timeout: 5000
+    database : 1
+    password: redis123456
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver

@@ -293,7 +293,6 @@
                         table += '<li>' + '等待时间：' + row.watingTime + '秒</li>'
                         table += '<li>' + '创建时间：' + row.createTime + '</li>'
                         table += '<li>' + '修改时间：' + row.submitTime + '</li>'
-
                         if(  2 !=  row.orderStatus ){
                             table += '<strong><li color="#FF0000"   > 处理时间 ' +'<span id = '+row.appOrderId +' ></span>' + '</li></strong>'
                             window.setInterval(function () {
@@ -368,22 +367,6 @@
 
     /* 状态显示 */
     function check(row) {
-        if (row.macthLock == 1) {//订单锁定证明已经被 撮合
-            var table = '<ul>'
-            if(  2 !=  row.orderStatus ){
-                table += '<strong><li color="#FF0000"   > 等待时间 ' +'<span id = '+row.orderId +' ></span>' + '</li></strong>'
-                window.setInterval(function () {
-                    var date1 = new Date()
-                    var date2 = new Date(row.macthTime)
-                    var s1 = date1.getTime(), s2 = date2.getTime();
-                    var total = (s1 - s2 ) / 1000;//当前时间差
-                    total =  parseInt(total)
-                    $('#'+row.orderId+'').html('<s></s>' + total + '秒');
-                }, 1000);
-            }
-            table += '<li>' + '等待订单释放</li>'
-                return  table;
-        }
         var actions = [];
         if (row.orderStatus === '4' || row.orderStatus === '1') {
                 actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>')
