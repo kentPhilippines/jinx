@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('商户提现记录详情')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-withdrawal-edit" th:object="${alipayWithdrawEntity}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <input name="userId" th:field="*{userId}" type="hidden">
+        <!--<input id="orderStatus" name="orderStatus"  type="hidden">-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">平台订单：</label>
+            <div class="col-sm-8">
+                <input name="orderId" th:field="*{orderId}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">商户账户：</label>
+            <div class="col-sm-8">
+                <input name="orderId" th:field="*{userId}" class="form-control" type="text" readonly>
+            </div>
+        </div>-->
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">申请人(后台)：</label>
+            <div class="col-sm-8">
+                <input name="orderId" th:field="*{apply}" class="form-control" type="text" readonly>
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">订单状态：</label>
+            <div class="col-sm-8">
+                <select name="orderStatus" class="form-control m-b" th:with="type=${@dict.getType('withdrawal_status')}"
+                        disabled>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                            th:field="*{orderStatus}"></option>
+                </select>
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">银行卡号：</label>
+            <div class="col-sm-8">
+                <input name="bankNo" th:field="*{bankNo}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开户人：</label>
+            <div class="col-sm-8">
+                <input name="accname" th:field="*{accname}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开户行：</label>
+            <div class="col-sm-8">
+                <input name="bankName" th:field="*{bankName}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">提现金额：</label>
+            <div class="col-sm-8">
+                <input name="amount" th:field="*{amount}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">手续费：</label>
+            <div class="col-sm-8">
+                <input name="fee" th:field="*{fee}" class="form-control" type="text" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">实际到账：</label>
+            <div class="col-sm-8">
+                <input name="actualAmount" th:field="*{actualAmount}" class="form-control" type="text" readonly>
+            </div>
+        </div>-->
+        <div class="form-group">
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">出款渠道：</label>
+                <div class="col-sm-8" th:if="${channelList.size()} ne 0">
+                    <select class="form-control" id="channelId" name="witChannel" required>
+                        <option value="">请选择渠道名称</option>
+                        <option th:each="channel : ${channelList}" th:text="${channel.userName}"
+                                th:value="${channel.userId}"></option>
+                    </select>
+                </div>
+                <div class="col-sm-8" th:if="${channelList.size()} eq 0">
+                    <input class="form-control" name="flag" readonly required
+                           style="border-width: 0;background-color:white; color: red;" type="text"
+                           value="未找到任何渠道名称，请新增渠道">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">出款产品类型：</label>
+                <div class="col-sm-8" th:if="${productList.size()} ne 0">
+                    <select class="form-control" id="witType" name="witType" required>
+                        <option value="">请选择产品名称</option>
+                        <option th:each="product : ${productList}" th:text="${product.productName}"
+                                th:value="${product.productId}"></option>
+                    </select>
+                </div>
+                <div class="col-sm-8" th:if="${productList.size()} eq 0">
+                    <input class="form-control" name="flag" readonly required
+                           style="border-width: 0;background-color:white; color: red;" type="text"
+                           value="未找到任何产品名称，请新增产品">
+                </div>
+            </div>
+        </div>
+
+
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label is-required">审核意见：</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" id="comment" maxlength="100" name="comment" required
+                          type="text"></textarea>
+            </div>
+        </div>-->
+
+    </form>
+
+
+</div>
+<div style="text-align: center;margin-bottom: 5px;">
+    <div style="text-align: center;">
+        <a name="approval" class="btn btn-w-m btn-primary" href="javascript:void(0)"
+           onclick="approval('2');">确定 </a>
+
+        <!--<a name="approval" class="btn btn-w-m btn-primary" href="javascript:void(0)"
+           th:if="${  alipayWithdrawEntity.orderStatus == 4 ||  alipayWithdrawEntity.orderStatus == '4'}"
+           onclick="approval('2');">成功 </a>
+        <a name="reject" class="btn btn-w-m btn-danger" href="javascript:void(0)"
+           onclick="googleBind('3');"
+           th:if="${  (alipayWithdrawEntity.orderStatus == 4 ||  alipayWithdrawEntity.orderStatus == '4' )
+           || (alipayWithdrawEntity.orderStatus == '2' || alipayWithdrawEntity.orderStatus == 2)}">
+            置为失败</a>
+        <a class="btn btn-w-m btn-danger" href="javascript:void(0)" name="reject"
+           th:if="${  (
+           (alipayWithdrawEntity.orderStatus == 1 ||  alipayWithdrawEntity.orderStatus == '1' ) &&
+           (autoWit == 0 || autoWit == '0')&&
+            (alipayWithdrawEntity.payStatus == 1 || alipayWithdrawEntity.payStatus == '1'  )
+           ) ||
+           ( (alipayWithdrawEntity.payStatus == 1 || alipayWithdrawEntity.payStatus == '1'  )&&(alipayWithdrawEntity.orderStatus == 1 ||  alipayWithdrawEntity.orderStatus == '1' ) && (alipayWithdrawEntity.retain1 == 1 || alipayWithdrawEntity.retain1 == '1'))
+           || (
+            (alipayWithdrawEntity.payStatus == 1 || alipayWithdrawEntity.payStatus == '1'  )&&
+             (alipayWithdrawEntity.orderStatus == 1 || alipayWithdrawEntity.orderStatus == '1'  )
+           )
+
+           }"
+           onclick="approval('100');"> 确认出款</a>
+        <a class="btn btn-w-m btn-danger" href="javascript:void(0)" name="reject"
+           onclick="approval('100');"
+           th:if="${  (alipayWithdrawEntity.orderStatus == 4 ||  alipayWithdrawEntity.orderStatus == '4' ) && (alipayWithdrawEntity.pushOrder == 3 || alipayWithdrawEntity.pushOrder == '3')}">
+            再次推送</a>-->
+        <div class="form-group"
+             th:if="${  (alipayWithdrawEntity.orderStatus == 4 ||  alipayWithdrawEntity.orderStatus == '4' ) && (alipayWithdrawEntity.pushOrder == 3 || alipayWithdrawEntity.pushOrder == '3')}">
+            <label class="col-sm-3 control-label glyphicon glyphicon-exclamation-sign"
+                   style="color: red;font-size: 15px;">温馨提示：</label>
+            <div class="col-sm-8">
+                <input class="form-control" readonly
+                       style="border-width: 0;background-color:white; color:green;font-size: 22px;"
+                       type="text" value="当前订单为上游驳回订单，请仔细核实后再次点击出款，避免重复出款">
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    const prefix = ctx + "alipay/withdrawal";
+    const prefix_ver = ctx + "verify/identity";
+    $("#form-withdrawal-edit").validate({
+        focusCleanup: true
+    });
+
+    /*财务通过提现记录-代付系统*/
+    function approval(status) {
+        //$("#orderStatus").val(status);
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/merchant/editChannel", $('#form-withdrawal-edit').serialize());
+        }
+    }
+
+    /*财务拒绝提现记录-代付系统
+    function reject(status) {
+        $("#orderStatus").val(status);
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/merchant/reject", $('#form-withdrawal-edit').serialize());
+        }
+    }*/
+    function googleBind(status) {
+        /* $.modal.confirm("确定要为此订单进行回滚操作吗？", function () {
+             layer.prompt({title: "请输入谷歌验证码", fromType: 1, maxLength: 6}, function (googleCode, index) {
+                 layer.close(index);
+                 $.ajax({
+                     type: "get",
+                     url: prefix_ver + "/google",
+                     data: {"googleCode": googleCode},
+                     dataType: "json",
+                     success: function (data) {
+                         if (0 == data.code) {*/
+        $.modal.confirm("确定要为此订单进行回滚操作吗？", function () {
+            $("#orderStatus").val(status);
+            $.operate.save(prefix + "/merchant/approval", $('#form-withdrawal-edit').serialize());
+        });
+        /*       } else {
+                   layer.msg(data.msg, {icon: 2, time: 2000});
+               }
+           }
+       });
+  });
+})*/
+    }
+
+</script>
+</body>
+</html>

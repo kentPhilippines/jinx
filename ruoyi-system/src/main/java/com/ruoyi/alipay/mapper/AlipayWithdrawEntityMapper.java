@@ -15,6 +15,7 @@ import java.util.List;
  * @date 2020-03-17
  */
 public interface AlipayWithdrawEntityMapper {
+    int updateByPrimaryKeySelective(AlipayWithdrawEntity record);
     /**
      * 查询会员提现记录
      *

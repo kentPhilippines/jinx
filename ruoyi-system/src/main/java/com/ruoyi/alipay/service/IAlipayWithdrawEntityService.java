@@ -22,6 +22,9 @@ public interface IAlipayWithdrawEntityService {
      */
     AlipayWithdrawEntity selectAlipayWithdrawEntityById(Long id);
 
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    void updateWithdrawEntityById(AlipayWithdrawEntity alipayWithdrawEntity);
+
     List<AlipayWithdrawEntity> selectAlipayWithdrawEntityByIds(String ids);
 
     /**

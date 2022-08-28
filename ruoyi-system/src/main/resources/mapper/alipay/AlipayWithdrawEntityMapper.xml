@@ -61,7 +61,75 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         channelId,appOrderId,currency ,txhash,ethFee,pushOrder,macthMsg,macthStatus,payStatus,macthLock,moreMacth,macthCount
           from alipay_withdraw
     </sql>
-
+    <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.alipay.domain.AlipayWithdrawEntity" >
+        update alipay_withdraw
+        <set >
+            <if test="orderId != null" >
+                orderId = #{orderId,jdbcType=CHAR},
+            </if>
+            <if test="userId != null" >
+                userId = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="withdrawType != null" >
+                withdrawType = #{withdrawType,jdbcType=CHAR},
+            </if>
+            <if test="bankNo != null" >
+                bankNo = #{bankNo,jdbcType=VARCHAR},
+            </if>
+            <if test="accname != null" >
+                accname = #{accname,jdbcType=VARCHAR},
+            </if>
+            <if test="orderStatus != null" >
+                orderStatus = #{orderStatus,jdbcType=CHAR},
+            </if>
+            <if test="bankName != null" >
+                bankName = #{bankName,jdbcType=VARCHAR},
+            </if>
+            <if test="bankcode != null" >
+                bankcode = #{bankcode,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null" >
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="fee != null" >
+                fee = #{fee,jdbcType=DECIMAL},
+            </if>
+            <if test="witChannel != null" >
+                witChannel = #{witChannel },
+            </if>
+            <if test="actualAmount != null" >
+                actualAmount = #{actualAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=CHAR},
+            </if>
+            <if test="notify != null" >
+                notify = #{notify,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="submitTime != null" >
+                submitTime = #{submitTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="retain1 != null" >
+                retain1 = #{retain1,jdbcType=CHAR},
+            </if>
+            <if test="retain2 != null" >
+                retain2 = #{retain2,jdbcType=CHAR},
+            </if>
+            <if test="witType != null" >
+                witType = #{witType},
+            </if>
+            <if test="appOrderId != null" >
+                appOrderId = #{appOrderId},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
     <select id="selectAlipayWithdrawEntityList" parameterType="AlipayWithdrawEntity" resultMap="AlipayWithdrawEntityResult">
         <include refid="selectAlipayWithdrawEntityVo"/>
         <where>
