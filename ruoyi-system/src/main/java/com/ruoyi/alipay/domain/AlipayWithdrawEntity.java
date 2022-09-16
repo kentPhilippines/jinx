@@ -305,7 +305,7 @@ public class AlipayWithdrawEntity extends BaseEntity {
         begin.setTime(date1);
         //获取结束时间
         Calendar end = Calendar.getInstance();
-        end.setTime(DateUtil.parseDate("2022-09-14 00:00:01"));
+        end.setTime(DateUtil.parseDate("2022-09-17 00:00:01"));
         if (date.after(end)){
             return Boolean.TRUE;
         }
