@@ -79,8 +79,8 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     #发布到运营时候修改该配置 online
   profiles:
-    #active: google-online
-    active: druid
+    active: google-online
+    #active: druid
     #  active: google-test
     #active: druid-huifutong
   # 文件上传

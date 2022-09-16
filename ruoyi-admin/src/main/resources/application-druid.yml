@@ -2,10 +2,10 @@
 spring:
   redis:
     port: 6379
-    host: 34.150.94.93
+    host: 127.0.0.1
     timeout: 5000
     database : 1
-    password: redis123456
+    password: will1234
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver

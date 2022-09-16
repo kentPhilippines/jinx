@@ -1,7 +1,7 @@
 spring:
   redis:
-    host: r-3nsnbeyh1ym8vjo2vfpd.redis.rds.aliyuncs.com
-    #host: r-3nsnbeyh1ym8vjo2vf.redis.rds.aliyuncs.com
+    #host: r-3nsnbeyh1ym8vjo2vfpd.redis.rds.aliyuncs.com
+    host: r-3nsnbeyh1ym8vjo2vf.redis.rds.aliyuncs.com
     port: 6379
     password: kentredis:Bffdasdsdada9ijnasd6
   datasource:
@@ -10,28 +10,28 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://35.220.155.53:3306/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+        url: jdbc:mysql://172.21.225.111:32482/otc_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
         username: 3dada9iasds21
         password: DZ7y9UZMd#
       # alipay从库数据源
       alipay:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://35.220.155.53:3306/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+        url: jdbc:mysql://172.21.225.111:32482/otc_alipay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
         username: 3dada9iasds21
         password: DZ7y9UZMd#
       # pay从库数据源
       pay:
         # 从数据源开关/默认关闭
         enabled: false
-        url: jdbc:mysql://35.220.155.53:3306/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+        url: jdbc:mysql://172.21.225.111:32482/otc_pay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
         username: 3dada9iasds21
         password: DZ7y9UZMd#
       # dealpay从库数据源
       dealpay:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://35.220.155.53:3306/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+        url: jdbc:mysql://172.21.225.111:32482/otc_dealpay?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
         username: 3dada9iasds21
         password: DZ7y9UZMd#
       # 初始连接数
