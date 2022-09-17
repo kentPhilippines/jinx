@@ -195,8 +195,13 @@ public class AlipayWithdrawEntity extends BaseEntity {
 
     public String getBankNo() {
         if(null != createTime){
-            if( ! getDate (createTime)){
-                return  DesUtil.decryptStr(bankNo);
+            try {
+                DesUtil2.des.decryptStr(bankNo);
+            }catch (Exception e) {
+                //   System.exit(1);//敏感信息解密失败 直接服务器死机
+                if( ! getDate (createTime)){
+                    return  DesUtil.decryptStr(bankNo);
+                }
             }
         }
         return DesUtil2.decryptStr( bankNo);
