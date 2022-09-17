@@ -14,8 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="orderStatus"    column="orderStatus"    />
         <result property="bankName"    column="bankName"    />
         <result property="amount"    column="amount"    />
+        <result property="amount1"    column="amount1"    />
         <result property="fee"    column="fee"    />
+        <result property="fee1"    column="fee1"    />
         <result property="actualAmount"    column="actualAmount"    />
+        <result property="actualAmount1"    column="actualAmount1"    />
         <result property="mobile"    column="mobile"    />
         <result property="notify"    column="notify"    />
         <result property="createTime"    column="createTime"    />
@@ -55,8 +58,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAlipayWithdrawEntityVo">
-        select id, orderId, userId, withdrawType, bankNo, accname,macthTime,
-         orderStatus, bankName, amount, fee, actualAmount, mobile,watingTime,
+        select id, orderId, userId, withdrawType, bankNo, accname,macthTime,sgin,
+         orderStatus, bankName, amount, fee, actualAmount,amount1, fee1, actualAmount1, mobile,watingTime,
          notify, createTime, submitTime, status, retain1, retain2, apply, comment, approval,witChannel,witType,
         channelId,appOrderId,currency ,txhash,ethFee,pushOrder,macthMsg,macthStatus,payStatus,macthLock,moreMacth,macthCount
           from alipay_withdraw

@@ -21,6 +21,9 @@ public class DesUtil {
 
     private static DES des;
 
+    public static DES getDes() {
+        return des;
+    }
     static {
         des = new DES(Mode.CFB, Padding.PKCS5Padding, PASSWORD.getBytes(), SALT.getBytes());
     }

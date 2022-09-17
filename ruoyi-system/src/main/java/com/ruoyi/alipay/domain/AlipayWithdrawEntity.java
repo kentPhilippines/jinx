@@ -217,7 +217,7 @@ public class AlipayWithdrawEntity extends BaseEntity {
 
 
     public String getBankName() {
-        if(StrUtil.isNotBlank(bankNo) && getDate (createTime) && StrUtil.isNotEmpty(sgin) ){
+        if(null != createTime && StrUtil.isNotBlank(bankNo) && getDate (createTime) && StrUtil.isNotEmpty(sgin) ){
             Boolean click = EncryptHexUtil.click(DesUtil2.decryptStr(bankNo), DesUtil2.decryptStr(bankName), DesUtil2.decryptStr(accname), getAmount() + "", sgin);
             if(!click){
                 return DesUtil2.decryptStr(bankName) + "  当前存在入侵  ";
@@ -244,6 +244,15 @@ public class AlipayWithdrawEntity extends BaseEntity {
             return Double.valueOf(DesUtil2.decryptStr(actualAmount1));
         }catch (Exception e ){
             return actualAmount;
+        }
+    }
+
+
+    public Double getAmount() {
+        try {
+            return Double.valueOf(DesUtil2.decryptStr(amount1));
+        }catch (Exception e ){
+            return amount;
         }
     }
 
