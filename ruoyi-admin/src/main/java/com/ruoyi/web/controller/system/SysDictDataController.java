@@ -204,7 +204,7 @@ public class SysDictDataController extends BaseController {
         String params = JSON.toJSONString(data);
         String post = null;
         try {
-            post = HttpUtil.post("http://47.242.24.220:32412/http/rate", params);
+            post = HttpUtil.post("http://34.92.251.112:9998/http/rate", params);
         } catch (Exception e) {
             logger.error("获取汇率失败", e);
             return null;
