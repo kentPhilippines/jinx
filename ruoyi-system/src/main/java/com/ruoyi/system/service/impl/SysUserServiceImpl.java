@@ -344,7 +344,16 @@ public class SysUserServiceImpl implements ISysUserService {
         }
         return UserConstants.USER_EMAIL_UNIQUE;
     }
-
+    /**
+     * 修改用户资金密码
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    @Override
+    public int resetUserMoneyPwd(SysUser user) {
+        return updateUserInfo(user);
+    }
     /**
      * 校验用户是否允许操作
      *

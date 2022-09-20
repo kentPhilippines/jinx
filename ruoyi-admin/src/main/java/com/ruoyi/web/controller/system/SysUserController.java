@@ -278,6 +278,29 @@ public class SysUserController extends BaseController {
         return success("重置成功");
 
     }
+    @Log(title = "重置资金密码", businessType = BusinessType.UPDATE)
+    @GetMapping("/resetMoneyPwd/{userId}")
+    public String resetMoneyPwd(@PathVariable("userId") Long userId, ModelMap mmap) {
+        mmap.put("user", userService.selectUserById(userId));
+        return prefix + "/resetMoneyPwd";
+    }
+
+    @Log(title = "重置资金密码", businessType = BusinessType.UPDATE)
+    @PostMapping("/resetMoneyPwd")
+    @ResponseBody
+    public AjaxResult resetMoneyPwdSave(SysUser user) {
+        userService.checkUserAllowed(user);
+        SysUser user1 = userService.selectUserById(user.getUserId());
+        user.setFundPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user1.getSalt()));
+        user.setPassword(null);
+        if (userService.resetUserMoneyPwd(user) > 0) {
+            if (ShiroUtils.getUserId().equals(user.getUserId())) {
+                ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
+            }
+            return success();
+        }
+        return error();
+    }
     /**
      * 用户Google验证器修改
      */

@@ -310,6 +310,21 @@ public class MerchantInfoEntityController extends BaseController {
         return success("重置成功，新的提现密码：" + resetPwd);
     }
 
+
+    /**
+     * 重置用戶的重置私钥
+     */
+    @Log(title = "重置私钥", businessType = BusinessType.RESET)
+    @PostMapping("resetPrivateKey")
+    @ResponseBody
+    public AjaxResult resetPrivateKey(Long id) {
+        String resetPwd = merchantInfoEntityService.resetPayPassword(id);
+        if ("false".equals(resetPwd)) {
+            return error("操作失败");
+        }
+        return success("重置成功");
+    }
+
     /**
      * 验证用户的登陆密码
      *

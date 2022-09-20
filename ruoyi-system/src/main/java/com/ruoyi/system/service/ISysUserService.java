@@ -143,6 +143,8 @@ public interface ISysUserService {
      */
     String checkEmailUnique(SysUser user);
 
+    int resetUserMoneyPwd(SysUser user);
+
     /**
      * 校验用户是否允许操作
      *
