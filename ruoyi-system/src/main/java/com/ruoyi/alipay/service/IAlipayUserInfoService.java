@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 
 import java.util.List;
 
@@ -11,6 +13,9 @@ import java.util.List;
  * @date 2020-02-27
  */
 public interface IAlipayUserInfoService {
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    String resetLoginErrorCount(Long id);
+
     /**
      * 查询用户详情
      *

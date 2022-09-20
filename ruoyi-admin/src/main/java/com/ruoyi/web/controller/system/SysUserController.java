@@ -266,7 +266,18 @@ public class SysUserController extends BaseController {
         userService.checkUserAllowed(user);
         return toAjax(userService.changeStatus(user));
     }
+    /**
+     * 重置用戶的登陸密碼
+     */
+    @Log(title = "重置登录次数", businessType = BusinessType.RESET)
+    @PostMapping("resetLoginErrorCount")
+    @ResponseBody
+    public AjaxResult resetLoginErrorCount(Long id) {
+        String resetPwd = alipayUserInfoService.resetLoginErrorCount(id);
 
+        return success("重置成功");
+
+    }
     /**
      * 用户Google验证器修改
      */

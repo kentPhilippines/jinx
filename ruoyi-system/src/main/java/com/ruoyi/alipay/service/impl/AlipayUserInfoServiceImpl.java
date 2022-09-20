@@ -10,6 +10,8 @@ import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.HashKit;
 import com.ruoyi.common.utils.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,7 +29,19 @@ import java.util.List;
 public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     @Resource
     private AlipayUserInfoMapper alipayUserInfoMapper;
-
+    private final String LOGIN_RETRY_KEY="jinxinmerchant:shiro:cache:loginRecordCache:";
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public String resetLoginErrorCount(Long id) {
+        AlipayUserInfo userInfo=alipayUserInfoMapper.selectAlipayUserInfoById(id);
+        if (userInfo == null) {
+            throw new BusinessException("ID不能为空或此卡商不存在");
+        }
+        redisTemplate.delete(LOGIN_RETRY_KEY+userInfo.getUserId());
+        return "";
+    }
     /**
      * 查询用户详情
      *
