@@ -4,6 +4,7 @@ spring:
     host: r-3nsnbeyh1ym8vjo2vf.redis.rds.aliyuncs.com
     port: 6379
     password: kentredis:Bffdasdsdada9ijnasd6
+    database: 6
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
