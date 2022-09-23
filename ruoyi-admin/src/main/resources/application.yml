@@ -1,121 +1,28 @@
-# 项目相关配置
-otc:
-  # 名称
-  name: OTC-Admin
-  # 版本
-  version: 4.1.0
-  # 版权年份
-  copyrightYear: 2020
-  # 实例演示开关
-  demoEnabled: false
-  # 文件路径 示例（ Windows配置D:/otc/admin/uploadPath，Linux配置 /home/otc/admin/uploadPath）
-  profile:  /img/
-  #profile: /home/otc/admin/uploadPath
-  # 获取ip地址开关
-  addressEnabled: true
-  #appName 缓存前缀
-  appName: jinxin
-# 开发环境配置
-server:
-  # 服务器的HTTP端口，默认为80
-  port: 80
-  servlet:
-    # 应用的访问路径
-    context-path: /
-  tomcat:
-    # tomcat的URI编码
-    uri-encoding: UTF-8
-    # tomcat最大线程数，默认为200
-    max-threads: 800
-    # Tomcat启动初始化的线程数，默认值25
-    min-spare-threads: 10
+nacos:
+  config:
+    #server-addr: 47.242.206.196:8848
+    server-addr: 172.16.32.220:8848 #内网
+    #namespace: 4ea7a38e-32fd-4ddd-b384-dc5ad4bd753d #test
+    namespace: a173ae57-6dc2-4f08-bda7-194b5d8ecdaf #pro
+    data-id: admin.yaml
+    group: JX_GROUP
+    bootstrap:
+      enable: true
+      log-enable: true
+    type: yaml
 
-# 日志配置
-logging:
-  level:
-    com.ruoyi: debug
-    org.springframework: warn
 
-# 用户配置
-user:
-  password:
-    # 密码错误{maxRetryCount}次锁定10分钟
-    maxRetryCount: 500
-#jetcache config
-jetcache:
-  statIntervalMinutes: 15
-  areaInCacheName: false
-  local:
-    default:
-      type: linkedhashmap
-      keyConvertor: fastjson
-  remote:
-    default:
-      type: redis
-      keyConvertor: fastjson
-      valueEncoder: kryo
-      valueDecoder: kryo
-      poolConfig:
-        minIdle: 5
-        maxIdle: 20
-        maxTotal: 50
-      host: ${spring.redis.host}
-      port: ${spring.redis.port}
-      password: ${spring.redis.password}
-# Spring配置
+
 spring:
-  # 模板引擎
-  thymeleaf:
-    mode: HTML
-    encoding: utf-8
-    # 禁用缓存
-    cache: false
-  # 资源信息
+  application:
+    name: admin
+#  profiles:
+#    active: dev
+
+#logging:
+#  level:
+#    root: info
+
   messages:
     # 国际化资源文件路径
     basename: static/i18n/messages
-  jackson:
-    time-zone: GMT+8
-    date-format: yyyy-MM-dd HH:mm:ss
-    #发布到运营时候修改该配置 online
-  profiles:
-    active: google-online
-    #active: druid
-    #  active: google-test
-    #active: druid-huifutong
-  # 文件上传
-  servlet:
-    multipart:
-      # 单个文件大小
-      max-file-size: 1000MB
-      # 设置总上传的文件大小
-      max-request-size: 1000MB
-  # 服务模块
-  devtools:
-    restart:
-      # 热部署开关
-      enabled: true
-
-# MyBatis
-mybatis:
-  # 搜索指定包别名
-  typeAliasesPackage: com.ruoyi.**.domain
-  # 配置mapper的扫描，找到所有的mapper.xml映射文件
-  mapperLocations: classpath*:mapper/**/*Mapper.xml
-  # 加载全局的配置文件
-  configLocation: classpath:mybatis/mybatis-config.xml
-
-# PageHelper分页插件
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
-  params: count=countSql
-# 防止XSS攻击
-xss:
-  # 过滤开关
-  enabled: true
-  # 排除链接（多个用逗号分隔）
-  excludes: /system/notice/*
-  # 匹配链接
-  urlPatterns: /system/*,/monitor/*,/tool/*

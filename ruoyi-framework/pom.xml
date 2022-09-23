@@ -20,6 +20,7 @@
 		<jetcache-starter-redis.version>2.6.0</jetcache-starter-redis.version>
 	</properties>
     <dependencies>
+
 		<!-- shiro+redis缓存插件 -->
 		<dependency>
 			<groupId>org.crazycake</groupId>
