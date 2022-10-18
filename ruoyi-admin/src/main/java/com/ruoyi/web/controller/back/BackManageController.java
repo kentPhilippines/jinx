@@ -734,7 +734,7 @@ public class BackManageController extends BaseController {
         String params = JSON.toJSONString(data);
         String post = null;
         try {
-            post = HttpUtil.post(otcRate, params);
+            post = HttpUtil.get(otcRate, data);
         } catch (Exception e) {
             logger.error("获取汇率失败", e);
             return null;
