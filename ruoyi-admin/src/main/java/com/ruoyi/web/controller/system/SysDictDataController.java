@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequestMapping("/system/dict/data")
 public class SysDictDataController extends BaseController {
     private String prefix = "system/dict/data";
-    @Value("${otc.usdt.rate:http://172.16.32.225:32437/http/rate}")
+    @Value("${otc.usdt.rate}")
     private String otcRate;
 
     @Autowired
@@ -199,10 +199,9 @@ public class SysDictDataController extends BaseController {
     String getRate(String type) {
         Map<String, Object> data = new HashMap<>();
         data.put("type", type);
-        String params = JSON.toJSONString(data);
         String post = null;
         try {
-            post = HttpUtil.post(otcRate, params);
+            post = HttpUtil.get(otcRate, data);
         } catch (Exception e) {
             logger.error("获取汇率失败", e);
             return null;
