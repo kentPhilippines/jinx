@@ -199,10 +199,10 @@ public class SysDictDataController extends BaseController {
     String getRate(String type) {
         Map<String, Object> data = new HashMap<>();
         data.put("type", type);
-        String params = JSON.toJSONString(data);
         String post = null;
         try {
-            post = HttpUtil.get(otcRate+"?type="+type);
+            post = HttpUtil.get(otcRate, data);
+            logger.info("raterequest:{},{},{}",otcRate,JSONUtil.toJsonStr(data),post);
         } catch (Exception e) {
             logger.error("获取汇率失败", e);
             return null;
