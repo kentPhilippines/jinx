@@ -202,6 +202,7 @@ public class SysDictDataController extends BaseController {
         String post = null;
         try {
             post = HttpUtil.get(otcRate, data);
+            logger.info("raterequest:{},{},{}",otcRate,JSONUtil.toJsonStr(data),post);
         } catch (Exception e) {
             logger.error("获取汇率失败", e);
             return null;
