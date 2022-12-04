@@ -221,6 +221,45 @@ public class AlipayWithdrawEntityController extends BaseController {
         return prefix + "/edits";
     }
     /**
+     * 批量修改推送渠道
+     */
+    @GetMapping("/merchant/editAllChannel/{ids}")
+    public String editAllChannel(@PathVariable("ids") String ids, ModelMap mmap) {
+        mmap.put("ids", ids);
+        List<AlipayWithdrawEntity> alipayWithdrawEntitys = alipayWithdrawEntityService.selectAlipayWithdrawEntityByIds(ids);
+        StrBuilder strBuilder = StrBuilder.create();
+        for (AlipayWithdrawEntity entity : alipayWithdrawEntitys) {
+            strBuilder.append("id:").append(entity.getId()).append(" 系统订单：").append(entity.getOrderId()).append(" ") ;
+
+//                    .append("原渠道：").append(rateEntity.getChannelId()).append(" ").append("原产品：").append(rateEntity.getPayTypr() + " ");
+        }
+        List<AlipayUserFundEntity> rateList = alipayUserFundEntityService.findUserFundRate();//查询所有渠道账户
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        alipayProductEntity.setProductCode("1");
+        List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        mmap.put("channelList", rateList);
+        mmap.put("productList", productlist);
+        mmap.put("rete", strBuilder.toString());
+        return prefix + "/editAllChannel";
+    }
+
+    @Log(title = "出款订单批量修改推送渠道", businessType = BusinessType.UPDATE)
+    @PostMapping("/merchant/editAllChannel")
+    @ResponseBody
+    public AjaxResult editAllChannel(String ids,String witChannel,String witType) {
+
+        List<AlipayWithdrawEntity> alipayWithdrawEntitys = alipayWithdrawEntityService.selectAlipayWithdrawEntityByIds(ids);
+
+        alipayWithdrawEntitys.stream().forEach(e->{
+            e.setWitChannel(witChannel);
+            e.setWitType(witType);
+        });
+
+        alipayWithdrawEntityService.batchUpdateChannel(alipayWithdrawEntitys);
+        return AjaxResult.success();
+    }
+    /**
      * 显示商户提现详情页
      */
     @GetMapping("/merchant/editAllPush/{ids}")

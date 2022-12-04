@@ -1292,6 +1292,16 @@ var table = {
                 var url = table.options.editAllPush.replace("{ids}", rows.join());
                 $.modal.open(title, url);
             },
+            editAllChannel: function (title) {
+                table.set();
+                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                var url = table.options.editAllChannelUrl.replace("{ids}", rows.join());
+                $.modal.open(title, url);
+            },
             editWating: function (title) {
                 table.set();
                 var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);

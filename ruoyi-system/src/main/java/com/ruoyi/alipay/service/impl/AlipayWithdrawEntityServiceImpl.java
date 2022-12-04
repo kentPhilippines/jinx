@@ -34,6 +34,16 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
 
     @Autowired
     private AlipayChanelFeeMapper alipayChanelFeeMapper;
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void batchUpdateChannel(List<AlipayWithdrawEntity> list)
+    {
+        list.stream().forEach(e->{
+            this.updateWithdrawEntityById(e);
+        });
+
+    }
     /**
      * 查询会员提现记录
      *
@@ -56,7 +66,7 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
         DateTime expireDate = DateUtil.offset(data.getCreateTime(), DateField.SECOND, data.getWatingTime());
         if(now.isAfter(expireDate))
         {
-            throw new BusinessException("已经超时，无法调整渠道");
+            throw new BusinessException(alipayWithdrawEntity.getOrderId()+"已经超时，无法调整渠道");
         }
 
 
@@ -64,7 +74,7 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
         AlipayChanelFee chanelFee = alipayChanelFeeMapper.findChannelBy(data.getWitChannel(),data.getWitType());
         if(chanelFee==null)
         {
-            throw new BusinessException("渠道费率未配置");
+            throw new BusinessException(data.getWitChannel()+"--"+data.getWitType()+"渠道费率未配置");
         }
 
 
