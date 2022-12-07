@@ -31,6 +31,14 @@ public class AlipayUserRateEntity extends BaseEntity {
     private String queueList;
     private List<String> agentList;
 
+
+
+    /**
+     * 预留，添加业务使用
+     * 金额是否随机小数 0或空是整数金额，1是小数金额
+     */
+    private Integer deci;
+
     public String getQueueList() {
         return queueList;
     }
@@ -253,7 +261,13 @@ public class AlipayUserRateEntity extends BaseEntity {
     public String getRetain4() {
         return retain4;
     }
+    public Integer getDeci() {
+        return deci;
+    }
 
+    public void setDeci(Integer deci) {
+        this.deci = deci;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)

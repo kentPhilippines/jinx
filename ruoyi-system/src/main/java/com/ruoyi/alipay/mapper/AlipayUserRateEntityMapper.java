@@ -182,4 +182,14 @@ public interface AlipayUserRateEntityMapper {
     AlipayUserRateEntity findWitRate(@Param("userId") String userId);
 
 
+    /**
+     * 更新是否启用小数
+     * @param id
+     * @param deci
+     * @return
+     */
+    @Update("update alipay_user_rate set deci = #{deci} where id = #{id} ")
+    int updateStatusOfDecimal(@Param("id") String id, @Param("deci") Integer deci);
+
+
 }
