@@ -143,6 +143,19 @@ public class AlipayUserRateEntityController extends BaseController {
         return null;
     }
 
+    /**
+     * 商户小数状态
+     */
+    @RequiresPermissions("merchant:rate:status")
+    @Log(title = "小数状态修改", businessType = BusinessType.UPDATE)
+    @PostMapping("/changeStatusOfDecimal")
+    @ResponseBody
+    public AjaxResult updateStatusOfDecimal(String id, String userId, String feeType, Integer deci) {
+        logger.info("[当前处理费小数状态开启或关闭的管理员账号为：" + ShiroUtils.getSysUser().getLoginName() + "]");
+        logger.info("[当前处理商户小数状态的参数为：" + deci + "]");
+        return toAjax(alipayUserRateEntityService.changeStatusOfDecimal(id, userId, feeType, deci));
+    }
+
     /*
      * 修改用户产品费率
      */

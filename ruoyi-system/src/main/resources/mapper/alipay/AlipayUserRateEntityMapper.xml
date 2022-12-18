@@ -19,10 +19,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="retain2"    column="retain2"    />
         <result property="retain3"    column="retain3"    />
         <result property="retain4"    column="retain4"    />
+        <result property="deci"    column="deci"    />
     </resultMap>
 
     <sql id="selectAlipayUserRateEntityVo">
-        select id, userId, userType, switchs,channelId, payTypr, fee, feeType, createTime, submitTime, status, retain1, retain2, retain3, retain4 from alipay_user_rate
+        select id, userId, userType, switchs,channelId, payTypr, fee, feeType, createTime, submitTime, status, retain1, retain2, retain3, retain4,deci  from alipay_user_rate
     </sql>
 
     <select id="selectAlipayUserRateEntityList" parameterType="AlipayUserRateEntity" resultMap="AlipayUserRateEntityResult">
@@ -62,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">createTime,</if>
             <if test="submitTime != null ">submitTime,</if>
             <if test="status != null ">status,</if>
+            <if test="deci != null ">deci,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null  and userId != ''">#{userId},</if>
@@ -74,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="submitTime != null ">#{submitTime},</if>
             <if test="status != null ">#{status},</if>
+            <if test="deci != null ">#{deci},</if>
          </trim>
     </insert>
 
@@ -85,6 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="switchs != null ">switchs = #{switchs},</if>
             <if test="payTypr != null  and payTypr != ''">payTypr = #{payTypr},</if>
             <if test="fee != null ">fee = #{fee},</if>
+            <if test="deci != null ">deci = #{deci},</if>
             <if test="feeType != null ">feeType = #{feeType},</if>
             <if test="channelId != null ">channelId = #{channelId},</if>
             <if test="createTime != null ">createTime = #{createTime},</if>

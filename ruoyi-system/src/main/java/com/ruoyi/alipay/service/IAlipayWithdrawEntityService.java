@@ -14,6 +14,12 @@ import java.util.List;
  * @date 2020-03-17
  */
 public interface IAlipayWithdrawEntityService {
+
+    /**
+     * 批量修改渠道
+     * @param list
+     */
+    void batchUpdateChannel(List<AlipayWithdrawEntity> list);
     /**
      * 查询会员提现记录
      *

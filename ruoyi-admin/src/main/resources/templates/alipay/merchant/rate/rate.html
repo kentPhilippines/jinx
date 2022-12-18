@@ -164,6 +164,13 @@
                     }
                 },
                 {
+                    title: '整数/小数',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusToolsDecimal(row);
+                    }
+                },
+                {
                     title: '通道状态',
                     align: 'center',
                     formatter: function (value, row, index) {
@@ -210,6 +217,29 @@
         };
         $.table.init(options);
     });
+
+    /* 整数/小数状态显示 */
+    function statusToolsDecimal(row) {
+        if (row.deci == 0) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="enableDecimal(\'' + row.id + '\',\'' + row.userId + '\',\'' + row.feeType + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" style="cursor:pointer;" title="点击变更状态" onclick="disableDecimal(\'' + row.id + '\',\'' + row.userId + '\',\'' + row.feeType + '\')"></i> ';
+        }
+    }
+    /* 商户费率-停用小数 */
+    function disableDecimal(id, userId, feeType) {
+        $.modal.confirm("确认要【停用】小数金额吗？", function () {
+            $.operate.post(prefix + "/changeStatusOfDecimal", {"id": id, "userId": userId, "feeType": feeType, "deci": 0});
+        })
+    }
+
+    /* 商户费率-开启小数 */
+    function enableDecimal(id, userId, feeType) {
+        $.modal.confirm("确认要【启用】小数金额吗？", function () {
+            $.operate.post(prefix + "/changeStatusOfDecimal", {"id": id, "userId": userId, "feeType": feeType, "deci": 1});
+        })
+    }
+
 
     /* 商户费率状态显示 */
     function statusTools(row) {

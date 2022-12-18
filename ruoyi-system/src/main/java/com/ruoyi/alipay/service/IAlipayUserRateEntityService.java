@@ -1,6 +1,8 @@
 package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayUserRateEntity;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 
 import java.util.List;
 
@@ -99,6 +101,9 @@ public interface IAlipayUserRateEntityService {
 
     List<AlipayUserRateEntity> findRates(String ids);
 
+
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    int changeStatusOfDecimal(String id, String userId, String feeType, Integer deci);
 
     /**
      * 根据商户账号和产品类型查询当前开启的费率

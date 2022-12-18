@@ -122,6 +122,9 @@
             <a class="btn btn-primary multiple disabled" onclick="$.operate.editAllPush('批量推送')">
                 <i class="fa fa-bar-chart"></i> 批量审核
             </a>
+            <a class="btn btn-primary multiple disabled" onclick="$.operate.editAllChannel('批量修改出款渠道')">
+                <i class="fa fa-bar-chart"></i> 批量修改出款渠道
+            </a>
             <a class="btn btn-primary multiple disabled" onclick="$.operate.editWating('修改等待时间')">
                 <i class="fa fa-remove"></i> 修改等待时间
             </a>
@@ -145,6 +148,7 @@
             url: prefix + "/merchant/list",
             updateUrl: prefix + "/merchant/edit/{id}",
             editChannelUrl: prefix + "/merchant/editChannel/{id}",
+            editAllChannelUrl: prefix + "/merchant/editAllChannel/{ids}",
             detailUrl: prefix + "/merchant/detail/{id}",
             ethFeeUrl: prefix + "/merchant/ethFee/{id}",
             updateUrlAll: prefix + "/merchant/edits/{ids}",
