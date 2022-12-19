@@ -103,6 +103,20 @@ public class AlipayDealOrderApp extends BaseEntity {
     @Excel(name = "USDT-hash")
     private String txhash;
 
+    public Double getActualAmount() {
+        return actualAmount;
+    }
+
+    public void setActualAmount(Double actualAmount) {
+        this.actualAmount = actualAmount;
+    }
+
+    /**
+     * 订单金额(原始金额)
+     */
+    @Excel(name = "实际金额")
+    private Double actualAmount;
+
     public String getTxhash() {
         return txhash;
     }
