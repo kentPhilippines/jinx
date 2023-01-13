@@ -136,6 +136,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: copy-js" />
 <script th:inline="javascript">
     const approvalFlag = [[${@permission.hasPermi('merchant:withdrawal:approval')}]];
     const detailFlag = [[${@permission.hasPermi('withdrawal:merchant:detail')}]];
@@ -143,6 +144,19 @@
     const prefix = ctx + "alipay/withdrawal";
     const prefix_ver = ctx + "verify/identity";
 
+    var clipboard = new ClipboardJS('.orderId', {
+        text: function (trigger) {
+            console.log(trigger.closest('tr'));
+
+            var row = trigger.closest('tr');
+            console.log($(row).find(".orderId").text());
+            var orderId = $(row).find(".orderId").text();
+            var bankinfo = $(row).find(".bankinfo").text();
+            var amount = $(row).find(".amount").text();
+            var cc=orderId +" " + bankinfo+" "+amount;
+            return cc;
+        },
+    });
     $(function () {
         var options = {
             url: prefix + "/merchant/list",
@@ -180,7 +194,7 @@
                     title: '订单',
                     formatter: function (value, row, index) {
                         var table = '<ul>'
-                        table += '<li>' + '系统订单：' + row.orderId + '</li>'
+                        table += '<li class="orderId" style="cursor: pointer;">' + '系统订单：' + row.orderId + '</li>'
                         table += '<li>' + '商户订单：' + row.appOrderId + '</li>'
                         table += '</ul>'
                         return table;
@@ -238,14 +252,14 @@
                     field: 'bankNo',
                     title: '银行信息',
                     formatter: function (value, row, index) {
-                        var table = '<ul>'
+                        var table = '<ul class="bankinfo">'
                         if (row.orderStatus == 1 && row.currency != 'CNY') {
                             table += '<li>' + '<i class=\"btn btn-link btn-xs\" style="cursor:pointer;" title="地址"onclick="openScan(\'' + row.bankNo + '\')"><i class="fa fa-google-wallet"></i> 支付地址：' + row.bankNo + '</i> ' + '</li>';
                         } else {
-                            table += '<li>' + '银行卡号：' + row.bankNo + '</li>'
+                            table += '<li>' + '银行卡号：' + row.bankNo + ' </li>'
                         }
-                        table += '<li>' + '开户人：' + row.accname + '</li>'
-                        table += '<li>' + '开户行：' + row.bankName + '</li>'
+                        table += '<li>' + '开户人：' + row.accname + ' </li>'
+                        table += '<li>' + '开户行：' + row.bankName + ' </li>'
                         table += '</ul>'
                         return table;
                     }
@@ -255,7 +269,7 @@
                     title: '金额情况',
                     formatter: function (value, row, index) {
                         var table = '<ul>'
-                        table += '<li>' + '代付金额：' + row.amount + '</li>'
+                        table += '<li class="amount">' + '代付金额：' + row.amount + '</li>'
                         table += '<li>' + '手续费：' + row.fee + '</li>'
                         table += '<li>' + '实际到账：' + row.actualAmount + '</li>'
                         table += '</ul>'
@@ -369,6 +383,7 @@
         };
         $.table.init(options);
     });
+
 
     /* 状态显示 */
     function check(row) {

@@ -102,7 +102,6 @@ public interface IAlipayUserRateEntityService {
     List<AlipayUserRateEntity> findRates(String ids);
 
 
-    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     int changeStatusOfDecimal(String id, String userId, String feeType, Integer deci);
 
     /**
