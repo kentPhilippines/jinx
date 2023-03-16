@@ -14,7 +14,7 @@
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
-    <link rel="shortcut icon" href="../static/favicon.ico" th:href="@{favicon.ico}"/>
+    <link rel="shortcut icon" href="../static/2023-03-16 14.16.37.mov" th:href="@{favicon.ico}"/>
     <style type="text/css">label.error { position:inherit;  }</style>
     <script>
         if(window.top!==window.self){window.top.location=window.location};
@@ -28,10 +28,10 @@
             <div class="col-sm-7">
                 <div class="signin-info">
                     <div class="logopanel m-b">
-                        <h1><img alt="[ 金星 ]" src="../static/img/photo_2020-04-26_19-55-42.png" style="height: 75px;" th:src="@{/img/photo_2020-04-26_19-55-42.png}"></h1>
+                        <h1><img alt="[ [[${@globalConfig.siteName}]] ]" src="../static/img/photo_2020-04-26_19-55-42.png" style="height: 75px;" th:src="@{/img/photo_2020-04-26_19-55-42.png}"></h1>
                     </div>
                     <div class="m-b"></div>
-                    <h4>欢迎使用 <strong>金星后台管理系统</strong></h4>
+                    <h4>欢迎使用 <strong>[[${@globalConfig.siteName}]]后台管理系统</strong></h4>
                     <ul class="m-b">
                         <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 用户是企业发展的源泉</li>
                         <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 品质是生命，服务是宗旨</li>
@@ -44,7 +44,7 @@
             <div class="col-sm-5">
                 <form id="signupForm">
                     <h4 class="no-margins">登录：</h4>
-                    <p class="m-t-md">金星理财，我们更专业</p>
+                    <p class="m-t-md">[[${@globalConfig.siteName}]]理财，我们更专业</p>
                     <input type="text"     name="username" class="form-control uname"     placeholder="用户名" value=""    />
                     <input type="password" name="password" class="form-control pword"     placeholder="密码"   value="" />
 					<div class="row m-t" th:if="${captchaEnabled==true && captchaType ne 'google'}">
@@ -74,7 +74,7 @@
         </div>
         <div class="signup-footer">
             <div class="pull-left">
-                &copy; 2020 All Rights Reserved. 金星 Tech. <br>
+                &copy; 2020 All Rights Reserved. [[${@globalConfig.siteName}]] Tech. <br>
             </div>
         </div>
     </div>
