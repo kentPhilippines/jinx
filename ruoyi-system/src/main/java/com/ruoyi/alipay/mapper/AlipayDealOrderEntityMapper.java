@@ -109,7 +109,7 @@ public interface AlipayDealOrderEntityMapper {
             "<if test = \"statisticsEntity.currency != null and statisticsEntity.currency != ''\">" +
             "and o.currency = #{statisticsEntity.currency} " +
             "</if>" +
-            "group by o.orderQrUser, o.retain1 " +
+            "group by o.orderQrUser, p.productName " +
             "</script>")
     List<StatisticsEntity> selectStatDateByDay(@Param("statisticsEntity") StatisticsEntity statisticsEntity, @Param("dayStart") String dayStart, @Param("dayEnd") String dayEnd);
 

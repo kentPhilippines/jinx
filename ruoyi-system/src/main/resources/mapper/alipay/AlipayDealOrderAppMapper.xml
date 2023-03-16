@@ -25,6 +25,7 @@
         <result property="retain3" column="retain3"/>
         <result property="currency" column="currency"/>
         <result property="txhash" column="txhash"/>
+        <result property="actualAmount" column="actualAmount"/>
     </resultMap>
 
     <sql id="selectAlipayDealOrderAppVo">
@@ -36,6 +37,7 @@
                orderStatus,
                dealDescribe,
                orderAmount,
+               actualAmount,
                orderIp,
                appOrderId,
                feeId,

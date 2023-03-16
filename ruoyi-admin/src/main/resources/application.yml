@@ -1,6 +1,6 @@
 nacos:
   config:
-    server-addr: 47.242.206.196:8848
+    server-addr: mse-c14908614-p.nacos-ans.mse.aliyuncs.com:8848
     #server-addr: 172.16.32.220:8848 #内网
     namespace: 4ea7a38e-32fd-4ddd-b384-dc5ad4bd753d #test
     #namespace: a173ae57-6dc2-4f08-bda7-194b5d8ecdaf #pro
