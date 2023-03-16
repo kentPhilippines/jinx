@@ -9,7 +9,7 @@
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 search-collapse">
-            <div ><p><h3>以下数据最终解释权归我司所有 <strong> @金星支付</strong></h3></p></div>
+            <div ><p><h3>以下数据最终解释权归我司所有 <strong> @[[${@globalConfig.siteName}]]支付</strong></h3></p></div>
         </div>
         <div class="col-sm-12 select-table table-striped" style="height: 95%">
             <div id="container" style="height: 50%;width: 100%"></div>
@@ -36,7 +36,7 @@
     var option =  {
         title: {
             text: '月度下线数据情况',
-           /* subtext: '数据来源：金星支付'*/
+           /* subtext: '数据来源：[[${@globalConfig.siteName}]]支付'*/
 
         },
         tooltip: {
@@ -77,7 +77,7 @@
      var option1   = {
          title: {
              text: '每日收益报表',
-             subtext: '数据来源：金星支付'
+             subtext: '数据来源：[[${@globalConfig.siteName}]]支付'
          },
          tooltip: {
              trigger: 'axis',
@@ -160,7 +160,7 @@
     var option2 = {
         title: {
             text: '每日会员交易汇总',
-            subtext: '数据来源：金星支付'
+            subtext: '数据来源：[[${@globalConfig.siteName}]]支付'
         },
         color: ['#3398DB'],
         tooltip: {
