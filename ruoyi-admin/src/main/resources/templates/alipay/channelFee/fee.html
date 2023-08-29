@@ -78,6 +78,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                onEditableSave: onEditableSave,
                 modalName: "渠道费率",
                 columns: [{
                     checkbox: true
@@ -96,18 +97,19 @@
                     title : '产品id'
                 },
                 {
+                    visible: editFlagAdmin == 'hidden' ? false : true,
                     field: 'impl',
                     title: '实体类对应关系'
                 },
                     {
                         field: 'channelRFee',
-                        title: '渠道入款费率【精确到千位】'
+                        title: '渠道入款费率【精确到千位】',editable: true
                     },
                     {
                         field: 'channelDFee',
-                        title: '渠道代付手续费【单笔】'
+                        title: '渠道代付手续费【单笔】',editable: true
                     }, {
-                        field: 'channelNo',
+                         field: 'channelNo',
                         title: '上游渠道通道编号'
                     },
                     {
@@ -127,6 +129,17 @@
             };
             $.table.init(options);
         });
+
+        function onEditableSave (field, row, oldValue, $el) {
+            // alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+            $.operate.post(prefix + "/edit", {
+                "id": row.id,
+                "channelRFee"  : row["channelRFee"],
+                "channelDFee"  : row["channelDFee"]
+            });
+        }
     </script>
+
+
 </body>
 </html>

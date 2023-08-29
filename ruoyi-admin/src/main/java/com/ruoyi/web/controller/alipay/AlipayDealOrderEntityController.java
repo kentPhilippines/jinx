@@ -70,6 +70,7 @@ public class AlipayDealOrderEntityController extends BaseController {
     public String orderDeal(ModelMap mmap) {
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
+        alipayProductEntity.setProductCode("2");
         //查询产品类型下拉菜单
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         mmap.put("productList", list);
@@ -94,37 +95,24 @@ public class AlipayDealOrderEntityController extends BaseController {
         SysUser user = new SysUser();
         List<SysUser> sysUsers = userService.selectUserList(user);
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
-        alipayProductEntity.setStatus(1);
         List<AlipayProductEntity> productlist = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         List<AlipayUserFundEntity> listFund = alipayUserFundEntityService.findUserFundAll();
         ConcurrentHashMap<String, AlipayUserFundEntity> userCollect1 = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
-        ConcurrentHashMap<String, SysUser> userCollect = new ConcurrentHashMap<String, SysUser>();
-        for (SysUser user1 : sysUsers) {
-            if (StrUtil.isNotBlank(user1.getMerchantId())) {
-                userCollect.put(user1.getMerchantId(), user1);
-            }
-        }
-        for (AlipayDealOrderEntity order : list) {
-            if(ObjectUtil.isNotNull(userCollect1.get(order.getOrderQrUser()))){
-                order.setChannelName(userCollect1.get(order.getOrderQrUser()).getUserName());
-            }
-            AlipayProductEntity product = prCollect.get(order.getRetain1());
-            if (ObjectUtil.isNotNull(product)) {
-                order.setRetain1(product.getProductName());
-            }
-            if(ObjectUtil.isNotNull(userCollect.get(order.getOrderAccount()))){
-                order.setUserName(userCollect.get(order.getOrderAccount()).getUserName());
-            }
-        }
-        userCollect = null;
+        ConcurrentHashMap<String, SysUser>  userCollect =   sysUsers.stream().collect(Collectors.toConcurrentMap(SysUser::getMerchantId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        list.stream().forEach(
+                o->{
+                    o.setRetain1(prCollect.get(o.getRetain1()).getProductName());
+                    o.setChannelName(userCollect1.get(o.getOrderQrUser()).getUserName());
+                    o.setUserName(userCollect.get(o.getOrderAccount()).getUserName());
+                }
+        );
         AlipayDealOrderEntity deal = alipayDealOrderEntityService.selectAlipayDealOrderEntityListSum(alipayDealOrderEntity);
         if (null != deal && CollUtil.isNotEmpty(list)) {
             for (int mark = 0; mark < 1; mark++) {
                 list.get(mark).setSunCountAmountFee(deal.getSunCountAmountFee());
                 list.get(mark).setSunCountAmount(deal.getSunCountAmount());
                 list.get(mark).setSunCountActualAmount(deal.getSunCountActualAmount());
-
             }
         }
         return getDataTable(list);

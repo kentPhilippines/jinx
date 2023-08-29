@@ -19,7 +19,7 @@
                 <input name="merchantName" th:field="*{userName}" class="form-control" type="text" readonly>
             </div>
         </div>
-        <div class="form-group">
+   <!--     <div class="form-group">
             <label class="col-sm-3 control-label">最小金额：</label>
             <div class="col-sm-8">
                 <input class="form-control" type="number" min="0" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"  name="minAmount" id="minAmount" th:field="*{minAmount}">
@@ -56,7 +56,7 @@
                 <input class="form-control" type="text" name="endTime" id="endTime" th:field="*{endTime}">
                 <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>时间格式：20:00:00</span>
             </div>
-        </div>
+        </div>-->
         <div class="form-group">
             <label class="col-sm-3 control-label">代付IP白名单：</label>
             <div class="col-xs-8">
@@ -65,7 +65,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">交易IP白名单：</label>
+            <label class="col-sm-3 control-label">交易网关：</label>
             <div class="col-xs-8">
                 <textarea id="dealUrl" name="dealUrl" maxlength="500" class="form-control"
                           rows="5">[[*{dealUrl}]]</textarea>
@@ -94,7 +94,7 @@
     });
 
     function submitHandler() {
-        let minAmount = $("#minAmount").val();
+       /* let minAmount = $("#minAmount").val();
         let maxAmount = $("#maxAmount").val();
         let startTime = $("#startTime").val();
         let endTime = $("#endTime").val();
@@ -117,7 +117,7 @@
                 $.modal.alertWarning("结束时间不能为空");
                 return;
             }
-        }
+        }*/
         if ($.validate.form()) {
             $.operate.save(prefix + "/merchant/save", $('#form-control-merchant-edit').serialize());
         }

@@ -90,7 +90,7 @@
     </update>
 
     <update id="deleteAlipayProductListEntityByIds" parameterType="String">
-        update alipay_product set status = 2 where id in
+        delete  from  alipay_product  where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

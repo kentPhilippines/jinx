@@ -12,9 +12,9 @@ import java.util.concurrent.Executor;
 public class NacosTest{
 
     public static void main(String[] args) throws NacosException, InterruptedException {
-        String serverAddr = "47.242.206.196:8848";
-        String dataId = "admin2.yaml";
-        String group = "DEFAULT_GROUP";
+        String serverAddr = "94.74.120.122:8848";
+        String dataId = "admin.yaml";
+        String group = "NCY_GROUP";
         Properties properties = new Properties();
         properties.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
         ConfigService configService = NacosFactory.createConfigService(properties);

@@ -47,7 +47,13 @@ public class AlipayDealOrderAppController extends BaseController {
     private IAlipayProductService iAlipayProductService;
 
     @GetMapping()
-    public String orderApp() {
+    public String orderApp(ModelMap mmap) {
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        alipayProductEntity.setProductCode("2");
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        mmap.put("productList", list);
         return prefix + "/orderApp";
     }
 
@@ -59,6 +65,15 @@ public class AlipayDealOrderAppController extends BaseController {
     public TableDataInfo list(AlipayDealOrderApp alipayDealOrderApp) {
         startPage();
         List<AlipayDealOrderApp> list = alipayDealOrderAppService.selectAlipayDealOrderAppList(alipayDealOrderApp);
+        AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
+        alipayProductEntity.setStatus(1);
+        alipayProductEntity.setProductCode("2");
+        //查询产品类型下拉菜单
+        List<AlipayProductEntity> productList = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
+        ConcurrentHashMap<String, AlipayProductEntity> prCollect = productList.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        list.stream().forEach(
+                o -> o.setRetain1(prCollect.get(o.getRetain1()).getProductName())
+        );
         return getDataTable(list);
     }
 
@@ -121,6 +136,7 @@ public class AlipayDealOrderAppController extends BaseController {
         //查询产品类型下拉菜单
         AlipayProductEntity alipayProductEntity = new AlipayProductEntity();
         alipayProductEntity.setStatus(1);
+        alipayProductEntity.setProductCode("2");
         List<AlipayProductEntity> list = iAlipayProductService.selectAlipayProductList(alipayProductEntity);
         mmap.put("productList", list);
         return prefix + "/currentTable";
@@ -144,18 +160,19 @@ public class AlipayDealOrderAppController extends BaseController {
                 amount = amount.add(new BigDecimal(alipayUserFundEntity.getAccountBalance()));
             }
         }
-        for (StatisticsEntity sta : list) {
-            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId()))) {
-                sta.setUserName(userCollect.get(sta.getUserId()).getUserName());
+        BigDecimal finalAmount = amount;
+        list.stream().forEach(o -> {
+            if (ObjectUtil.isNotNull(userCollect.get(o.getUserId()))) {
+                o.setUserName(userCollect.get(o.getUserId()).getUserName());
             }
-            if (ObjectUtil.isNotNull(userCollect.get(sta.getUserId()))) {
-                sta.setAccountAmount(userCollect.get(sta.getUserId()).getAccountBalance().toString());
+            if (ObjectUtil.isNotNull(userCollect.get(o.getUserId()))) {
+                o.setAccountAmount(userCollect.get(o.getUserId()).getAccountBalance().toString());
             }
-            if ("所有".equals(sta.getUserId())) {
-                sta.setAccountAmount(amount.doubleValue() + "");
+            if ("所有".equals(o.getUserId())) {
+                o.setAccountAmount(finalAmount.doubleValue() + "");
             }
-            sta.setTodayAmount(sta.getSuccessAmount().subtract(new BigDecimal(sta.getSuccessFee())).toString());
-        }
+            o.setTodayAmount(o.getSuccessAmount().subtract(new BigDecimal(o.getSuccessFee())).toString());
+        });
         return getDataTable(list);
     }
 

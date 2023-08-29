@@ -9,6 +9,7 @@ import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.DateUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -106,6 +107,7 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    @Cacheable
     public List<AlipayUserFundEntity> findUserFundAll() {
         return alipayUserFundEntityMapper.findUserFundAll();
     }
