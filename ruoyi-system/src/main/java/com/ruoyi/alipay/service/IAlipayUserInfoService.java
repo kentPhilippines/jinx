@@ -170,5 +170,7 @@ public interface IAlipayUserInfoService {
     AlipayUserInfo findUserByUserId(String orderAccount);
 
 
+    void deleteUserById(String userId);
+
 
 }

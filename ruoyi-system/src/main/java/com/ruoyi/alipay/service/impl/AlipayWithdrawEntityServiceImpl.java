@@ -183,4 +183,10 @@ public class AlipayWithdrawEntityServiceImpl implements IAlipayWithdrawEntitySer
             alipayWithdrawEntityMapper.batchUpdateMacthMoreWatingTime(id,wati);
         });
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void deleteUserId(String userId) {
+        alipayWithdrawEntityMapper.deleteUserId(userId);
+    }
 }

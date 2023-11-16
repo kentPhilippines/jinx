@@ -107,7 +107,6 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    @Cacheable
     public List<AlipayUserFundEntity> findUserFundAll() {
         return alipayUserFundEntityMapper.findUserFundAll();
     }
@@ -206,5 +205,14 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserFundEntity> findUserFundAllToBank() {
         return alipayUserFundEntityMapper.findUserFundAllToBank();
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void deleteUserById(String userId) {
+        alipayUserFundEntityMapper.deleteUserById(userId);
+
+
+
     }
 }

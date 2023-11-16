@@ -3,10 +3,7 @@ package com.ruoyi.alipay.mapper;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
 import com.ruoyi.common.core.domain.BaseEntity;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -145,4 +142,8 @@ public interface AlipayUserFundEntityMapper {
 
     @Select("select userId  ,userName, accountBalance, rechargeNumber , freezeBalance ,userType from alipay_user_fund where userType = 2  ")
     List<AlipayUserFundEntity> findUserFundAllToBank();
+
+    @Delete("  delete from alipay_user_fund where userId = #{userId} ")
+    void deleteUserById(@Param("userId") String userId);
+
 }

@@ -18,7 +18,6 @@
                                     <option th:each="product : ${rateList}" th:text="${product.userName}" th:value="${product.userId}"></option>
                                 </select>
                             </li>
-
                             <li class="select-selectpicker">
                                 <label>产品类型：</label>
                                 <select id="productId" name="productId" class="selectpicker" data-none-selected-text="请选择">
@@ -67,9 +66,11 @@
         </div>
     </div>
     <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
+     <th:block th:include="include :: bootstrap-table-editable-js" />
+     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('alipay:channelFee:edit')}]];
         var removeFlag = [[${@permission.hasPermi('alipay:channelFee:remove')}]];
+        const editFlagAdmin = [[${@permission.hasPermi('control:account:merchant:admin')}]];
         var prefix = ctx + "alipay/channelFee";
         $(function() {
             var options = {

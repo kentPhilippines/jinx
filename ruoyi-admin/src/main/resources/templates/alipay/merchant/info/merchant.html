@@ -68,6 +68,7 @@
     const bindGoogleFlag = [[${@permission.hasPermi('system:user:bind')}]];
     const editFlagAdmin = [[${@permission.hasPermi('control:account:merchant:admin')}]];
     const prefixControl = ctx + "control/account";
+    const removeFlag = [[${@permission.hasPermi('merchant:info:remove')}]];
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -78,6 +79,7 @@
             updateUrl: prefixControl + "/merchant/edit/{id}",
             openUrl: prefix + "/open/account/{userId}",
             listUrl: prefix + "/agentList/{userId}/{type}",
+            removeUrl: prefix + "/remove",
             // detailView: true,//父子表
             pagination: true,//显示分页
             modalName: "商户信息",
@@ -184,6 +186,7 @@
                         } else {
                             actions.push('<a class="btn btn-primary btn-xs ' + bindGoogleFlag + '" href="javascript:void(0)" onclick="googleUnbind(\'' + row.sysUserId + '\',\'' + row.loginName + '\')"><i class="fa fa-check"></i>解绑</a>');
                         }
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]

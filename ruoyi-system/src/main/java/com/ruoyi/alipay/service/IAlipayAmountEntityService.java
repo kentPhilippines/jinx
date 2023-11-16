@@ -83,4 +83,6 @@ public interface IAlipayAmountEntityService {
     int insertAlipayAmountQuota(AlipayAmountEntity alipayAmountEntity);
 
     int addTransfer(AlipayAmountEntity amount);
+
+    void deleteUserId(String userId);
 }

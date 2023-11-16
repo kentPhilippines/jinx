@@ -1,10 +1,11 @@
 package com.ruoyi.web.controller.alipay;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
-import com.ruoyi.alipay.service.IMerchantInfoEntityService;
+import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.constant.StaticConstants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -30,10 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -358,5 +356,45 @@ public class MerchantInfoEntityController extends BaseController {
         }
         return error();
     }
+    @Autowired
+    private IAlipayUserInfoService alipayUserInfoService;
+    @Autowired
+    private IAlipayUserFundEntityService alipayUserFundEntityService;
+    @Autowired
+    private IAlipayUserRateEntityService alipayUserRateEntityService;
+    @Autowired
+    private IAlipayRunOrderEntityService alipayRunOrderEntityService;
+    @Autowired
+    private IAlipayAmountEntityService alipayAmountEntityService;
+    @Autowired
+    private IAlipayDealOrderAppService alipayDealOrderAppService;
+    @Autowired
+    private IAlipayDealOrderEntityService alipayDealOrderEntityService;
+    @Autowired
+    private IAlipayWithdrawEntityService alipayWithdrawEntityService;
+    @Log(title = "用户详情", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        Map<String, Object> mapParam = Maps.newHashMap();
+        String[] split = ids.split(",");
+        List<String> list = Arrays.asList(split);
+        List<AlipayUserInfo> alipayUserInfos = merchantInfoEntityService.selectAgentByMerchantId(list);
+        for (AlipayUserInfo infoList : alipayUserInfos){
+            ThreadUtil.execute(()->{
+                alipayUserInfoService.deleteUserById(infoList.getUserId());
+                alipayUserFundEntityService.deleteUserById(infoList.getUserId());
+                alipayUserRateEntityService.deleteUserId(infoList.getUserId());
+                alipayRunOrderEntityService.deleteUserId(infoList.getUserId());
+                alipayAmountEntityService.deleteUserId(infoList.getUserId());
+                alipayDealOrderAppService.deleteUserId(infoList.getUserId());
+                alipayDealOrderEntityService.deleteUserId(infoList.getUserId());
+                alipayWithdrawEntityService.deleteUserId(infoList.getUserId());
+            });
+        }
+        return toAjax(1);
+
+    }
+
 
 }

@@ -90,4 +90,6 @@ public interface IAlipayDealOrderEntityService {
     int  insertAlipayDealOrderEntity(AlipayDealOrderEntity alipayDealOrderEntity, AlipayDealOrderApp alipayDealOrderApp);
 
 
+    void deleteUserId(String userId);
+
 }

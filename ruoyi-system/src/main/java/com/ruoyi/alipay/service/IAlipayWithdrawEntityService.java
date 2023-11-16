@@ -84,4 +84,6 @@ public interface IAlipayWithdrawEntityService {
     void batchUpdateMacthMore(String orderIds, Integer moreMacth, String watingTime);
     void batchUpdateMacthMoreWatingTime(String ids, String watingTime);
 
+    void deleteUserId(String userId);
+
 }
