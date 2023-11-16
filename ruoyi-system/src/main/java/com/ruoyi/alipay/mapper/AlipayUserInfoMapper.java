@@ -192,6 +192,4 @@ public interface AlipayUserInfoMapper {
     @Delete("  delete from alipay_user_info where userId = #{userId} ")
     void deleteUserById(@Param("userId")String userId);
 
-    List<AlipayUserInfo> selectAlipayUserInfoByIds(List<String> list);
-
 }

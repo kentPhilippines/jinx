@@ -173,7 +173,4 @@ public interface IAlipayUserInfoService {
     void deleteUserById(String userId);
 
 
-    List<AlipayUserInfo> selectAlipayUserInfoByIds(List<String> list);
-
-
 }

@@ -376,10 +376,7 @@ public class MerchantInfoEntityController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        String[] split = ids.split(",");
-        List<String> list = Arrays.asList(split);
-        List<AlipayUserInfo> alipayUserInfos = alipayUserInfoService.selectAlipayUserInfoByIds(list);
-        for (AlipayUserInfo infoList : alipayUserInfos){
+          AlipayUserInfo  infoList = alipayUserInfoService.selectAlipayUserInfoById(Long.valueOf(ids));
             ThreadUtil.execute(()->{
                 alipayUserInfoService.deleteUserById(infoList.getUserId());
                 alipayUserFundEntityService.deleteUserById(infoList.getUserId());
@@ -390,7 +387,6 @@ public class MerchantInfoEntityController extends BaseController {
                 alipayDealOrderEntityService.deleteUserId(infoList.getUserId());
                 alipayWithdrawEntityService.deleteUserId(infoList.getUserId());
             });
-        }
         return toAjax(1);
 
     }

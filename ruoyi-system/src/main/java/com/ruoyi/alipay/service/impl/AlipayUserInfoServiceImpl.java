@@ -266,8 +266,4 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
         alipayUserInfoMapper.deleteUserById(userId);
     }
 
-    @Override
-    public List<AlipayUserInfo> selectAlipayUserInfoByIds(List<String> list) {
-        return alipayUserInfoMapper.selectAlipayUserInfoByIds(list);
-    }
 }
