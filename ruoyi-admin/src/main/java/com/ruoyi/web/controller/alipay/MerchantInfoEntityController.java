@@ -376,10 +376,9 @@ public class MerchantInfoEntityController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        Map<String, Object> mapParam = Maps.newHashMap();
         String[] split = ids.split(",");
         List<String> list = Arrays.asList(split);
-        List<AlipayUserInfo> alipayUserInfos = merchantInfoEntityService.selectAgentByMerchantId(list);
+        List<AlipayUserInfo> alipayUserInfos = alipayUserInfoService.selectAlipayUserInfoByIds(list);
         for (AlipayUserInfo infoList : alipayUserInfos){
             ThreadUtil.execute(()->{
                 alipayUserInfoService.deleteUserById(infoList.getUserId());

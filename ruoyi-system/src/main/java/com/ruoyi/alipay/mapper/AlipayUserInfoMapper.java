@@ -143,7 +143,7 @@ public interface AlipayUserInfoMapper {
      *
      * @return
      */
-    @Select("select * from alipay_user_info  where agent is null and userType = 2 ")
+    @Select(" select * from alipay_user_info  where agent is null and userType = 2 ")
     List<AlipayUserInfo> selectdealpayUserInfoByAgent();
 
     @Update("update alipay_user_info set qrRechargeList = #{qrRechargeList}, queueList = #{queueList}, submitTime = sysdate() where id = #{id}")
@@ -192,5 +192,6 @@ public interface AlipayUserInfoMapper {
     @Delete("  delete from alipay_user_info where userId = #{userId} ")
     void deleteUserById(@Param("userId")String userId);
 
+    List<AlipayUserInfo> selectAlipayUserInfoByIds(List<String> list);
 
 }
