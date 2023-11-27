@@ -2,6 +2,7 @@ package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayChanelFee;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -69,4 +70,9 @@ public interface AlipayChanelFeeMapper {
 
 	@Select("select * from  alipay_product where  productId in (select payTypr from alipay_user_rate where userId = #{merchantId} group by payTypr )")
 	List<AlipayProductEntity> findProductByName(@Param("merchantId") String merchantId);
+
+	@Delete("  delete from alipay_chanel_fee where channelId = #{userId} ")
+    void deleteChannelByChannel(@Param("userId") String userId);
+
+
 }

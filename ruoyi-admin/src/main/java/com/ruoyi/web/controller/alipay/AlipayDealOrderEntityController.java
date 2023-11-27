@@ -102,9 +102,13 @@ public class AlipayDealOrderEntityController extends BaseController {
         ConcurrentHashMap<String, SysUser> userCollect = sysUsers.stream().filter(e -> StrUtil.isNotEmpty(e.getMerchantId())).collect(Collectors.toConcurrentMap(SysUser::getMerchantId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         list.stream().forEach(
                 o -> {
-                    o.setRetain1(prCollect.get(o.getRetain1()).getProductName());
-                    o.setChannelName(userCollect1.get(o.getOrderQrUser()).getUserName());
-                    o.setUserName(userCollect.get(o.getOrderAccount()).getUserName());
+                    try {
+                        o.setRetain1(prCollect.get(o.getRetain1()).getProductName());
+                        o.setChannelName(userCollect1.get(o.getOrderQrUser()).getUserName());
+                        o.setUserName(userCollect.get(o.getOrderAccount()).getUserName());
+                    }catch ( Throwable e  ){
+                        logger.error("错误 ：",e);
+                    }
                 }
         );
         AlipayDealOrderEntity deal = alipayDealOrderEntityService.selectAlipayDealOrderEntityListSum(alipayDealOrderEntity);
