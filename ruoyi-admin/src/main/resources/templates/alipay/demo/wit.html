@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('代付测试')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+
+    <form class="form-horizontal m" id="form-merchant-add">
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">账户：</label>
+            <div class="col-sm-8">
+                <input id="appId" name="appid" class="form-control" type="text" placeholder="appId"
+                       required>
+            </div>
+        </div>
+        <!--        <div class="form-group">-->
+        <!--            <label class="col-sm-3 control-label is-required">orderId：</label>-->
+        <!--            <div class="col-sm-8">-->
+        <!--                <input id="orderId" name="orderId" class="form-control" type="text" placeholder="orderId"-->
+        <!--                       required>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="form-group">-->
+        <!--            <label class="col-sm-3 control-label is-required">notifyUrl：</label>-->
+        <!--            <div class="col-sm-8">-->
+        <!--                <input id="notifyUrl" name="notifyUrl" class="form-control" type="text" value="www.google.com"-->
+        <!--                       required>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="form-group">-->
+        <!--            <label class="col-sm-3 control-label is-required">pageUrl：</label>-->
+        <!--            <div class="col-sm-8">-->
+        <!--                <input id="pageUrl" name="pageUrl" class="form-control" type="text" value="www.google.com"-->
+        <!--                       required>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">金额：</label>
+            <div class="col-sm-8">
+                <input id="amount" name="amount" class="form-control" type="text" placeholder="amount"
+                       required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">银行卡号：</label>
+            <div class="col-sm-8">
+                <input id="acctno" name="acctno" class="form-control" type="text" placeholder="6222621060004847957"
+                       required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">收款人账户：</label>
+            <div class="col-sm-8">
+                <input id="acctname" name="acctname" class="form-control" type="text" placeholder="张三"
+                       required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">银行编码：</label>
+            <div class="col-sm-8">
+                <input id="bankcode" name="bankcode" class="form-control" type="text" placeholder="ICBC"
+                       required>
+            </div>
+        </div>
+
+        <!--        <div class="form-group">-->
+        <!--            <label class="col-sm-3 control-label is-required">applyDate：</label>-->
+        <!--            <div class="col-sm-8">-->
+        <!--                <input id="applyDate" name="applyDate" class="form-control" type="text" value="2023-06-20"-->
+        <!--                       required>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="form-group">-->
+        <!--            <label class="col-sm-3 control-label is-required">bankCode：</label>-->
+        <!--            <div class="col-sm-8">-->
+        <!--                <input id="bankCode" name="bankCode" class="form-control" type="text" value="ICBC"-->
+        <!--                       required>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="form-group">-->
+        <!--            <label class="col-sm-3 control-label is-required">subject：</label>-->
+        <!--            <div class="col-sm-8">-->
+        <!--                <input id="subject" name="subject" class="form-control" type="text" value="test"-->
+        <!--                       required>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+<!--        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">收款人：</label>
+            <div class="col-sm-8">
+                <input id="userId" name="userId" class="form-control" type="text" value="王小二"
+                       required>
+            </div>
+        </div>-->
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">返回：</label>
+            <div class="col-sm-8" id="content">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            <div class="col-sm-8">
+                <button type="button" onclick="test();">测试</button>
+            </div>
+        </div>
+        <!--        {-->
+        <!--        "appId": "73",-->
+        <!--        "orderId": "73",-->
+        <!--        "notifyUrl": "www.erminia-streich.info",-->
+        <!--        "pageUrl": "www.erminia-streich.info",-->
+        <!--        "amount": "b6vcfz",-->
+        <!--        "passCode": "36568",-->
+        <!--        "applyDate": "2023-06-20",-->
+        <!--        "bankCode": "36568",-->
+        <!--        "subject": "8dg41l",-->
+        <!--        "sign": "qp3wgw",-->
+        <!--        "userId": "73"-->
+        <!--        }-->
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "alipay/merchant"
+    $("#form-merchant-add").validate({
+        focusCleanup: true
+    });
+
+    // function submitHandler() {
+    //     if ($.validate.form()) {
+    //         $.operate.save(prefix + "/add", $('#form-merchant-add').serialize());
+    //     }
+    // }
+    function convertFormToJSON(form) {
+        const array = $(form).serializeArray(); // Encodes the set of form elements as an array of names and values.
+        const json = {};
+        $.each(array, function () {
+            json[this.name] = this.value || "";
+        });
+        return json;
+    }
+    function test() {
+        $("#content").text("");
+        var url = "/alipay/demo/wit";
+        var formData = convertFormToJSON($("#form-merchant-add"));;
+        var formData1  = $("#form-merchant-add").serialize();;
+        // var formData = $("#form-merchant-add").serializeJSON();
+
+        console.log(formData);
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: formData1,
+            success: function (data) {
+
+                $("#content").text(JSON.stringify(data));
+                console.log(JSON.stringify(data));
+                // $("#userId").val(data.msg);
+            }
+        });
+    }
+</script>
+</body>
+</html>
