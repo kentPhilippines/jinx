@@ -89,11 +89,11 @@
         where id = #{id}
     </update>
 
-    <update id="deleteAlipayProductListEntityByIds" parameterType="String">
+    <delete id="deleteAlipayProductListEntityByIds" parameterType="String">
         delete  from  alipay_product  where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
-    </update>
+    </delete>
 
 </mapper>

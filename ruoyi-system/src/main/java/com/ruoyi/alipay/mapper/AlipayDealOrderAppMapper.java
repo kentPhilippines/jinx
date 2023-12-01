@@ -2,6 +2,7 @@ package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayDealOrderApp;
 import com.ruoyi.common.core.domain.StatisticsEntity;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -182,5 +183,8 @@ public interface AlipayDealOrderAppMapper {
      * @return 商户订单登记集合
      */
     AlipayDealOrderApp selectAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
+    @Delete("  delete from alipay_deal_order_app where orderAccount = #{userId} ")
+    void deleteUserId(@Param("userId") String userId);
+
 
 }

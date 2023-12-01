@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -142,7 +143,7 @@ public interface AlipayUserInfoMapper {
      *
      * @return
      */
-    @Select("select * from alipay_user_info  where agent is null and userType = 2 ")
+    @Select(" select * from alipay_user_info  where agent is null and userType = 2 ")
     List<AlipayUserInfo> selectdealpayUserInfoByAgent();
 
     @Update("update alipay_user_info set qrRechargeList = #{qrRechargeList}, queueList = #{queueList}, submitTime = sysdate() where id = #{id}")
@@ -187,4 +188,8 @@ public interface AlipayUserInfoMapper {
 
     @Update("update alipay_user_info set  isAgent  = 1 where id = #{id}")
     int upUserAgents(Long id);
+
+    @Delete("  delete from alipay_user_info where userId = #{userId} ")
+    void deleteUserById(@Param("userId")String userId);
+
 }

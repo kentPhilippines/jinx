@@ -57,6 +57,7 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
      * @return 结果
      */
     @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int updateAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp) {
         return alipayDealOrderAppMapper.updateAlipayDealOrderApp(alipayDealOrderApp);
     }
@@ -116,11 +117,16 @@ public class AlipayDealOrderAppServiceImpl implements IAlipayDealOrderAppService
 
 
     @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public int insertAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp) {
         return alipayDealOrderAppMapper.insertAlipayDealOrderApp(alipayDealOrderApp);
     }
 
-
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void deleteUserId(String userId) {
+        alipayDealOrderAppMapper.deleteUserId(userId);
+    }
 
 
 }

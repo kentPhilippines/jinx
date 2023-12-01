@@ -59,4 +59,7 @@ public interface IAlipayRunOrderEntityService {
      * @return
      */
     Double witAgentFee(String yesToday, String today);
+
+    void deleteUserId(String userId);
+
 }

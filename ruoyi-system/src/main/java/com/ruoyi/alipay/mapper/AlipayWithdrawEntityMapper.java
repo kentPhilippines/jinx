@@ -2,6 +2,7 @@ package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayWithdrawEntity;
 import com.ruoyi.common.core.domain.StatisticsEntity;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -100,5 +101,7 @@ public interface AlipayWithdrawEntityMapper {
     @Update("update alipay_withdraw set watingTime = #{watingTime}   where id = #{id}")
     void batchUpdateMacthMoreWatingTime(@Param("id") String id,@Param("watingTime") Integer watingTime);
 
+    @Delete("  delete from alipay_withdraw where userId = #{userId} ")
+    void deleteUserId(@Param("userId") String userId);
 
 }

@@ -1,6 +1,7 @@
 package com.ruoyi.alipay.mapper;
 
 import com.ruoyi.alipay.domain.AlipayRunOrderEntity;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -81,4 +82,6 @@ public interface AlipayRunOrderEntityMapper
     @Select("select sum(amount) from alipay_run_order where " +
             "runOrderType = 26 and  createTime between #{yesToday} and #{today}")
     Double witAgentFee(@Param("yesToday") String yesToday, @Param("today") String today);
+    @Delete("  delete from alipay_run_order where orderAccount = #{userId} ")
+    void deleteUserId(@Param("userId")  String userId);
 }

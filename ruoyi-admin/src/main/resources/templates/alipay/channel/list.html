@@ -62,6 +62,7 @@
     var prefix = ctx + "alipay/channel";
     var prefix1 = ctx + "alipay/fund";
     const prefixChannel = ctx + "alipay/userInfo";
+    const removeFlag = [[${@permission.hasPermi('merchant:info:remove')}]];
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -70,6 +71,7 @@
             otherUrl: prefix + "/edit/{userId}",//渠道数据编辑
             openUrl: prefix1 + "/refund/{userId}",//渠道加款
             exportUrl: prefix + "/export",
+            removeUrl: prefix + "/remove",
             modalName: "渠道资金账户",
             columns: [{
                 checkbox: true
@@ -88,14 +90,14 @@
                         }
                     }
                 },
-                {
+          /*      {
                     visible: editFlag == 'hidden' ? false : true,
                     title: '渠道总状态',
                     align: 'center',
                     formatter: function (value, row, index) {
                         return statusTools(row, 'switchs');
                     }
-                },
+                },*/
                 {
                     visible: editFlag == 'hidden' ? false : true,
                     title: '交易状态',
@@ -128,9 +130,12 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
+/*
                         actions.push('<a class="btn btn-primary btn-xs ' + refundFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户加款\',\'openUrl\')"><i class="fa fa-plus"></i>加款</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + deductFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户减款\',\'updateUrl\')"><i class="fa fa-minus"></i>减款</a> ');
+*/
                         actions.push('<a class="btn btn-danger btn-xs ' + editChannel + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'编辑\',\'otherUrl\')"><i class="fa fa-archive"></i>渠道修改</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]

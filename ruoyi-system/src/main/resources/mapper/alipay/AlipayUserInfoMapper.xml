@@ -203,5 +203,11 @@
             #{id}
         </foreach>
     </delete>
+    <select id="selectAlipayUserInfoByIds" parameterType="String">
+        select from alipay_user_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
 </mapper>

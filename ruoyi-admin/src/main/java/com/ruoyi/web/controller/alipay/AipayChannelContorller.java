@@ -3,9 +3,7 @@ package com.ruoyi.web.controller.alipay;
 import cn.hutool.core.thread.ThreadUtil;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
-import com.ruoyi.alipay.service.IAlipayAmountEntityService;
-import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
-import com.ruoyi.alipay.service.IAlipayUserInfoService;
+import com.ruoyi.alipay.service.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -43,6 +41,8 @@ public class AipayChannelContorller extends BaseController {
     @Autowired private DictionaryUtils dictionaryUtils;
     @Autowired private IAlipayAmountEntityService alipayAmountEntityService;
     @Autowired private SysPasswordService passwordService;
+    @Autowired private IAlipayChanelFeeService alipayChanelFeeService;
+
     /**
      * 查询用户资金账户列表
      */
@@ -127,4 +127,20 @@ public class AipayChannelContorller extends BaseController {
         throw new BusinessException("操作失败，修改失败");
     }
 
+    @Autowired
+    private IAlipayRunOrderEntityService alipayRunOrderEntityService;
+    @Log(title = "用户详情", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        AlipayUserInfo  infoList = alipayUserInfoService.selectAlipayUserInfoById(Long.valueOf(ids));
+        ThreadUtil.execute(()->{
+            alipayUserInfoService.deleteUserById(infoList.getUserId());
+            alipayUserFundEntityService.deleteUserById(infoList.getUserId());
+            alipayRunOrderEntityService.deleteUserId(infoList.getUserId());
+            alipayChanelFeeService.deleteChannelByChannel(infoList.getUserId());
+        });
+        return toAjax(1);
+
+    }
 }

@@ -74,6 +74,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null ">submitTime = #{submitTime},</if>
             <if test="status != null ">status = #{status},</if>
             <if test="channelNo != null ">channelNo = #{channelNo},</if>
+            <if test="channelRFee != null  and channelRFee != ''">channelRFee = #{channelRFee},</if>
+            <if test="channelDFee != null  and channelDFee != ''">channelDFee = #{channelDFee},</if>
         </trim>
         where id = #{id}
     </update>

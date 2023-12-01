@@ -68,4 +68,10 @@ public class AlipayRunOrderEntityServiceImpl implements IAlipayRunOrderEntitySer
         return alipayRunOrderEntityMapper.witAgentFee(yesToday, today);
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void deleteUserId(String userId) {
+        alipayRunOrderEntityMapper.deleteUserId(userId);
+    }
+
 }

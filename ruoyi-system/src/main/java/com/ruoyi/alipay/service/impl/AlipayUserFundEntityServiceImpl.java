@@ -101,13 +101,13 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
             channel.setRemitOrderState(userInfo.getRemitOrderState());
             channel.setMaxAmount(userInfo.getMaxAmount());
             channel.setMinAmount(userInfo.getMinAmount());
+            channel.setId(userInfo.getId());
         }
         return channelAccount;
     }
 
     @Override
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
-    @Cacheable
     public List<AlipayUserFundEntity> findUserFundAll() {
         return alipayUserFundEntityMapper.findUserFundAll();
     }
@@ -206,5 +206,14 @@ public class AlipayUserFundEntityServiceImpl implements IAlipayUserFundEntitySer
     @DataSource(value = DataSourceType.ALIPAY_SLAVE)
     public List<AlipayUserFundEntity> findUserFundAllToBank() {
         return alipayUserFundEntityMapper.findUserFundAllToBank();
+    }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void deleteUserById(String userId) {
+        alipayUserFundEntityMapper.deleteUserById(userId);
+
+
+
     }
 }

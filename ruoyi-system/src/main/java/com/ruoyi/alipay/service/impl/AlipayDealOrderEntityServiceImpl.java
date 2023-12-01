@@ -143,6 +143,11 @@ public class AlipayDealOrderEntityServiceImpl implements IAlipayDealOrderEntityS
         return i1;
     }
 
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void deleteUserId(String userId) {
+        alipayDealOrderEntityMapper.deleteUserId(userId);
+    }
 
 
 }

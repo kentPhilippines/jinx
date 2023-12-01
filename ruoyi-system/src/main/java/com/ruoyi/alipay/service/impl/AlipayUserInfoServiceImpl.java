@@ -259,4 +259,11 @@ public class AlipayUserInfoServiceImpl implements IAlipayUserInfoService {
     public AlipayUserInfo findUserByUserId(String orderAccount) {
         return null;
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void deleteUserById(String userId) {
+        alipayUserInfoMapper.deleteUserById(userId);
+    }
+
 }

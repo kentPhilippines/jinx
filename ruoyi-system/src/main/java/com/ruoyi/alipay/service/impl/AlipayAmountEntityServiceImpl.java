@@ -163,4 +163,10 @@ public class AlipayAmountEntityServiceImpl implements IAlipayAmountEntityService
     public int addTransfer(AlipayAmountEntity amount) {
         return alipayAmountEntityMapper.insertAlipayAmountEntity(amount);
     }
+
+    @Override
+    @DataSource(value = DataSourceType.ALIPAY_SLAVE)
+    public void deleteUserId(String userId) {
+        alipayAmountEntityMapper.deleteUserId(userId);
+    }
 }

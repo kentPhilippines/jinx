@@ -108,4 +108,10 @@ public class AlipayChanelFeeServiceImpl implements IAlipayChanelFeeService {
 	public List<AlipayProductEntity> findProductByName(String merchantId) {
 		return alipayChanelFeeMapper.findProductByName(merchantId);
 	}
+
+	@Override
+	@DataSource(DataSourceType.ALIPAY_SLAVE)
+	public void deleteChannelByChannel(String userId) {
+		alipayChanelFeeMapper.deleteChannelByChannel( userId);
+	}
 }

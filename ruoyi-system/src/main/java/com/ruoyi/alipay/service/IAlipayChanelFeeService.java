@@ -2,6 +2,8 @@ package com.ruoyi.alipay.service;
 
 import com.ruoyi.alipay.domain.AlipayChanelFee;
 import com.ruoyi.alipay.domain.AlipayProductEntity;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 
 import java.util.List;
 
@@ -65,4 +67,6 @@ public interface IAlipayChanelFeeService
     public AlipayChanelFee findChannelBy(String channelId, String payTypr);
 
     List<AlipayProductEntity> findProductByName(String merchantId);
+    void deleteChannelByChannel(String userId);
+
 }

@@ -99,12 +99,16 @@ public class AlipayDealOrderEntityController extends BaseController {
         List<AlipayUserFundEntity> listFund = alipayUserFundEntityService.findUserFundAll();
         ConcurrentHashMap<String, AlipayUserFundEntity> userCollect1 = listFund.stream().collect(Collectors.toConcurrentMap(AlipayUserFundEntity::getUserId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
-        ConcurrentHashMap<String, SysUser>  userCollect =   sysUsers.stream().collect(Collectors.toConcurrentMap(SysUser::getMerchantId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
+        ConcurrentHashMap<String, SysUser> userCollect = sysUsers.stream().filter(e -> StrUtil.isNotEmpty(e.getMerchantId())).collect(Collectors.toConcurrentMap(SysUser::getMerchantId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         list.stream().forEach(
-                o->{
-                    o.setRetain1(prCollect.get(o.getRetain1()).getProductName());
-                    o.setChannelName(userCollect1.get(o.getOrderQrUser()).getUserName());
-                    o.setUserName(userCollect.get(o.getOrderAccount()).getUserName());
+                o -> {
+                    try {
+                        o.setRetain1(prCollect.get(o.getRetain1()).getProductName());
+                        o.setChannelName(userCollect1.get(o.getOrderQrUser()).getUserName());
+                        o.setUserName(userCollect.get(o.getOrderAccount()).getUserName());
+                    }catch ( Throwable e  ){
+                        logger.error("错误 ：",e);
+                    }
                 }
         );
         AlipayDealOrderEntity deal = alipayDealOrderEntityService.selectAlipayDealOrderEntityListSum(alipayDealOrderEntity);
@@ -283,6 +287,7 @@ public class AlipayDealOrderEntityController extends BaseController {
 
     @Autowired
     private IAlipayUserInfoService alipayUserInfoService;
+
     /**
      * 显示补单编辑页
      */
@@ -292,37 +297,33 @@ public class AlipayDealOrderEntityController extends BaseController {
         mmap.put("alipayDealOrderEntity", alipayDealOrderEntity);
         return prefix + "/backOrder";
     }
+
     @Autowired
     private CacheManager cacheManager;
-   @GetMapping("/onlineCardUrl/{id}")
+
+    @GetMapping("/onlineCardUrl/{id}")
     public String onlineCardUrl(@PathVariable("id") Long id, ModelMap mmap) {
         AlipayDealOrderEntity alipayDealOrderEntity = alipayDealOrderEntityService.selectAlipayDealOrderEntityById(id);
         mmap.put("alipayDealOrderEntity", alipayDealOrderEntity);
 
         //获取大于该笔订单金额的所有未选取的出款订单
-       // //要求  无法匹配到 当前代理下面所有商户的出款订单  1， 获取当前代理  2 非当前代理下的出款订单
-       String orderAccount = alipayDealOrderEntity.getOrderAccount();
-       AlipayUserInfo agent = findAgent(orderAccount);
-       List<String> sonUser = alipayUserInfoService.findSonUser(agent.getUserId());
-     //  List<AlipayWithdrawEntity> witList =     alipayWithdrawEntityService.findwitInNotThis(sonUser,"MyChannel",4);
-       //获取符合要求的出款订单
+        // //要求  无法匹配到 当前代理下面所有商户的出款订单  1， 获取当前代理  2 非当前代理下的出款订单
+        String orderAccount = alipayDealOrderEntity.getOrderAccount();
+        AlipayUserInfo agent = findAgent(orderAccount);
+        List<String> sonUser = alipayUserInfoService.findSonUser(agent.getUserId());
+        //  List<AlipayWithdrawEntity> witList =     alipayWithdrawEntityService.findwitInNotThis(sonUser,"MyChannel",4);
+        //获取符合要求的出款订单
 
 
-
-
-
-
-
-
-       return prefix + "/onlineCard";
+        return prefix + "/onlineCard";
     }
 
-    AlipayUserInfo  findAgent(     String userId  ){
-        AlipayUserInfo  userInfo  = alipayUserInfoService.findUserByUserId(userId);
-        if(StrUtil.isEmpty(userInfo.getAgent())){
+    AlipayUserInfo findAgent(String userId) {
+        AlipayUserInfo userInfo = alipayUserInfoService.findUserByUserId(userId);
+        if (StrUtil.isEmpty(userInfo.getAgent())) {
             return userInfo;
-        }else{
-            return  findAgent(userInfo.getAgent());
+        } else {
+            return findAgent(userInfo.getAgent());
         }
     }
 

@@ -86,4 +86,8 @@ public interface IAlipayDealOrderAppService {
      */
     int insertAlipayDealOrderApp(AlipayDealOrderApp alipayDealOrderApp);
 
+    void deleteUserId(String userId);
+
+
+
 }

@@ -214,24 +214,29 @@ public class AlipayUserRateEntityController extends BaseController {
         ConcurrentHashMap<String, AlipayProductEntity> prCollect = productlist.stream().collect(Collectors.toConcurrentMap(AlipayProductEntity::getProductId, Function.identity(), (o1, o2) -> o1, ConcurrentHashMap::new));
         BigDecimal a = new BigDecimal("0");
         for (AlipayUserRateEntity rate : list) {
-            AlipayUserFundEntity channel = qrCollect.get(rate.getChannelId());
-            AlipayProductEntity product = prCollect.get(rate.getPayTypr());
-            AlipayChanelFee channelBy = alipayChanelFeeService.findChannelBy(rate.getChannelId(), rate.getPayTypr());
-            String channelRFee = channelBy.getChannelRFee();
-            a = new BigDecimal("" + rate.getFee());
-            if (rate.getFeeType().toString().equals(PAY_TYPE)) {
-                rate.setChannelFee(channelRFee);
-                rate.setProfit(String.valueOf(a.subtract(new BigDecimal(channelRFee))));
-            } else {
-                rate.setChannelFee(channelBy.getChannelDFee());
-                rate.setProfit(String.valueOf(a.subtract(new BigDecimal(channelBy.getChannelDFee()))));
+            try {
+                AlipayUserFundEntity channel = qrCollect.get(rate.getChannelId());
+                AlipayProductEntity product = prCollect.get(rate.getPayTypr());
+                AlipayChanelFee channelBy = alipayChanelFeeService.findChannelBy(rate.getChannelId(), rate.getPayTypr());
+                String channelRFee = channelBy.getChannelRFee();
+                a = new BigDecimal("" + rate.getFee());
+                if (rate.getFeeType().toString().equals(PAY_TYPE)) {
+                    rate.setChannelFee(channelRFee);
+                    rate.setProfit(String.valueOf(a.subtract(new BigDecimal(channelRFee))));
+                } else {
+                    rate.setChannelFee(channelBy.getChannelDFee());
+                    rate.setProfit(String.valueOf(a.subtract(new BigDecimal(channelBy.getChannelDFee()))));
+                }
+                if (ObjectUtil.isNotNull(channel)) {
+                    rate.setChannelId(channel.getUserName());
+                }
+                if (ObjectUtil.isNotNull(product)) {
+                    rate.setPayTypr(product.getProductName());
+                }
+            } catch (Throwable e ){
+                logger.error("费率匹配错误",e);
             }
-            if (ObjectUtil.isNotNull(channel)) {
-                rate.setChannelId(channel.getUserName());
-            }
-            if (ObjectUtil.isNotNull(product)) {
-                rate.setPayTypr(product.getProductName());
-            }
+
         }
         return getDataTable(list);
     }

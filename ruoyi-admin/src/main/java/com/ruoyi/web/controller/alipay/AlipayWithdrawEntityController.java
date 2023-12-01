@@ -190,8 +190,7 @@ public class AlipayWithdrawEntityController extends BaseController {
 
         try {
             alipayWithdrawEntityService.updateWithdrawEntityById(alipayWithdrawEntity);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
         }
