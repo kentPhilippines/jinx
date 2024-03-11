@@ -1,9 +1,12 @@
 package com.ruoyi.web.controller.alipay;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Maps;
+import com.ruoyi.UserInfoUtil;
 import com.ruoyi.alipay.domain.AlipayAmountEntity;
 import com.ruoyi.alipay.domain.AlipayUserFundEntity;
 import com.ruoyi.alipay.domain.AlipayUserInfo;
+import com.ruoyi.alipay.domain.UserInfo;
 import com.ruoyi.alipay.service.IAlipayAmountEntityService;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
@@ -88,6 +91,12 @@ public class AlipayUserFundEntityController extends BaseController {
             list.add(0, userFundCardEntity);
         }
         AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.findSumFundM(alipayUserFundEntity.getCurrency());
+        for (AlipayUserFundEntity fund : list) {
+            UserInfo userInfo = UserInfoUtil.selectUserInfoByName(userFundEntity.getUserId());
+            if (ObjectUtil.isNotNull(userInfo)) {
+                fund.setWitAccount(userInfo.getAmount().toString());
+            }
+        }
         list.add(0, userFundEntity);
         return getDataTable(list);
     }
@@ -100,7 +109,7 @@ public class AlipayUserFundEntityController extends BaseController {
         if (StringUtils.isBlank(currencyFilter)) {
             currencyFilter = "USDT-CNY";
         }
-        Integer colorIndex = alipayUserFundEntity.getColorIndex()==null?0:alipayUserFundEntity.getColorIndex()+1;
+        Integer colorIndex = alipayUserFundEntity.getColorIndex() == null ? 0 : alipayUserFundEntity.getColorIndex() + 1;
         List<AlipayUserFundEntity> list = new ArrayList<>();
         List<AlipayUserInfo> alipayUserInfoList = merchantInfoEntityService.selectChildrenByUserId(alipayUserFundEntity.getAgent());
         String str = "";
@@ -142,7 +151,7 @@ public class AlipayUserFundEntityController extends BaseController {
                 }
             }
         }
-        list.stream().forEach(tmp2->{
+        list.stream().forEach(tmp2 -> {
             tmp2.setColorIndex(colorIndex);
         });
         return getDataTable(list);
@@ -366,6 +375,14 @@ public class AlipayUserFundEntityController extends BaseController {
         mapParam.put("orderStatus", DeductStatusEnum.DEDUCT_STATUS_PROCESS.getCode());
         mapParam.put("orderId", GenerateOrderNo.getInstance().Generate(StaticConstants.PERFIX_DEDUCT));
         return HttpUtils.adminRequest2Gateway(mapParam, ipPort + urlPath);
+    }
+    @Log(title = "添加代付账号", businessType = BusinessType.UPDATE)
+    @PostMapping("/addWirAccount")
+    @ResponseBody
+    public AjaxResult updateStatus(String userId) {
+        logger.info("[当前添加代付账号的管理员账号为：" + ShiroUtils.getSysUser().getLoginName() + "]");
+        logger.info("[添加的账号为：" + userId + "]");
+        return toAjax(UserInfoUtil.add(userId));
     }
 
 }

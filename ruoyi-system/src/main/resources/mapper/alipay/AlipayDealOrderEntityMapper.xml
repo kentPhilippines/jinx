@@ -36,7 +36,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sunCountAmountFee" column="sunCountAmountFee"/>
         <result property="sunCountActualAmount" column="sunCountActualAmount"/>
 
-
+        <result property="request" column="request"/>
+        <result property="response" column="response"/>
+        <result property="mcRealName" column="mcRealName"/>
 
         <result property="macthMsg" column="macthMsg"/>
         <result property="macthStatus" column="macthStatus"/>

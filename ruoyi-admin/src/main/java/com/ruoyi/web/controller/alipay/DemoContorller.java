@@ -33,68 +33,65 @@ public class DemoContorller extends BaseController {
 
     private String prefix = "alipay/demo";
 
-//    @RequiresPermissions("alipay:demo:view")
+    //    @RequiresPermissions("alipay:demo:view")
     @GetMapping(value = "/deposit")
-    public String deposit()
-    {
+    public String deposit() {
         return prefix + "/deposit";
     }
 
 
-//    @RequiresPermissions("alipay:demo:view")
+    //    @RequiresPermissions("alipay:demo:view")
     @GetMapping(value = "/wit")
-    public String wit()
-    {
+    public String wit() {
         return prefix + "/wit";
     }
 
 
     @Autowired
     private IAlipayUserInfoService alipayUserInfoService;
+
     @PostMapping(value = "/deposit")
     @ResponseBody
-    public String deposit( DepositRequestVO deal)
-    {
-        logger.info("-----{}",JSONUtil.toJsonStr(deal));
+    public String deposit(DepositRequestVO deal) {
+        logger.info("-----{}", JSONUtil.toJsonStr(deal));
         AlipayUserInfo merchantInfoByUserId = alipayUserInfoService.findMerchantInfoByUserId(deal.getAppId());
         SimpleDateFormat d = new SimpleDateFormat("yyyyMMddHHmmss");
         String key = merchantInfoByUserId.getPayPasword();//交易密钥
         String dealurl = merchantInfoByUserId.getDealUrl();
-        Map<String, Object> objectToMap = JSONUtil.toBean(JSONUtil.toJsonStr(deal),Map.class);
+        Map<String, Object> objectToMap = JSONUtil.toBean(JSONUtil.toJsonStr(deal), Map.class);
         String createParam = createParam(objectToMap);
         logger.info("签名前请求串：" + createParam);
         String md5 = getKeyedDigestUTF8(createParam + key);
         logger.info("签名：" + md5);
         deal.setSign(md5);
-        Map<String, Object> objectToMap2 = JSONUtil.toBean(JSONUtil.toJsonStr(deal),Map.class);
+        Map<String, Object> objectToMap2 = JSONUtil.toBean(JSONUtil.toJsonStr(deal), Map.class);
         String createParam2 = createParam(objectToMap2);
         logger.info("加密前字符串：" + createParam2);
         logger.info("加密前json字符串：" + JSONUtil.toJsonStr(objectToMap2));
-        String post = HttpUtil.post(dealurl+"/v2/deal/pay", JSONUtil.toJsonStr(objectToMap2));
+        String post = HttpUtil.post(dealurl + "/v2/deal/pay", JSONUtil.toJsonStr(objectToMap2));
         logger.info("相应结果集：" + post);
         return post;
     }
 
     @PostMapping(value = "/wit")
     @ResponseBody
-    public String wit(WithdrawRequestVO deal)
-    {
-        logger.info("-----{}",JSONUtil.toJsonStr(deal));
+    public String wit(WithdrawRequestVO deal) {
+        logger.info("-----{}", JSONUtil.toJsonStr(deal));
         AlipayUserInfo merchantInfoByUserId = alipayUserInfoService.findMerchantInfoByUserId(deal.getAppid());
         SimpleDateFormat d = new SimpleDateFormat("yyyyMMddHHmmss");
         String key = merchantInfoByUserId.getPayPasword();//交易密钥
         String dealurl = merchantInfoByUserId.getDealUrl();
-        Map<String, Object> objectToMap = JSONUtil.toBean(JSONUtil.toJsonStr(deal),Map.class);
+        Map<String, Object> objectToMap = JSONUtil.toBean(JSONUtil.toJsonStr(deal), Map.class);
         String createParam = createParam(objectToMap);
         logger.info("签名前请求串：" + createParam);
         String md5 = getKeyedDigestUTF8(createParam + key);
         logger.info("签名：" + md5);
         deal.setSign(md5);
-        Map<String, Object> objectToMap2 = JSONUtil.toBean(JSONUtil.toJsonStr(deal),Map.class);
+        Map<String, Object> objectToMap2 = JSONUtil.toBean(JSONUtil.toJsonStr(deal), Map.class);
         String createParam2 = createParam(objectToMap2);
         logger.info("加密前字符串：" + createParam2);
         logger.info("加密前json字符串：" + JSONUtil.toJsonStr(objectToMap2));
-        String post = HttpUtil.post(dealurl+"/v2/deal/wit", JSONUtil.toJsonStr(objectToMap2));
+        String post = HttpUtil.post(dealurl + "/v2/deal/wit", JSONUtil.toJsonStr(objectToMap2));
         logger.info("相应结果集：" + post);
         return post;
     }

@@ -82,7 +82,8 @@
                         </li>
                         <li class="select-selectpicker">
                             <label>实际除款渠道：</label>
-                            <select class="selectpicker" data-none-selected-text="请选择" id="channelId" name="channelId">
+                            <select class="selectpicker" data-none-selected-text="请选择" id="channelId"
+                                    name="channelId">
                                 <option value="">所有</option>
                                 <option th:each="channel : ${channelList}" th:text="${channel.userName}"
                                         th:value="${channel.userId}"></option>
@@ -136,7 +137,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-select-js"/>
-<th:block th:include="include :: copy-js" />
+<th:block th:include="include :: copy-js"/>
 <script th:inline="javascript">
     const approvalFlag = [[${@permission.hasPermi('merchant:withdrawal:approval')}]];
     const detailFlag = [[${@permission.hasPermi('withdrawal:merchant:detail')}]];
@@ -153,7 +154,7 @@
             var orderId = $(row).find(".orderId").text();
             var bankinfo = $(row).find(".bankinfo").text();
             var amount = $(row).find(".amount").text();
-            var cc=orderId +" " + bankinfo+" "+amount;
+            var cc = orderId + " " + bankinfo + " " + amount;
             return cc;
         },
     });
@@ -210,9 +211,9 @@
                     formatter: function (value, row, index) {
                         var table = '<ul>'
                         table += '<li>' + '商户账户：' + row.userId + '</li>'
-                        if(null != row.apply){
+                        if (null != row.apply) {
                             table += '<li>' + '申请人：' + row.apply + ',后台申请</li>'
-                        }else{
+                        } else {
                         }
                         table += '</ul>'
                         return table;
@@ -227,21 +228,21 @@
                     title: '订单状态',
                     formatter: function (value, row, index) {
                         var table = '<ul>'
-                        if(row.moreMacth == 1 || row.moreMacth== '1'){
+                        if (row.moreMacth == 1 || row.moreMacth == '1') {
                             table += '<li>' + '<span class="badge badge-danger"> 等待撮合 已挂起 </span>' + '</li>'
                         }
-                        if(row.macthLock == 1 || row.macthLock== '1'){
+                        if (row.macthLock == 1 || row.macthLock == '1') {
                             table += '<li>' + '<span class="badge badge-info"> 订单已被撮合 锁定 </span>' + '</li>'
                         }
-                        if(row.macthStatus == 1 || row.macthStatus== '1'){
+                        if (row.macthStatus == 1 || row.macthStatus == '1') {
                             table += '<li>' + '<span class="badge badge-info"> 撮合未支付</span>' + '</li>'
                         }
-                        if(row.macthStatus == 2 || row.macthStatus== '2'){
+                        if (row.macthStatus == 2 || row.macthStatus == '2') {
                             table += '<li>' + '<span class="badge badge-info"> 撮合已支付</span>' + '</li>'
                         }
-                        if(row.payStatus == 1 || row.payStatus== '1'){
+                        if (row.payStatus == 1 || row.payStatus == '1') {
                             table += '<li>' + '<span class="badge badge-primary"> 已扣款结算 </span>' + '</li>'
-                        }else{
+                        } else {
                             table += '<li>' + '<span class="badge btn-danger"> 未扣款结算 </span>' + '</li>'
                         }
                         table += '<li>' + $.table.selectDictLabel(orderStatus, value) + '</li>'
@@ -312,19 +313,19 @@
                         table += '<li>' + '等待时间：' + row.watingTime + '秒</li>'
                         table += '<li>' + '创建时间：' + row.createTime + '</li>'
                         table += '<li>' + '修改时间：' + row.submitTime + '</li>'
-                        if(  2 !=  row.orderStatus ){
-                            table += '<strong><li color="#FF0000"   > 处理时间 ' +'<span id = '+row.appOrderId +' ></span>' + '</li></strong>'
+                        if (2 != row.orderStatus) {
+                            table += '<strong><li color="#FF0000"   > 处理时间 ' + '<span id = ' + row.appOrderId + ' ></span>' + '</li></strong>'
                             window.setInterval(function () {
                                 var date1 = new Date()
                                 var date2 = new Date(row.submitTime)
                                 var s1 = date1.getTime(), s2 = date2.getTime();
-                                var total = (s1 - s2 ) / 1000;//当前时间差
-                                total =  parseInt(total)
-                                $('#'+row.appOrderId+'').html('<s></s>' + total + '秒');
+                                var total = (s1 - s2) / 1000;//当前时间差
+                                total = parseInt(total)
+                                $('#' + row.appOrderId + '').html('<s></s>' + total + '秒');
                             }, 1000);
                         }
                         table += '</ul>'
-                        if(row.macthCount>0){
+                        if (row.macthCount > 0) {
                             table += '<li>' + '撮合次数：' + row.macthCount + '</li>'
                             table += '<li>' + '最近一次撮合时间：' + row.macthTime + '</li>'
                         }
@@ -337,7 +338,7 @@
                     formatter: function (value, row, index) {
                         var table = '<ul>'
                         table += '<li>' + '配置出款渠道：' + row.witChannel + '</li>'
-                        if(null != row.channelId){
+                        if (null != row.channelId) {
                             table += '<li>' + '实际出款渠道：' + row.channelId + '</li>'
                         }
                         table += '<li>' + '代付产品类型：' + row.witType + '</li>'
@@ -366,9 +367,9 @@
                     title: '挂起',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        if(row.orderStatus == 1 ){
+                        if (row.orderStatus == 1) {
                             return statusTools(row, 'moreMacth');
-                        }else{
+                        } else {
                             return '';
                         }
                     }
@@ -390,7 +391,7 @@
         var actions = [];
         actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.editChannel(\'' + row.id + '\')"><i class="fa fa-shield"></i> 修改出款渠道</a>')
         if (row.orderStatus === '4' || row.orderStatus === '1') {
-                actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>')
+            actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-shield"></i> 审核</a>')
         } else if (row.orderStatus === '2' || row.orderStatus === '3') {
             if (row.orderStatus === '2') {
                 actions.push('<a class="btn btn-success btn-xs ' + approvalFlag + '" href="javascript:void(0)" onclick="$.operate.approval(\'' + row.id + '\')"><i class="fa fa-angellist"></i>回滚</a>')

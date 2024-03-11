@@ -112,14 +112,20 @@
                     field: 'userName',
                     title: '账户名称 '
                 },
-               /* {
-                    field: 'cashBalance',
-                    title: '现金账户 '
-                },
                 {
-                    field: 'rechargeNumber',
-                    title: '充值点数'
-                },*/
+                    field: 'witAccount',
+                    title: '代付账户 ',
+                    formatter: function (value, row, index) {
+                        if ("" == row.witAccount || null == row.witAccount) {
+                            return null;
+                        }
+                        return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="addWitAccount(\'' + row.userId + '\')"><i class="fa fa-google-wallet"></i> 代付开户' + '</a>';
+                    }
+                },
+                /*     {
+                         field: 'rechargeNumber',
+                         title: '充值点数'
+                     },*/
                 {
                     field: 'freezeBalance',
                     title: '冻结账户',
@@ -424,6 +430,13 @@
     function detail(userId) {
         var url = ctx + "back/app/statistics/view?userId=" + userId;
         $.modal.openTab("商户月度交易数据", url);
+    }
+    function addWitAccount(userId) {
+        $.modal.confirm("确认要开设代付账号", function () {
+            var url = ctx + "/addWirAccount";
+            $.operate.post(url, { "userId": userId,});
+        })
+
     }
 
 </script>

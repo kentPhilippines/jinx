@@ -9,6 +9,7 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 import javax.net.ssl.HostnameVerifier;
@@ -72,7 +73,7 @@ public class HttpUtils {
         postMap.put("cipherText", cipherText);
         postMap.put("userId", extraParam.get("userId"));
         postMap.put("manage",extraParam.get("manage"));
-        String flag = HttpUtil.post(url, postMap);
+       /* String flag = HttpUtil.post(url, postMap);
         log.info(">>>>>>>>>>>>>>>>>gateway返回的结果：{}", flag);
         JSONObject json = JSONObject.parseObject(flag);
         String result = json.getString("success");
@@ -82,7 +83,7 @@ public class HttpUtils {
             case "false":
                 String message = json.getString("message");
                 return AjaxResult.error(message);
-        }
+        }*/
         return AjaxResult.warn("请求出错，请联系技术人员");
     }
 
@@ -213,6 +214,56 @@ public class HttpUtils {
         }
         return result.toString();
     }
+
+
+    public static String sendPostJson(String url, String jsonBody) {
+        PrintWriter out = null;
+        BufferedReader in = null;
+        StringBuilder result = new StringBuilder();
+        try {
+            URL realUrl = new URL(url);
+            URLConnection conn = realUrl.openConnection();
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+            conn.setRequestProperty("Accept-Charset", "utf-8");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty(Token.HEADER, Token.TOKEN);
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            out = new PrintWriter(conn.getOutputStream());
+            out.print(jsonBody);
+            out.flush();
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result.append(line);
+            }
+            log.info("recv - {}", result);
+        } catch (ConnectException e) {
+            log.error("调用HttpUtils.sendPostJson ConnectException, url=" + url + ",param=" + jsonBody, e);
+        } catch (SocketTimeoutException e) {
+            log.error("调用HttpUtils.sendPostJson SocketTimeoutException, url=" + url + ",param=" + jsonBody, e);
+        } catch (IOException e) {
+            log.error("调用HttpUtils.sendPostJson IOException, url=" + url + ",param=" + jsonBody, e);
+        } catch (Exception e) {
+            log.error("调用HttpsUtil.sendPostJson Exception, url=" + url + ",param=" + jsonBody, e);
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException ex) {
+                log.error("调用in.close Exception, url=" + url + ",param=" + jsonBody, ex);
+            }
+        }
+        return result.toString();
+    }
+
+
 
     public static String sendSSLPost(String url, String param) {
         StringBuilder result = new StringBuilder();
