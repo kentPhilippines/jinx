@@ -33,7 +33,7 @@
                         </li>
                         <li class="select-selectpicker">
                             <label>货币类型： </label>
-                            <select class="selectpicker"  data-none-selected-text="请选择" id="currency"
+                            <select class="selectpicker" data-none-selected-text="请选择" id="currency"
                                     name="currency" th:with="type=${@dict.getType('currency')}">
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                         th:value="${dict.dictValue}"></option>
@@ -85,6 +85,7 @@
         var options = {
             url: prefix + "/list",
             updateUrl: prefix + "/deduct/{id}",
+            editAccount: prefix + "/editAccount/{id}",
             openUrl: prefix + "/refund/{userId}",
             exportUrl: prefix + "/export",
             addFreezeUrl: prefix + "/addFreezeUrl/{userId}",
@@ -94,7 +95,7 @@
             modalName: "用户资金账户",
             detailView: true,
             onExpandRow: function (index, row, $detail) {
-                initChildTable(index, row, $detail,0);
+                initChildTable(index, row, $detail, 0);
             },
             columns: [{
                 checkbox: true
@@ -116,10 +117,13 @@
                     field: 'witAccount',
                     title: '代付账户 ',
                     formatter: function (value, row, index) {
+                        var actions = [];
                         if ("" == row.witAccount || null == row.witAccount) {
-                            return null;
+                            return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="addWitAccount(\'' + row.userId + '\')"><i class="fa fa-google-wallet"></i> 代付开户' + '</a>';
                         }
-                        return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="addWitAccount(\'' + row.userId + '\')"><i class="fa fa-google-wallet"></i> 代付开户' + '</a>';
+                        actions.push( '<a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="$.operate.editAccount(\'' + row.userId + '\')"><i class="fa fa-plus"></i> 加减款' + '</a>');
+                        actions.push('<span  ><span ></span> ' + value + '</span> ');
+                        return actions;
                     }
                 },
                 /*     {
@@ -224,13 +228,13 @@
         $.table.init(options);
     });
 
-    initChildTable = function(index, row, $detail,colorIndex) {
-        var currency=$('#currency option:selected').val();//选中的值
+    initChildTable = function (index, row, $detail, colorIndex) {
+        var currency = $('#currency option:selected').val();//选中的值
         var childTable = $detail.html('<table style="table-layout:fixed"></table>').find('table');
         $(childTable).bootstrapTable({
-            detailView:true,
+            detailView: true,
             onExpandRow: function (index, row, $detail) {
-                initChildTable(index, row, $detail,row.colorIndex);
+                initChildTable(index, row, $detail, row.colorIndex);
             },
             url: prefix + "/childrenList",
             method: 'post',
@@ -298,9 +302,9 @@
             },
             sidePagination: "server",
             contentType: "application/x-www-form-urlencoded",
-            queryParams : {
+            queryParams: {
                 agent: row.userId,
-                currency:currency,
+                currency: currency,
                 colorIndex: colorIndex
             },
             columns: [{
@@ -318,6 +322,19 @@
                 {
                     field: 'userName',
                     title: '账户名称 '
+                },
+                {
+                    field: 'witAccount',
+                    title: '代付账户 ',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if ("" == row.witAccount || null == row.witAccount) {
+                            return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="addWitAccount(\'' + row.userId + '\')"><i class="fa fa-google-wallet"></i> 代付开户' + '</a>';
+                        }
+                        actions.push('<a class="btn btn-primary btn-xs ' + refundFlag + '" onclick="$.operate.openAccount(\'' + row.userId + '\',\'资金账户加款\',\'openUrl\')"><i class="fa fa-plus"></i>加款</a> ');
+                        actions.push('<span  ><span ></span>value</span> ');
+                        return actions;
+                    }
                 },
                 /* {
                      field: 'cashBalance',
@@ -431,10 +448,11 @@
         var url = ctx + "back/app/statistics/view?userId=" + userId;
         $.modal.openTab("商户月度交易数据", url);
     }
+
     function addWitAccount(userId) {
         $.modal.confirm("确认要开设代付账号", function () {
             var url = ctx + "/addWirAccount";
-            $.operate.post(url, { "userId": userId,});
+            $.operate.post(url, {"userId": userId});
         })
 
     }

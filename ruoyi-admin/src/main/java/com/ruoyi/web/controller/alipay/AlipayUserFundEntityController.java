@@ -3,10 +3,7 @@ package com.ruoyi.web.controller.alipay;
 import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Maps;
 import com.ruoyi.UserInfoUtil;
-import com.ruoyi.alipay.domain.AlipayAmountEntity;
-import com.ruoyi.alipay.domain.AlipayUserFundEntity;
-import com.ruoyi.alipay.domain.AlipayUserInfo;
-import com.ruoyi.alipay.domain.UserInfo;
+import com.ruoyi.alipay.domain.*;
 import com.ruoyi.alipay.service.IAlipayAmountEntityService;
 import com.ruoyi.alipay.service.IAlipayUserFundEntityService;
 import com.ruoyi.alipay.service.IMerchantInfoEntityService;
@@ -92,7 +89,7 @@ public class AlipayUserFundEntityController extends BaseController {
         }
         AlipayUserFundEntity userFundEntity = alipayUserFundEntityService.findSumFundM(alipayUserFundEntity.getCurrency());
         for (AlipayUserFundEntity fund : list) {
-            UserInfo userInfo = UserInfoUtil.selectUserInfoByName(userFundEntity.getUserId());
+            UserInfo userInfo = UserInfoUtil.selectUserInfoByName(fund.getUserId());
             if (ObjectUtil.isNotNull(userInfo)) {
                 fund.setWitAccount(userInfo.getAmount().toString());
             }
@@ -383,6 +380,22 @@ public class AlipayUserFundEntityController extends BaseController {
         logger.info("[当前添加代付账号的管理员账号为：" + ShiroUtils.getSysUser().getLoginName() + "]");
         logger.info("[添加的账号为：" + userId + "]");
         return toAjax(UserInfoUtil.add(userId));
+    }
+    @RequiresPermissions("system:userInfo:edit")
+    @GetMapping("/editAccount/{id}")
+    public String editAccount(@PathVariable("id") String id, ModelMap mmap) {
+        UserInfo userInfo = UserInfoUtil.selectUserInfoByName(id);
+        mmap.put("userInfo", userInfo);
+        return prefix + "/witAmount";
+    }
+    @RequiresPermissions("system:userInfo:amount")
+    @Log(title = "用户", businessType = BusinessType.UPDATE)
+    @PostMapping("/amount")
+    @ResponseBody
+    public AjaxResult amount(AdminApiVo.UserInfoAmount amount) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        amount.setApply(sysUser.getUserName());
+        return toAjax(UserInfoUtil.amount(amount));
     }
 
 }
