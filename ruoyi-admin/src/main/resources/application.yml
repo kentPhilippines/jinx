@@ -1,16 +1,15 @@
 nacos:
   config:
     server-addr: http://94.74.120.122:8848
-    #server-addr: 172.16.32.220:8848 #内网
+    # server-addr: 172.16.32.220:8848 #内网
     namespace:  test
     #namespace: a173ae57-6dc2-4f08-bda7-194b5d8ecdaf #pro
-    data-id: admin.yaml
-    group: JX_GROUP
+    data-id: admin_out.yaml
+    group: ZB_GROUP
     bootstrap:
-      enable: true
+      enable: false
       log-enable: true
     type: yaml
-
 
 
 spring:

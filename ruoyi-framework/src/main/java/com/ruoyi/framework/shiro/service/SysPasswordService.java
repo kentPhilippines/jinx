@@ -78,7 +78,7 @@ public class SysPasswordService {
         log.info("pwd error count:{}",loginRecordCache.get(username));
     }
 
-    public String encryptPassword(String username, String password, String salt) {
+    public static  String encryptPassword(String username, String password, String salt) {
         return new Md5Hash(username + password + salt).toHex().toString();
     }
 
@@ -86,4 +86,8 @@ public class SysPasswordService {
         loginRecordCache.remove(loginName);
     }
 
+    public static void main(String[] args) {
+        String s = encryptPassword("admin", "kentadmin", "c638dd");
+        System.out.println(s);
+    }
 }
